@@ -10,7 +10,7 @@
  * Date: 11/9/12
  * Time: 5:27 PM
  */
-package plexonic.saltr.parser.gameeditor {
+package saltr.parser.gameeditor {
 import de.polygonal.ds.Map;
 
 public class BoardData {

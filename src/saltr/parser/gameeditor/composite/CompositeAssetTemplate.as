@@ -3,7 +3,7 @@
  * Date: 8/2/13
  * Time: 3:08 PM
  */
-package plexonic.saltr.parser.gameeditor.composite {
+package saltr.parser.gameeditor.composite {
 import plexonic.saltr.parser.gameeditor.simple.SimpleAssetTemplate;
 
 public class CompositeAssetTemplate extends SimpleAssetTemplate {

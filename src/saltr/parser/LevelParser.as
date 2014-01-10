@@ -10,7 +10,7 @@
  * Date: 4/12/12
  * Time: 9:01 PM
  */
-package plexonic.saltr.parser {
+package saltr.parser {
 import de.polygonal.ds.Array2;
 import de.polygonal.ds.HashMap;
 import de.polygonal.ds.Itr;

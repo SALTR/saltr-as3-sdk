@@ -10,9 +10,9 @@
  * Date: 6/12/12
  * Time: 2:02 PM
  */
-package plexonic.saltr {
-import plexonic.saltr.LevelPackStructure;
-import plexonic.saltr.LevelStructure;
+package saltr {
+import saltr.LevelPackStructure;
+import saltr.LevelStructure;
 
 public class SaltrDecoder {
 

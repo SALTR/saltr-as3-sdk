@@ -3,7 +3,7 @@
  * Date: 8/2/13
  * Time: 5:28 PM
  */
-package plexonic.saltr.parser.gameeditor {
+package saltr.parser.gameeditor {
 public class BoardAsset {
     protected var _state:String;
     protected var _keys:Object;

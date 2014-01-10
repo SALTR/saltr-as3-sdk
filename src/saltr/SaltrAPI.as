@@ -10,7 +10,8 @@
  * Date: 12/1/12
  * Time: 5:23 PM
  */
-package plexonic.saltr {
+package saltr {
+import plexonic.saltr.*;
 
 import flash.net.URLVariables;
 

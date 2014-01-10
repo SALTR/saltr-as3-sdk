@@ -10,7 +10,7 @@
  * Date: 11/9/12
  * Time: 5:02 PM
  */
-package plexonic.saltr.parser.gameeditor.simple {
+package saltr.parser.gameeditor.simple {
 import plexonic.saltr.parser.gameeditor.BoardAsset;
 import plexonic.saltr.parser.gameeditor.Cell;
 

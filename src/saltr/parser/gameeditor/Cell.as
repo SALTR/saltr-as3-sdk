@@ -7,11 +7,33 @@
 
 /**
  * User: sarg
- * Date: 10/26/12
- * Time: 11:20 AM
+ * Date: 11/9/12
+ * Time: 4:51 PM
  */
-package plexonic.saltr.parser {
-public interface IParser {
-    function parse():void;
+package saltr.parser.gameeditor {
+public class Cell {
+    private var _x:int;
+    private var _y:int;
+
+    public function Cell(x:int, y:int) {
+        _x = x;
+        _y = y;
+    }
+
+    public function get x():int {
+        return _x;
+    }
+
+    public function get y():int {
+        return _y;
+    }
+
+    public function set y(value:int):void {
+        _y = value;
+    }
+
+    public function set x(value:int):void {
+        _x = value;
+    }
 }
 }

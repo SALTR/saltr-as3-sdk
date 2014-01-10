@@ -10,7 +10,7 @@
  * Date: 6/12/12
  * Time: 2:03 PM
  */
-package plexonic.saltr {
+package saltr {
 import plexonic.util.Tools;
 
 public class Feature {

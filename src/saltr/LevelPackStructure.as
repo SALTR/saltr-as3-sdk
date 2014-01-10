@@ -10,7 +10,8 @@
  * Date: 10/23/12
  * Time: 3:48 PM
  */
-package plexonic.saltr {
+package saltr {
+import plexonic.saltr.*;
 import plexonic.game.level.*;
 
 public class LevelPackStructure {

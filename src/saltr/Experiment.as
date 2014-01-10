@@ -10,7 +10,7 @@
  * Date: 6/12/12
  * Time: 2:03 PM
  */
-package plexonic.saltr {
+package saltr {
 public class Experiment {
     public static const SPLIT_TEST_TYPE_FEATURE : String = "FEATURE";
     public static const SPLIT_TEST_TYPE_LEVEL_PACK : String = "LEVEL_PACK";

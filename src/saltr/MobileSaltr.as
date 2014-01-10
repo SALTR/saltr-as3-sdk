@@ -10,7 +10,8 @@
  * Date: 4/12/13
  * Time: 8:25 PM
  */
-package plexonic.saltr {
+package saltr {
+import plexonic.saltr.*;
 import plexonic.device.Agent;
 import plexonic.network.NetworkMonitor;
 

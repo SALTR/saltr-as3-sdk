@@ -3,7 +3,7 @@
  * Date: 8/2/13
  * Time: 3:08 PM
  */
-package plexonic.saltr.parser.gameeditor.composite {
+package saltr.parser.gameeditor.composite {
 import de.polygonal.ds.Array2;
 import de.polygonal.ds.Map;
 

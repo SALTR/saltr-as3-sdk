@@ -10,7 +10,7 @@
  * Date: 4/12/12
  * Time: 7:25 PM
  */
-package plexonic.saltr.parser.gameeditor.chunk {
+package saltr.parser.gameeditor.chunk {
 import de.polygonal.ds.Array2;
 import de.polygonal.ds.Map;
 

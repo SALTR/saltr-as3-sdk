@@ -10,13 +10,14 @@
  * Date: 6/12/12
  * Time: 7:26 PM
  */
-package plexonic.saltr {
+package saltr {
+import plexonic.saltr.*;
 import plexonic.asset.Asset;
 import plexonic.asset.JSONAsset;
 import plexonic.asset.URLTicket;
 import plexonic.error.PureVirtualFunctionError;
-import plexonic.saltr.LevelPackStructure;
-import plexonic.saltr.LevelStructure;
+import saltr.LevelPackStructure;
+import saltr.LevelStructure;
 import plexonic.user.User;
 import plexonic.util.Storage;
 

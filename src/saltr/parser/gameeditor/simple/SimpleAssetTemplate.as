@@ -10,7 +10,7 @@
  * Date: 11/10/12
  * Time: 12:31 PM
  */
-package plexonic.saltr.parser.gameeditor.simple {
+package saltr.parser.gameeditor.simple {
 public class SimpleAssetTemplate {
     private var _keys:Object;
     private var _type:String;

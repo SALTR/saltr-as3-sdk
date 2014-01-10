@@ -10,7 +10,7 @@
  * Date: 4/12/12
  * Time: 7:27 PM
  */
-package plexonic.saltr.parser.gameeditor.chunk {
+package saltr.parser.gameeditor.chunk {
 public class AssetInChunk {
     private var _id:String;
     private var _count:uint;

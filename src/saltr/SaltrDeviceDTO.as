@@ -10,7 +10,7 @@
  * Date: 12/3/12
  * Time: 5:28 PM
  */
-package plexonic.saltr {
+package saltr {
 public class SaltrDeviceDTO {
 
     private var _deviceId:String;
