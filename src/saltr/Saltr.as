@@ -11,13 +11,10 @@
  * Time: 7:26 PM
  */
 package saltr {
-import plexonic.saltr.*;
 import plexonic.asset.Asset;
 import plexonic.asset.JSONAsset;
 import plexonic.asset.URLTicket;
 import plexonic.error.PureVirtualFunctionError;
-import saltr.LevelPackStructure;
-import saltr.LevelStructure;
 import plexonic.user.User;
 import plexonic.util.Storage;
 
@@ -55,9 +52,9 @@ public class Saltr extends EventDispatcher {
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
-    protected var _partnerDTO:SaltrPartnerDTO;
+    protected var _partnerDTO:PartnerDTO;
 
-    private var _saltDecoder:SaltrDecoder;
+    private var _saltDecoder:Deserializer;
     protected var _instanceKey:String;
 
     /**
@@ -72,13 +69,13 @@ public class Saltr extends EventDispatcher {
         _storage = Storage.getInstance();
         _instanceKey = instanceKey;
         _api = new SaltrAPI();
-        _saltDecoder = new SaltrDecoder();
+        _saltDecoder = new Deserializer();
         _isLoading = false;
         _ready = false;
     }
 
-    //TODO: decoder shouldn't be visible here at all!
-    public function get saltDecoder():SaltrDecoder {
+    //TODO @GSAR: decoder shouldn't be visible here at all! get rid of this!
+    public function get saltDecoder():Deserializer {
         return _saltDecoder;
     }
 
@@ -109,7 +106,7 @@ public class Saltr extends EventDispatcher {
 
 
     public function initPartner(partner:String, user:User):void {
-        var saltPartnerDTO:SaltrPartnerDTO = new SaltrPartnerDTO();
+        var saltPartnerDTO:PartnerDTO = new PartnerDTO();
         saltPartnerDTO.partnerType = partner;
         saltPartnerDTO.firstName = user.firstname;
         saltPartnerDTO.lastName = user.lastname;

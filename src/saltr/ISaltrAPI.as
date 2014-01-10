@@ -11,13 +11,10 @@
  * Time: 5:11 PM
  */
 package saltr {
-import plexonic.saltr.*;
 
 public interface ISaltrAPI {
 
-    function getSaltLevelPacks(partner:SaltrPartnerDTO, device:SaltrDeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;
-
-    function loadAppData(partner:SaltrPartnerDTO, device:SaltrDeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;
+    function loadAppData(partner:PartnerDTO, device:DeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;
 
     function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void;
 }

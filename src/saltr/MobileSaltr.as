@@ -11,13 +11,13 @@
  * Time: 8:25 PM
  */
 package saltr {
-import plexonic.saltr.*;
 import plexonic.device.Agent;
 import plexonic.network.NetworkMonitor;
 
+//TODO @GSAR: try to merge with Saltr
 public class MobileSaltr extends Saltr {
     private static var INSTANCE:MobileSaltr = null;
-    private var _deviceDTO:SaltrDeviceDTO;
+    private var _deviceDTO:DeviceDTO;
 
     public static function getInstance():MobileSaltr {
         if (INSTANCE == null) {
@@ -36,7 +36,7 @@ public class MobileSaltr extends Saltr {
 
     override public function init(instanceKey:String):void {
         super.init(instanceKey);
-        _deviceDTO = new SaltrDeviceDTO(Agent.device.udid, "");
+        _deviceDTO = new DeviceDTO(Agent.device.udid, "");
     }
 
     override public function getAppData(platform:String):void {

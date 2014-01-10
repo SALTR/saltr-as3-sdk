@@ -11,8 +11,6 @@
  * Time: 5:23 PM
  */
 package saltr {
-import plexonic.saltr.*;
-
 import flash.net.URLVariables;
 
 import plexonic.asset.Asset;
@@ -21,11 +19,13 @@ import plexonic.asset.URLTicket;
 
 import starling.events.Event;
 
+//TODO @GSAR: move methods into Saltr - delete this Class
 internal class SaltrAPI implements ISaltrAPI {
 
     public function SaltrAPI() {
     }
 
+    //TODO @GSAR: port this later when SALTR is ready
     public function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_ADDPROP;
@@ -62,48 +62,8 @@ internal class SaltrAPI implements ISaltrAPI {
         asset.load();
     }
 
-    public function getSaltLevelPacks(partner:SaltrPartnerDTO, device:SaltrDeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void {
 
-        var urlVars:URLVariables = new URLVariables();
-
-        //TODO @GSAR: why not make a special a dynamic class to define "command" and "arguments" properties?
-        urlVars.command = Saltr.COMMAND_EXPG;
-
-        var args:Object = {};
-
-        if (device != null) {
-            args.device = device;
-        }
-        if (partner != null) {
-            args.partner = partner;
-        }
-        args.instanceKey = saltInstanceKey;
-        urlVars.arguments = JSON.stringify(args);
-
-        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
-        var asset:JSONAsset = new JSONAsset("level_pack", ticket);
-        //
-
-        //TODO @GSAR: get rid of nested functions!
-        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, function (event:Event):void {
-            trace("getSaltLevelPacks : success");
-            event.target.removeEventListeners();
-            var data:Object = asset.jsonData;
-            successHandler(data);
-            asset.dispose();
-        });
-        //
-        asset.addEventListener(Asset.EVENT_LOAD_ERROR, function (event:Event):void {
-            trace("getSaltLevelPacks : error");
-            event.target.removeEventListeners();
-            failureHandler();
-            asset.dispose();
-        });
-        //
-        asset.load();
-    }
-
-    public function loadAppData(partner:SaltrPartnerDTO, device:SaltrDeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void {
+    public function loadAppData(partner:PartnerDTO, device:DeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_APPDATA;
 

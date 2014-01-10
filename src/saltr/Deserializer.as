@@ -11,10 +11,9 @@
  * Time: 2:02 PM
  */
 package saltr {
-import saltr.LevelPackStructure;
-import saltr.LevelStructure;
 
-public class SaltrDecoder {
+//TODO @GSAR: make this internal!
+public class Deserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {
         return p1.index - p2.index;
@@ -25,7 +24,7 @@ public class SaltrDecoder {
     private var _experiments:Vector.<Experiment>;
     private var _levelPackStructures:Vector.<LevelPackStructure>;
 
-    public function SaltrDecoder() {
+    public function Deserializer() {
         _features = new Vector.<Feature>();
         _experiments = new Vector.<Experiment>();
     }

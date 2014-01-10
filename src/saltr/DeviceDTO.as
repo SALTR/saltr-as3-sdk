@@ -6,17 +6,18 @@
  */
 
 /**
- * User: dale
+ * User: daal
  * Date: 12/3/12
  * Time: 5:28 PM
  */
 package saltr {
-public class SaltrDeviceDTO {
+//TODO @GSAR: get rid of this, or at least make it internal!
+public class DeviceDTO {
 
     private var _deviceId:String;
     private var _deviceType:String;
 
-    public function SaltrDeviceDTO(deviceId:String = null, deviceType:String = null) {
+    public function DeviceDTO(deviceId:String = null, deviceType:String = null) {
         _deviceId = deviceId;
 
         //TODO: remove device type after it is removed from Salt Bend

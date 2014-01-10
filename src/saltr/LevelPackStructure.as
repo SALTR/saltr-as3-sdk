@@ -11,8 +11,6 @@
  * Time: 3:48 PM
  */
 package saltr {
-import plexonic.saltr.*;
-import plexonic.game.level.*;
 
 public class LevelPackStructure {
     private var _token:String;

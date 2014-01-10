@@ -13,16 +13,17 @@
 package saltr {
 import plexonic.user.Gender;
 
-public class SaltrPartnerDTO {
+//TODO @GSAR: Rename to handle USER properties separately, and Partner data separately may be?
+public class PartnerDTO {
 
     private var _partnerId:String;
     private var _partnerType:String;
-    private var _firstName : String;
-    private var _lastName : String;
+    private var _firstName:String;
+    private var _lastName:String;
     private var _gender:String;
     private var _age:uint;
 
-    public function SaltrPartnerDTO() {
+    public function PartnerDTO() {
         //TODO: set gender correctly
         _gender = Gender.UNKNOWN;
     }
