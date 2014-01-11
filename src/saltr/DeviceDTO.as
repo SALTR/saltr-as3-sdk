@@ -12,7 +12,7 @@
  */
 package saltr {
 //TODO @GSAR: get rid of this, or at least make it internal!
-public class DeviceDTO {
+internal class DeviceDTO {
 
     private var _deviceId:String;
     private var _deviceType:String;

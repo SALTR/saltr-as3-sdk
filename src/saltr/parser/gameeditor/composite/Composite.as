@@ -7,8 +7,8 @@ package saltr.parser.gameeditor.composite {
 import de.polygonal.ds.Array2;
 import de.polygonal.ds.Map;
 
-import plexonic.saltr.parser.gameeditor.BoardData;
-import plexonic.saltr.parser.gameeditor.Cell;
+import saltr.parser.gameeditor.BoardData;
+import saltr.parser.gameeditor.Cell;
 
 public class Composite {
     private var _id:String;

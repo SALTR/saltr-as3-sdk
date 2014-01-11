@@ -16,13 +16,13 @@ import de.polygonal.ds.HashMap;
 import de.polygonal.ds.Itr;
 import de.polygonal.ds.Map;
 
-import plexonic.saltr.parser.gameeditor.BoardData;
-import plexonic.saltr.parser.gameeditor.Cell;
-import plexonic.saltr.parser.gameeditor.chunk.AssetInChunk;
-import plexonic.saltr.parser.gameeditor.chunk.Chunk;
-import plexonic.saltr.parser.gameeditor.composite.Composite;
-import plexonic.saltr.parser.gameeditor.composite.CompositeAssetTemplate;
-import plexonic.saltr.parser.gameeditor.simple.SimpleAssetTemplate;
+import saltr.parser.gameeditor.BoardData;
+import saltr.parser.gameeditor.Cell;
+import saltr.parser.gameeditor.chunk.AssetInChunk;
+import saltr.parser.gameeditor.chunk.Chunk;
+import saltr.parser.gameeditor.composite.Composite;
+import saltr.parser.gameeditor.composite.CompositeAssetTemplate;
+import saltr.parser.gameeditor.simple.SimpleAssetTemplate;
 
 final public class LevelParser {
 

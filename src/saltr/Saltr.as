@@ -11,6 +11,8 @@
  * Time: 7:26 PM
  */
 package saltr {
+import flash.net.URLVariables;
+
 import plexonic.asset.Asset;
 import plexonic.asset.JSONAsset;
 import plexonic.asset.URLTicket;
@@ -48,7 +50,6 @@ public class Saltr extends EventDispatcher {
     private static const RESULT_ERROR:String = "ERROR";
 
     protected var _storage:Storage;
-    protected var _api:ISaltrAPI;
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
@@ -56,6 +57,10 @@ public class Saltr extends EventDispatcher {
 
     private var _saltDecoder:Deserializer;
     protected var _instanceKey:String;
+    private var _features:Vector.<Feature>;
+    private var _levelPackStructures:Vector.<LevelPackStructure>;
+    private var _experiments:Vector.<Experiment>;
+    private var _deviceDTO:DeviceDTO;
 
     /**
      *
@@ -68,15 +73,9 @@ public class Saltr extends EventDispatcher {
     public function init(instanceKey:String):void {
         _storage = Storage.getInstance();
         _instanceKey = instanceKey;
-        _api = new SaltrAPI();
         _saltDecoder = new Deserializer();
         _isLoading = false;
         _ready = false;
-    }
-
-    //TODO @GSAR: decoder shouldn't be visible here at all! get rid of this!
-    public function get saltDecoder():Deserializer {
-        return _saltDecoder;
     }
 
     public function get saltUserId():String {
@@ -92,16 +91,12 @@ public class Saltr extends EventDispatcher {
     }
 
     public function getFeatureByToken(token:String):Feature {
-        for each(var feature:Feature in _saltDecoder.features) {
+        for each(var feature:Feature in _features) {
             if (feature.token == token) {
                 return feature;
             }
         }
         return null;
-    }
-
-    public function addProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
-        _api.addProperty(_saltUserId, _instanceKey, propertyNames, propertyValues, operations);
     }
 
 
@@ -115,8 +110,12 @@ public class Saltr extends EventDispatcher {
         _partnerDTO = saltPartnerDTO;
     }
 
-    public function getAppData(platform:String):void {
-        throw  new PureVirtualFunctionError();
+    public function initDevice(deviceId:String):void {
+        _deviceDTO = new DeviceDTO(deviceId, "");
+    }
+
+    public function getAppData():void {
+        loadAppData();
     }
 
     protected function loadAppDataSuccessHandler(jsonData:Object):void {
@@ -124,6 +123,9 @@ public class Saltr extends EventDispatcher {
         _ready = true;
         _saltUserId = jsonData.saltId;
         _saltDecoder.decode(jsonData);
+        _features = _saltDecoder.features;
+        _levelPackStructures = _saltDecoder.levelPackStructures;
+        _experiments = _saltDecoder.experiments;
         trace("[SaltClient] packs=" + _saltDecoder.levelPackStructures.length);
         dispatchEventWith(EVENT_APPDATA_READY_FOR_SETTING);
         dispatchEventWith(EVENT_APPDATA_READY_FOR_USE);
@@ -220,14 +222,14 @@ public class Saltr extends EventDispatcher {
         var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
         var ticket:URLTicket = new URLTicket(dataUrl);
         var asset:JSONAsset = new JSONAsset("level", ticket);
-        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataLoadedHandler);
-        asset.addEventListener(Asset.EVENT_LOAD_ERROR, levelDataLoadErrorHandler);
+        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataAssetLoadedHandler);
+        asset.addEventListener(Asset.EVENT_LOAD_ERROR, levelDataAssetLoadErrorHandler);
         asset.load();
         //
         //TODO @GSAR: get rid of nested functions!
-        function levelDataLoadedHandler(event:Event):void {
-            asset.removeEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataLoadedHandler);
-            asset.removeEventListener(Asset.EVENT_LOAD_ERROR, levelDataLoadErrorHandler);
+        function levelDataAssetLoadedHandler(event:Event):void {
+            asset.removeEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataAssetLoadedHandler);
+            asset.removeEventListener(Asset.EVENT_LOAD_ERROR, levelDataAssetLoadErrorHandler);
             var data:Object = asset.jsonData;
             var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
             if (asset.jsonData == null) {
@@ -240,13 +242,118 @@ public class Saltr extends EventDispatcher {
             asset.dispose();
         }
 
-        function levelDataLoadErrorHandler(event:Event):void {
-            asset.removeEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataLoadedHandler);
-            asset.removeEventListener(Asset.EVENT_LOAD_ERROR, levelDataLoadErrorHandler);
+        function levelDataAssetLoadErrorHandler(event:Event):void {
+            asset.removeEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataAssetLoadedHandler);
+            asset.removeEventListener(Asset.EVENT_LOAD_ERROR, levelDataAssetLoadErrorHandler);
             var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
             loadLevelDataLocally(levelPackData, levelData, cachedFileName);
             asset.dispose();
         }
+    }
+
+    //TODO @GSAR: port this later when SALTR is ready
+    public function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
+        var urlVars:URLVariables = new URLVariables();
+        urlVars.command = Saltr.COMMAND_ADDPROP;
+        var args:Object = {saltId: saltUserId};
+        var properties:Array = [];
+        for (var i:uint = 0; i < propertyNames.length; i++) {
+            var propertyName:String = propertyNames[i];
+            var propertyValue:* = propertyValues[i];
+            var operation:String = operations[i];
+            properties.push({key: propertyName, value: propertyValue, operation: operation});
+        }
+        args.properties = properties;
+        args.instanceKey = saltInstanceKey;
+        urlVars.arguments = JSON.stringify(args);
+
+        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
+
+        var asset:JSONAsset = new JSONAsset("property", ticket);
+        //
+        //TODO @GSAR: get rid of nested functions!
+        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, function (event:Event):void {
+            trace("getSaltLevelPacks : success");
+            event.target.removeEventListeners();
+            var data:Object = asset.jsonData;
+            asset.dispose();
+        });
+        //
+        asset.addEventListener(Asset.EVENT_LOAD_ERROR, function (event:Event):void {
+            trace("getSaltLevelPacks : error");
+            event.target.removeEventListeners();
+            asset.dispose();
+        });
+        //
+        asset.load();
+    }
+
+
+    private function loadAppData():void {
+        if (_isLoading) {
+            return;
+        }
+        _isLoading = true;
+        _ready = false;
+        var asset:JSONAsset = createAppDataAsset();
+        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, appDataAssetLoadCompleteHandler);
+        asset.addEventListener(Asset.EVENT_LOAD_ERROR, appDataAssetLoadErrorHandler);
+        asset.load();
+    }
+
+    private function appDataAssetLoadErrorHandler(event:Event):void {
+        trace("[SaltAPI] App data is failed to load.");
+        var asset:JSONAsset = event.target as JSONAsset;
+        asset.removeEventListeners();
+        loadAppDataInternal();
+        asset.dispose();
+    }
+
+    private function appDataAssetLoadCompleteHandler(event:Event):void {
+        trace("[SaltAPI] App data is loaded.");
+        var asset:JSONAsset = event.target as JSONAsset;
+        asset.removeEventListeners();
+        var data:Object = asset.jsonData;
+        var jsonData:Object = data.responseData;
+        trace("[SaltClient] Loaded App data. json=" + jsonData);
+        if (jsonData == null || data["status"] != Saltr.RESULT_SUCCEED) {
+            loadAppDataInternal();
+        }
+        else {
+            loadAppDataSuccessHandler(jsonData);
+            _storage.cacheObject(PACKS_DATA_URL_CACHE, "0", jsonData);
+        }
+        asset.dispose();
+    }
+
+    private function createAppDataAsset():JSONAsset {
+        var urlVars:URLVariables = new URLVariables();
+        urlVars.command = Saltr.COMMAND_APPDATA;
+
+        var args:Object = {};
+
+        if (_deviceDTO != null) {
+            args.device = _deviceDTO;
+        }
+        if (_partnerDTO != null) {
+            args.partner = _partnerDTO;
+        }
+        args.instanceKey = _instanceKey;
+        urlVars.arguments = JSON.stringify(args);
+        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
+        return new JSONAsset("saltAppConfig", ticket);
+    }
+
+    public function get features():Vector.<Feature> {
+        return _features;
+    }
+
+    public function get levelPackStructures():Vector.<LevelPackStructure> {
+        return _levelPackStructures;
+    }
+
+    public function get experiments():Vector.<Experiment> {
+        return _experiments;
     }
 }
 }

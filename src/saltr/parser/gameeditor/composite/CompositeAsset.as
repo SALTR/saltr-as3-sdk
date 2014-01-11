@@ -4,8 +4,8 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor.composite {
-import plexonic.saltr.parser.gameeditor.BoardAsset;
-import plexonic.saltr.parser.gameeditor.Cell;
+import saltr.parser.gameeditor.BoardAsset;
+import saltr.parser.gameeditor.Cell;
 
 public class CompositeAsset extends BoardAsset {
     private var _shifts:Vector.<Cell>;

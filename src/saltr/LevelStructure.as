@@ -13,8 +13,8 @@
 package saltr {
 import de.polygonal.ds.Array2;
 
-import plexonic.saltr.parser.LevelParser;
-import plexonic.saltr.parser.gameeditor.BoardData;
+import saltr.parser.LevelParser;
+import saltr.parser.gameeditor.BoardData;
 
 public class LevelStructure {
     private var _id:String;

@@ -13,7 +13,7 @@
 package saltr {
 
 //TODO @GSAR: make this internal!
-public class Deserializer {
+internal class Deserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {
         return p1.index - p2.index;
@@ -39,15 +39,6 @@ public class Deserializer {
 
     public function get experiments():Vector.<Experiment> {
         return _experiments;
-    }
-
-    public function getFeatureByToken(token:String):Feature {
-        for (var i:int = 0, len:int = _features.length; i < len; ++i) {
-            if (_features[i].token == token) {
-                return _features[i];
-            }
-        }
-        return null;
     }
 
     public function decode(data:Object):void {

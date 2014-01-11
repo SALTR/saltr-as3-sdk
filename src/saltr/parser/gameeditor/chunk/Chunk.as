@@ -14,10 +14,10 @@ package saltr.parser.gameeditor.chunk {
 import de.polygonal.ds.Array2;
 import de.polygonal.ds.Map;
 
-import plexonic.saltr.parser.gameeditor.BoardData;
-import plexonic.saltr.parser.gameeditor.Cell;
-import plexonic.saltr.parser.gameeditor.simple.SimpleAsset;
-import plexonic.saltr.parser.gameeditor.simple.SimpleAssetTemplate;
+import saltr.parser.gameeditor.BoardData;
+import saltr.parser.gameeditor.Cell;
+import saltr.parser.gameeditor.simple.SimpleAsset;
+import saltr.parser.gameeditor.simple.SimpleAssetTemplate;
 
 public class Chunk {
     private var _id:String;

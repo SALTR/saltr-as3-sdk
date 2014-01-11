@@ -11,8 +11,8 @@
  * Time: 5:02 PM
  */
 package saltr.parser.gameeditor.simple {
-import plexonic.saltr.parser.gameeditor.BoardAsset;
-import plexonic.saltr.parser.gameeditor.Cell;
+import saltr.parser.gameeditor.BoardAsset;
+import saltr.parser.gameeditor.Cell;
 
 public class SimpleAsset extends BoardAsset {
     private var _cell:Cell;
