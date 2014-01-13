@@ -11,8 +11,6 @@
  * Time: 2:03 PM
  */
 package saltr {
-import plexonic.util.Tools;
-
 public class Feature {
     private var _token:String;
     private var _data:Object;
@@ -23,7 +21,7 @@ public class Feature {
     }
 
     public function toString():String {
-        return "Feature { token : " + _token + " , data : " + Tools.toString(_data) + "}";
+        return "Feature { token : " + _token + " , data : " + _data + "}";
     }
 
 

@@ -2,13 +2,8 @@
 <module type="Flex" version="4">
   <component name="FlexBuildConfigurationManager" active="saltr-as3-sdk">
     <configurations>
-      <configuration name="saltr-as3-sdk" pure-as="true" output-type="Library" output-file="saltr-as3-sdk-v0.0.1.swc" output-folder="$MODULE_DIR$/out/production/saltr-as3-sdk">
-        <dependencies target-player="11.9">
-          <entries>
-            <entry library-name="PL-Polygonal-DS" library-level="application">
-              <dependency linkage="Merged" />
-            </entry>
-          </entries>
+      <configuration name="saltr-as3-sdk" target-platform="Mobile" pure-as="true" output-type="Library" output-file="saltr-as3-sdk-v0.0.1.swc" output-folder="$MODULE_DIR$/out/production/saltr-as3-sdk">
+        <dependencies>
           <sdk name="AIRSDK_Compiler_3.9" />
         </dependencies>
         <compiler-options />
@@ -21,21 +16,11 @@
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../Starling-Framework">
-      <sourceFolder url="file://$MODULE_DIR$/../Starling-Framework/starling" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/../plexonic-f2">
-      <sourceFolder url="file://$MODULE_DIR$/../plexonic-f2/src" isTestSource="false" />
-    </content>
-    <content url="file://$MODULE_DIR$/../plexonic-mobile">
-      <sourceFolder url="file://$MODULE_DIR$/../plexonic-mobile/src" isTestSource="false" />
-    </content>
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="AIRSDK_Compiler_3.9" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="PL-Polygonal-DS" level="application" />
   </component>
 </module>
 

@@ -11,9 +11,8 @@
  * Time: 4:35 PM
  */
 package saltr {
-import de.polygonal.ds.Array2;
-
 import saltr.parser.LevelParser;
+import saltr.parser.data.Vector2D;
 import saltr.parser.gameeditor.BoardData;
 
 public class LevelStructure {
@@ -23,10 +22,10 @@ public class LevelStructure {
     private var _properties:Object;
     private var _cols:int;
     private var _rows:int;
-    private var _board:Array2;
+    private var _board:Vector2D;
     private var _appendingRows:int;
     private var _appendingCols:int;
-    private var _appendedBoard:Array2;
+    private var _appendedBoard:Vector2D;
     private var _dataFetched:Boolean;
     private var _keyset:Object;
     private var _version:String;
@@ -54,12 +53,12 @@ public class LevelStructure {
         _rawAppendedBoard = data["boards"]["appended"];
         _cols = int(_rawMainBoard.cols);
         _rows = int(_rawMainBoard.rows);
-        _board = new Array2(_cols, _rows);
+        _board = new Vector2D(_cols, _rows);
         LevelParser.parseBoard(_board, _rawMainBoard, _boardData);
         if (_rawAppendedBoard) {
             _appendingRows = _rawAppendedBoard.rows ? int(_rawAppendedBoard.rows) : 1;
             _appendingCols = int(_rawAppendedBoard.cols);
-            _appendedBoard = new Array2(_appendingCols, _appendingRows);
+            _appendedBoard = new Vector2D(_appendingCols, _appendingRows);
             LevelParser.parseBoard(_appendedBoard, _rawAppendedBoard, _boardData);
         }
         _dataFetched = true;
@@ -85,7 +84,7 @@ public class LevelStructure {
         return _properties;
     }
 
-    public function get board():Array2 {
+    public function get board():Vector2D {
         return _board;
     }
 
@@ -97,7 +96,7 @@ public class LevelStructure {
         return _appendingCols;
     }
 
-    public function get appendedBoard():Array2 {
+    public function get appendedBoard():Vector2D {
         return _appendedBoard;
     }
 

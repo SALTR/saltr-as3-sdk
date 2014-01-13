@@ -11,21 +11,21 @@
  * Time: 5:27 PM
  */
 package saltr.parser.gameeditor {
-import de.polygonal.ds.Map;
+import flash.utils.Dictionary;
 
 public class BoardData {
-    private var _assetMap:Map;
+    private var _assetMap:Dictionary;
     private var _keyset:Object;
-    private var _stateMap:Map;
+    private var _stateMap:Dictionary;
 
     public function BoardData() {
     }
 
-    public function get assetMap():Map {
+    public function get assetMap():Dictionary {
         return _assetMap;
     }
 
-    public function set assetMap(value:Map):void {
+    public function set assetMap(value:Dictionary):void {
         _assetMap = value;
     }
 
@@ -37,11 +37,11 @@ public class BoardData {
         _keyset = value;
     }
 
-    public function get stateMap():Map {
+    public function get stateMap():Dictionary {
         return _stateMap;
     }
 
-    public function set stateMap(value:Map):void {
+    public function set stateMap(value:Dictionary):void {
         _stateMap = value;
     }
 

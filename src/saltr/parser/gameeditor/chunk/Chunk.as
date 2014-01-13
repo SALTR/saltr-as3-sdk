@@ -11,9 +11,9 @@
  * Time: 7:25 PM
  */
 package saltr.parser.gameeditor.chunk {
-import de.polygonal.ds.Array2;
-import de.polygonal.ds.Map;
+import flash.utils.Dictionary;
 
+import saltr.parser.data.Vector2D;
 import saltr.parser.gameeditor.BoardData;
 import saltr.parser.gameeditor.Cell;
 import saltr.parser.gameeditor.simple.SimpleAsset;
@@ -24,11 +24,11 @@ public class Chunk {
     private var _chunkAssets:Vector.<AssetInChunk>;
     private var _items:Array;
     private var _cells:Vector.<Cell>;
-    private var _outputBoard:Array2;
-    private var _boardAssetMap:Map;
-    private var _boardStateMap:Map;
+    private var _outputBoard:Vector2D;
+    private var _boardAssetMap:Dictionary;
+    private var _boardStateMap:Dictionary;
 
-    public function Chunk(id:String, outputBoard:Array2, boardData:BoardData) {
+    public function Chunk(id:String, outputBoard:Vector2D, boardData:BoardData) {
         _id = id;
         _chunkAssets = new Vector.<AssetInChunk>();
         _cells = new Vector.<Cell>();
@@ -65,8 +65,8 @@ public class Chunk {
         var randCellIndex:int;
         var randCell:Cell;
         var asset:SimpleAsset;
-        var assetTemplate:SimpleAssetTemplate = _boardAssetMap.get(id) as SimpleAssetTemplate;
-        var state:String = _boardStateMap.get(stateId) as String;
+        var assetTemplate:SimpleAssetTemplate = _boardAssetMap[id] as SimpleAssetTemplate;
+        var state:String = _boardStateMap[stateId] as String;
         for (var i:uint = 0; i < count; ++i) {
             randCellIndex = int(Math.random() * _cells.length);
             randCell = _cells[randCellIndex];
@@ -75,7 +75,7 @@ public class Chunk {
             asset.state = state;
             asset.type = assetTemplate.type;
             asset.cell = randCell;
-            _outputBoard.set(randCell.x, randCell.y, asset);
+            _outputBoard.insert(randCell.x, randCell.y, asset);
             _cells.splice(randCellIndex, 1);
             if (_cells.length == 0) {
                 return;

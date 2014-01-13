@@ -4,19 +4,19 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor.composite {
-import de.polygonal.ds.Array2;
-import de.polygonal.ds.Map;
+import flash.utils.Dictionary;
 
+import saltr.parser.data.Vector2D;
 import saltr.parser.gameeditor.BoardData;
 import saltr.parser.gameeditor.Cell;
 
 public class Composite {
     private var _id:String;
     private var _position:Cell;
-    private var _outputBoard:Array2;
-    private var _boardAssetMap:Map;
+    private var _outputBoard:Vector2D;
+    private var _boardAssetMap:Dictionary;
 
-    public function Composite(id:String, position:Cell, outputBoard:Array2, boardData:BoardData) {
+    public function Composite(id:String, position:Cell, outputBoard:Vector2D, boardData:BoardData) {
         _id = id;
         _position = position;
         _outputBoard = outputBoard;
@@ -45,7 +45,7 @@ public class Composite {
         }
         compositeAsset.shifts = shifts;
         compositeAsset.basis = new Cell(_position.x, _position.y);
-        _outputBoard.set(_position.x, _position.y, compositeAsset);
+        _outputBoard.insert(_position.x, _position.y, compositeAsset);
     }
 }
 }

@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="408aa5d5-df88-42ec-9d51-0a7fd41f3456" name="Default" comment="" />
+    <list default="true" id="408aa5d5-df88-42ec-9d51-0a7fd41f3456" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/assets/Asset.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/utils/HTTPStatus.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/storage/IStorage.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/storage/Storage.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/assets/URLTicket.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/parser/data/Vector2D.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/parser/data/Vector2DIterator.as" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/utils/formatString.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as" afterPath="$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as" afterPath="$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as" afterPath="$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/Feature.as" afterPath="$PROJECT_DIR$/src/saltr/Feature.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/LevelParser.as" afterPath="$PROJECT_DIR$/src/saltr/parser/LevelParser.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/LevelStructure.as" afterPath="$PROJECT_DIR$/src/saltr/LevelStructure.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/PartnerDTO.as" afterPath="$PROJECT_DIR$/src/saltr/PartnerDTO.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/Saltr.as" afterPath="$PROJECT_DIR$/src/saltr/Saltr.as" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/saltr-as3-sdk.iml" afterPath="$PROJECT_DIR$/saltr-as3-sdk.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/saltr-as3-sdk.iws" afterPath="$PROJECT_DIR$/saltr-as3-sdk.iws" />
+    </list>
     <ignored path="saltr-as3-sdk.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -10,7 +29,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="ChangesViewManager" flattened_view="false" show_ignored="false" />
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -64,13 +83,98 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ISaltrAPI.as" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/saltr/ISaltrAPI.as">
+      <file leaf-file-name="LevelStructure.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/LevelStructure.as">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="16" selection-start="378" selection-end="378" vertical-scroll-proportion="0.18888889" vertical-offset="0" max-vertical-offset="900">
+            <state line="98" column="48" selection-start="3092" selection-end="3092" vertical-scroll-proportion="0.0" vertical-offset="1666" max-vertical-offset="2261">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PartnerDTO.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/PartnerDTO.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="34" column="0" selection-start="907" selection-end="907" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Saltr.as" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/saltr/Saltr.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="243" column="55" selection-start="9718" selection-end="9718" vertical-scroll-proportion="4.4955554" vertical-offset="0" max-vertical-offset="5287">
+              <folding>
+                <element signature="e#399#429#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="IStorage.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/storage/IStorage.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="442">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Storage.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/storage/Storage.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="30" column="61" selection-start="1000" selection-end="1000" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1938">
+              <folding>
+                <element signature="e#407#436#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Asset.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/assets/Asset.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="98" column="5" selection-start="3070" selection-end="3070" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3791">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Vector2DIterator.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/parser/data/Vector2DIterator.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="0" selection-start="332" selection-end="332" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LevelParser.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/parser/LevelParser.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="120" column="47" selection-start="4664" selection-end="4664" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="2448">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DeviceDTO.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/DeviceDTO.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="78" selection-start="589" selection-end="637" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Vector2D.as" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/saltr/parser/data/Vector2D.as">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="40" column="38" selection-start="978" selection-end="978" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="969">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -100,19 +204,37 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as" />
         <option value="$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/simple/SimpleAsset.as" />
         <option value="$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/composite/CompositeAsset.as" />
         <option value="$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/composite/CompositeAssetTemplate.as" />
         <option value="$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/composite/Composite.as" />
         <option value="$PROJECT_DIR$/src/plexonic/saltr/parser/LevelParser.as" />
         <option value="$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/chunk/Chunk.as" />
+        <option value="$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as" />
+        <option value="$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as" />
+        <option value="$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as" />
+        <option value="$PROJECT_DIR$/src/saltr/Feature.as" />
+        <option value="$PROJECT_DIR$/src/saltr/Vector2D.as" />
+        <option value="$PROJECT_DIR$/src/saltr/parser/LevelParser.as" />
+        <option value="$PROJECT_DIR$/src/saltr/LevelStructure.as" />
+        <option value="$PROJECT_DIR$/src/saltr/assets/TextAsset.as" />
+        <option value="$PROJECT_DIR$/src/saltr/assets/ByteArrayAsset.as" />
+        <option value="$PROJECT_DIR$/src/saltr/assets/utils/HTTPStatus.as" />
+        <option value="$PROJECT_DIR$/src/saltr/utils/formatString.as" />
+        <option value="$PROJECT_DIR$/src/saltr/assets/Asset.as" />
+        <option value="$PROJECT_DIR$/src/saltr/parser/data/Vector2D.as" />
+        <option value="$PROJECT_DIR$/src/saltr/parser/data/Vector2DIterator.as" />
+        <option value="$PROJECT_DIR$/src/saltr/storage/IStorage.as" />
+        <option value="$PROJECT_DIR$/src/saltr/storage/MobileStorageEngine.as" />
+        <option value="$PROJECT_DIR$/src/saltr/storage/Storage.as" />
+        <option value="$PROJECT_DIR$/src/saltr/SaltrUser.as" />
+        <option value="$PROJECT_DIR$/src/saltr/PartnerDTO.as" />
+        <option value="$PROJECT_DIR$/src/saltr/Saltr.as" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-4" />
-    <option name="y" value="-4" />
     <option name="width" value="1928" />
     <option name="height" value="1044" />
   </component>
@@ -142,7 +264,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -158,20 +279,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="saltr-as3-sdk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="saltr-as3-sdk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="saltr-as3-sdk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="saltr-as3-sdk" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -179,10 +286,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="saltr-as3-sdk" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="saltr-as3-sdk" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewModuleNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="saltr-as3-sdk" />
@@ -200,6 +303,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -214,184 +318,24 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../plexonic-mobile" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../plexonic-f2" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\saltr\storage" />
+      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\saltr\utils" />
+      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\saltr\assets\utils" />
+      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\saltr\assets" />
       <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\plexonic" />
-      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src" />
     </key>
-  </component>
-  <component name="RestoreUpdateTree">
-    <UpdateInfo date="Moments ago" ActionInfo="_Update">
-      <UpdatedFiles>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated from server" />
-          <option name="myStatusName" value="Changed on server" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CHANGED_ON_SERVER" />
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Updated" />
-            <option name="myStatusName" value="Changed" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="UPDATED" />
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-f2/src/plexonic/analytics/Analytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-f2/src/plexonic/analytics/proxy/ProxyMixPanel.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-f2/src/plexonic/game/GameController.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-f2/src/plexonic/game/level/LevelData.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-f2/src/plexonic/game/matching/experimental/DroppingHelper.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/FlurryGAMobileAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/FlurryLocalyticsMobileAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/FlurryMobileAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/LocalyticsMobileAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/MobileAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/proxy/AbstractProxyAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/proxy/ProxyApsalar.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/proxy/ProxyFlurry.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/proxy/ProxyGameAnalytics.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/../plexonic-mobile/src/plexonic/analytics/proxy/ProxyLocalytics.as</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Created" />
-            <option name="myStatusName" value="Created" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="CREATED" />
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/Deserializer.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/DeviceDTO.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/Experiment.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/Feature.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/ISaltrAPI.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/LevelPackStructure.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/LevelStructure.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/MobileSaltr.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/PartnerDTO.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/Saltr.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/SaltrAPI.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/LevelParser.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardAsset.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/Cell.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/AssetInChunk.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/CompositeAsset.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/CompositeAssetTemplate.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/simple/SimpleAsset.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/saltr/parser/gameeditor/simple/SimpleAssetTemplate.as</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Deleted" />
-            <option name="myStatusName" value="Deleted" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="true" />
-            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/Experiment.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/Feature.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/ISaltrAPI.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/LevelPackStructure.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/LevelStructure.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/MobileSaltr.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/Saltr.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/SaltrAPI.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/SaltrDecoder.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/SaltrDeviceDTO.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/SaltrPartnerDTO.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/IParser.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/LevelParser.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/BoardAsset.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/BoardData.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/Cell.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/chunk/AssetInChunk.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/chunk/Chunk.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/composite/Composite.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/composite/CompositeAsset.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/composite/CompositeAssetTemplate.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/simple/SimpleAsset.as</PATH>
-            <PATH vcs="Git" revision="">$PROJECT_DIR$/src/plexonic/saltr/parser/gameeditor/simple/SimpleAssetTemplate.as</PATH>
-          </FILE-GROUP>
-          <FILE-GROUP>
-            <option name="myUpdateName" value="Restored" />
-            <option name="myStatusName" value="Will be restored" />
-            <option name="mySupportsDeletion" value="false" />
-            <option name="myCanBeAbsent" value="false" />
-            <option name="myId" value="RESTORED" />
-          </FILE-GROUP>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Modified" />
-          <option name="myStatusName" value="Modified" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MODIFIED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Skipped" />
-          <option name="myStatusName" value="Skipped" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SKIPPED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with conflicts" />
-          <option name="myStatusName" value="Will be merged with conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_CONFLICTS" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with tree conflicts" />
-          <option name="myStatusName" value="Merged with tree conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged with property conflicts" />
-          <option name="myStatusName" value="Will be merged with property conflicts" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Merged" />
-          <option name="myStatusName" value="Will be merged" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="MERGED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Not in repository" />
-          <option name="myStatusName" value="Not in repository" />
-          <option name="mySupportsDeletion" value="true" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UNKNOWN" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally added" />
-          <option name="myStatusName" value="Locally added" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_ADDED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Locally removed" />
-          <option name="myStatusName" value="Locally removed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="LOCALLY_REMOVED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Switched" />
-          <option name="myStatusName" value="Switched" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="SWITCHED" />
-        </FILE-GROUP>
-      </UpdatedFiles>
-    </UpdateInfo>
+    <key name="CreateActionScriptClassDialog.DESTINATION_PACKAGE_RECENT_KEY">
+      <recent name="saltr" />
+      <recent name="saltr.parser.data" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\saltr\utils" />
+      <recent name="D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\src\saltr\parser\data" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="Remote" factoryName="Remote">
@@ -526,6 +470,8 @@
       <workItem from="1389268114250" duration="4551000" />
       <workItem from="1389277534751" duration="1210000" />
       <workItem from="1389335829485" duration="3252000" />
+      <workItem from="1389519314265" duration="9401000" />
+      <workItem from="1389530714500" duration="7129000" />
     </task>
     <task id="LOCAL-00001" summary="iinitial commit">
       <created>1389363145840</created>
@@ -535,34 +481,34 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10596000" />
+    <option name="totallyTimeSpent" value="27126000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="-4" width="1928" height="1044" extended-state="6" />
-    <editor active="true" />
+    <frame x="-4" y="0" width="1928" height="1044" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="true" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="true" weight="0.3290735" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="true" internal_type="SLIDING" type="FLOATING" visible="false" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="1919" y="56" width="622" height="1026" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.17358893" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="2542" y="56" width="465" height="1027" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -582,14 +528,298 @@
     <option name="LAST_COMMIT_MESSAGE" value="iinitial commit" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/saltr/LevelStructure.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="48" selection-start="3092" selection-end="3092" vertical-scroll-proportion="0.0" vertical-offset="1666" max-vertical-offset="2261">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/PartnerDTO.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="21" selection-start="817" selection-end="817" vertical-scroll-proportion="0.0" vertical-offset="459" max-vertical-offset="1445">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/Saltr.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="217" column="55" selection-start="8088" selection-end="8088" vertical-scroll-proportion="0.0" vertical-offset="3689" max-vertical-offset="5831">
+          <folding>
+            <element signature="e#399#429#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/assets/Asset.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="150" selection-start="1733" selection-end="1733" vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="4080">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/data/Vector2DIterator.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="332" selection-end="332" vertical-scroll-proportion="0.0" vertical-offset="238" max-vertical-offset="561">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/LevelParser.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="47" selection-start="4664" selection-end="4664" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="2448">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/data/Vector2D.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="38" selection-start="978" selection-end="978" vertical-scroll-proportion="0.0" vertical-offset="680" max-vertical-offset="969">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/saltr/ISaltrAPI.as">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="16" selection-start="378" selection-end="378" vertical-scroll-proportion="0.18888889" vertical-offset="0" max-vertical-offset="900">
+        <state line="10" column="16" selection-start="378" selection-end="378" vertical-scroll-proportion="0.0" vertical-offset="170" max-vertical-offset="459">
           <folding>
             <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/ISaltrAPI.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="16" selection-start="378" selection-end="378" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/AssetInChunk.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/CompositeAsset.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/CompositeAssetTemplate.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/simple/SimpleAssetTemplate.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/simple/SimpleAsset.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardAsset.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="43" column="49" selection-start="1084" selection-end="1084" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="850">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="28" selection-start="1555" selection-end="1555" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="969">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#99#129#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../plexonic-f2/src/com/hurlant/crypto/tls/SSLConnectionState.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="34" selection-start="1473" selection-end="1473" vertical-scroll-proportion="0.6611111" vertical-offset="0" max-vertical-offset="2703" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../plexonic-f2/src/com/hurlant/crypto/hash/MAC.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="37" selection-start="1104" selection-end="1104" vertical-scroll-proportion="0.5477778" vertical-offset="0" max-vertical-offset="2261" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="113" column="0" selection-start="4178" selection-end="4178" vertical-scroll-proportion="0.0" vertical-offset="1429" max-vertical-offset="2329">
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+            <element signature="e#423#453#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/Feature.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="0" selection-start="634" selection-end="634" vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="629">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/gameeditor/Cell.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="20" selection-start="506" selection-end="506" vertical-scroll-proportion="0.0" vertical-offset="6" max-vertical-offset="680">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/LevelStructure.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="48" selection-start="3092" selection-end="3092" vertical-scroll-proportion="0.0" vertical-offset="154" max-vertical-offset="2176">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/assets/URLTicket.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4012">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/LevelParser.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="47" selection-start="4664" selection-end="4664" vertical-scroll-proportion="0.0" vertical-offset="86" max-vertical-offset="2363">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/utils/HTTPStatus.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="5" selection-start="1268" selection-end="1268" vertical-scroll-proportion="0.41555557" vertical-offset="0" max-vertical-offset="900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/utils/formatString.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="0" selection-start="448" selection-end="448" vertical-scroll-proportion="0.05666667" vertical-offset="0" max-vertical-offset="900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/data/Vector2D.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="38" selection-start="978" selection-end="978" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="901">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/parser/data/Vector2DIterator.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="0" selection-start="332" selection-end="332" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="561">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/assets/Asset.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="98" column="5" selection-start="3070" selection-end="3070" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3791">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../plexonic-f2/src/plexonic/util/Storage.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="36" selection-start="442" selection-end="442" vertical-scroll-proportion="0.15111111" vertical-offset="0" max-vertical-offset="918">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/storage/IStorage.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../plexonic-f2/src/plexonic/util/IStorage.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="17" selection-start="423" selection-end="423" vertical-scroll-proportion="0.15111111" vertical-offset="0" max-vertical-offset="900">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/storage/Storage.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="61" selection-start="1000" selection-end="1000" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1938">
+          <folding>
+            <element signature="e#407#436#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/DeviceDTO.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="78" selection-start="589" selection-end="637" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/PartnerDTO.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="34" column="0" selection-start="907" selection-end="907" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1241">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/saltr/Saltr.as">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="243" column="55" selection-start="9718" selection-end="9718" vertical-scroll-proportion="4.4955554" vertical-offset="0" max-vertical-offset="5287">
+          <folding>
+            <element signature="e#399#429#0" expanded="true" />
           </folding>
         </state>
       </provider>

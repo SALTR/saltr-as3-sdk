@@ -11,69 +11,62 @@
  * Time: 5:28 PM
  */
 package saltr {
-import plexonic.user.Gender;
+
 
 //TODO @GSAR: Rename to handle USER properties separately, and Partner data separately may be?
-public class PartnerDTO {
+internal class PartnerDTO {
 
     private var _partnerId:String;
     private var _partnerType:String;
-    private var _firstName:String;
-    private var _lastName:String;
-    private var _gender:String;
-    private var _age:uint;
+//    private var _firstName:String;
+//    private var _lastName:String;
+//    private var _gender:String;
+//    private var _age:uint;
 
-    public function PartnerDTO() {
-        //TODO: set gender correctly
-        _gender = Gender.UNKNOWN;
+    public function PartnerDTO(partnerId:String = null, partnerType:String = null) {
+
     }
 
     public function get partnerId():String {
         return _partnerId;
     }
 
-    public function set partnerId(value:String):void {
-        _partnerId = value;
-    }
 
     public function get partnerType():String {
         return _partnerType;
     }
 
-    public function set partnerType(value:String):void {
-        _partnerType = value;
-    }
 
-    public function get gender():String {
-        return _gender;
-    }
-
-    public function set gender(value:String):void {
-        _gender = value;
-    }
-
-    public function get age():uint {
-        return _age;
-    }
-
-    public function set age(value:uint):void {
-        _age = value;
-    }
-
-    public function get firstName():String {
-        return _firstName;
-    }
-
-    public function set firstName(value:String):void {
-        _firstName = value;
-    }
-
-    public function get lastName():String {
-        return _lastName;
-    }
-
-    public function set lastName(value:String):void {
-        _lastName = value;
-    }
+//    public function get gender():String {
+//        return _gender;
+//    }
+//
+//    public function set gender(value:String):void {
+//        _gender = value;
+//    }
+//
+//    public function get age():uint {
+//        return _age;
+//    }
+//
+//    public function set age(value:uint):void {
+//        _age = value;
+//    }
+//
+//    public function get firstName():String {
+//        return _firstName;
+//    }
+//
+//    public function set firstName(value:String):void {
+//        _firstName = value;
+//    }
+//
+//    public function get lastName():String {
+//        return _lastName;
+//    }
+//
+//    public function set lastName(value:String):void {
+//        _lastName = value;
+//    }
 }
 }

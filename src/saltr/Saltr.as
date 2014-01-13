@@ -13,77 +13,56 @@
 package saltr {
 import flash.net.URLVariables;
 
-import plexonic.asset.Asset;
-import plexonic.asset.JSONAsset;
-import plexonic.asset.URLTicket;
-import plexonic.error.PureVirtualFunctionError;
-import plexonic.user.User;
-import plexonic.util.Storage;
+import saltr.assets.Asset;
+import saltr.assets.URLTicket;
+import saltr.storage.IStorage;
+import saltr.storage.Storage;
+import saltr.utils.formatString;
 
-import starling.events.Event;
-import starling.events.EventDispatcher;
-import starling.utils.formatString;
+public class Saltr {
 
-public class Saltr extends EventDispatcher {
-    public static const EVENT_LEVELDATA_READY:String = "levelDataReady";
-    public static const EVENT_APPDATA_READY_FOR_SETTING:String = "appDataReadyForSetting";
-    public static const EVENT_APPDATA_READY_FOR_USE:String = "appDataReadyForUse";
-
-    public static const PLATFORM_TYPE_IOS:String = "iOS";
-    public static const PLATFORM_TYPE_WEB:String = "web";
-    public static const SALT_API_URL:String = CONFIG::saltApiUrl;
-    public static const COMMAND_GAFE:String = "GAFE";
-    public static const COMMAND_EXPG:String = "EXPG";
+    public static const SALT_API_URL:String = "http://api.saltr.com/httpjson.action";
     public static const COMMAND_APPDATA:String = "APPDATA";
     public static const COMMAND_ADDPROP:String = "ADDPROP";
 
     //
-    protected static const PACKS_DATA_URL_CACHE:String = "level_packs_cache.json";
-    protected static const PACKS_DATA_URL_INTERNAL:String = "level/level_packs.json";
-    protected static const LEVEL_DATA_URL_LOCAL_TEMPLATE:String = "level/pack_{0}/level_{1}.json";
-    private static const LEVEL_DATA_URL_CACHE_TEMPLATE:String = "pack_{0}_level_{1}.json";
+    protected static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
+    protected static const APP_DATA_URL_INTERNAL:String = "saltr/app_data.json";
+    protected static const LEVEL_DATA_URL_LOCAL_TEMPLATE:String = "saltr/pack_{0}/level_{1}.json";
+    protected static const LEVEL_DATA_URL_CACHE_TEMPLATE:String = "pack_{0}_level_{1}.json";
 
     public static const PROPERTY_OPERATIONS_INCREMENT:String = "inc";
     public static const PROPERTY_OPERATIONS_SET:String = "set";
 
     protected static const RESULT_SUCCEED:String = "SUCCEED";
-    private static const RESULT_ERROR:String = "ERROR";
+    protected static const RESULT_ERROR:String = "ERROR";
 
-    protected var _storage:Storage;
+    protected var _storage:IStorage;
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
     protected var _partnerDTO:PartnerDTO;
 
-    private var _saltDecoder:Deserializer;
+    protected var _saltDecoder:Deserializer;
     protected var _instanceKey:String;
-    private var _features:Vector.<Feature>;
-    private var _levelPackStructures:Vector.<LevelPackStructure>;
-    private var _experiments:Vector.<Experiment>;
-    private var _deviceDTO:DeviceDTO;
+    protected var _features:Vector.<Feature>;
+    protected var _levelPackStructures:Vector.<LevelPackStructure>;
+    protected var _experiments:Vector.<Experiment>;
+    protected var _deviceDTO:DeviceDTO;
+    protected var _onGetAppDataSuccess:Function;
+    protected var _onGetAppDataFail:Function;
+    protected var _onGetLevelDataBodySuccess:Function;
+    protected var _onGetLevelDataBodyFail:Function;
 
     /**
      *
      */
-    public function Saltr() {
-
-    }
-
-    // TODO: override init in WebSaltr
-    public function init(instanceKey:String):void {
-        _storage = Storage.getInstance();
+    public function Saltr(instanceKey:String, storage:IStorage) {
         _instanceKey = instanceKey;
+        _storage = storage;
         _saltDecoder = new Deserializer();
         _isLoading = false;
         _ready = false;
-    }
-
-    public function get saltUserId():String {
-        return _saltUserId;
-    }
-
-    public function get userId():String {
-        throw new PureVirtualFunctionError();
     }
 
     public function get ready():Boolean {
@@ -99,22 +78,17 @@ public class Saltr extends EventDispatcher {
         return null;
     }
 
-
-    public function initPartner(partner:String, user:User):void {
-        var saltPartnerDTO:PartnerDTO = new PartnerDTO();
-        saltPartnerDTO.partnerType = partner;
-        saltPartnerDTO.firstName = user.firstname;
-        saltPartnerDTO.lastName = user.lastname;
-        saltPartnerDTO.gender = user.gender;
-        saltPartnerDTO.partnerId = user.id;
-        _partnerDTO = saltPartnerDTO;
+    public function initPartner(partnerId:String, partnerType:String):void {
+        _partnerDTO = new PartnerDTO(partnerId, partnerType);
     }
 
-    public function initDevice(deviceId:String):void {
-        _deviceDTO = new DeviceDTO(deviceId, "");
+    public function initDevice(deviceId:String, deviceType:String):void {
+        _deviceDTO = new DeviceDTO(deviceId, deviceType);
     }
 
-    public function getAppData():void {
+    public function getAppData(onGetAppDataSuccess:Function, onGetAppDataFail:Function):void {
+        _onGetAppDataSuccess = onGetAppDataSuccess;
+        _onGetAppDataFail = onGetAppDataFail;
         loadAppData();
     }
 
@@ -127,19 +101,19 @@ public class Saltr extends EventDispatcher {
         _levelPackStructures = _saltDecoder.levelPackStructures;
         _experiments = _saltDecoder.experiments;
         trace("[SaltClient] packs=" + _saltDecoder.levelPackStructures.length);
-        dispatchEventWith(EVENT_APPDATA_READY_FOR_SETTING);
-        dispatchEventWith(EVENT_APPDATA_READY_FOR_USE);
+        _onGetAppDataSuccess();
     }
 
     private function loadAppDataFailHandler():void {
         _isLoading = false;
         _ready = false;
+        _onGetAppDataFail();
         trace("[SaltClient] ERROR: Level Packs are not loaded.");
     }
 
     protected function loadAppDataInternal():void {
         trace("[SaltClient] NO Internet available - so loading internal app data.");
-        var data:Object = _storage.getObject(PACKS_DATA_URL_CACHE, Storage.FROM_CACHE);
+        var data:Object = _storage.getObject(APP_DATA_URL_CACHE, Storage.FROM_CACHE);
         if (data != null) {
             trace("[SaltClient] Loading App data from Cache folder.");
 
@@ -147,7 +121,7 @@ public class Saltr extends EventDispatcher {
         }
         else {
             trace("[SaltClient] Loading App data from application folder.");
-            data = _storage.getObject(PACKS_DATA_URL_INTERNAL, Storage.FROM_APP);
+            data = _storage.getObject(APP_DATA_URL_INTERNAL, Storage.FROM_APP);
             if (data != null) {
                 loadAppDataSuccessHandler(data);
             }
@@ -160,34 +134,31 @@ public class Saltr extends EventDispatcher {
 
     /////////////////////////////////////
 
-    public function getLevelDataBody(levelPackData:LevelPackStructure, levelData:LevelStructure):void {
-        CONFIG::dev{
-            loadLevelDataFromServer(levelPackData, levelData, true);
-        }
-        CONFIG::stage{
+    public function getLevelDataBody(levelPackData:LevelPackStructure, levelData:LevelStructure, onGetLevelDataBodySuccess:Function, onGetLevelDataBodyFail:Function, useCache:Boolean = true):void {
+        _onGetLevelDataBodySuccess = onGetLevelDataBodySuccess;
+        _onGetLevelDataBodyFail = onGetLevelDataBodyFail;
+        if (!useCache) {
             loadLevelDataFromServer(levelPackData, levelData, true);
         }
 
-        CONFIG::live{
-            //if there are no version change than load from cache
-            var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-            if (levelData.version == _storage.getObjectVersion(cachedFileName, Storage.FROM_CACHE)) {
-                loadLevelDataCached(levelData, cachedFileName);
-            } else {
-                loadLevelDataFromServer(levelPackData, levelData);
-            }
+        //if there are no version change than load from cache
+        var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
+        if (levelData.version == _storage.getObjectVersion(cachedFileName, Storage.FROM_CACHE)) {
+            loadLevelDataCached(levelData, cachedFileName);
+        } else {
+            loadLevelDataFromServer(levelPackData, levelData);
         }
-
 
     }
 
     protected function levelLoadSuccessHandler(levelData:LevelStructure, data:Object):void {
         levelData.parseData(data);
-        dispatchEventWith(EVENT_LEVELDATA_READY);
+        _onGetLevelDataBodySuccess();
     }
 
     protected function levelLoadErrorHandler():void {
         trace("[SaltClient] ERROR: Level data is not loaded.");
+        _onGetLevelDataBodyFail();
     }
 
     protected function loadLevelDataLocally(levelPackData:LevelPackStructure, levelData:LevelStructure, cachedFileName:String):void {
@@ -221,15 +192,11 @@ public class Saltr extends EventDispatcher {
     protected function loadLevelDataFromServer(levelPackData:LevelPackStructure, levelData:LevelStructure, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
         var ticket:URLTicket = new URLTicket(dataUrl);
-        var asset:JSONAsset = new JSONAsset("level", ticket);
-        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataAssetLoadedHandler);
-        asset.addEventListener(Asset.EVENT_LOAD_ERROR, levelDataAssetLoadErrorHandler);
+        var asset:Asset = new Asset("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
         asset.load();
         //
         //TODO @GSAR: get rid of nested functions!
-        function levelDataAssetLoadedHandler(event:Event):void {
-            asset.removeEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataAssetLoadedHandler);
-            asset.removeEventListener(Asset.EVENT_LOAD_ERROR, levelDataAssetLoadErrorHandler);
+        function levelDataAssetLoadedHandler():void {
             var data:Object = asset.jsonData;
             var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
             if (asset.jsonData == null) {
@@ -242,9 +209,7 @@ public class Saltr extends EventDispatcher {
             asset.dispose();
         }
 
-        function levelDataAssetLoadErrorHandler(event:Event):void {
-            asset.removeEventListener(Asset.EVENT_LOAD_COMPLETE, levelDataAssetLoadedHandler);
-            asset.removeEventListener(Asset.EVENT_LOAD_ERROR, levelDataAssetLoadErrorHandler);
+        function levelDataAssetLoadErrorHandler():void {
             var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
             loadLevelDataLocally(levelPackData, levelData, cachedFileName);
             asset.dispose();
@@ -269,22 +234,16 @@ public class Saltr extends EventDispatcher {
 
         var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
 
-        var asset:JSONAsset = new JSONAsset("property", ticket);
-        //
-        //TODO @GSAR: get rid of nested functions!
-        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, function (event:Event):void {
-            trace("getSaltLevelPacks : success");
-            event.target.removeEventListeners();
-            var data:Object = asset.jsonData;
-            asset.dispose();
-        });
-        //
-        asset.addEventListener(Asset.EVENT_LOAD_ERROR, function (event:Event):void {
-            trace("getSaltLevelPacks : error");
-            event.target.removeEventListeners();
-            asset.dispose();
-        });
-        //
+        var asset:Asset = new Asset("property", ticket,
+                function (asset:Asset):void {
+                    trace("getSaltLevelPacks : success");
+                    var data:Object = asset.jsonData;
+                    asset.dispose();
+                },
+                function (asset:Asset):void {
+                    trace("getSaltLevelPacks : error");
+                    asset.dispose();
+                });
         asset.load();
     }
 
@@ -295,24 +254,18 @@ public class Saltr extends EventDispatcher {
         }
         _isLoading = true;
         _ready = false;
-        var asset:JSONAsset = createAppDataAsset();
-        asset.addEventListener(Asset.EVENT_LOAD_COMPLETE, appDataAssetLoadCompleteHandler);
-        asset.addEventListener(Asset.EVENT_LOAD_ERROR, appDataAssetLoadErrorHandler);
+        var asset:Asset = createAppDataAsset(appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
         asset.load();
     }
 
-    private function appDataAssetLoadErrorHandler(event:Event):void {
+    private function appDataAssetLoadErrorHandler(asset:Asset):void {
         trace("[SaltAPI] App data is failed to load.");
-        var asset:JSONAsset = event.target as JSONAsset;
-        asset.removeEventListeners();
         loadAppDataInternal();
         asset.dispose();
     }
 
-    private function appDataAssetLoadCompleteHandler(event:Event):void {
+    private function appDataAssetLoadCompleteHandler(asset:Asset):void {
         trace("[SaltAPI] App data is loaded.");
-        var asset:JSONAsset = event.target as JSONAsset;
-        asset.removeEventListeners();
         var data:Object = asset.jsonData;
         var jsonData:Object = data.responseData;
         trace("[SaltClient] Loaded App data. json=" + jsonData);
@@ -321,17 +274,15 @@ public class Saltr extends EventDispatcher {
         }
         else {
             loadAppDataSuccessHandler(jsonData);
-            _storage.cacheObject(PACKS_DATA_URL_CACHE, "0", jsonData);
+            _storage.cacheObject(APP_DATA_URL_CACHE, "0", jsonData);
         }
         asset.dispose();
     }
 
-    private function createAppDataAsset():JSONAsset {
+    private function createAppDataAsset(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Asset {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_APPDATA;
-
         var args:Object = {};
-
         if (_deviceDTO != null) {
             args.device = _deviceDTO;
         }
@@ -341,7 +292,7 @@ public class Saltr extends EventDispatcher {
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
         var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
-        return new JSONAsset("saltAppConfig", ticket);
+        return new Asset("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
     public function get features():Vector.<Feature> {

@@ -11,11 +11,9 @@
  * Time: 9:01 PM
  */
 package saltr.parser {
-import de.polygonal.ds.Array2;
-import de.polygonal.ds.HashMap;
-import de.polygonal.ds.Itr;
-import de.polygonal.ds.Map;
+import flash.utils.Dictionary;
 
+import saltr.parser.data.Vector2D;
 import saltr.parser.gameeditor.BoardData;
 import saltr.parser.gameeditor.Cell;
 import saltr.parser.gameeditor.chunk.AssetInChunk;
@@ -30,41 +28,37 @@ final public class LevelParser {
 //        throw new StaticClassError();
     }
 
-    public static function parseBoard(outputBoard:Array2, board:Object, boardData:BoardData):void {
+    public static function parseBoard(outputBoard:Vector2D, board:Object, boardData:BoardData):void {
         createEmptyBoard(outputBoard);
-        var composites:HashMap = parseComposites(board.composites as Array, outputBoard, boardData);
-        var boardChunks:HashMap = parseChunks(board.chunks as Array, outputBoard, boardData);
+        var composites:Dictionary = parseComposites(board.composites as Array, outputBoard, boardData);
+        var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, boardData);
         generateComposites(composites);
         generateChunks(boardChunks);
     }
 
-    public static function regenerateChunks(outputBoard:Array2, board:Object, boardData:BoardData):void {
-        var boardChunks:HashMap = parseChunks(board.chunks as Array, outputBoard, boardData);
+    public static function regenerateChunks(outputBoard:Vector2D, board:Object, boardData:BoardData):void {
+        var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, boardData);
         generateChunks(boardChunks);
     }
 
-    private static function generateChunks(chunks:HashMap):void {
-        var iterator:Itr = chunks.iterator();
-        iterator.reset();
-        while (iterator.hasNext()) {
-            (iterator.next() as Chunk).generate();
+    private static function generateChunks(chunks:Dictionary):void {
+        for (var key:Object in chunks) {
+            (chunks[key] as Chunk).generate();
         }
     }
 
-    private static function generateComposites(composites:HashMap):void {
-        var iterator:Itr = composites.iterator();
-        iterator.reset();
-        while (iterator.hasNext()) {
-            (iterator.next() as Composite).generate();
+    private static function generateComposites(composites:Dictionary):void {
+        for (var key:Object in composites) {
+            (composites[key] as Composite).generate();
         }
     }
 
-    private static function createEmptyBoard(board:Array2):void {
-        var cols:int = board.getW();
-        var rows:int = board.getH();
+    private static function createEmptyBoard(board:Vector2D):void {
+        var cols:int = board.width;
+        var rows:int = board.height;
         for (var i:int = 0; i < rows; ++i) {
             for (var j:int = 0; j < cols; ++j) {
-                board.set(j, i, {
+                board.insert(j, i, {
                     col: j,
                     row: i
                 });
@@ -72,12 +66,12 @@ final public class LevelParser {
         }
     }
 
-    private static function parseChunks(chunksPrototype:Array, outputBoard:Array2, boardData:BoardData):HashMap {
+    private static function parseChunks(chunksPrototype:Array, outputBoard:Vector2D, boardData:BoardData):Dictionary {
         var chunkAsset:AssetInChunk;
         var chunk:Chunk;
         var assetsPrototype:Array;
         var cellsPrototype:Array;
-        var chunks:HashMap = new HashMap(false, chunksPrototype.length);
+        var chunks:Dictionary = new Dictionary();
         for each (var chunkPrototype:* in chunksPrototype) {
             chunk = new Chunk(String(chunkPrototype.chunkId), outputBoard, boardData);
             assetsPrototype = chunkPrototype.assets as Array;
@@ -89,20 +83,20 @@ final public class LevelParser {
             for each(var cellPrototype:* in cellsPrototype) {
                 chunk.addCell(new Cell(cellPrototype[0], cellPrototype[1]));
             }
-            chunks.set(chunk.id, chunk);
+            chunks[chunk.id] = chunk;
         }
         return chunks;
     }
 
 
-    private static function parseComposites(composites:Array, outputBoard:Array2, boardData:BoardData):HashMap {
+    private static function parseComposites(composites:Array, outputBoard:Vector2D, boardData:BoardData):Dictionary {
         var composite:Composite;
-        var compositesMap:HashMap = new HashMap();
+        var compositesMap:Dictionary = new Dictionary();
         for each(var compositePrototype:* in composites) {
             composite = new Composite(compositePrototype.assetId,
                     new Cell(compositePrototype.position[0], compositePrototype.position[1]),
                     outputBoard, boardData);
-            compositesMap.set(composite.id, composite);
+            compositesMap[composite.id] = composite;
         }
         return compositesMap;
     }
@@ -115,20 +109,20 @@ final public class LevelParser {
         return boardData;
     }
 
-    private static function parseAssetStates(states:Object):Map {
-        var statesMap:Map = new HashMap();
+    private static function parseAssetStates(states:Object):Dictionary {
+        var statesMap:Dictionary = new Dictionary();
         for (var object:Object in states) {
             //noinspection JSUnfilteredForInLoop
-            statesMap.set(object, states[object]);
+            statesMap[object] = states[object];
         }
         return statesMap;
     }
 
-    private static function parseBoardAssets(asetts:Object):Map {
-        var assetMap:Map = new HashMap();
+    private static function parseBoardAssets(asetts:Object):Dictionary {
+        var assetMap:Dictionary = new Dictionary();
         for (var object:Object in asetts) {
             //noinspection JSUnfilteredForInLoop
-            assetMap.set(object, parseAsset(asetts[object]));
+            assetMap[object] = parseAsset(asetts[object]);
         }
         return assetMap;
 
