@@ -2,23 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="408aa5d5-df88-42ec-9d51-0a7fd41f3456" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/assets/Asset.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/utils/HTTPStatus.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/storage/IStorage.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/storage/Storage.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/assets/URLTicket.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/parser/data/Vector2D.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/parser/data/Vector2DIterator.as" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/saltr/utils/formatString.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as" afterPath="$PROJECT_DIR$/src/saltr/parser/gameeditor/BoardData.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as" afterPath="$PROJECT_DIR$/src/saltr/parser/gameeditor/chunk/Chunk.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as" afterPath="$PROJECT_DIR$/src/saltr/parser/gameeditor/composite/Composite.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/Feature.as" afterPath="$PROJECT_DIR$/src/saltr/Feature.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/parser/LevelParser.as" afterPath="$PROJECT_DIR$/src/saltr/parser/LevelParser.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/LevelStructure.as" afterPath="$PROJECT_DIR$/src/saltr/LevelStructure.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/PartnerDTO.as" afterPath="$PROJECT_DIR$/src/saltr/PartnerDTO.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/saltr/Saltr.as" afterPath="$PROJECT_DIR$/src/saltr/Saltr.as" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/saltr-as3-sdk.iml" afterPath="$PROJECT_DIR$/saltr-as3-sdk.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/saltr-as3-sdk.iws" afterPath="$PROJECT_DIR$/saltr-as3-sdk.iws" />
     </list>
     <ignored path="saltr-as3-sdk.iws" />
@@ -471,23 +454,27 @@
       <workItem from="1389277534751" duration="1210000" />
       <workItem from="1389335829485" duration="3252000" />
       <workItem from="1389519314265" duration="9401000" />
-      <workItem from="1389530714500" duration="7129000" />
+      <workItem from="1389530714500" duration="7208000" />
     </task>
     <task id="LOCAL-00001" summary="iinitial commit">
       <created>1389363145840</created>
       <updated>1389363145840</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="first very limited api implementation">
+      <created>1389619197333</created>
+      <updated>1389619197333</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27126000" />
+    <option name="totallyTimeSpent" value="27205000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-4" y="0" width="1928" height="1044" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="true" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="true" weight="0.3290735" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="true" weight="0.3290735" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -496,18 +483,18 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="true" internal_type="SLIDING" type="FLOATING" visible="false" weight="0.24973376" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" x="1919" y="56" width="622" height="1026" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.17358893" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="2542" y="56" width="465" height="1027" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.17358893" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" x="2542" y="56" width="465" height="1027" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32937366" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -525,7 +512,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="iinitial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="iinitial commit" />
+    <MESSAGE value="first very limited api implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="first very limited api implementation" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
