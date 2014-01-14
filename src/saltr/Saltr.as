@@ -19,6 +19,8 @@ import saltr.storage.IStorage;
 import saltr.storage.Storage;
 import saltr.utils.formatString;
 
+
+//TODO:: @daal add some flushCache method.
 public class Saltr {
 
     public static const SALT_API_URL:String = "http://api.saltr.com/httpjson.action";
@@ -41,14 +43,14 @@ public class Saltr {
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
-    protected var _partnerDTO:PartnerDTO;
+    protected var _partnerDTO:Partner;
 
     protected var _saltDecoder:Deserializer;
     protected var _instanceKey:String;
     protected var _features:Vector.<Feature>;
     protected var _levelPackStructures:Vector.<LevelPackStructure>;
     protected var _experiments:Vector.<Experiment>;
-    protected var _deviceDTO:DeviceDTO;
+    protected var _deviceDTO:Device;
     protected var _onGetAppDataSuccess:Function;
     protected var _onGetAppDataFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
@@ -82,11 +84,11 @@ public class Saltr {
     }
 
     public function initPartner(partnerId:String, partnerType:String):void {
-        _partnerDTO = new PartnerDTO(partnerId, partnerType);
+        _partnerDTO = new Partner(partnerId, partnerType);
     }
 
     public function initDevice(deviceId:String, deviceType:String):void {
-        _deviceDTO = new DeviceDTO(deviceId, deviceType);
+        _deviceDTO = new Device(deviceId, deviceType);
     }
 
     public function getAppData(onGetAppDataSuccess:Function, onGetAppDataFail:Function):void {

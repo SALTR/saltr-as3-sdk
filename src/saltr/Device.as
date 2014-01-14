@@ -12,12 +12,12 @@
  */
 package saltr {
 //TODO @GSAR: get rid of this, or at least make it internal!
-internal class DeviceDTO {
+internal class Device {
 
     private var _deviceId:String;
     private var _deviceType:String;
 
-    public function DeviceDTO(deviceId:String = null, deviceType:String = null) {
+    public function Device(deviceId:String = null, deviceType:String = null) {
         _deviceId = deviceId;
 
         //TODO: remove device type after it is removed from Salt Bend

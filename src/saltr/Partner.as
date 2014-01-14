@@ -14,7 +14,7 @@ package saltr {
 
 
 //TODO @GSAR: Rename to handle USER properties separately, and Partner data separately may be?
-internal class PartnerDTO {
+internal class Partner {
 
     private var _partnerId:String;
     private var _partnerType:String;
@@ -23,7 +23,7 @@ internal class PartnerDTO {
 //    private var _gender:String;
 //    private var _age:uint;
 
-    public function PartnerDTO(partnerId:String = null, partnerType:String = null) {
+    public function Partner(partnerId:String = null, partnerType:String = null) {
 
     }
 

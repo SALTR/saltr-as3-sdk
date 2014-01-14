@@ -14,7 +14,7 @@ package saltr {
 
 public interface ISaltrAPI {
 
-    function loadAppData(partner:PartnerDTO, device:DeviceDTO, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;
+    function loadAppData(partner:Partner, device:Device, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;
 
     function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void;
 }
