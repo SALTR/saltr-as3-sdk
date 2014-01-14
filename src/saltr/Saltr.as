@@ -53,16 +53,19 @@ public class Saltr {
     protected var _onGetAppDataFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
+    protected var _cacheData : Boolean;
 
     /**
      *
      */
-    public function Saltr(instanceKey:String, storage:IStorage) {
+    public function Saltr(instanceKey:String, enableCache : Boolean = true) {
         _instanceKey = instanceKey;
-        _storage = storage;
         _saltDecoder = new Deserializer();
         _isLoading = false;
         _ready = false;
+        if(enableCache) {
+            _storage = new Storage();
+        }
     }
 
     public function get ready():Boolean {
