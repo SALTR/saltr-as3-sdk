@@ -43,14 +43,14 @@ public class Saltr {
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
-    protected var _partnerDTO:Partner;
+    protected var _partner:Partner;
 
-    protected var _saltDecoder:Deserializer;
+    protected var _deserializer:Deserializer;
     protected var _instanceKey:String;
     protected var _features:Vector.<Feature>;
     protected var _levelPackStructures:Vector.<LevelPackStructure>;
     protected var _experiments:Vector.<Experiment>;
-    protected var _deviceDTO:Device;
+    protected var _device:Device;
     protected var _onGetAppDataSuccess:Function;
     protected var _onGetAppDataFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
@@ -62,10 +62,12 @@ public class Saltr {
      */
     public function Saltr(instanceKey:String, enableCache : Boolean = true) {
         _instanceKey = instanceKey;
-        _saltDecoder = new Deserializer();
+        _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
+        _cacheData = false;
         if(enableCache) {
+            _cacheData = true;
             _storage = new Storage();
         }
     }
@@ -84,11 +86,11 @@ public class Saltr {
     }
 
     public function initPartner(partnerId:String, partnerType:String):void {
-        _partnerDTO = new Partner(partnerId, partnerType);
+        _partner = new Partner(partnerId, partnerType);
     }
 
     public function initDevice(deviceId:String, deviceType:String):void {
-        _deviceDTO = new Device(deviceId, deviceType);
+        _device = new Device(deviceId, deviceType);
     }
 
     public function getAppData(onGetAppDataSuccess:Function, onGetAppDataFail:Function):void {
@@ -101,11 +103,11 @@ public class Saltr {
         _isLoading = false;
         _ready = true;
         _saltUserId = jsonData.saltId;
-        _saltDecoder.decode(jsonData);
-        _features = _saltDecoder.features;
-        _levelPackStructures = _saltDecoder.levelPackStructures;
-        _experiments = _saltDecoder.experiments;
-        trace("[SaltClient] packs=" + _saltDecoder.levelPackStructures.length);
+        _deserializer.decode(jsonData);
+        _features = _deserializer.features;
+        _levelPackStructures = _deserializer.levelPackStructures;
+        _experiments = _deserializer.experiments;
+        trace("[SaltClient] packs=" + _deserializer.levelPackStructures.length);
         _onGetAppDataSuccess();
     }
 
@@ -288,11 +290,11 @@ public class Saltr {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_APPDATA;
         var args:Object = {};
-        if (_deviceDTO != null) {
-            args.device = _deviceDTO;
+        if (_device != null) {
+            args.device = _device;
         }
-        if (_partnerDTO != null) {
-            args.partner = _partnerDTO;
+        if (_partner != null) {
+            args.partner = _partner;
         }
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
