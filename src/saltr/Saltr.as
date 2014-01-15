@@ -17,8 +17,8 @@ import saltr.assets.Asset;
 import saltr.assets.URLTicket;
 import saltr.storage.IStorage;
 import saltr.storage.Storage;
+import saltr.storage.StorageDummy;
 import saltr.utils.formatString;
-
 
 //TODO:: @daal add some flushCache method.
 public class Saltr {
@@ -55,21 +55,18 @@ public class Saltr {
     protected var _onGetAppDataFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
-    protected var _cacheData : Boolean;
+    protected var _enableCache:Boolean;
 
     /**
      *
      */
-    public function Saltr(instanceKey:String, enableCache : Boolean = true) {
+    public function Saltr(instanceKey:String, enableCache:Boolean = true) {
         _instanceKey = instanceKey;
         _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
-        _cacheData = false;
-        if(enableCache) {
-            _cacheData = true;
-            _storage = new Storage();
-        }
+        _enableCache = enableCache;
+        _storage = _enableCache ? new Storage() : new StorageDummy();
     }
 
     public function get ready():Boolean {
