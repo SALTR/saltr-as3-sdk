@@ -15,6 +15,7 @@ import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
 
+//TODO @GSAR: rename class!
 public class URLTicket {
 
     //URLRequest variables

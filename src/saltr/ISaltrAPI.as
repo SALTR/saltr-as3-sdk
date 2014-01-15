@@ -11,7 +11,7 @@
  * Time: 5:11 PM
  */
 package saltr {
-
+//TODO @GSAR: remove interface!
 public interface ISaltrAPI {
 
     function loadAppData(partner:Partner, device:Device, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;

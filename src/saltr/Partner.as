@@ -31,7 +31,6 @@ internal class Partner {
         return _partnerId;
     }
 
-
     public function get partnerType():String {
         return _partnerType;
     }

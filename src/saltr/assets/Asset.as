@@ -20,7 +20,7 @@ import flash.utils.Timer;
 
 import saltr.utils.HTTPStatus;
 
-//TODO @daal. Asset name conflicts with gameeditor Asset.
+//TODO @daal. Asset name conflicts with gameeditor Asset. Rename class!
 public class Asset {
 
     protected var _id:String;

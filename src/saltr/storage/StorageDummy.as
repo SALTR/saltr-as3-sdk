@@ -4,6 +4,7 @@
  * Time: 6:37 PM
  */
 package saltr.storage {
+//TODO @GSAR: rename class!
 public class StorageDummy implements IStorage{
     public function StorageDummy() {
     }

@@ -10,6 +10,7 @@
  * Date: 10/1/12
  * Time: 2:39 PM
  */
+//TODO @GSAR: rename class!
 package saltr.storage {
 import flash.filesystem.File;
 import flash.filesystem.FileMode;

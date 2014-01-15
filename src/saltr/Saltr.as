@@ -60,6 +60,9 @@ public class Saltr {
     /**
      *
      */
+    //TODO @GSAR: add a way to create mobile and Web Saltr instances
+
+    //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String, enableCache:Boolean = true) {
         _instanceKey = instanceKey;
         _deserializer = new Deserializer();
@@ -71,6 +74,18 @@ public class Saltr {
 
     public function get ready():Boolean {
         return _ready;
+    }
+
+    public function get features():Vector.<Feature> {
+        return _features;
+    }
+
+    public function get levelPackStructures():Vector.<LevelPackStructure> {
+        return _levelPackStructures;
+    }
+
+    public function get experiments():Vector.<Experiment> {
+        return _experiments;
     }
 
     public function getFeatureByToken(token:String):Feature {
@@ -220,6 +235,7 @@ public class Saltr {
         }
     }
 
+
     //TODO @GSAR: port this later when SALTR is ready
     public function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
@@ -250,7 +266,6 @@ public class Saltr {
                 });
         asset.load();
     }
-
 
     private function loadAppData():void {
         if (_isLoading) {
@@ -297,18 +312,6 @@ public class Saltr {
         urlVars.arguments = JSON.stringify(args);
         var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
         return new Asset("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
-    }
-
-    public function get features():Vector.<Feature> {
-        return _features;
-    }
-
-    public function get levelPackStructures():Vector.<LevelPackStructure> {
-        return _levelPackStructures;
-    }
-
-    public function get experiments():Vector.<Experiment> {
-        return _experiments;
     }
 }
 }

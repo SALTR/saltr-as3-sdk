@@ -11,6 +11,7 @@
  * Time: 9:13 PM
  */
 package saltr.storage {
+//TODO @GSAR: rename class!
 public interface IStorage {
 
     function getObject(name:String, from:int = 1):Object;
