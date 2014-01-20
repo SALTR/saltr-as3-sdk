@@ -10,7 +10,7 @@
  * Date: 10/13/13
  * Time: 2:41 PM
  */
-package saltr.assets {
+package saltr.resource {
 import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;

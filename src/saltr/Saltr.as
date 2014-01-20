@@ -13,8 +13,8 @@
 package saltr {
 import flash.net.URLVariables;
 
-import saltr.assets.Asset;
-import saltr.assets.URLTicket;
+import saltr.resource.Resource;
+import saltr.resource.URLTicket;
 import saltr.storage.IStorage;
 import saltr.storage.Storage;
 import saltr.storage.StorageDummy;
@@ -24,8 +24,10 @@ import saltr.utils.formatString;
 public class Saltr {
 
     public static const SALT_API_URL:String = "http://api.saltr.com/httpjson.action";
-    public static const COMMAND_APPDATA:String = "APPDATA";
-    public static const COMMAND_ADDPROP:String = "ADDPROP";
+    public static const SALT_URL:String = "http://saltr.com/httpjson.action";
+    public static const COMMAND_APP_DATA:String = "APPDATA";
+    public static const COMMAND_ADD_PROPERTY:String = "ADDPROP";
+    public static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
 
     //
     protected static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
@@ -56,13 +58,15 @@ public class Saltr {
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
     protected var _enableCache:Boolean;
+    protected var _onSaveOrUpdateFeatureSuccess:Function;
+    protected var _onSaveOrUpdateFeatureFail:Function;
 
     /**
      *
      */
-    //TODO @GSAR: add a way to create mobile and Web Saltr instances
+        //TODO @GSAR: add a way to create mobile and Web Saltr instances
 
-    //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
+        //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String, enableCache:Boolean = true) {
         _instanceKey = instanceKey;
         _deserializer = new Deserializer();
@@ -211,7 +215,7 @@ public class Saltr {
     protected function loadLevelDataFromServer(levelPackData:LevelPackStructure, levelData:LevelStructure, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
         var ticket:URLTicket = new URLTicket(dataUrl);
-        var asset:Asset = new Asset("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
+        var asset:Resource = new Resource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
         asset.load();
         //
         //TODO @GSAR: get rid of nested functions!
@@ -237,9 +241,9 @@ public class Saltr {
 
 
     //TODO @GSAR: port this later when SALTR is ready
-    public function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
+    public function addPropertyProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_ADDPROP;
+        urlVars.command = Saltr.COMMAND_ADD_PROPERTY;
         var args:Object = {saltId: saltUserId};
         var properties:Array = [];
         for (var i:uint = 0; i < propertyNames.length; i++) {
@@ -254,13 +258,13 @@ public class Saltr {
 
         var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
 
-        var asset:Asset = new Asset("property", ticket,
-                function (asset:Asset):void {
+        var asset:Resource = new Resource("property", ticket,
+                function (asset:Resource):void {
                     trace("getSaltLevelPacks : success");
                     var data:Object = asset.jsonData;
                     asset.dispose();
                 },
-                function (asset:Asset):void {
+                function (asset:Resource):void {
                     trace("getSaltLevelPacks : error");
                     asset.dispose();
                 });
@@ -273,17 +277,17 @@ public class Saltr {
         }
         _isLoading = true;
         _ready = false;
-        var asset:Asset = createAppDataAsset(appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+        var asset:Resource = createAppDataResource(appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
         asset.load();
     }
 
-    private function appDataAssetLoadErrorHandler(asset:Asset):void {
+    private function appDataAssetLoadErrorHandler(asset:Resource):void {
         trace("[SaltAPI] App data is failed to load.");
         loadAppDataInternal();
         asset.dispose();
     }
 
-    private function appDataAssetLoadCompleteHandler(asset:Asset):void {
+    private function appDataAssetLoadCompleteHandler(asset:Resource):void {
         trace("[SaltAPI] App data is loaded.");
         var data:Object = asset.jsonData;
         var jsonData:Object = data.responseData;
@@ -298,9 +302,9 @@ public class Saltr {
         asset.dispose();
     }
 
-    private function createAppDataAsset(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Asset {
+    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Resource {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_APPDATA;
+        urlVars.command = Saltr.COMMAND_APP_DATA;
         var args:Object = {};
         if (_device != null) {
             args.device = _device;
@@ -311,7 +315,32 @@ public class Saltr {
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
         var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
-        return new Asset("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+        return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
+
+    public function saveOrUpdateFeature(feature:Feature, onSaveOrUpdateFeatureSuccess:Function, onSaveOrUpdateFeatureFail:Function):void {
+        _onSaveOrUpdateFeatureSuccess = onSaveOrUpdateFeatureSuccess;
+        _onSaveOrUpdateFeatureFail = onSaveOrUpdateFeatureFail;
+        var urlVars:URLVariables = new URLVariables();
+        urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
+        urlVars.instanceKey = _instanceKey;
+        urlVars.token = feature.token;
+        urlVars.value = JSON.stringify(feature.value);
+        var ticket:URLTicket = new URLTicket(Saltr.SALT_URL, urlVars);
+        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, saveOrUpdateFeatureLoadCompleteHandler, saveOrUpdateFeatureLoadErrorHandler);
+        resource.load();
+    }
+
+    private function saveOrUpdateFeatureLoadCompleteHandler(resource:Resource):void {
+        trace("[Saltr] Feature saved or updated.");
+        _onSaveOrUpdateFeatureSuccess();
+    }
+
+    private function saveOrUpdateFeatureLoadErrorHandler(resource:Resource):void {
+        trace("[Saltr] Feature save or update error.");
+        _onSaveOrUpdateFeatureFail();
+    }
+
+
 }
 }

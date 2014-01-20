@@ -13,15 +13,15 @@
 package saltr {
 public class Feature {
     private var _token:String;
-    private var _data:Object;
+    private var _value:Object;
 
     public function Feature(token:String, data:Object) {
         _token = token;
-        _data = data;
+        _value = data;
     }
 
     public function toString():String {
-        return "Feature { token : " + _token + " , data : " + _data + "}";
+        return "Feature { token : " + _token + " , value : " + _value + "}";
     }
 
 
@@ -29,8 +29,8 @@ public class Feature {
         return _token;
     }
 
-    public function get data():Object {
-        return _data;
+    public function get value():Object {
+        return _value;
     }
 }
 }
