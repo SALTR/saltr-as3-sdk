@@ -10,13 +10,12 @@
  * Date: 10/1/12
  * Time: 2:39 PM
  */
-//TODO @GSAR: rename class!
-package saltr.storage {
+package saltr.repository {
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 
-public class Storage implements IStorage {
+public class MobileRepository implements IRepository {
     public static const FROM_STORAGE:int = 1;
     public static const FROM_CACHE:int = 2;
     public static const FROM_APP:int = 3;
@@ -27,7 +26,7 @@ public class Storage implements IStorage {
     private var _fileStream:FileStream;
 
 
-    public function Storage() {
+    public function MobileRepository() {
         _applicationDirectory = File.applicationDirectory;
         _storageDirectory = File.applicationStorageDirectory;
         _cacheDirectory = File.cacheDirectory;
@@ -37,7 +36,7 @@ public class Storage implements IStorage {
         trace("cacheDir: " + _cacheDirectory.nativePath);
     }
 
-    public function getObject(fileName:String, from:int = Storage.FROM_STORAGE):Object {
+    public function getObject(fileName:String, from:int = MobileRepository.FROM_STORAGE):Object {
         var directory:File = getDirectory(from);
         if (directory) {
             var file:File = directory.resolvePath(fileName);
@@ -46,7 +45,7 @@ public class Storage implements IStorage {
         return null;
     }
 
-    public function getObjectVersion(name:String, from:int = Storage.FROM_STORAGE):String {
+    public function getObjectVersion(name:String, from:int = MobileRepository.FROM_STORAGE):String {
         var directory:File = getDirectory(from);
         if (directory) {
             var file:File = directory.resolvePath(name.replace(".", "") + "_VERSION_");
@@ -73,11 +72,11 @@ public class Storage implements IStorage {
 
     private function getDirectory(from:int):File {
         switch (from) {
-            case Storage.FROM_STORAGE:
+            case MobileRepository.FROM_STORAGE:
                 return _storageDirectory;
-            case Storage.FROM_CACHE:
+            case MobileRepository.FROM_CACHE:
                 return _cacheDirectory;
-            case Storage.FROM_APP:
+            case MobileRepository.FROM_APP:
                 return _applicationDirectory;
             default:
                 return null;

@@ -6,16 +6,20 @@
  */
 
 /**
- * User: sarg
- * Date: 12/1/12
- * Time: 5:11 PM
+ * User: gsar
+ * Date: 4/1/13
+ * Time: 9:13 PM
  */
-package saltr {
-//TODO @GSAR: remove interface!
-public interface ISaltrAPI {
+package saltr.repository {
+public interface IRepository {
 
-    function loadAppData(partner:Partner, device:Device, saltInstanceKey:String, platform:String, successHandler:Function, failureHandler:Function):void;
+    function getObject(name:String, from:int = 1):Object;
 
-    function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void;
+    function getObjectVersion(name:String, from:int = 1):String;
+
+    function saveObject(name:String, object:Object):void;
+
+    function cacheObject(name:String, version:String, object:Object):void;
+
 }
 }
