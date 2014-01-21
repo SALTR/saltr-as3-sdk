@@ -33,8 +33,5 @@ public class Feature {
         return _value;
     }
 
-    public function getSerializedObject():Object {
-        return {token: _token, value: JSON.stringify(_value)};
-    }
 }
 }

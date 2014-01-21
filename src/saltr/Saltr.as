@@ -23,11 +23,11 @@ import saltr.utils.formatString;
 //TODO:: @daal add some flushCache method.
 public class Saltr {
 
-    public static const SALT_API_URL:String = "http://api.saltr.com/httpjson.action";
-    public static const SALT_URL:String = "http://saltr.com/httpjson.action";
-    public static const COMMAND_APP_DATA:String = "APPDATA";
-    public static const COMMAND_ADD_PROPERTY:String = "ADDPROP";
-    public static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
+    protected static const SALTR_API_URL:String = "http://api.saltr.com/httpjson.action";
+    protected static const SALTR_URL:String = "http://saltr.com/httpjson.action";
+    protected static const COMMAND_APP_DATA:String = "APPDATA";
+    protected static const COMMAND_ADD_PROPERTY:String = "ADDPROP";
+    protected static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
 
     //
     protected static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
@@ -256,7 +256,7 @@ public class Saltr {
         args.instanceKey = saltInstanceKey;
         urlVars.arguments = JSON.stringify(args);
 
-        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
+        var ticket:URLTicket = new URLTicket(Saltr.SALTR_API_URL, urlVars);
 
         var asset:Resource = new Resource("property", ticket,
                 function (asset:Resource):void {
@@ -314,7 +314,7 @@ public class Saltr {
         }
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
-        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
+        var ticket:URLTicket = new URLTicket(Saltr.SALTR_API_URL, urlVars);
         return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
@@ -325,11 +325,13 @@ public class Saltr {
         urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
         var arrayList:Array = [];
+        var feature:Feature;
         for (var i:int = 0, len:int = featureList.length; i < len; ++i) {
-            arrayList.push(featureList[i].getSerializedObject());
+            feature = featureList[i];
+            arrayList.push({token: feature.token, value: JSON.stringify(feature.value)});
         }
         urlVars.data = JSON.stringify(arrayList);
-        var ticket:URLTicket = new URLTicket(Saltr.SALT_URL, urlVars);
+        var ticket:URLTicket = new URLTicket(Saltr.SALTR_URL, urlVars);
         var resource:Resource = new Resource("saveOrUpdateFeature", ticket, saveOrUpdateFeatureLoadCompleteHandler, saveOrUpdateFeatureLoadErrorHandler);
         resource.load();
     }
