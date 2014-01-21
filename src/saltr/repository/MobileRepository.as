@@ -15,7 +15,7 @@ import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 
-public class Repository implements IRepository {
+public class MobileRepository implements IRepository {
     public static const FROM_STORAGE:int = 1;
     public static const FROM_CACHE:int = 2;
     public static const FROM_APP:int = 3;
@@ -26,7 +26,7 @@ public class Repository implements IRepository {
     private var _fileStream:FileStream;
 
 
-    public function Repository() {
+    public function MobileRepository() {
         _applicationDirectory = File.applicationDirectory;
         _storageDirectory = File.applicationStorageDirectory;
         _cacheDirectory = File.cacheDirectory;
@@ -36,7 +36,7 @@ public class Repository implements IRepository {
         trace("cacheDir: " + _cacheDirectory.nativePath);
     }
 
-    public function getObject(fileName:String, from:int = Repository.FROM_STORAGE):Object {
+    public function getObject(fileName:String, from:int = MobileRepository.FROM_STORAGE):Object {
         var directory:File = getDirectory(from);
         if (directory) {
             var file:File = directory.resolvePath(fileName);
@@ -45,7 +45,7 @@ public class Repository implements IRepository {
         return null;
     }
 
-    public function getObjectVersion(name:String, from:int = Repository.FROM_STORAGE):String {
+    public function getObjectVersion(name:String, from:int = MobileRepository.FROM_STORAGE):String {
         var directory:File = getDirectory(from);
         if (directory) {
             var file:File = directory.resolvePath(name.replace(".", "") + "_VERSION_");
@@ -72,11 +72,11 @@ public class Repository implements IRepository {
 
     private function getDirectory(from:int):File {
         switch (from) {
-            case Repository.FROM_STORAGE:
+            case MobileRepository.FROM_STORAGE:
                 return _storageDirectory;
-            case Repository.FROM_CACHE:
+            case MobileRepository.FROM_CACHE:
                 return _cacheDirectory;
-            case Repository.FROM_APP:
+            case MobileRepository.FROM_APP:
                 return _applicationDirectory;
             default:
                 return null;

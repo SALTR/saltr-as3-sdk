@@ -4,8 +4,9 @@
  * Time: 6:37 PM
  */
 package saltr.repository {
-public class RepositoryDummy implements IRepository {
-    public function RepositoryDummy() {
+//TODO @sarg: not implemented yet!
+public class WebRepository implements IRepository {
+    public function WebRepository() {
     }
 
     public function getObject(name:String, from:int = 1):Object {
