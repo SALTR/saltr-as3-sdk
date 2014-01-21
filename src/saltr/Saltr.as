@@ -14,10 +14,10 @@ package saltr {
 import flash.net.URLVariables;
 
 import saltr.resource.Resource;
-import saltr.resource.URLTicket;
-import saltr.storage.IStorage;
-import saltr.storage.Storage;
-import saltr.storage.StorageDummy;
+import saltr.resource.ResourceURLTicket;
+import saltr.repository.IRepository;
+import saltr.repository.Repository;
+import saltr.repository.RepositoryDummy;
 import saltr.utils.formatString;
 
 //TODO:: @daal add some flushCache method.
@@ -41,7 +41,7 @@ public class Saltr {
     protected static const RESULT_SUCCEED:String = "SUCCEED";
     protected static const RESULT_ERROR:String = "ERROR";
 
-    protected var _storage:IStorage;
+    protected var _storage:IRepository;
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
@@ -64,7 +64,6 @@ public class Saltr {
     /**
      *
      */
-        //TODO @GSAR: add a way to create mobile and Web Saltr instances
 
         //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String, enableCache:Boolean = true) {
@@ -73,7 +72,7 @@ public class Saltr {
         _isLoading = false;
         _ready = false;
         _enableCache = enableCache;
-        _storage = _enableCache ? new Storage() : new StorageDummy();
+        _storage = _enableCache ? new Repository() : new RepositoryDummy();
     }
 
     public function get ready():Boolean {
@@ -136,7 +135,7 @@ public class Saltr {
 
     protected function loadAppDataInternal():void {
         trace("[SaltClient] NO Internet available - so loading internal app data.");
-        var data:Object = _storage.getObject(APP_DATA_URL_CACHE, Storage.FROM_CACHE);
+        var data:Object = _storage.getObject(APP_DATA_URL_CACHE, Repository.FROM_CACHE);
         if (data != null) {
             trace("[SaltClient] Loading App data from Cache folder.");
 
@@ -144,7 +143,7 @@ public class Saltr {
         }
         else {
             trace("[SaltClient] Loading App data from application folder.");
-            data = _storage.getObject(APP_DATA_URL_INTERNAL, Storage.FROM_APP);
+            data = _storage.getObject(APP_DATA_URL_INTERNAL, Repository.FROM_APP);
             if (data != null) {
                 loadAppDataSuccessHandler(data);
             }
@@ -166,7 +165,7 @@ public class Saltr {
 
         //if there are no version change than load from cache
         var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-        if (levelData.version == _storage.getObjectVersion(cachedFileName, Storage.FROM_CACHE)) {
+        if (levelData.version == _storage.getObjectVersion(cachedFileName, Repository.FROM_CACHE)) {
             loadLevelDataCached(levelData, cachedFileName);
         } else {
             loadLevelDataFromServer(levelPackData, levelData);
@@ -193,7 +192,7 @@ public class Saltr {
 
     protected function loadLevelDataCached(levelData:LevelStructure, cachedFileName:String):Boolean {
         trace("[SaltClient::loadLevelData] LOADING LEVEL DATA CACHE IMMEDIATELY.");
-        var data:Object = _storage.getObject(cachedFileName, Storage.FROM_CACHE);
+        var data:Object = _storage.getObject(cachedFileName, Repository.FROM_CACHE);
         if (data != null) {
             levelLoadSuccessHandler(levelData, data);
             return true;
@@ -203,7 +202,7 @@ public class Saltr {
 
     private function loadLevelDataInternal(levelPackData:LevelPackStructure, levelData:LevelStructure):void {
         var url:String = formatString(LEVEL_DATA_URL_LOCAL_TEMPLATE, levelPackData.index, levelData.index);
-        var data:Object = _storage.getObject(url, Storage.FROM_APP);
+        var data:Object = _storage.getObject(url, Repository.FROM_APP);
         if (data != null) {
             levelLoadSuccessHandler(levelData, data);
         }
@@ -214,7 +213,7 @@ public class Saltr {
 
     protected function loadLevelDataFromServer(levelPackData:LevelPackStructure, levelData:LevelStructure, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
-        var ticket:URLTicket = new URLTicket(dataUrl);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(dataUrl);
         var asset:Resource = new Resource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
         asset.load();
         //
@@ -256,7 +255,7 @@ public class Saltr {
         args.instanceKey = saltInstanceKey;
         urlVars.arguments = JSON.stringify(args);
 
-        var ticket:URLTicket = new URLTicket(Saltr.SALTR_API_URL, urlVars);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
 
         var asset:Resource = new Resource("property", ticket,
                 function (asset:Resource):void {
@@ -314,7 +313,7 @@ public class Saltr {
         }
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
-        var ticket:URLTicket = new URLTicket(Saltr.SALTR_API_URL, urlVars);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
         return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
@@ -331,7 +330,7 @@ public class Saltr {
             arrayList.push({token: feature.token, value: JSON.stringify(feature.value)});
         }
         urlVars.data = JSON.stringify(arrayList);
-        var ticket:URLTicket = new URLTicket(Saltr.SALTR_URL, urlVars);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_URL, urlVars);
         var resource:Resource = new Resource("saveOrUpdateFeature", ticket, saveOrUpdateFeatureLoadCompleteHandler, saveOrUpdateFeatureLoadErrorHandler);
         resource.load();
     }

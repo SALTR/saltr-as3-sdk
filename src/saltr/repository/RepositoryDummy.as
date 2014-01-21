@@ -3,10 +3,9 @@
  * Date: 1/14/14
  * Time: 6:37 PM
  */
-package saltr.storage {
-//TODO @GSAR: rename class!
-public class StorageDummy implements IStorage{
-    public function StorageDummy() {
+package saltr.repository {
+public class RepositoryDummy implements IRepository {
+    public function RepositoryDummy() {
     }
 
     public function getObject(name:String, from:int = 1):Object {

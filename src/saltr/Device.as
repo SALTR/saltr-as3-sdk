@@ -11,7 +11,6 @@
  * Time: 5:28 PM
  */
 package saltr {
-//TODO @GSAR: get rid of this, or at least make it internal!
 internal class Device {
 
     private var _deviceId:String;

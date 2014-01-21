@@ -12,7 +12,6 @@
  */
 package saltr {
 
-//TODO @GSAR: make this internal!
 internal class Deserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {

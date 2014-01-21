@@ -15,8 +15,7 @@ import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
 
-//TODO @GSAR: rename class!
-public class URLTicket {
+public class ResourceURLTicket {
 
     //URLRequest variables
     private var _authenticate:Boolean;
@@ -39,7 +38,7 @@ public class URLTicket {
     private var _dropTimeout:int;
 
 
-    public function URLTicket(url:String, variables:Object = null) {
+    public function ResourceURLTicket(url:String, variables:Object = null) {
         _authenticate = true;
         _cacheResponse = true;
         _followRedirects = true;
