@@ -318,14 +318,17 @@ public class Saltr {
         return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
-    public function saveOrUpdateFeature(feature:Feature, onSaveOrUpdateFeatureSuccess:Function, onSaveOrUpdateFeatureFail:Function):void {
+    public function saveOrUpdateFeature(featureList:Vector.<Feature>, onSaveOrUpdateFeatureSuccess:Function, onSaveOrUpdateFeatureFail:Function):void {
         _onSaveOrUpdateFeatureSuccess = onSaveOrUpdateFeatureSuccess;
         _onSaveOrUpdateFeatureFail = onSaveOrUpdateFeatureFail;
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
-        urlVars.token = feature.token;
-        urlVars.value = JSON.stringify(feature.value);
+        var arrayList:Array = [];
+        for (var i:int = 0, len:int = featureList.length; i < len; ++i) {
+            arrayList.push(featureList[i].getSerializedObject());
+        }
+        urlVars.data = JSON.stringify(arrayList);
         var ticket:URLTicket = new URLTicket(Saltr.SALT_URL, urlVars);
         var resource:Resource = new Resource("saveOrUpdateFeature", ticket, saveOrUpdateFeatureLoadCompleteHandler, saveOrUpdateFeatureLoadErrorHandler);
         resource.load();
