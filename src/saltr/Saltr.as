@@ -14,7 +14,6 @@ package saltr {
 import flash.net.URLVariables;
 
 import saltr.repository.IRepository;
-import saltr.repository.MobileRepository;
 import saltr.resource.Resource;
 import saltr.resource.ResourceURLTicket;
 import saltr.utils.formatString;
@@ -131,7 +130,7 @@ public class Saltr {
 
     protected function loadAppDataInternal():void {
         trace("[SaltClient] NO Internet available - so loading internal app data.");
-        var data:Object = _repository.getObject(APP_DATA_URL_CACHE, MobileRepository.FROM_CACHE);
+        var data:Object = _repository.getObjectFromCache(APP_DATA_URL_CACHE);
         if (data != null) {
             trace("[SaltClient] Loading App data from Cache folder.");
 
@@ -139,7 +138,7 @@ public class Saltr {
         }
         else {
             trace("[SaltClient] Loading App data from application folder.");
-            data = _repository.getObject(APP_DATA_URL_INTERNAL, MobileRepository.FROM_APP);
+            data = _repository.getObjectFromApplication(APP_DATA_URL_INTERNAL);
             if (data != null) {
                 loadAppDataSuccessHandler(data);
             }
@@ -161,7 +160,7 @@ public class Saltr {
 
         //if there are no version change than load from cache
         var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-        if (levelData.version == _repository.getObjectVersion(cachedFileName, MobileRepository.FROM_CACHE)) {
+        if (levelData.version == _repository.getObjectVersion(cachedFileName)) {
             loadLevelDataCached(levelData, cachedFileName);
         } else {
             loadLevelDataFromServer(levelPackData, levelData);
@@ -188,7 +187,7 @@ public class Saltr {
 
     protected function loadLevelDataCached(levelData:LevelStructure, cachedFileName:String):Boolean {
         trace("[SaltClient::loadLevelData] LOADING LEVEL DATA CACHE IMMEDIATELY.");
-        var data:Object = _repository.getObject(cachedFileName, MobileRepository.FROM_CACHE);
+        var data:Object = _repository.getObjectFromCache(cachedFileName);
         if (data != null) {
             levelLoadSuccessHandler(levelData, data);
             return true;
@@ -198,7 +197,7 @@ public class Saltr {
 
     private function loadLevelDataInternal(levelPackData:LevelPackStructure, levelData:LevelStructure):void {
         var url:String = formatString(LEVEL_DATA_URL_LOCAL_TEMPLATE, levelPackData.index, levelData.index);
-        var data:Object = _repository.getObject(url, MobileRepository.FROM_APP);
+        var data:Object = _repository.getObjectFromApplication(url);
         if (data != null) {
             levelLoadSuccessHandler(levelData, data);
         }

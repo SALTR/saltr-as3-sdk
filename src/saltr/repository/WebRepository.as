@@ -9,11 +9,15 @@ public class WebRepository implements IRepository {
     public function WebRepository() {
     }
 
-    public function getObject(name:String, from:int = 1):Object {
+    public function getObjectFromStorage(name:String):Object {
         return null;
     }
 
-    public function getObjectVersion(name:String, from:int = 1):String {
+    public function getObjectFromCache(fileName:String):Object {
+        return null;
+    }
+
+    public function getObjectVersion(name:String):String {
         return "";
     }
 
@@ -21,6 +25,10 @@ public class WebRepository implements IRepository {
     }
 
     public function cacheObject(name:String, version:String, object:Object):void {
+    }
+
+    public function getObjectFromApplication(fileName:String):Object {
+        return null;
     }
 }
 }

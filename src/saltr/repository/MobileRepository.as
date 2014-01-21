@@ -16,9 +16,6 @@ import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 
 public class MobileRepository implements IRepository {
-    public static const FROM_STORAGE:int = 1;
-    public static const FROM_CACHE:int = 2;
-    public static const FROM_APP:int = 3;
 
     private var _storageDirectory:File;
     private var _applicationDirectory:File;
@@ -36,26 +33,29 @@ public class MobileRepository implements IRepository {
         trace("cacheDir: " + _cacheDirectory.nativePath);
     }
 
-    public function getObject(fileName:String, from:int = MobileRepository.FROM_STORAGE):Object {
-        var directory:File = getDirectory(from);
-        if (directory) {
-            var file:File = directory.resolvePath(fileName);
-            return getInternal(file);
-        }
-        return null;
+    public function getObjectFromStorage(fileName:String):Object {
+        var file:File = _storageDirectory.resolvePath(fileName);
+        return getInternal(file);
     }
 
-    public function getObjectVersion(name:String, from:int = MobileRepository.FROM_STORAGE):String {
-        var directory:File = getDirectory(from);
-        if (directory) {
-            var file:File = directory.resolvePath(name.replace(".", "") + "_VERSION_");
-            var obj:Object = getInternal(file);
-            if (obj == null) {
-                return null;
-            }
-            return obj["_VERSION_"];
+    public function getObjectFromApplication(fileName:String):Object {
+        var file:File = _applicationDirectory.resolvePath(fileName);
+        return getInternal(file);
+    }
+
+    public function getObjectFromCache(fileName:String):Object {
+        var file:File = _cacheDirectory.resolvePath(fileName);
+        return getInternal(file);
+
+    }
+
+    public function getObjectVersion(name:String):String {
+        var file:File = _cacheDirectory.resolvePath(name.replace(".", "") + "_VERSION_");
+        var obj:Object = getInternal(file);
+        if (obj == null) {
+            return null;
         }
-        return null;
+        return obj["_VERSION_"];
     }
 
     public function cacheObject(fileName:String, version:String, object:Object):void {
@@ -68,19 +68,6 @@ public class MobileRepository implements IRepository {
     public function saveObject(fileName:String, objectToSave:Object):void {
         var file:File = _storageDirectory.resolvePath(fileName);
         saveInternal(file, objectToSave);
-    }
-
-    private function getDirectory(from:int):File {
-        switch (from) {
-            case MobileRepository.FROM_STORAGE:
-                return _storageDirectory;
-            case MobileRepository.FROM_CACHE:
-                return _cacheDirectory;
-            case MobileRepository.FROM_APP:
-                return _applicationDirectory;
-            default:
-                return null;
-        }
     }
 
     private function getInternal(file:File):Object {
