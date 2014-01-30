@@ -31,7 +31,6 @@ public class LevelStructure {
     private var _version:String;
     private var _boardData:BoardData;
     private var _data:Object;
-    private var _innerProperties:Object;
     private var _rawMainBoard:Object;
     private var _rawAppendedBoard:Object;
 
@@ -46,7 +45,6 @@ public class LevelStructure {
 
     public function parseData(data:Object):void {
         _data = data;
-        _innerProperties = _data["properties"];
         _boardData = LevelParser.parseBoardData(data);
         _keyset = _boardData.keyset;
         _rawMainBoard = data["boards"]["main"];
@@ -121,7 +119,7 @@ public class LevelStructure {
     }
 
     public function get innerProperties():Object {
-        return _innerProperties;
+        return _data["properties"];
     }
 }
 }
