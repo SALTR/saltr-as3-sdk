@@ -156,6 +156,7 @@ public class Saltr {
         _onGetLevelDataBodyFail = onGetLevelDataBodyFail;
         if (!useCache) {
             loadLevelDataFromServer(levelPackData, levelData, true);
+            return;
         }
 
         //if there are no version change than load from cache
