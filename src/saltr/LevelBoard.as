@@ -61,8 +61,8 @@ public class LevelBoard {
         return _position;
     }
 
-    public function get properties():Dictionary {
-        return _rawBoard.properties;
+    public function get properties():Object {
+        return _rawBoard.board.properties;
     }
 
     public function get boardVector():Vector2D {
