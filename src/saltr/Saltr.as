@@ -13,19 +13,19 @@
 package saltr {
 import flash.net.URLVariables;
 
-import saltr.assets.Asset;
-import saltr.assets.URLTicket;
-import saltr.storage.IStorage;
-import saltr.storage.Storage;
-import saltr.storage.StorageDummy;
+import saltr.repository.IRepository;
+import saltr.resource.Resource;
+import saltr.resource.ResourceURLTicket;
 import saltr.utils.formatString;
 
 //TODO:: @daal add some flushCache method.
 public class Saltr {
 
-    public static const SALT_API_URL:String = "http://api.saltr.com/httpjson.action";
-    public static const COMMAND_APPDATA:String = "APPDATA";
-    public static const COMMAND_ADDPROP:String = "ADDPROP";
+    protected static const SALTR_API_URL:String = "http://api.saltr.com/httpjson.action";
+    protected static const SALTR_URL:String = "http://saltr.com/httpjson.action";
+    protected static const COMMAND_APP_DATA:String = "APPDATA";
+    protected static const COMMAND_ADD_PROPERTY:String = "ADDPROP";
+    protected static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
 
     //
     protected static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
@@ -39,7 +39,7 @@ public class Saltr {
     protected static const RESULT_SUCCEED:String = "SUCCEED";
     protected static const RESULT_ERROR:String = "ERROR";
 
-    protected var _storage:IStorage;
+    protected var _repository:IRepository;
     protected var _saltUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
@@ -55,21 +55,19 @@ public class Saltr {
     protected var _onGetAppDataFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
-    protected var _enableCache:Boolean;
+    protected var _onSaveOrUpdateFeatureSuccess:Function;
+    protected var _onSaveOrUpdateFeatureFail:Function;
 
     /**
      *
      */
-    //TODO @GSAR: add a way to create mobile and Web Saltr instances
 
-    //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
-    public function Saltr(instanceKey:String, enableCache:Boolean = true) {
+        //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
+    public function Saltr(instanceKey:String) {
         _instanceKey = instanceKey;
         _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
-        _enableCache = enableCache;
-        _storage = _enableCache ? new Storage() : new StorageDummy();
     }
 
     public function get ready():Boolean {
@@ -132,7 +130,7 @@ public class Saltr {
 
     protected function loadAppDataInternal():void {
         trace("[SaltClient] NO Internet available - so loading internal app data.");
-        var data:Object = _storage.getObject(APP_DATA_URL_CACHE, Storage.FROM_CACHE);
+        var data:Object = _repository.getObjectFromCache(APP_DATA_URL_CACHE);
         if (data != null) {
             trace("[SaltClient] Loading App data from Cache folder.");
 
@@ -140,7 +138,7 @@ public class Saltr {
         }
         else {
             trace("[SaltClient] Loading App data from application folder.");
-            data = _storage.getObject(APP_DATA_URL_INTERNAL, Storage.FROM_APP);
+            data = _repository.getObjectFromApplication(APP_DATA_URL_INTERNAL);
             if (data != null) {
                 loadAppDataSuccessHandler(data);
             }
@@ -158,11 +156,12 @@ public class Saltr {
         _onGetLevelDataBodyFail = onGetLevelDataBodyFail;
         if (!useCache) {
             loadLevelDataFromServer(levelPackData, levelData, true);
+            return;
         }
 
         //if there are no version change than load from cache
         var cachedFileName:String = formatString(LEVEL_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-        if (levelData.version == _storage.getObjectVersion(cachedFileName, Storage.FROM_CACHE)) {
+        if (levelData.version == _repository.getObjectVersion(cachedFileName)) {
             loadLevelDataCached(levelData, cachedFileName);
         } else {
             loadLevelDataFromServer(levelPackData, levelData);
@@ -189,7 +188,7 @@ public class Saltr {
 
     protected function loadLevelDataCached(levelData:LevelStructure, cachedFileName:String):Boolean {
         trace("[SaltClient::loadLevelData] LOADING LEVEL DATA CACHE IMMEDIATELY.");
-        var data:Object = _storage.getObject(cachedFileName, Storage.FROM_CACHE);
+        var data:Object = _repository.getObjectFromCache(cachedFileName);
         if (data != null) {
             levelLoadSuccessHandler(levelData, data);
             return true;
@@ -199,7 +198,7 @@ public class Saltr {
 
     private function loadLevelDataInternal(levelPackData:LevelPackStructure, levelData:LevelStructure):void {
         var url:String = formatString(LEVEL_DATA_URL_LOCAL_TEMPLATE, levelPackData.index, levelData.index);
-        var data:Object = _storage.getObject(url, Storage.FROM_APP);
+        var data:Object = _repository.getObjectFromApplication(url);
         if (data != null) {
             levelLoadSuccessHandler(levelData, data);
         }
@@ -210,8 +209,8 @@ public class Saltr {
 
     protected function loadLevelDataFromServer(levelPackData:LevelPackStructure, levelData:LevelStructure, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
-        var ticket:URLTicket = new URLTicket(dataUrl);
-        var asset:Asset = new Asset("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(dataUrl);
+        var asset:Resource = new Resource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
         asset.load();
         //
         //TODO @GSAR: get rid of nested functions!
@@ -223,7 +222,7 @@ public class Saltr {
             }
             else {
                 levelLoadSuccessHandler(levelData, data);
-                _storage.cacheObject(cachedFileName, String(levelData.version), data);
+                _repository.cacheObject(cachedFileName, String(levelData.version), data);
             }
             asset.dispose();
         }
@@ -237,9 +236,9 @@ public class Saltr {
 
 
     //TODO @GSAR: port this later when SALTR is ready
-    public function addProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
+    public function addPropertyProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_ADDPROP;
+        urlVars.command = Saltr.COMMAND_ADD_PROPERTY;
         var args:Object = {saltId: saltUserId};
         var properties:Array = [];
         for (var i:uint = 0; i < propertyNames.length; i++) {
@@ -252,15 +251,15 @@ public class Saltr {
         args.instanceKey = saltInstanceKey;
         urlVars.arguments = JSON.stringify(args);
 
-        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
 
-        var asset:Asset = new Asset("property", ticket,
-                function (asset:Asset):void {
+        var asset:Resource = new Resource("property", ticket,
+                function (asset:Resource):void {
                     trace("getSaltLevelPacks : success");
                     var data:Object = asset.jsonData;
                     asset.dispose();
                 },
-                function (asset:Asset):void {
+                function (asset:Resource):void {
                     trace("getSaltLevelPacks : error");
                     asset.dispose();
                 });
@@ -273,17 +272,17 @@ public class Saltr {
         }
         _isLoading = true;
         _ready = false;
-        var asset:Asset = createAppDataAsset(appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+        var asset:Resource = createAppDataResource(appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
         asset.load();
     }
 
-    private function appDataAssetLoadErrorHandler(asset:Asset):void {
+    private function appDataAssetLoadErrorHandler(asset:Resource):void {
         trace("[SaltAPI] App data is failed to load.");
         loadAppDataInternal();
         asset.dispose();
     }
 
-    private function appDataAssetLoadCompleteHandler(asset:Asset):void {
+    private function appDataAssetLoadCompleteHandler(asset:Resource):void {
         trace("[SaltAPI] App data is loaded.");
         var data:Object = asset.jsonData;
         var jsonData:Object = data.responseData;
@@ -293,14 +292,14 @@ public class Saltr {
         }
         else {
             loadAppDataSuccessHandler(jsonData);
-            _storage.cacheObject(APP_DATA_URL_CACHE, "0", jsonData);
+            _repository.cacheObject(APP_DATA_URL_CACHE, "0", jsonData);
         }
         asset.dispose();
     }
 
-    private function createAppDataAsset(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Asset {
+    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Resource {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_APPDATA;
+        urlVars.command = Saltr.COMMAND_APP_DATA;
         var args:Object = {};
         if (_device != null) {
             args.device = _device;
@@ -310,8 +309,41 @@ public class Saltr {
         }
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
-        var ticket:URLTicket = new URLTicket(Saltr.SALT_API_URL, urlVars);
-        return new Asset("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
+        return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+    }
+
+    public function saveOrUpdateFeature(featureList:Vector.<Feature>, onSaveOrUpdateFeatureSuccess:Function, onSaveOrUpdateFeatureFail:Function):void {
+        _onSaveOrUpdateFeatureSuccess = onSaveOrUpdateFeatureSuccess;
+        _onSaveOrUpdateFeatureFail = onSaveOrUpdateFeatureFail;
+        var urlVars:URLVariables = new URLVariables();
+        urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
+        urlVars.instanceKey = _instanceKey;
+        var arrayList:Array = [];
+        var feature:Feature;
+        for (var i:int = 0, len:int = featureList.length; i < len; ++i) {
+            feature = featureList[i];
+            arrayList.push({token: feature.token, value: JSON.stringify(feature.value)});
+        }
+        urlVars.data = JSON.stringify(arrayList);
+        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_URL, urlVars);
+        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, saveOrUpdateFeatureLoadCompleteHandler, saveOrUpdateFeatureLoadErrorHandler);
+        resource.load();
+    }
+
+    private function saveOrUpdateFeatureLoadCompleteHandler(resource:Resource):void {
+        trace("[Saltr] Feature saved or updated.");
+        _onSaveOrUpdateFeatureSuccess();
+    }
+
+    private function saveOrUpdateFeatureLoadErrorHandler(resource:Resource):void {
+        trace("[Saltr] Feature save or update error.");
+        _onSaveOrUpdateFeatureFail();
+    }
+
+
+    public function set repository(value:IRepository):void {
+        _repository = value;
     }
 }
 }

@@ -5,7 +5,7 @@
  * Առանց գրավոր թույլտվության այս կոդի պատճենահանումը կամ օգտագործումը քրեական հանցագործություն է:
  */
 
-package saltr.assets {
+package saltr.resource {
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.HTTPStatusEvent;
@@ -20,12 +20,11 @@ import flash.utils.Timer;
 
 import saltr.utils.HTTPStatus;
 
-//TODO @daal. Asset name conflicts with gameeditor Asset. Rename class!
-public class Asset {
+public class Resource {
 
     protected var _id:String;
     protected var _isLoaded:Boolean;
-    protected var _ticket:URLTicket;
+    protected var _ticket:ResourceURLTicket;
     protected var _fails:int;
     protected var _maxAttempts:int;
     protected var _dropTimeout:int;
@@ -45,7 +44,7 @@ public class Asset {
      * @param onFail callback function if loading fail, function signature is function(asset:Asset)
      * @param onProgress callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int)
      */
-    public function Asset(id:String, ticket:URLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
+    public function Resource(id:String, ticket:ResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
         //
         _id = id;
         _ticket = ticket;
@@ -91,7 +90,7 @@ public class Asset {
         return json;
     }
 
-    public function get ticket():URLTicket {
+    public function get ticket():ResourceURLTicket {
         return _ticket;
     }
 
