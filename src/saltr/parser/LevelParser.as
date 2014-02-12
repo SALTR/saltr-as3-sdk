@@ -32,6 +32,7 @@ final public class LevelParser {
         createEmptyBoard(outputBoard);
         var composites:Dictionary = parseComposites(board.composites as Array, outputBoard, boardData);
         var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, boardData);
+        board["properties"] = parseProperties(board.properties.board);
         generateComposites(composites);
         generateChunks(boardChunks);
     }
@@ -88,7 +89,6 @@ final public class LevelParser {
         return chunks;
     }
 
-
     private static function parseComposites(composites:Array, outputBoard:Vector2D, boardData:BoardData):Dictionary {
         var composite:Composite;
         var compositesMap:Dictionary = new Dictionary();
@@ -99,6 +99,14 @@ final public class LevelParser {
             compositesMap[composite.id] = composite;
         }
         return compositesMap;
+    }
+
+    private static function parseProperties(properties:Object):Dictionary {
+        var propertiesMap:Dictionary = new Dictionary();
+        for (var propertyName:String in properties) {
+            propertiesMap[propertyName] = properties[propertyName];
+        }
+        return propertiesMap;
     }
 
     public static function parseBoardData(data:Object):BoardData {
