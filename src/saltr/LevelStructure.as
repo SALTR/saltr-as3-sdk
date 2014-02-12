@@ -11,8 +11,9 @@
  * Time: 4:35 PM
  */
 package saltr {
+import flash.utils.Dictionary;
+
 import saltr.parser.LevelParser;
-import saltr.parser.data.Vector2D;
 import saltr.parser.gameeditor.BoardData;
 
 public class LevelStructure {
@@ -20,19 +21,11 @@ public class LevelStructure {
     private var _dataUrl:String;
     private var _index:int;
     private var _properties:Object;
-    private var _cols:int;
-    private var _rows:int;
-    private var _board:Vector2D;
-    private var _appendingRows:int;
-    private var _appendingCols:int;
-    private var _appendedBoard:Vector2D;
+    private var _boards:Dictionary;
     private var _dataFetched:Boolean;
     private var _keyset:Object;
     private var _version:String;
-    private var _boardData:BoardData;
     private var _data:Object;
-    private var _rawMainBoard:Object;
-    private var _rawAppendedBoard:Object;
 
     public function LevelStructure(id:String, index:int, dataUrl:String, properties:Object, version:String) {
         _id = id;
@@ -45,30 +38,19 @@ public class LevelStructure {
 
     public function parseData(data:Object):void {
         _data = data;
-        _boardData = LevelParser.parseBoardData(data);
-        _keyset = _boardData.keyset;
-        _rawMainBoard = data["boards"]["main"];
-        _rawAppendedBoard = data["boards"]["appended"];
-        _cols = int(_rawMainBoard.cols);
-        _rows = int(_rawMainBoard.rows);
-        _board = new Vector2D(_cols, _rows);
-        LevelParser.parseBoard(_board, _rawMainBoard, _boardData);
-        if (_rawAppendedBoard) {
-            _appendingRows = _rawAppendedBoard.rows ? int(_rawAppendedBoard.rows) : 1;
-            _appendingCols = int(_rawAppendedBoard.cols);
-            _appendedBoard = new Vector2D(_appendingCols, _appendingRows);
-            LevelParser.parseBoard(_appendedBoard, _rawAppendedBoard, _boardData);
+        var boardData:BoardData = LevelParser.parseBoardData(data);
+        _keyset = boardData.keyset;
+
+        _boards = new Dictionary();
+        var levelBoard:LevelBoard;
+        var boardsObject:Object = data["boards"];
+        for (var key:String in boardsObject) {
+            levelBoard = new LevelBoard(boardsObject[key], boardData);
+            _boards[key] = levelBoard;
         }
+
         _dataFetched = true;
     }
-
-    public function regenerateChunks():void {
-        LevelParser.regenerateChunks(_board, _rawMainBoard, _boardData);
-        if (_rawAppendedBoard) {
-            LevelParser.regenerateChunks(_appendedBoard, _rawAppendedBoard, _boardData);
-        }
-    }
-
 
     public function get id():String {
         return _id;
@@ -80,22 +62,6 @@ public class LevelStructure {
 
     public function get properties():Object {
         return _properties;
-    }
-
-    public function get board():Vector2D {
-        return _board;
-    }
-
-    public function get appendingRows():int {
-        return _appendingRows;
-    }
-
-    public function get appendingCols():int {
-        return _appendingCols;
-    }
-
-    public function get appendedBoard():Vector2D {
-        return _appendedBoard;
     }
 
     public function get keyset():Object {
@@ -120,6 +86,10 @@ public class LevelStructure {
 
     public function get innerProperties():Object {
         return _data["properties"];
+    }
+
+    public function getBoardById(id:String):LevelBoard {
+        return _boards[id];
     }
 }
 }
