@@ -62,7 +62,7 @@ public class LevelBoard {
     }
 
     public function get properties():Object {
-        return _rawBoard.board.properties;
+        return _rawBoard.properties.board;
     }
 
     public function get boardVector():Vector2D {
