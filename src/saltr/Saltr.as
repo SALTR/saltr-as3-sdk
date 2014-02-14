@@ -62,6 +62,7 @@ public class Saltr {
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String) {
+        _features = new Dictionary();
         _instanceKey = instanceKey;
         _deserializer = new Deserializer();
         _isLoading = false;
