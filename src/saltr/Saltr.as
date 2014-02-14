@@ -12,6 +12,7 @@
  */
 package saltr {
 import flash.net.URLVariables;
+import flash.utils.Dictionary;
 
 import saltr.repository.IRepository;
 import saltr.resource.Resource;
@@ -47,7 +48,7 @@ public class Saltr {
 
     protected var _deserializer:Deserializer;
     protected var _instanceKey:String;
-    protected var _features:Vector.<Feature>;
+    protected var _features:Dictionary;
     protected var _levelPackStructures:Vector.<LevelPackStructure>;
     protected var _experiments:Vector.<Experiment>;
     protected var _device:Device;
@@ -55,12 +56,9 @@ public class Saltr {
     protected var _onGetAppDataFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
-    protected var _onSaveOrUpdateFeatureSuccess:Function;
-    protected var _onSaveOrUpdateFeatureFail:Function;
 
-    /**
-     *
-     */
+    private var _isInDevMode : Boolean;
+
 
         //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String) {
@@ -68,13 +66,18 @@ public class Saltr {
         _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
+        _isInDevMode = true;
+    }
+
+    public function set repository(value:IRepository):void {
+        _repository = value;
     }
 
     public function get ready():Boolean {
         return _ready;
     }
 
-    public function get features():Vector.<Feature> {
+    public function get features():Dictionary {
         return _features;
     }
 
@@ -86,13 +89,8 @@ public class Saltr {
         return _experiments;
     }
 
-    public function getFeatureByToken(token:String):Feature {
-        for each(var feature:Feature in _features) {
-            if (feature.token == token) {
-                return feature;
-            }
-        }
-        return null;
+    public function getFeature(token:String):Feature {
+        return _features[token];
     }
 
     public function initPartner(partnerId:String, partnerType:String):void {
@@ -101,6 +99,20 @@ public class Saltr {
 
     public function initDevice(deviceId:String, deviceType:String):void {
         _device = new Device(deviceId, deviceType);
+    }
+
+    /**
+     * If you want to have a feature synced with SALTR you should call define before getAppData call.
+     */
+    public function defineFeature(token : String, properties : Object) : void {
+        var feature : Feature = _features[token];
+        if(feature == null) {
+            feature = new Feature(token, null, properties);
+            _features[token] = feature;
+        }
+        else {
+            feature.defaultProperties = properties;
+        }
     }
 
     public function getAppData(onGetAppDataSuccess:Function, onGetAppDataFail:Function):void {
@@ -113,12 +125,26 @@ public class Saltr {
         _isLoading = false;
         _ready = true;
         _saltUserId = jsonData.saltId;
-        _deserializer.decode(jsonData);
-        _features = _deserializer.features;
-        _levelPackStructures = _deserializer.levelPackStructures;
-        _experiments = _deserializer.experiments;
-        trace("[SaltClient] packs=" + _deserializer.levelPackStructures.length);
+
+        _experiments = _deserializer.decodeExperiments(jsonData);
+        _levelPackStructures = _deserializer.decodeLevels(jsonData);
+        var saltrFeatures : Dictionary = _deserializer.decodeFeatures(jsonData);
+        //merging with defaults...
+        for(var i : String in saltrFeatures) {
+            var saltrFeature : Feature = saltrFeatures[i];
+            var defaultFeature : Feature = _features[i];
+            if(defaultFeature != null) {
+                saltrFeature.defaultProperties = defaultFeature.defaultProperties;
+            }
+        }
+        _features = saltrFeatures;
+
+        trace("[SaltClient] packs=" + _levelPackStructures.length);
         _onGetAppDataSuccess();
+
+        if(_isInDevMode) {
+            syncFeatures();
+        }
     }
 
     private function loadAppDataFailHandler():void {
@@ -313,37 +339,19 @@ public class Saltr {
         return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
-    public function saveOrUpdateFeature(featureList:Vector.<Feature>, onSaveOrUpdateFeatureSuccess:Function, onSaveOrUpdateFeatureFail:Function):void {
-        _onSaveOrUpdateFeatureSuccess = onSaveOrUpdateFeatureSuccess;
-        _onSaveOrUpdateFeatureFail = onSaveOrUpdateFeatureFail;
+    private function syncFeatures() : void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
-        var arrayList:Array = [];
-        var feature:Feature;
-        for (var i:int = 0, len:int = featureList.length; i < len; ++i) {
-            feature = featureList[i];
-            arrayList.push({token: feature.token, value: JSON.stringify(feature.value)});
+        var featureList:Array = [];
+        for (var i : String in _features) {
+            var feature:Feature = _features[i];
+            featureList.push({token: feature.token, value: JSON.stringify(feature.defaultProperties)});
         }
-        urlVars.data = JSON.stringify(arrayList);
+        urlVars.data = JSON.stringify(featureList);
         var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_URL, urlVars);
-        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, saveOrUpdateFeatureLoadCompleteHandler, saveOrUpdateFeatureLoadErrorHandler);
+        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, function(resource : Resource){}, function(resource : Resource){});
         resource.load();
-    }
-
-    private function saveOrUpdateFeatureLoadCompleteHandler(resource:Resource):void {
-        trace("[Saltr] Feature saved or updated.");
-        _onSaveOrUpdateFeatureSuccess();
-    }
-
-    private function saveOrUpdateFeatureLoadErrorHandler(resource:Resource):void {
-        trace("[Saltr] Feature save or update error.");
-        _onSaveOrUpdateFeatureFail();
-    }
-
-
-    public function set repository(value:IRepository):void {
-        _repository = value;
     }
 }
 }

@@ -13,25 +13,33 @@
 package saltr {
 public class Feature {
     private var _token:String;
-    private var _value:Object;
+    private var _properties:Object;
+    private var _defaultProperties : Object;
 
-    public function Feature(token:String, data:Object) {
+    public function Feature(token:String, data:Object = null, defaultValue : Object = null) {
         _token = token;
-        _value = data;
+        _properties = data;
+        _defaultProperties = defaultValue;
     }
-
-    public function toString():String {
-        return "Feature { token : " + _token + " , value : " + _value + "}";
-    }
-
 
     public function get token():String {
         return _token;
     }
 
-    public function get value():Object {
-        return _value;
+    public function get properties():Object {
+        return _properties == null ? _defaultProperties : _properties;
     }
 
+    public function get defaultProperties() : Object {
+        return _defaultProperties;
+    }
+
+    public function set defaultProperties(value : Object) : void {
+        _defaultProperties = value;
+    }
+
+    public function toString():String {
+        return "Feature { token : " + _token + " , value : " + _properties + "}";
+    }
 }
 }
