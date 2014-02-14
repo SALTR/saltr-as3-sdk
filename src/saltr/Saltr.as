@@ -346,7 +346,9 @@ public class Saltr {
         var featureList:Array = [];
         for (var i : String in _features) {
             var feature:Feature = _features[i];
-            featureList.push({token: feature.token, value: JSON.stringify(feature.defaultProperties)});
+            if(feature.defaultProperties != null) {
+                featureList.push({token: feature.token, value: JSON.stringify(feature.defaultProperties)});
+            }
         }
         urlVars.data = JSON.stringify(featureList);
         var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_URL, urlVars);
