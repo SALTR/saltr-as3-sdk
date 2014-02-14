@@ -14,12 +14,12 @@ package saltr {
 public class Feature {
     private var _token:String;
     private var _properties:Object;
-    private var _defaultProperties : Object;
+    private var _defaultProperties:Object;
 
-    public function Feature(token:String, data:Object = null, defaultValue : Object = null) {
+    public function Feature(token:String, data:Object = null, defaultProperties:Object = null) {
         _token = token;
         _properties = data;
-        _defaultProperties = defaultValue;
+        _defaultProperties = defaultProperties;
     }
 
     public function get token():String {
@@ -30,11 +30,11 @@ public class Feature {
         return _properties == null ? _defaultProperties : _properties;
     }
 
-    public function get defaultProperties() : Object {
+    public function get defaultProperties():Object {
         return _defaultProperties;
     }
 
-    public function set defaultProperties(value : Object) : void {
+    public function set defaultProperties(value:Object):void {
         _defaultProperties = value;
     }
 

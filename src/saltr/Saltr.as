@@ -57,10 +57,10 @@ public class Saltr {
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
 
-    private var _isInDevMode : Boolean;
+    private var _isInDevMode:Boolean;
 
 
-        //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
+    //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String) {
         _instanceKey = instanceKey;
         _deserializer = new Deserializer();
@@ -104,11 +104,10 @@ public class Saltr {
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
-    public function defineFeature(token : String, properties : Object) : void {
-        var feature : Feature = _features[token];
-        if(feature == null) {
-            feature = new Feature(token, null, properties);
-            _features[token] = feature;
+    public function defineFeature(token:String, properties:Object):void {
+        var feature:Feature = _features[token];
+        if (feature == null) {
+            _features[token] = new Feature(token, null, properties);
         }
         else {
             feature.defaultProperties = properties;
@@ -128,12 +127,12 @@ public class Saltr {
 
         _experiments = _deserializer.decodeExperiments(jsonData);
         _levelPackStructures = _deserializer.decodeLevels(jsonData);
-        var saltrFeatures : Dictionary = _deserializer.decodeFeatures(jsonData);
+        var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
         //merging with defaults...
-        for(var i : String in saltrFeatures) {
-            var saltrFeature : Feature = saltrFeatures[i];
-            var defaultFeature : Feature = _features[i];
-            if(defaultFeature != null) {
+        for (var i:String in saltrFeatures) {
+            var saltrFeature:Feature = saltrFeatures[i];
+            var defaultFeature:Feature = _features[i];
+            if (defaultFeature != null) {
                 saltrFeature.defaultProperties = defaultFeature.defaultProperties;
             }
         }
@@ -142,7 +141,7 @@ public class Saltr {
         trace("[SaltClient] packs=" + _levelPackStructures.length);
         _onGetAppDataSuccess();
 
-        if(_isInDevMode) {
+        if (_isInDevMode) {
             syncFeatures();
         }
     }
@@ -339,21 +338,29 @@ public class Saltr {
         return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
-    private function syncFeatures() : void {
+    private function syncFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
         var featureList:Array = [];
-        for (var i : String in _features) {
+        for (var i:String in _features) {
             var feature:Feature = _features[i];
-            if(feature.defaultProperties != null) {
+            if (feature.defaultProperties != null) {
                 featureList.push({token: feature.token, value: JSON.stringify(feature.defaultProperties)});
             }
         }
         urlVars.data = JSON.stringify(featureList);
         var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_URL, urlVars);
-        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, function(resource : Resource){}, function(resource : Resource){});
+        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
+    }
+
+    protected function syncSuccessHandler(resource:Resource):void {
+
+    }
+
+    protected function syncFailHandler(resource:Resource):void {
+
     }
 }
 }
