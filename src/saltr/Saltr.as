@@ -58,6 +58,7 @@ public class Saltr {
     protected var _onGetLevelDataBodyFail:Function;
 
     private var _isInDevMode:Boolean;
+    private var _appVersion : String;
 
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
@@ -67,7 +68,14 @@ public class Saltr {
         _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
-        _isInDevMode = false;
+        _isInDevMode = true;
+
+        //TODO @daal. Clarify!
+        _appVersion = "1.0.0";
+    }
+
+    public function set appVersion(value:String):void {
+        _appVersion = value;
     }
 
     public function set repository(value:IRepository):void {
@@ -136,8 +144,8 @@ public class Saltr {
             if (defaultFeature != null) {
                 saltrFeature.defaultProperties = defaultFeature.defaultProperties;
             }
+            _features[i] = saltrFeature;
         }
-        _features = saltrFeatures;
 
         trace("[SaltClient] packs=" + _levelPackStructures.length);
         _onGetAppDataSuccess();
@@ -343,6 +351,8 @@ public class Saltr {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
+        //TODO:: @daal Fix this!!!
+        urlVars.appVersion = _appVersion;
         var featureList:Array = [];
         for (var i:String in _features) {
             var feature:Feature = _features[i];
