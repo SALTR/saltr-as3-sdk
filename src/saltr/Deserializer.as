@@ -12,46 +12,16 @@
  */
 package saltr {
 
+import flash.utils.Dictionary;
+
 internal class Deserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {
         return p1.index - p2.index;
     }
 
-    //TODO: my be map is can be more flexible
-    private var _features:Vector.<Feature>;
-    private var _experiments:Vector.<Experiment>;
-    private var _levelPackStructures:Vector.<LevelPackStructure>;
-
-    public function Deserializer() {
-        _features = new Vector.<Feature>();
-        _experiments = new Vector.<Experiment>();
-    }
-
-    public function get features():Vector.<Feature> {
-        return _features;
-    }
-
-    public function get levelPackStructures():Vector.<LevelPackStructure> {
-        return _levelPackStructures;
-    }
-
-    public function get experiments():Vector.<Experiment> {
-        return _experiments;
-    }
-
-    public function decode(data:Object):void {
-        if (data == null) {
-            return;
-        }
-
-        clearData();
-        decodeFeatures(data);
-        decodeExperimentInfo(data);
-        decodeLevels(data);
-    }
-
-    private function decodeExperimentInfo(data:Object):void {
+    public function decodeExperiments(data : Object) : Vector.<Experiment> {
+        var experiments : Vector.<Experiment> = new Vector.<Experiment>();
         var experimentInfo:Array = data.experimentInfo;
         if (experimentInfo != null) {
             for each (var item:Object in experimentInfo) {
@@ -63,14 +33,15 @@ internal class Deserializer {
 
                 //TODO @GSAR: rename and review item.customEventList!!!
                 experiment.customEvents = item.customEventList as Array;
-                _experiments.push(experiment);
+                experiments.push(experiment);
             }
         }
+        return experiments;
     }
 
-    private function decodeLevels(data:Object):void {
+    public function decodeLevels(data : Object) : Vector.<LevelPackStructure> {
         var levelPacksObject:Object = data.levelPackList;
-        _levelPackStructures = new <LevelPackStructure>[];
+        var levelPackStructures : Vector.<LevelPackStructure> = new <LevelPackStructure>[];
         var levelStructures:Vector.<LevelStructure>;
         var levelsObject:Object;
         for each(var levelPack:Object in levelPacksObject) {
@@ -80,32 +51,21 @@ internal class Deserializer {
                 levelStructures.push(new LevelStructure(level.id, level.order, level.url, level.properties, level.version));
             }
             levelStructures.sort(sortByIndex);
-            _levelPackStructures.push(new LevelPackStructure(levelPack.token, levelPack.order, levelStructures));
+            levelPackStructures.push(new LevelPackStructure(levelPack.token, levelPack.order, levelStructures));
         }
-        _levelPackStructures.sort(sortByIndex);
+        levelPackStructures.sort(sortByIndex);
+        return levelPackStructures;
     }
 
-    private function decodeFeatures(data:Object):void {
+    public function decodeFeatures(data : Object) : Dictionary {
+        var features : Dictionary = new Dictionary();
         var featuresList:Array = data.featureList;
         if (featuresList != null) {
-            var feature:Feature;
             for each(var featureObj:Object in featuresList) {
-                feature = new Feature(featureObj.token, featureObj.data);
-                _features.push(feature);
+                features[featureObj.token] = new Feature(featureObj.token, featureObj.data);
             }
         }
-    }
-
-    private function clearData():void {
-        if (_features) {
-            _features.length = 0;
-        }
-        if (_experiments) {
-            _experiments.length = 0;
-        }
-        if (_levelPackStructures) {
-            _levelPackStructures.length = 0;
-        }
+        return features;
     }
 }
 }
