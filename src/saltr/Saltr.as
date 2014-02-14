@@ -69,9 +69,6 @@ public class Saltr {
         _isLoading = false;
         _ready = false;
         _isInDevMode = true;
-
-        //TODO @daal. Clarify!
-        _appVersion = "1.0.0";
     }
 
     public function set appVersion(value:String):void {
@@ -351,8 +348,9 @@ public class Saltr {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
-        //TODO:: @daal Fix this!!!
-        urlVars.appVersion = _appVersion;
+        if(_appVersion) {
+            urlVars.appVersion = _appVersion;
+        }
         var featureList:Array = [];
         for (var i:String in _features) {
             var feature:Feature = _features[i];
