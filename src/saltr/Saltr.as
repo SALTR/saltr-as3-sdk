@@ -67,7 +67,7 @@ public class Saltr {
         _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
-        _isInDevMode = true;
+        _isInDevMode = false;
     }
 
     public function set repository(value:IRepository):void {
