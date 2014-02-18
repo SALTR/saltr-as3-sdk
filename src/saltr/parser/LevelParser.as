@@ -88,14 +88,11 @@ final public class LevelParser {
         return chunks;
     }
 
-
     private static function parseComposites(composites:Array, outputBoard:Vector2D, boardData:BoardData):Dictionary {
         var composite:Composite;
         var compositesMap:Dictionary = new Dictionary();
         for each(var compositePrototype:* in composites) {
-            composite = new Composite(compositePrototype.assetId,
-                    new Cell(compositePrototype.position[0], compositePrototype.position[1]),
-                    outputBoard, boardData);
+            composite = new Composite(compositePrototype.assetId, new Cell(compositePrototype.position[0], compositePrototype.position[1]), outputBoard, boardData);
             compositesMap[composite.id] = composite;
         }
         return compositesMap;
