@@ -61,8 +61,12 @@ public class LevelBoard {
         return _position;
     }
 
-    public function get properties():Object {
+    public function get boardProperties():Object {
         return _rawBoard.properties.board;
+    }
+
+    public function get cellProperties():Object {
+        return _rawBoard.properties.cell;
     }
 
     public function get boardVector():Vector2D {
