@@ -42,13 +42,10 @@ public class LevelStructure {
         _keyset = boardData.keyset;
 
         _boards = new Dictionary();
-        var levelBoard:LevelBoard;
         var boardsObject:Object = data["boards"];
         for (var key:String in boardsObject) {
-            levelBoard = new LevelBoard(boardsObject[key], boardData);
-            _boards[key] = levelBoard;
+            _boards[key] = new LevelBoard(boardsObject[key], boardData);
         }
-
         _dataFetched = true;
     }
 

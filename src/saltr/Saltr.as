@@ -267,10 +267,10 @@ public class Saltr {
 
 
     //TODO @GSAR: port this later when SALTR is ready
-    public function addPropertyProperty(saltUserId:String, saltInstanceKey:String, propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
+    public function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_ADD_PROPERTY;
-        var args:Object = {saltId: saltUserId};
+        var args:Object = {saltId: _saltUserId};
         var properties:Array = [];
         for (var i:uint = 0; i < propertyNames.length; i++) {
             var propertyName:String = propertyNames[i];
@@ -279,22 +279,22 @@ public class Saltr {
             properties.push({key: propertyName, value: propertyValue, operation: operation});
         }
         args.properties = properties;
-        args.instanceKey = saltInstanceKey;
+        args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
 
         var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
 
-        var asset:Resource = new Resource("property", ticket,
-                function (asset:Resource):void {
+        var resource:Resource = new Resource("property", ticket,
+                function (resource:Resource):void {
                     trace("getSaltLevelPacks : success");
-                    var data:Object = asset.jsonData;
-                    asset.dispose();
+                    var data:Object = resource.jsonData;
+                    resource.dispose();
                 },
-                function (asset:Resource):void {
+                function (resource:Resource):void {
                     trace("getSaltLevelPacks : error");
-                    asset.dispose();
+                    resource.dispose();
                 });
-        asset.load();
+        resource.load();
     }
 
     private function loadAppData():void {
@@ -364,12 +364,8 @@ public class Saltr {
         resource.load();
     }
 
-    protected function syncSuccessHandler(resource:Resource):void {
+    protected function syncSuccessHandler(resource:Resource):void {}
 
-    }
-
-    protected function syncFailHandler(resource:Resource):void {
-
-    }
+    protected function syncFailHandler(resource:Resource):void {}
 }
 }
