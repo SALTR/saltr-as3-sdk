@@ -20,16 +20,16 @@ public class SimpleAsset extends BoardAsset {
     public function SimpleAsset() {
     }
 
-    public function toString():String {
-        return "Asset : [type : " + _type + "]" + "[keys : " + _keys + "]" + "[state : " + _state + "]";
-    }
-
     public function set cell(cell:Cell):void {
         _cell = cell;
     }
 
     public function get cell():Cell {
         return _cell;
+    }
+
+    public function toString():String {
+        return "Asset : [type : " + _type + "]" + "[keys : " + _keys + "]" + "[state : " + _state + "]";
     }
 }
 }
