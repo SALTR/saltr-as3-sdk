@@ -65,7 +65,7 @@ public class LevelBoard {
         return _rawBoard.properties.board;
     }
 
-    public function get cellProperties():Object {
+    public function get cellProperties():Array {
         return _rawBoard.properties.cell;
     }
 
