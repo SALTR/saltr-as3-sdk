@@ -27,8 +27,8 @@ public class Composite {
     }
 
     public function generate():void {
-        var compositeAssetTemplate:CompositeAssetTemplate = _boardAssetMap[id] as CompositeAssetTemplate;
-        var compositeAsset:CompositeAsset = new CompositeAsset();
+        var compositeAssetTemplate:CompositeAsset = _boardAssetMap[id] as CompositeAsset;
+        var compositeAsset:CompositeInstance = new CompositeInstance();
         compositeAsset.keys = compositeAssetTemplate.keys;
         compositeAsset.type = compositeAssetTemplate.type;
         compositeAsset.shifts = compositeAssetTemplate.shifts;

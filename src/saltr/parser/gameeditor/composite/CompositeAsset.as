@@ -4,20 +4,19 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor.composite {
-import saltr.parser.gameeditor.BoardAsset;
+import saltr.parser.gameeditor.Asset;
 
-public class CompositeAsset extends BoardAsset {
+public class CompositeAsset extends Asset {
+
     private var _shifts:Array;
 
-    public function CompositeAsset() {
+    public function CompositeAsset(shifts:Array, typeKey:String, keys:Object) {
+        super(typeKey, keys);
+        _shifts = shifts;
     }
 
     public function get shifts():Array {
         return _shifts;
-    }
-
-    public function set shifts(value:Array):void {
-        _shifts = value;
     }
 }
 }

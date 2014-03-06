@@ -13,10 +13,10 @@
 package saltr.parser.gameeditor.chunk {
 import flash.utils.Dictionary;
 
-import saltr.parser.gameeditor.BoardAsset;
+import saltr.parser.gameeditor.AssetInstance;
 import saltr.parser.gameeditor.BoardData;
 import saltr.parser.gameeditor.Cell;
-import saltr.parser.gameeditor.AssetTemplate;
+import saltr.parser.gameeditor.Asset;
 
 public class Chunk {
     private var _id:String;
@@ -47,12 +47,12 @@ public class Chunk {
     }
 
     private function generateAsset(count:uint, id:String, stateId:String):void {
-        var assetTemplate:AssetTemplate = _boardAssetMap[id] as AssetTemplate;
+        var assetTemplate:Asset = _boardAssetMap[id] as Asset;
         var state:String = _boardStateMap[stateId] as String;
         for (var i:uint = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _cells.length);
             var randCell:Cell = _cells[randCellIndex];
-            var asset:BoardAsset = new BoardAsset();
+            var asset:AssetInstance = new AssetInstance();
             asset.keys = assetTemplate.keys;
             asset.state = state;
             asset.type = assetTemplate.type;

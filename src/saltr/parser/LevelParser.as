@@ -19,8 +19,8 @@ import saltr.parser.gameeditor.Cell;
 import saltr.parser.gameeditor.chunk.AssetInChunk;
 import saltr.parser.gameeditor.chunk.Chunk;
 import saltr.parser.gameeditor.composite.Composite;
-import saltr.parser.gameeditor.composite.CompositeAssetTemplate;
-import saltr.parser.gameeditor.AssetTemplate;
+import saltr.parser.gameeditor.composite.CompositeAsset;
+import saltr.parser.gameeditor.Asset;
 
 final public class LevelParser {
 
@@ -130,11 +130,11 @@ final public class LevelParser {
 
     }
 
-    private static function parseAsset(asset:Object):AssetTemplate {
+    private static function parseAsset(asset:Object):Asset {
         if (asset.cells/*if asset is composite asset*/) {
-            return new CompositeAssetTemplate(asset.cells as Array, asset.type_key, asset.keys);
+            return new CompositeAsset(asset.cells as Array, asset.type_key, asset.keys);
         }
-        return new AssetTemplate(asset.type_key, asset.keys);
+        return new Asset(asset.type_key, asset.keys);
     }
 }
 }
