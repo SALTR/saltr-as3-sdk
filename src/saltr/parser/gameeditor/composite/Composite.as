@@ -32,7 +32,7 @@ public class Composite {
         compositeAsset.keys = compositeAssetTemplate.keys;
         compositeAsset.type = compositeAssetTemplate.type;
         compositeAsset.shifts = compositeAssetTemplate.shifts;
-        _cell.boardAsset = compositeAsset;
+        _cell.assetInstance = compositeAsset;
     }
 }
 }

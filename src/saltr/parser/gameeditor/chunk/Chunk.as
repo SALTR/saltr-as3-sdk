@@ -56,7 +56,7 @@ public class Chunk {
             asset.keys = assetTemplate.keys;
             asset.state = state;
             asset.type = assetTemplate.type;
-            randCell.boardAsset = asset;
+            randCell.assetInstance = asset;
             _cells.splice(randCellIndex, 1);
             if (_cells.length == 0) {
                 return;

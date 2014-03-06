@@ -16,7 +16,7 @@ public class Cell {
     private var _y:int;
     private var _properties : Object;
     private var _isBlocked : Boolean;
-    private var _boardAsset : AssetInstance;
+    private var _assetInstance : AssetInstance;
 
     public function Cell(x:int, y:int) {
         _x = x;
@@ -25,12 +25,12 @@ public class Cell {
         _isBlocked = false;
     }
 
-    public function get boardAsset():AssetInstance {
-        return _boardAsset;
+    public function get assetInstance():AssetInstance {
+        return _assetInstance;
     }
 
-    public function set boardAsset(value:AssetInstance):void {
-        _boardAsset = value;
+    public function set assetInstance(value:AssetInstance):void {
+        _assetInstance = value;
     }
 
     public function set properties(value:Object):void {
