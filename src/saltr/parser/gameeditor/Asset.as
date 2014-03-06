@@ -7,29 +7,29 @@
 
 /**
  * User: sarg
- * Date: 11/9/12
- * Time: 5:02 PM
+ * Date: 11/10/12
+ * Time: 12:31 PM
  */
-package saltr.parser.gameeditor.simple {
-import saltr.parser.gameeditor.BoardAsset;
-import saltr.parser.gameeditor.Cell;
+package saltr.parser.gameeditor {
+public class Asset {
+    private var _keys:Object;
+    private var _type:String;
 
-public class SimpleAsset extends BoardAsset {
-    private var _cell:Cell;
-
-    public function SimpleAsset() {
+    public function Asset(typeKey:String, keys:Object) {
+        _type = typeKey;
+        _keys = keys;
     }
 
-    public function set cell(cell:Cell):void {
-        _cell = cell;
+    public function get keys():Object {
+        return _keys;
     }
 
-    public function get cell():Cell {
-        return _cell;
+    public function get type():String {
+        return _type;
     }
 
     public function toString():String {
-        return "Asset : [type : " + _type + "]" + "[keys : " + _keys + "]" + "[state : " + _state + "]";
+        return "AssetTemplate : [type : " + _type + "]" + "[keys : " + _keys + "]";
     }
 }
 }

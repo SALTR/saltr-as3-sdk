@@ -13,33 +13,27 @@
 package saltr.parser.gameeditor.chunk {
 import flash.utils.Dictionary;
 
-import saltr.parser.data.Vector2D;
+import saltr.parser.gameeditor.AssetInstance;
 import saltr.parser.gameeditor.BoardData;
 import saltr.parser.gameeditor.Cell;
-import saltr.parser.gameeditor.simple.SimpleAsset;
-import saltr.parser.gameeditor.simple.SimpleAssetTemplate;
+import saltr.parser.gameeditor.Asset;
 
 public class Chunk {
     private var _id:String;
     private var _chunkAssets:Vector.<AssetInChunk>;
-    private var _items:Array;
     private var _cells:Vector.<Cell>;
-    private var _outputBoard:Vector2D;
     private var _boardAssetMap:Dictionary;
     private var _boardStateMap:Dictionary;
 
-    public function Chunk(id:String, outputBoard:Vector2D, boardData:BoardData) {
+    public function Chunk(id:String,boardData:BoardData) {
         _id = id;
         _chunkAssets = new Vector.<AssetInChunk>();
         _cells = new Vector.<Cell>();
-        _items = [];
-        _outputBoard = outputBoard;
         _boardAssetMap = boardData.assetMap;
         _boardStateMap = boardData.stateMap;
     }
 
     public function generate():void {
-//        initRemainingItems();
         var weakChunkAsset:Vector.<AssetInChunk> = new Vector.<AssetInChunk>();
         for each(var chunkAsset:AssetInChunk in _chunkAssets) {
             if (chunkAsset.count != 0) {
@@ -52,30 +46,17 @@ public class Chunk {
         generateWeakAssets(weakChunkAsset);
     }
 
-//    private function initRemainingItems():void {
-//        for each(var item:Object in _items) {
-//            item.type = null;
-//            item.colorId = null;
-//            _remainingItems.push(item);
-//        }
-//    }
-
-
     private function generateAsset(count:uint, id:String, stateId:String):void {
-        var randCellIndex:int;
-        var randCell:Cell;
-        var asset:SimpleAsset;
-        var assetTemplate:SimpleAssetTemplate = _boardAssetMap[id] as SimpleAssetTemplate;
+        var assetTemplate:Asset = _boardAssetMap[id] as Asset;
         var state:String = _boardStateMap[stateId] as String;
         for (var i:uint = 0; i < count; ++i) {
-            randCellIndex = int(Math.random() * _cells.length);
-            randCell = _cells[randCellIndex];
-            asset = new SimpleAsset();
+            var randCellIndex:int = int(Math.random() * _cells.length);
+            var randCell:Cell = _cells[randCellIndex];
+            var asset:AssetInstance = new AssetInstance();
             asset.keys = assetTemplate.keys;
             asset.state = state;
             asset.type = assetTemplate.type;
-            asset.cell = randCell;
-            _outputBoard.insert(randCell.x, randCell.y, asset);
+            randCell.boardAsset = asset;
             _cells.splice(randCellIndex, 1);
             if (_cells.length == 0) {
                 return;
@@ -83,18 +64,16 @@ public class Chunk {
         }
     }
 
-
     private function generateWeakAssets(weakChunkAsset:Vector.<AssetInChunk>):void {
         if (weakChunkAsset.length != 0) {
             var assetConcentration:Number = _cells.length > weakChunkAsset.length ? _cells.length / weakChunkAsset.length : 1;
             var minAssetCount:uint = assetConcentration <= 2 ? 1 : assetConcentration - 2;
             var maxAssetCount:uint = assetConcentration == 1 ? 1 : assetConcentration + 2;
             var lastChunkAssetIndex:int = weakChunkAsset.length - 1;
-            var chunkAsset:AssetInChunk;
-            var count:uint;
+
             for (var i:uint = 0; i < weakChunkAsset.length && _cells.length != 0; ++i) {
-                chunkAsset = weakChunkAsset[i];
-                count = i == lastChunkAssetIndex ? _cells.length : randomWithin(minAssetCount, maxAssetCount);
+                var chunkAsset : AssetInChunk = weakChunkAsset[i];
+                var count : uint = i == lastChunkAssetIndex ? _cells.length : randomWithin(minAssetCount, maxAssetCount);
                 generateAsset(count, chunkAsset.id, chunkAsset.stateId);
             }
         }
@@ -118,10 +97,6 @@ public class Chunk {
 
     public function set id(value:String):void {
         _id = value;
-    }
-
-    public function addItem(item:Object):void {
-        _items.push(item);
     }
 
     private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {

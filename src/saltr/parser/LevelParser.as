@@ -19,19 +19,15 @@ import saltr.parser.gameeditor.Cell;
 import saltr.parser.gameeditor.chunk.AssetInChunk;
 import saltr.parser.gameeditor.chunk.Chunk;
 import saltr.parser.gameeditor.composite.Composite;
-import saltr.parser.gameeditor.composite.CompositeAssetTemplate;
-import saltr.parser.gameeditor.simple.SimpleAssetTemplate;
+import saltr.parser.gameeditor.composite.CompositeAsset;
+import saltr.parser.gameeditor.Asset;
 
 final public class LevelParser {
 
-    public function LevelParser() {
-//        throw new StaticClassError();
-    }
-
-    public static function parseBoard(outputBoard:Vector2D, board:Object, boardData:BoardData):void {
-        createEmptyBoard(outputBoard);
-        var composites:Dictionary = parseComposites(board.composites as Array, outputBoard, boardData);
-        var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, boardData);
+    public static function parseBoard(outputBoard:Vector2D, rawBoard:Object, boardData:BoardData):void {
+        createEmptyBoard(outputBoard, rawBoard);
+        var composites:Dictionary = parseComposites(rawBoard.composites as Array, outputBoard, boardData);
+        var boardChunks:Dictionary = parseChunks(rawBoard.chunks as Array, outputBoard, boardData);
         generateComposites(composites);
         generateChunks(boardChunks);
     }
@@ -53,35 +49,45 @@ final public class LevelParser {
         }
     }
 
-    private static function createEmptyBoard(board:Vector2D):void {
+    private static function createEmptyBoard(board:Vector2D, rawBoard : Object):void {
+        var blockedCells : Array = rawBoard.hasOwnProperty("blockedCells") ? rawBoard.blockedCells : [];
+        var cellProperties : Array = rawBoard.hasOwnProperty("properties") && rawBoard.properties.hasOwnProperty("cell") ? rawBoard.properties.cell : [];
         var cols:int = board.width;
         var rows:int = board.height;
         for (var i:int = 0; i < rows; ++i) {
             for (var j:int = 0; j < cols; ++j) {
-                board.insert(j, i, {
-                    col: j,
-                    row: i
-                });
+                var cell : Cell = new Cell(j,i);
+                board.insert(j, i, cell);
+                for(var p : int = 0; p < cellProperties.length; p++) {
+                    var property : Object = cellProperties[p];
+                    if(property.coords[0] == j && property.coords[1] == i) {
+                        cell.properties = property.value;
+                        break;
+                    }
+                }
+                for(var b : int = 0; b < blockedCells.length; b++) {
+                    var blockedCell : Array = blockedCells[b];
+                    if(blockedCell[0] == j && blockedCell[1] == i) {
+                        cell.isBlocked = true;
+                        break;
+                    }
+                }
             }
         }
     }
 
     private static function parseChunks(chunksPrototype:Array, outputBoard:Vector2D, boardData:BoardData):Dictionary {
-        var chunkAsset:AssetInChunk;
-        var chunk:Chunk;
-        var assetsPrototype:Array;
-        var cellsPrototype:Array;
         var chunks:Dictionary = new Dictionary();
         for each (var chunkPrototype:* in chunksPrototype) {
-            chunk = new Chunk(String(chunkPrototype.chunkId), outputBoard, boardData);
-            assetsPrototype = chunkPrototype.assets as Array;
+            var chunk : Chunk = new Chunk(String(chunkPrototype.chunkId), boardData);
+            var assetsPrototype:Array = chunkPrototype.assets as Array;
             for each (var assetPrototype:* in assetsPrototype) {
-                chunkAsset = new AssetInChunk(assetPrototype.assetId, assetPrototype.count, assetPrototype.stateId);
+                var chunkAsset:AssetInChunk = new AssetInChunk(assetPrototype.assetId, assetPrototype.count, assetPrototype.stateId);
                 chunk.addChunkAsset(chunkAsset);
             }
-            cellsPrototype = chunkPrototype.cells as Array;
+            var cellsPrototype:Array = chunkPrototype.cells as Array;
             for each(var cellPrototype:* in cellsPrototype) {
-                chunk.addCell(new Cell(cellPrototype[0], cellPrototype[1]));
+                chunk.addCell(outputBoard.retrieve(cellPrototype[0], cellPrototype[1]) as Cell);
             }
             chunks[chunk.id] = chunk;
         }
@@ -89,10 +95,9 @@ final public class LevelParser {
     }
 
     private static function parseComposites(composites:Array, outputBoard:Vector2D, boardData:BoardData):Dictionary {
-        var composite:Composite;
         var compositesMap:Dictionary = new Dictionary();
         for each(var compositePrototype:* in composites) {
-            composite = new Composite(compositePrototype.assetId, new Cell(compositePrototype.position[0], compositePrototype.position[1]), outputBoard, boardData);
+            var composite:Composite = new Composite(compositePrototype.assetId, outputBoard.retrieve(compositePrototype.position[0], compositePrototype.position[1]) as Cell, boardData);
             compositesMap[composite.id] = composite;
         }
         return compositesMap;
@@ -125,11 +130,11 @@ final public class LevelParser {
 
     }
 
-    private static function parseAsset(asset:Object):SimpleAssetTemplate {
+    private static function parseAsset(asset:Object):Asset {
         if (asset.cells/*if asset is composite asset*/) {
-            return new CompositeAssetTemplate(asset.cells as Array, asset.type_key, asset.keys);
+            return new CompositeAsset(asset.cells as Array, asset.type_key, asset.keys);
         }
-        return new SimpleAssetTemplate(asset.type_key, asset.keys);
+        return new Asset(asset.type_key, asset.keys);
     }
 }
 }
