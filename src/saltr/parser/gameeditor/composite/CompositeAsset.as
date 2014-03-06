@@ -5,29 +5,19 @@
  */
 package saltr.parser.gameeditor.composite {
 import saltr.parser.gameeditor.BoardAsset;
-import saltr.parser.gameeditor.Cell;
 
 public class CompositeAsset extends BoardAsset {
-    private var _shifts:Vector.<Cell>;
-    private var _basis:Cell;
+    private var _shifts:Array;
 
     public function CompositeAsset() {
     }
 
-    public function get shifts():Vector.<Cell> {
+    public function get shifts():Array {
         return _shifts;
     }
 
-    public function set shifts(value:Vector.<Cell>):void {
+    public function set shifts(value:Array):void {
         _shifts = value;
-    }
-
-    public function get basis():Cell {
-        return _basis;
-    }
-
-    public function set basis(value:Cell):void {
-        _basis = value;
     }
 }
 }

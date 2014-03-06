@@ -4,9 +4,9 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor.composite {
-import saltr.parser.gameeditor.simple.SimpleAssetTemplate;
+import saltr.parser.gameeditor.AssetTemplate;
 
-public class CompositeAssetTemplate extends SimpleAssetTemplate {
+public class CompositeAssetTemplate extends AssetTemplate {
 
     private var _shifts:Array;
 
