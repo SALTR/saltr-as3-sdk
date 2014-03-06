@@ -32,6 +32,7 @@ public class Saltr {
     protected static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
     protected static const APP_DATA_URL_INTERNAL:String = "saltr/app_data.json";
     protected static const LEVEL_DATA_URL_LOCAL_TEMPLATE:String = "saltr/pack_{0}/level_{1}.json";
+    protected static const LEVEL_PACK_URL_LOCAL:String = "saltr/level_packs.json";
     protected static const LEVEL_DATA_URL_CACHE_TEMPLATE:String = "pack_{0}_level_{1}.json";
 
     public static const PROPERTY_OPERATIONS_INCREMENT:String = "inc";
@@ -109,6 +110,11 @@ public class Saltr {
         _device = new Device(deviceId, deviceType);
     }
 
+    public function importLevels() : void {
+        var cachedData:Object = _repository.getObjectFromCache(LEVEL_PACK_URL_LOCAL);
+        _levelPackStructures = _deserializer.decodeLevels(cachedData);
+    }
+
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
@@ -126,7 +132,21 @@ public class Saltr {
     public function start(onDataLoadSuccess:Function, onDataLoadFail:Function):void {
         _onDataLoadSuccess = onDataLoadSuccess;
         _onDataLoadFail = onDataLoadFail;
+        applyCachedFeatures();
         loadData();
+    }
+
+    private function applyCachedFeatures():void {
+        var cachedData:Object = _repository.getObjectFromCache(APP_DATA_URL_CACHE);
+        var cachedFeatures:Dictionary = _deserializer.decodeFeatures(cachedData);
+        for (var token:String in cachedFeatures) {
+            var saltrFeature:Feature = cachedFeatures[token];
+            var defaultFeature:Feature = _features[token];
+            if (defaultFeature != null) {
+                saltrFeature.defaultProperties = defaultFeature.defaultProperties;
+            }
+            _features[token] = saltrFeature;
+        }
     }
 
     protected function loadDataSuccessHandler(jsonData:Object):void {
@@ -137,6 +157,7 @@ public class Saltr {
         _saltrUserId = jsonData.saltId;
 
         _experiments = _deserializer.decodeExperiments(jsonData);
+
         _levelPackStructures = _deserializer.decodeLevels(jsonData);
         var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
 
