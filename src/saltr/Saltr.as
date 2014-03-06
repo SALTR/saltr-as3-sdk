@@ -41,7 +41,7 @@ public class Saltr {
     protected static const RESULT_ERROR:String = "ERROR";
 
     protected var _repository:IRepository;
-    protected var _saltUserId:String;
+    protected var _saltrUserId:String;
     protected var _isLoading:Boolean;
     protected var _ready:Boolean;
     protected var _partner:Partner;
@@ -52,8 +52,8 @@ public class Saltr {
     protected var _levelPackStructures:Vector.<LevelPackStructure>;
     protected var _experiments:Vector.<Experiment>;
     protected var _device:Device;
-    protected var _onGetAppDataSuccess:Function;
-    protected var _onGetAppDataFail:Function;
+    protected var _onDataLoadSuccess:Function;
+    protected var _onDataLoadFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
     protected var _onGetLevelDataBodyFail:Function;
 
@@ -63,12 +63,14 @@ public class Saltr {
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function Saltr(instanceKey:String) {
-        _features = new Dictionary();
         _instanceKey = instanceKey;
-        _deserializer = new Deserializer();
         _isLoading = false;
         _ready = false;
+
+        //TODO #GSAR: implement usage of dev mode variable
         _isInDevMode = true;
+        _features = new Dictionary();
+        _deserializer = new Deserializer();
     }
 
     public function set appVersion(value:String):void {
@@ -110,6 +112,7 @@ public class Saltr {
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
+    //TODO @GSAR: add Properties class to handle correct feature properties assignment
     public function defineFeature(token:String, properties:Object):void {
         var feature:Feature = _features[token];
         if (feature == null) {
@@ -120,61 +123,64 @@ public class Saltr {
         }
     }
 
-    public function getAppData(onGetAppDataSuccess:Function, onGetAppDataFail:Function):void {
-        _onGetAppDataSuccess = onGetAppDataSuccess;
-        _onGetAppDataFail = onGetAppDataFail;
-        loadAppData();
+    public function start(onDataLoadSuccess:Function, onDataLoadFail:Function):void {
+        _onDataLoadSuccess = onDataLoadSuccess;
+        _onDataLoadFail = onDataLoadFail;
+        loadData();
     }
 
-    protected function loadAppDataSuccessHandler(jsonData:Object):void {
+    protected function loadDataSuccessHandler(jsonData:Object):void {
         _isLoading = false;
         _ready = true;
-        _saltUserId = jsonData.saltId;
+
+        //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
+        _saltrUserId = jsonData.saltId;
 
         _experiments = _deserializer.decodeExperiments(jsonData);
         _levelPackStructures = _deserializer.decodeLevels(jsonData);
         var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
+
         //merging with defaults...
-        for (var i:String in saltrFeatures) {
-            var saltrFeature:Feature = saltrFeatures[i];
-            var defaultFeature:Feature = _features[i];
+        for (var token:String in saltrFeatures) {
+            var saltrFeature:Feature = saltrFeatures[token];
+            var defaultFeature:Feature = _features[token];
             if (defaultFeature != null) {
                 saltrFeature.defaultProperties = defaultFeature.defaultProperties;
             }
-            _features[i] = saltrFeature;
+            _features[token] = saltrFeature;
         }
 
-        trace("[SaltClient] packs=" + _levelPackStructures.length);
-        _onGetAppDataSuccess();
+        trace("[Saltr] packs=" + _levelPackStructures.length);
+        _onDataLoadSuccess();
 
+        //TODO @GSAR: implement this!
         if (_isInDevMode) {
             syncFeatures();
         }
     }
 
-    private function loadAppDataFailHandler():void {
+    private function loadDataFailHandler():void {
         _isLoading = false;
         _ready = false;
-        _onGetAppDataFail();
-        trace("[SaltClient] ERROR: Level Packs are not loaded.");
+        _onDataLoadFail();
+        trace("[Saltr] ERROR: Level Packs are not loaded.");
     }
 
-    protected function loadAppDataInternal():void {
-        trace("[SaltClient] NO Internet available - so loading internal app data.");
-        var data:Object = _repository.getObjectFromCache(APP_DATA_URL_CACHE);
-        if (data != null) {
-            trace("[SaltClient] Loading App data from Cache folder.");
-
-            loadAppDataSuccessHandler(data);
+    protected function loadDataInternal():void {
+        trace("[Saltr] NO Internet available - so loading internal app data.");
+        var cachedData:Object = _repository.getObjectFromCache(APP_DATA_URL_CACHE);
+        if (cachedData != null) {
+            trace("[Saltr] Loading data from cache.");
+            loadDataSuccessHandler(cachedData);
         }
         else {
-            trace("[SaltClient] Loading App data from application folder.");
-            data = _repository.getObjectFromApplication(APP_DATA_URL_INTERNAL);
-            if (data != null) {
-                loadAppDataSuccessHandler(data);
+            trace("[Saltr] Loading App data from application folder.");
+            var internalData:Object = _repository.getObjectFromApplication(APP_DATA_URL_INTERNAL);
+            if (internalData != null) {
+                loadDataSuccessHandler(internalData);
             }
             else {
-                loadAppDataFailHandler();
+                loadDataFailHandler();
             }
 
         }
@@ -206,7 +212,7 @@ public class Saltr {
     }
 
     protected function levelLoadErrorHandler():void {
-        trace("[SaltClient] ERROR: Level data is not loaded.");
+        trace("[Saltr] ERROR: Level data is not loaded.");
         _onGetLevelDataBodyFail();
     }
 
@@ -270,7 +276,7 @@ public class Saltr {
     public function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_ADD_PROPERTY;
-        var args:Object = {saltId: _saltUserId};
+        var args:Object = {saltId: _saltrUserId};
         var properties:Array = [];
         for (var i:uint = 0; i < propertyNames.length; i++) {
             var propertyName:String = propertyNames[i];
@@ -297,38 +303,38 @@ public class Saltr {
         resource.load();
     }
 
-    private function loadAppData():void {
+    private function loadData():void {
         if (_isLoading) {
             return;
         }
         _isLoading = true;
         _ready = false;
-        var asset:Resource = createAppDataResource(appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
-        asset.load();
+        var resource:Resource = createDataResource(resourceLoadSuccessHandler, resourceLoadFailHandler);
+        resource.load();
     }
 
-    private function appDataAssetLoadErrorHandler(asset:Resource):void {
-        trace("[SaltAPI] App data is failed to load.");
-        loadAppDataInternal();
-        asset.dispose();
+    private function resourceLoadFailHandler(resource:Resource):void {
+        trace("[Saltr] App data is failed to load.");
+        loadDataInternal();
+        resource.dispose();
     }
 
-    private function appDataAssetLoadCompleteHandler(asset:Resource):void {
-        trace("[SaltAPI] App data is loaded.");
-        var data:Object = asset.jsonData;
+    private function resourceLoadSuccessHandler(resource:Resource):void {
+        trace("[Saltr] App data is loaded.");
+        var data:Object = resource.jsonData;
         var jsonData:Object = data.responseData;
-        trace("[SaltClient] Loaded App data. json=" + jsonData);
+        trace("[Saltr] Loaded App data. json=" + jsonData);
         if (jsonData == null || data["status"] != Saltr.RESULT_SUCCEED) {
-            loadAppDataInternal();
+            loadDataInternal();
         }
         else {
-            loadAppDataSuccessHandler(jsonData);
+            loadDataSuccessHandler(jsonData);
             _repository.cacheObject(APP_DATA_URL_CACHE, "0", jsonData);
         }
-        asset.dispose();
+        resource.dispose();
     }
 
-    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Resource {
+    private function createDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Resource {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = Saltr.COMMAND_APP_DATA;
         var args:Object = {};

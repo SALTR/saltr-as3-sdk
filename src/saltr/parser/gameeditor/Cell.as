@@ -14,10 +14,39 @@ package saltr.parser.gameeditor {
 public class Cell {
     private var _x:int;
     private var _y:int;
+    private var _properties : Object;
+    private var _isBlocked : Boolean;
+    private var _assetInstance : AssetInstance;
 
     public function Cell(x:int, y:int) {
         _x = x;
         _y = y;
+        _properties = {};
+        _isBlocked = false;
+    }
+
+    public function get assetInstance():AssetInstance {
+        return _assetInstance;
+    }
+
+    public function set assetInstance(value:AssetInstance):void {
+        _assetInstance = value;
+    }
+
+    public function set properties(value:Object):void {
+        _properties = value;
+    }
+
+    public function set isBlocked(value:Boolean):void {
+        _isBlocked = value;
+    }
+
+    public function get properties():Object {
+        return _properties;
+    }
+
+    public function get isBlocked():Boolean {
+        return _isBlocked;
     }
 
     public function get x():int {

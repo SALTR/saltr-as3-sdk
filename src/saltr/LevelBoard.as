@@ -15,7 +15,6 @@ public class LevelBoard {
 
     private var _rows:int;
     private var _cols:int;
-    private var _blockedCells:Array;
     private var _position:Array;
     private var _boardVector:Vector2D;
     private var _rawBoard:Object;
@@ -26,7 +25,6 @@ public class LevelBoard {
         _boardData = boardData;
         _cols = _rawBoard.cols;
         _rows = _rawBoard.rows;
-        _blockedCells = _rawBoard.blockedCells;
         _position = _rawBoard.position;
 
         _boardVector = new Vector2D(_cols, _rows);
@@ -53,20 +51,16 @@ public class LevelBoard {
         return _cols;
     }
 
-    public function get blockedCells():Array {
-        return _blockedCells;
-    }
-
     public function get position():Array {
         return _position;
     }
 
     public function get boardProperties():Object {
-        return _rawBoard.properties.board;
-    }
+        if(_rawBoard.hasOwnProperty("properties") && _rawBoard.properties.hasOwnProperty("board")) {
+            return _rawBoard.properties.board;
+        }
+        return {};
 
-    public function get cellProperties():Object {
-        return _rawBoard.properties.cell;
     }
 
     public function get boardVector():Vector2D {
