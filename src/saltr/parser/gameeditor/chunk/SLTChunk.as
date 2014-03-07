@@ -14,7 +14,7 @@ package saltr.parser.gameeditor.chunk {
 import flash.utils.Dictionary;
 
 import saltr.parser.gameeditor.SLTAssetInstance;
-import saltr.parser.gameeditor.SLTBoardData;
+import saltr.parser.gameeditor.SLTLevelSettings;
 import saltr.parser.gameeditor.SLTCell;
 import saltr.parser.gameeditor.SLTAsset;
 
@@ -25,12 +25,12 @@ public class SLTChunk {
     private var _boardAssetMap:Dictionary;
     private var _boardStateMap:Dictionary;
 
-    public function SLTChunk(id:String,boardData:SLTBoardData) {
+    public function SLTChunk(id:String,levelSettings:SLTLevelSettings) {
         _id = id;
         _chunkAssets = new Vector.<SLTAssetInChunk>();
         _cells = new Vector.<SLTCell>();
-        _boardAssetMap = boardData.assetMap;
-        _boardStateMap = boardData.stateMap;
+        _boardAssetMap = levelSettings.assetMap;
+        _boardStateMap = levelSettings.stateMap;
     }
 
     public function generate():void {

@@ -14,7 +14,7 @@ package saltr.parser {
 import flash.utils.Dictionary;
 
 import saltr.parser.data.SLTVector2D;
-import saltr.parser.gameeditor.SLTBoardData;
+import saltr.parser.gameeditor.SLTLevelSettings;
 import saltr.parser.gameeditor.SLTCell;
 import saltr.parser.gameeditor.chunk.SLTAssetInChunk;
 import saltr.parser.gameeditor.chunk.SLTChunk;
@@ -22,18 +22,18 @@ import saltr.parser.gameeditor.composite.SLTComposite;
 import saltr.parser.gameeditor.composite.SLTCompositeAsset;
 import saltr.parser.gameeditor.SLTAsset;
 
-final public class SLTLevelParser {
+final public class SLTLevelBoardParser {
 
-    public static function parseBoard(outputBoard:SLTVector2D, rawBoard:Object, boardData:SLTBoardData):void {
+    public static function parseBoard(outputBoard:SLTVector2D, rawBoard:Object, levelSettings:SLTLevelSettings):void {
         createEmptyBoard(outputBoard, rawBoard);
-        var composites:Dictionary = parseComposites(rawBoard.composites as Array, outputBoard, boardData);
-        var boardChunks:Dictionary = parseChunks(rawBoard.chunks as Array, outputBoard, boardData);
+        var composites:Dictionary = parseComposites(rawBoard.composites as Array, outputBoard, levelSettings);
+        var boardChunks:Dictionary = parseChunks(rawBoard.chunks as Array, outputBoard, levelSettings);
         generateComposites(composites);
         generateChunks(boardChunks);
     }
 
-    public static function regenerateChunks(outputBoard:SLTVector2D, board:Object, boardData:SLTBoardData):void {
-        var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, boardData);
+    public static function regenerateChunks(outputBoard:SLTVector2D, board:Object, levelSettings:SLTLevelSettings):void {
+        var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, levelSettings);
         generateChunks(boardChunks);
     }
 
@@ -76,10 +76,10 @@ final public class SLTLevelParser {
         }
     }
 
-    private static function parseChunks(chunksPrototype:Array, outputBoard:SLTVector2D, boardData:SLTBoardData):Dictionary {
+    private static function parseChunks(chunksPrototype:Array, outputBoard:SLTVector2D, levelSettings:SLTLevelSettings):Dictionary {
         var chunks:Dictionary = new Dictionary();
         for each (var chunkPrototype:* in chunksPrototype) {
-            var chunk : SLTChunk = new SLTChunk(String(chunkPrototype.chunkId), boardData);
+            var chunk : SLTChunk = new SLTChunk(String(chunkPrototype.chunkId), levelSettings);
             var assetsPrototype:Array = chunkPrototype.assets as Array;
             for each (var assetPrototype:* in assetsPrototype) {
                 var chunkAsset:SLTAssetInChunk = new SLTAssetInChunk(assetPrototype.assetId, assetPrototype.count, assetPrototype.stateId);
@@ -94,21 +94,21 @@ final public class SLTLevelParser {
         return chunks;
     }
 
-    private static function parseComposites(composites:Array, outputBoard:SLTVector2D, boardData:SLTBoardData):Dictionary {
+    private static function parseComposites(composites:Array, outputBoard:SLTVector2D, levelSettings:SLTLevelSettings):Dictionary {
         var compositesMap:Dictionary = new Dictionary();
         for each(var compositePrototype:* in composites) {
-            var composite:SLTComposite = new SLTComposite(compositePrototype.assetId, outputBoard.retrieve(compositePrototype.position[0], compositePrototype.position[1]) as SLTCell, boardData);
+            var composite:SLTComposite = new SLTComposite(compositePrototype.assetId, outputBoard.retrieve(compositePrototype.position[0], compositePrototype.position[1]) as SLTCell, levelSettings);
             compositesMap[composite.id] = composite;
         }
         return compositesMap;
     }
 
-    public static function parseBoardData(data:Object):SLTBoardData {
-        var boardData:SLTBoardData = new SLTBoardData();
-        boardData.assetMap = parseBoardAssets(data["assets"]);
-        boardData.keyset = data["keySets"];
-        boardData.stateMap = parseAssetStates(data["assetStates"]);
-        return boardData;
+    public static function parseLevelSettings(data:Object):SLTLevelSettings {
+        var levelSettings:SLTLevelSettings = new SLTLevelSettings();
+        levelSettings.assetMap = parseBoardAssets(data["assets"]);
+        levelSettings.keyset = data["keySets"];
+        levelSettings.stateMap = parseAssetStates(data["assetStates"]);
+        return levelSettings;
     }
 
     private static function parseAssetStates(states:Object):Dictionary {

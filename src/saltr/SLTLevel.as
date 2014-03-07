@@ -13,8 +13,8 @@
 package saltr {
 import flash.utils.Dictionary;
 
-import saltr.parser.SLTLevelParser;
-import saltr.parser.gameeditor.SLTBoardData;
+import saltr.parser.SLTLevelBoardParser;
+import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTLevel {
     private var _id:String;
@@ -38,13 +38,13 @@ public class SLTLevel {
 
     public function parseData(data:Object):void {
         _data = data;
-        var boardData:SLTBoardData = SLTLevelParser.parseBoardData(data);
-        _keyset = boardData.keyset;
+        var levelSettings:SLTLevelSettings = SLTLevelBoardParser.parseLevelSettings(data);
+        _keyset = levelSettings.keyset;
 
         _boards = new Dictionary();
         var boardsObject:Object = data["boards"];
         for (var key:String in boardsObject) {
-            _boards[key] = new SLTLevelBoard(boardsObject[key], boardData);
+            _boards[key] = new SLTLevelBoard(boardsObject[key], levelSettings);
         }
         _dataFetched = true;
     }

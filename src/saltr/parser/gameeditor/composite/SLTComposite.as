@@ -8,7 +8,7 @@ import flash.geom.Point;
 import flash.utils.Dictionary;
 
 import saltr.parser.data.SLTVector2D;
-import saltr.parser.gameeditor.SLTBoardData;
+import saltr.parser.gameeditor.SLTLevelSettings;
 import saltr.parser.gameeditor.SLTCell;
 
 public class SLTComposite {
@@ -16,10 +16,10 @@ public class SLTComposite {
     private var _cell:SLTCell;
     private var _boardAssetMap:Dictionary;
 
-    public function SLTComposite(id:String, cell:SLTCell, boardData:SLTBoardData) {
+    public function SLTComposite(id:String, cell:SLTCell, levelSettings:SLTLevelSettings) {
         _id = id;
         _cell = cell;
-        _boardAssetMap = boardData.assetMap;
+        _boardAssetMap = levelSettings.assetMap;
     }
 
     public function get id():String {

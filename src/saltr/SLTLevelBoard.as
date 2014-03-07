@@ -6,9 +6,9 @@
 package saltr {
 import flash.utils.Dictionary;
 
-import saltr.parser.SLTLevelParser;
+import saltr.parser.SLTLevelBoardParser;
 import saltr.parser.data.SLTVector2D;
-import saltr.parser.gameeditor.SLTBoardData;
+import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTLevelBoard {
     public static var MAIN_BOARD_ID:String = "main";
@@ -18,21 +18,21 @@ public class SLTLevelBoard {
     private var _position:Array;
     private var _boardVector:SLTVector2D;
     private var _rawBoard:Object;
-    private var _boardData:SLTBoardData;
+    private var _levelSettings:SLTLevelSettings;
 
-    public function SLTLevelBoard(rawBoard:Object, boardData:SLTBoardData) {
+    public function SLTLevelBoard(rawBoard:Object, levelSettings:SLTLevelSettings) {
         _rawBoard = rawBoard;
-        _boardData = boardData;
+        _levelSettings = levelSettings;
         _cols = _rawBoard.cols;
         _rows = _rawBoard.rows;
         _position = _rawBoard.position;
 
         _boardVector = new SLTVector2D(_cols, _rows);
-        SLTLevelParser.parseBoard(_boardVector, _rawBoard, _boardData);
+        SLTLevelBoardParser.parseBoard(_boardVector, _rawBoard, _levelSettings);
     }
 
     public function regenerateChunks():void {
-        SLTLevelParser.regenerateChunks(_boardVector, _rawBoard, _boardData);
+        SLTLevelBoardParser.regenerateChunks(_boardVector, _rawBoard, _levelSettings);
     }
 
     public function get composites():Dictionary {
@@ -67,8 +67,8 @@ public class SLTLevelBoard {
         return _boardVector;
     }
 
-    public function get boardData():SLTBoardData {
-        return _boardData;
+    public function get levelSettings():SLTLevelSettings {
+        return _levelSettings;
     }
 }
 }

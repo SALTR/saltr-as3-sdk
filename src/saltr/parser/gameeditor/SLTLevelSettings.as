@@ -13,12 +13,12 @@
 package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
 
-public class SLTBoardData {
+public class SLTLevelSettings {
     private var _assetMap:Dictionary;
     private var _keyset:Object;
     private var _stateMap:Dictionary;
 
-    public function SLTBoardData() {
+    public function SLTLevelSettings() {
     }
 
     public function get assetMap():Dictionary {
