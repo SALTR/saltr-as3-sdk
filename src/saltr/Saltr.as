@@ -44,7 +44,7 @@ public class Saltr {
     protected var _repository:IRepository;
     protected var _saltrUserId:String;
     protected var _isLoading:Boolean;
-    protected var _ready:Boolean;
+    protected var _connected:Boolean;
     protected var _partner:Partner;
 
     protected var _deserializer:Deserializer;
@@ -66,7 +66,7 @@ public class Saltr {
     public function Saltr(instanceKey:String) {
         _instanceKey = instanceKey;
         _isLoading = false;
-        _ready = false;
+        _connected = false;
 
         //TODO #GSAR: implement usage of dev mode variable
         _isInDevMode = true;
@@ -82,8 +82,8 @@ public class Saltr {
         _repository = value;
     }
 
-    public function get ready():Boolean {
-        return _ready;
+    public function get connected():Boolean {
+        return _connected;
     }
 
     public function get features():Dictionary {
@@ -110,9 +110,9 @@ public class Saltr {
         _device = new Device(deviceId, deviceType);
     }
 
-    public function importLevels() : void {
-        var cachedData:Object = _repository.getObjectFromCache(LEVEL_PACK_URL_LOCAL);
-        _levelPackStructures = _deserializer.decodeLevels(cachedData);
+    public function importLevels(path : String = LEVEL_PACK_URL_LOCAL) : void {
+        var applicationData:Object = _repository.getObjectFromApplication(path);
+        _levelPackStructures = _deserializer.decodeLevels(applicationData);
     }
 
     /**
@@ -151,7 +151,7 @@ public class Saltr {
 
     protected function loadDataSuccessHandler(jsonData:Object):void {
         _isLoading = false;
-        _ready = true;
+        _connected = true;
 
         //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
         _saltrUserId = jsonData.saltId;
@@ -182,7 +182,7 @@ public class Saltr {
 
     private function loadDataFailHandler():void {
         _isLoading = false;
-        _ready = false;
+        _connected = false;
         _onDataLoadFail();
         trace("[Saltr] ERROR: Level Packs are not loaded.");
     }
@@ -329,29 +329,23 @@ public class Saltr {
             return;
         }
         _isLoading = true;
-        _ready = false;
+        _connected = false;
         var resource:Resource = createDataResource(resourceLoadSuccessHandler, resourceLoadFailHandler);
         resource.load();
     }
 
     private function resourceLoadFailHandler(resource:Resource):void {
         trace("[Saltr] App data is failed to load.");
-        loadDataInternal();
+        loadDataFailHandler();
         resource.dispose();
     }
 
     private function resourceLoadSuccessHandler(resource:Resource):void {
-        trace("[Saltr] App data is loaded.");
         var data:Object = resource.jsonData;
         var jsonData:Object = data.responseData;
         trace("[Saltr] Loaded App data. json=" + jsonData);
-        if (jsonData == null || data["status"] != Saltr.RESULT_SUCCEED) {
-            loadDataInternal();
-        }
-        else {
-            loadDataSuccessHandler(jsonData);
-            _repository.cacheObject(APP_DATA_URL_CACHE, "0", jsonData);
-        }
+        loadDataSuccessHandler(jsonData);
+        _repository.cacheObject(APP_DATA_URL_CACHE, "0", jsonData);
         resource.dispose();
     }
 
