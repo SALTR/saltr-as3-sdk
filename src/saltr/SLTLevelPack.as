@@ -12,23 +12,23 @@
  */
 package saltr {
 
-public class LevelPackStructure {
+public class SLTLevelPack {
     private var _token:String;
-    private var _levelStructureList:Vector.<LevelStructure>;
+    private var _levels:Vector.<SLTLevel>;
     private var _index:int;
 
-    public function LevelPackStructure(token:String, index:int, levelStructureList:Vector.<LevelStructure>) {
+    public function SLTLevelPack(token:String, index:int, levels:Vector.<SLTLevel>) {
         _token = token;
         _index = index;
-        _levelStructureList = levelStructureList;
+        _levels = levels;
     }
 
     public function get token():String {
         return _token;
     }
 
-    public function get levelStructureList():Vector.<LevelStructure> {
-        return _levelStructureList;
+    public function get levels():Vector.<SLTLevel> {
+        return _levels;
     }
 
     public function get index():int {

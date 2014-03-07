@@ -13,10 +13,10 @@
 package saltr {
 import flash.utils.Dictionary;
 
-import saltr.parser.LevelParser;
-import saltr.parser.gameeditor.BoardData;
+import saltr.parser.SLTLevelParser;
+import saltr.parser.gameeditor.SLTBoardData;
 
-public class LevelStructure {
+public class SLTLevel {
     private var _id:String;
     private var _dataUrl:String;
     private var _index:int;
@@ -27,7 +27,7 @@ public class LevelStructure {
     private var _version:String;
     private var _data:Object;
 
-    public function LevelStructure(id:String, index:int, dataUrl:String, properties:Object, version:String) {
+    public function SLTLevel(id:String, index:int, dataUrl:String, properties:Object, version:String) {
         _id = id;
         _index = index;
         _dataUrl = dataUrl;
@@ -38,13 +38,13 @@ public class LevelStructure {
 
     public function parseData(data:Object):void {
         _data = data;
-        var boardData:BoardData = LevelParser.parseBoardData(data);
+        var boardData:SLTBoardData = SLTLevelParser.parseBoardData(data);
         _keyset = boardData.keyset;
 
         _boards = new Dictionary();
         var boardsObject:Object = data["boards"];
         for (var key:String in boardsObject) {
-            _boards[key] = new LevelBoard(boardsObject[key], boardData);
+            _boards[key] = new SLTLevelBoard(boardsObject[key], boardData);
         }
         _dataFetched = true;
     }
@@ -85,7 +85,7 @@ public class LevelStructure {
         return _data["properties"];
     }
 
-    public function getBoardById(id:String):LevelBoard {
+    public function getBoardById(id:String):SLTLevelBoard {
         return _boards[id];
     }
 }

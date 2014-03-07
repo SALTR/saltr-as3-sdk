@@ -4,12 +4,12 @@
  * Time: 4:25 PM
  */
 package saltr.parser.data {
-public class Vector2DIterator {
-    private var _vector2D:Vector2D;
+public class SLTVector2DIterator {
+    private var _vector2D:SLTVector2D;
     private var _vectorLength:uint;
     private var _currentPosition:int;
 
-    public function Vector2DIterator(vector2D:Vector2D) {
+    public function SLTVector2DIterator(vector2D:SLTVector2D) {
         _vector2D = vector2D;
         reset();
     }

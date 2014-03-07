@@ -4,12 +4,12 @@
  * Time: 5:28 PM
  */
 package saltr.parser.gameeditor {
-public class AssetInstance {
+public class SLTAssetInstance {
     protected var _state:String;
     protected var _keys:Object;
     protected var _type:String;
 
-    public function AssetInstance() {
+    public function SLTAssetInstance() {
     }
 
     public function get state():String {

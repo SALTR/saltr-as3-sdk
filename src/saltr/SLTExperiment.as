@@ -11,7 +11,7 @@
  * Time: 2:03 PM
  */
 package saltr {
-public class Experiment {
+public class SLTExperiment {
     public static const SPLIT_TEST_TYPE_FEATURE : String = "FEATURE";
     public static const SPLIT_TEST_TYPE_LEVEL_PACK : String = "LEVEL_PACK";
 
@@ -20,7 +20,7 @@ public class Experiment {
     private var _type:String;
     private var _customEvents:Array;
 
-    public function Experiment() {
+    public function SLTExperiment() {
     }
 
     public function get partition():String {

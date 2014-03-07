@@ -14,13 +14,13 @@ package saltr {
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
-import saltr.repository.IRepository;
-import saltr.resource.Resource;
-import saltr.resource.ResourceURLTicket;
+import saltr.repository.ISLTRepository;
+import saltr.resource.SLTResource;
+import saltr.resource.SLTResourceURLTicket;
 import saltr.utils.formatString;
 
 //TODO:: @daal add some flushCache method.
-public class Saltr {
+public class SLTSaltr {
 
     protected static const SALTR_API_URL:String = "http://api.saltr.com/httpjson.action";
     protected static const SALTR_URL:String = "http://saltr.com/httpjson.action";
@@ -41,18 +41,18 @@ public class Saltr {
     protected static const RESULT_SUCCEED:String = "SUCCEED";
     protected static const RESULT_ERROR:String = "ERROR";
 
-    protected var _repository:IRepository;
+    protected var _repository:ISLTRepository;
     protected var _saltrUserId:String;
     protected var _isLoading:Boolean;
     protected var _connected:Boolean;
-    protected var _partner:Partner;
+    protected var _partner:SLTPartner;
 
-    protected var _deserializer:Deserializer;
+    protected var _deserializer:SLTDeserializer;
     protected var _instanceKey:String;
     protected var _features:Dictionary;
-    protected var _levelPackStructures:Vector.<LevelPackStructure>;
-    protected var _experiments:Vector.<Experiment>;
-    protected var _device:Device;
+    protected var _levelPacks:Vector.<SLTLevelPack>;
+    protected var _experiments:Vector.<SLTExperiment>;
+    protected var _device:SLTDevice;
     protected var _onDataLoadSuccess:Function;
     protected var _onDataLoadFail:Function;
     protected var _onGetLevelDataBodySuccess:Function;
@@ -63,22 +63,22 @@ public class Saltr {
 
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
-    public function Saltr(instanceKey:String) {
+    public function SLTSaltr(instanceKey:String) {
         _instanceKey = instanceKey;
         _isLoading = false;
         _connected = false;
 
-        //TODO #GSAR: implement usage of dev mode variable
+        //TODO @GSAR: implement usage of dev mode variable
         _isInDevMode = true;
         _features = new Dictionary();
-        _deserializer = new Deserializer();
+        _deserializer = new SLTDeserializer();
     }
 
     public function set appVersion(value:String):void {
         _appVersion = value;
     }
 
-    public function set repository(value:IRepository):void {
+    public function set repository(value:ISLTRepository):void {
         _repository = value;
     }
 
@@ -90,29 +90,29 @@ public class Saltr {
         return _features;
     }
 
-    public function get levelPackStructures():Vector.<LevelPackStructure> {
-        return _levelPackStructures;
+    public function get levelPacks():Vector.<SLTLevelPack> {
+        return _levelPacks;
     }
 
-    public function get experiments():Vector.<Experiment> {
+    public function get experiments():Vector.<SLTExperiment> {
         return _experiments;
     }
 
-    public function getFeature(token:String):Feature {
+    public function getFeature(token:String):SLTFeature {
         return _features[token];
     }
 
     public function initPartner(partnerId:String, partnerType:String):void {
-        _partner = new Partner(partnerId, partnerType);
+        _partner = new SLTPartner(partnerId, partnerType);
     }
 
     public function initDevice(deviceId:String, deviceType:String):void {
-        _device = new Device(deviceId, deviceType);
+        _device = new SLTDevice(deviceId, deviceType);
     }
 
     public function importLevels(path : String = LEVEL_PACK_URL_LOCAL) : void {
         var applicationData:Object = _repository.getObjectFromApplication(path);
-        _levelPackStructures = _deserializer.decodeLevels(applicationData);
+        _levelPacks = _deserializer.decodeLevels(applicationData);
     }
 
     /**
@@ -120,9 +120,9 @@ public class Saltr {
      */
     //TODO @GSAR: add Properties class to handle correct feature properties assignment
     public function defineFeature(token:String, properties:Object):void {
-        var feature:Feature = _features[token];
+        var feature:SLTFeature = _features[token];
         if (feature == null) {
-            _features[token] = new Feature(token, null, properties);
+            _features[token] = new SLTFeature(token, null, properties);
         }
         else {
             feature.defaultProperties = properties;
@@ -140,8 +140,8 @@ public class Saltr {
         var cachedData:Object = _repository.getObjectFromCache(APP_DATA_URL_CACHE);
         var cachedFeatures:Dictionary = _deserializer.decodeFeatures(cachedData);
         for (var token:String in cachedFeatures) {
-            var saltrFeature:Feature = cachedFeatures[token];
-            var defaultFeature:Feature = _features[token];
+            var saltrFeature:SLTFeature = cachedFeatures[token];
+            var defaultFeature:SLTFeature = _features[token];
             if (defaultFeature != null) {
                 saltrFeature.defaultProperties = defaultFeature.defaultProperties;
             }
@@ -158,20 +158,20 @@ public class Saltr {
 
         _experiments = _deserializer.decodeExperiments(jsonData);
 
-        _levelPackStructures = _deserializer.decodeLevels(jsonData);
+        _levelPacks = _deserializer.decodeLevels(jsonData);
         var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
 
         //merging with defaults...
         for (var token:String in saltrFeatures) {
-            var saltrFeature:Feature = saltrFeatures[token];
-            var defaultFeature:Feature = _features[token];
+            var saltrFeature:SLTFeature = saltrFeatures[token];
+            var defaultFeature:SLTFeature = _features[token];
             if (defaultFeature != null) {
                 saltrFeature.defaultProperties = defaultFeature.defaultProperties;
             }
             _features[token] = saltrFeature;
         }
 
-        trace("[Saltr] packs=" + _levelPackStructures.length);
+        trace("[Saltr] packs=" + _levelPacks.length);
         _onDataLoadSuccess();
 
         //TODO @GSAR: implement this!
@@ -209,7 +209,7 @@ public class Saltr {
 
     /////////////////////////////////////
 
-    public function getLevelDataBody(levelPackData:LevelPackStructure, levelData:LevelStructure, onGetLevelDataBodySuccess:Function, onGetLevelDataBodyFail:Function, useCache:Boolean = true):void {
+    public function getLevelDataBody(levelPackData:SLTLevelPack, levelData:SLTLevel, onGetLevelDataBodySuccess:Function, onGetLevelDataBodyFail:Function, useCache:Boolean = true):void {
         _onGetLevelDataBodySuccess = onGetLevelDataBodySuccess;
         _onGetLevelDataBodyFail = onGetLevelDataBodyFail;
         if (!useCache) {
@@ -227,7 +227,7 @@ public class Saltr {
 
     }
 
-    protected function levelLoadSuccessHandler(levelData:LevelStructure, data:Object):void {
+    protected function levelLoadSuccessHandler(levelData:SLTLevel, data:Object):void {
         levelData.parseData(data);
         _onGetLevelDataBodySuccess();
     }
@@ -237,14 +237,14 @@ public class Saltr {
         _onGetLevelDataBodyFail();
     }
 
-    protected function loadLevelDataLocally(levelPackData:LevelPackStructure, levelData:LevelStructure, cachedFileName:String):void {
+    protected function loadLevelDataLocally(levelPackData:SLTLevelPack, levelData:SLTLevel, cachedFileName:String):void {
         if (loadLevelDataCached(levelData, cachedFileName) == true) {
             return;
         }
         loadLevelDataInternal(levelPackData, levelData);
     }
 
-    protected function loadLevelDataCached(levelData:LevelStructure, cachedFileName:String):Boolean {
+    protected function loadLevelDataCached(levelData:SLTLevel, cachedFileName:String):Boolean {
         trace("[SaltClient::loadLevelData] LOADING LEVEL DATA CACHE IMMEDIATELY.");
         var data:Object = _repository.getObjectFromCache(cachedFileName);
         if (data != null) {
@@ -254,7 +254,7 @@ public class Saltr {
         return false;
     }
 
-    private function loadLevelDataInternal(levelPackData:LevelPackStructure, levelData:LevelStructure):void {
+    private function loadLevelDataInternal(levelPackData:SLTLevelPack, levelData:SLTLevel):void {
         var url:String = formatString(LEVEL_DATA_URL_LOCAL_TEMPLATE, levelPackData.index, levelData.index);
         var data:Object = _repository.getObjectFromApplication(url);
         if (data != null) {
@@ -265,10 +265,10 @@ public class Saltr {
         }
     }
 
-    protected function loadLevelDataFromServer(levelPackData:LevelPackStructure, levelData:LevelStructure, forceNoCache:Boolean = false):void {
+    protected function loadLevelDataFromServer(levelPackData:SLTLevelPack, levelData:SLTLevel, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
-        var ticket:ResourceURLTicket = new ResourceURLTicket(dataUrl);
-        var asset:Resource = new Resource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+        var asset:SLTResource = new SLTResource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
         asset.load();
         //
         //TODO @GSAR: get rid of nested functions!
@@ -296,7 +296,7 @@ public class Saltr {
     //TODO @GSAR: port this later when SALTR is ready
     public function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_ADD_PROPERTY;
+        urlVars.command = COMMAND_ADD_PROPERTY;
         var args:Object = {saltId: _saltrUserId};
         var properties:Array = [];
         for (var i:uint = 0; i < propertyNames.length; i++) {
@@ -309,15 +309,15 @@ public class Saltr {
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
 
-        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTSaltr.SALTR_API_URL, urlVars);
 
-        var resource:Resource = new Resource("property", ticket,
-                function (resource:Resource):void {
+        var resource:SLTResource = new SLTResource("property", ticket,
+                function (resource:SLTResource):void {
                     trace("getSaltLevelPacks : success");
                     var data:Object = resource.jsonData;
                     resource.dispose();
                 },
-                function (resource:Resource):void {
+                function (resource:SLTResource):void {
                     trace("getSaltLevelPacks : error");
                     resource.dispose();
                 });
@@ -330,17 +330,17 @@ public class Saltr {
         }
         _isLoading = true;
         _connected = false;
-        var resource:Resource = createDataResource(resourceLoadSuccessHandler, resourceLoadFailHandler);
+        var resource:SLTResource = createDataResource(resourceLoadSuccessHandler, resourceLoadFailHandler);
         resource.load();
     }
 
-    private function resourceLoadFailHandler(resource:Resource):void {
+    private function resourceLoadFailHandler(resource:SLTResource):void {
         trace("[Saltr] App data is failed to load.");
         loadDataFailHandler();
         resource.dispose();
     }
 
-    private function resourceLoadSuccessHandler(resource:Resource):void {
+    private function resourceLoadSuccessHandler(resource:SLTResource):void {
         var data:Object = resource.jsonData;
         var jsonData:Object = data.responseData;
         trace("[Saltr] Loaded App data. json=" + jsonData);
@@ -349,9 +349,9 @@ public class Saltr {
         resource.dispose();
     }
 
-    private function createDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):Resource {
+    private function createDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_APP_DATA;
+        urlVars.command = SLTSaltr.COMMAND_APP_DATA;
         var args:Object = {};
         if (_device != null) {
             args.device = _device;
@@ -361,32 +361,32 @@ public class Saltr {
         }
         args.instanceKey = _instanceKey;
         urlVars.arguments = JSON.stringify(args);
-        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_API_URL, urlVars);
-        return new Resource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTSaltr.SALTR_API_URL, urlVars);
+        return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
     private function syncFeatures():void {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = Saltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
+        urlVars.command = SLTSaltr.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
         if(_appVersion) {
             urlVars.appVersion = _appVersion;
         }
         var featureList:Array = [];
         for (var i:String in _features) {
-            var feature:Feature = _features[i];
+            var feature:SLTFeature = _features[i];
             if (feature.defaultProperties != null) {
                 featureList.push({token: feature.token, value: JSON.stringify(feature.defaultProperties)});
             }
         }
         urlVars.data = JSON.stringify(featureList);
-        var ticket:ResourceURLTicket = new ResourceURLTicket(Saltr.SALTR_URL, urlVars);
-        var resource:Resource = new Resource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTSaltr.SALTR_URL, urlVars);
+        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
 
-    protected function syncSuccessHandler(resource:Resource):void {}
+    protected function syncSuccessHandler(resource:SLTResource):void {}
 
-    protected function syncFailHandler(resource:Resource):void {}
+    protected function syncFailHandler(resource:SLTResource):void {}
 }
 }

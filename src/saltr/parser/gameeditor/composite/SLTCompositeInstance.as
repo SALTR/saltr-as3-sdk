@@ -4,12 +4,12 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor.composite {
-import saltr.parser.gameeditor.AssetInstance;
+import saltr.parser.gameeditor.SLTAssetInstance;
 
-public class CompositeInstance extends AssetInstance {
+public class SLTCompositeInstance extends SLTAssetInstance {
     private var _shifts:Array;
 
-    public function CompositeInstance() {
+    public function SLTCompositeInstance() {
     }
 
     public function get shifts():Array {

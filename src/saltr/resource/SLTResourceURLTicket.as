@@ -15,7 +15,7 @@ import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
 
-public class ResourceURLTicket {
+public class SLTResourceURLTicket {
 
     //URLRequest variables
     private var _authenticate:Boolean;
@@ -38,7 +38,7 @@ public class ResourceURLTicket {
     private var _dropTimeout:int;
 
 
-    public function ResourceURLTicket(url:String, variables:Object = null) {
+    public function SLTResourceURLTicket(url:String, variables:Object = null) {
         _authenticate = true;
         _cacheResponse = true;
         _followRedirects = true;

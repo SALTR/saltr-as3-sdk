@@ -4,10 +4,10 @@
  * Time: 6:37 PM
  */
 package saltr.repository {
-public class DummyRepository implements IRepository {
-    public function DummyRepository() {
+//TODO @sarg: not implemented yet!
+public class SLTWebRepository implements ISLTRepository {
+    public function SLTWebRepository() {
     }
-
 
     public function getObjectFromStorage(name:String):Object {
         return null;

@@ -14,18 +14,18 @@ package saltr {
 
 import flash.utils.Dictionary;
 
-internal class Deserializer {
+internal class SLTDeserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {
         return p1.index - p2.index;
     }
 
-    public function decodeExperiments(data : Object) : Vector.<Experiment> {
-        var experiments : Vector.<Experiment> = new Vector.<Experiment>();
+    public function decodeExperiments(data : Object) : Vector.<SLTExperiment> {
+        var experiments : Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
         var experimentInfo:Array = data.experimentInfo;
         if (experimentInfo != null) {
             for each (var item:Object in experimentInfo) {
-                var experiment:Experiment = new Experiment();
+                var experiment:SLTExperiment = new SLTExperiment();
                 experiment.token = item.token;
                 //TODO @GSAR: rename to just .partition
                 experiment.partition = item.partitionName;
@@ -39,22 +39,22 @@ internal class Deserializer {
         return experiments;
     }
 
-    public function decodeLevels(data : Object) : Vector.<LevelPackStructure> {
+    public function decodeLevels(data : Object) : Vector.<SLTLevelPack> {
         var levelPacksObject:Object = data.levelPackList;
-        var levelPackStructures : Vector.<LevelPackStructure> = new <LevelPackStructure>[];
-        var levelStructures:Vector.<LevelStructure>;
+        var levelPacks : Vector.<SLTLevelPack> = new <SLTLevelPack>[];
+        var levels:Vector.<SLTLevel>;
         var levelsObject:Object;
         for each(var levelPack:Object in levelPacksObject) {
             levelsObject = levelPack.levelList;
-            levelStructures = new <LevelStructure>[];
+            levels = new <SLTLevel>[];
             for each (var level:Object in levelsObject) {
-                levelStructures.push(new LevelStructure(level.id, level.order, level.url, level.properties, level.version));
+                levels.push(new SLTLevel(level.id, level.order, level.url, level.properties, level.version));
             }
-            levelStructures.sort(sortByIndex);
-            levelPackStructures.push(new LevelPackStructure(levelPack.token, levelPack.order, levelStructures));
+            levels.sort(sortByIndex);
+            levelPacks.push(new SLTLevelPack(levelPack.token, levelPack.order, levels));
         }
-        levelPackStructures.sort(sortByIndex);
-        return levelPackStructures;
+        levelPacks.sort(sortByIndex);
+        return levelPacks;
     }
 
     public function decodeFeatures(data : Object) : Dictionary {
@@ -62,7 +62,7 @@ internal class Deserializer {
         var featuresList:Array = data.featureList;
         if (featuresList != null) {
             for each(var featureObj:Object in featuresList) {
-                features[featureObj.token] = new Feature(featureObj.token, featureObj.data);
+                features[featureObj.token] = new SLTFeature(featureObj.token, featureObj.data);
             }
         }
         return features;

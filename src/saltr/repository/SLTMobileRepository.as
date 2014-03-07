@@ -15,7 +15,7 @@ import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 
-public class MobileRepository implements IRepository {
+public class SLTMobileRepository implements ISLTRepository {
 
     private var _storageDirectory:File;
     private var _applicationDirectory:File;
@@ -23,7 +23,7 @@ public class MobileRepository implements IRepository {
     private var _fileStream:FileStream;
 
 
-    public function MobileRepository() {
+    public function SLTMobileRepository() {
         _applicationDirectory = File.applicationDirectory;
         _storageDirectory = File.applicationStorageDirectory;
         _cacheDirectory = File.cacheDirectory;

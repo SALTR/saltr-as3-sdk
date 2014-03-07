@@ -4,13 +4,13 @@
  * Time: 1:39 PM
  */
 package saltr.parser.data {
-public class Vector2D {
+public class SLTVector2D {
     private var _width:int;
     private var _height:int;
     private var _rawData:Vector.<Object>;
-    private var _iterator:Vector2DIterator;
+    private var _iterator:SLTVector2DIterator;
 
-    public function Vector2D(width:int, height:int) {
+    public function SLTVector2D(width:int, height:int) {
         _width = width;
         _height = height;
         allocate();
@@ -36,9 +36,9 @@ public class Vector2D {
         return _height;
     }
 
-    public function get iterator():Vector2DIterator {
+    public function get iterator():SLTVector2DIterator {
         if (!_iterator) {
-            _iterator = new Vector2DIterator(this);
+            _iterator = new SLTVector2DIterator(this);
         }
         return _iterator;
     }

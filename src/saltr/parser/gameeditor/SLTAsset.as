@@ -11,11 +11,11 @@
  * Time: 12:31 PM
  */
 package saltr.parser.gameeditor {
-public class Asset {
+public class SLTAsset {
     private var _keys:Object;
     private var _type:String;
 
-    public function Asset(typeKey:String, keys:Object) {
+    public function SLTAsset(typeKey:String, keys:Object) {
         _type = typeKey;
         _keys = keys;
     }
