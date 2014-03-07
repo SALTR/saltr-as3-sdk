@@ -23,7 +23,6 @@ public class SLTLevel {
     private var _properties:Object;
     private var _boards:Dictionary;
     private var _dataFetched:Boolean;
-    private var _keyset:Object;
     private var _version:String;
     private var _data:Object;
 
@@ -39,7 +38,6 @@ public class SLTLevel {
     public function parseData(data:Object):void {
         _data = data;
         var levelSettings:SLTLevelSettings = SLTLevelBoardParser.parseLevelSettings(data);
-        _keyset = levelSettings.keyset;
 
         _boards = new Dictionary();
         var boardsObject:Object = data["boards"];
@@ -59,10 +57,6 @@ public class SLTLevel {
 
     public function get properties():Object {
         return _properties;
-    }
-
-    public function get keyset():Object {
-        return _keyset;
     }
 
     public function get dataUrl():String {
