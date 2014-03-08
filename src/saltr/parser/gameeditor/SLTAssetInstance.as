@@ -5,27 +5,18 @@
  */
 package saltr.parser.gameeditor {
 public class SLTAssetInstance {
-    protected var _state:String;
     protected var _keys:Object;
+    protected var _state:String;
     protected var _type:String;
 
-    public function SLTAssetInstance() {
+    public function SLTAssetInstance(keys:Object, state:String, type:String) {
+        _keys = keys;
+        _state = state;
+        _type = type;
     }
 
     public function get state():String {
         return _state;
-    }
-
-    public function set state(value:String):void {
-        _state = value;
-    }
-
-    public function set keys(keys:Object):void {
-        _keys = keys;
-    }
-
-    public function set type(type:String):void {
-        _type = type;
     }
 
     public function get keys():Object {

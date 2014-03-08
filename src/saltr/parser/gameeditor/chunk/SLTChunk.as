@@ -25,12 +25,24 @@ public class SLTChunk {
     private var _boardAssetMap:Dictionary;
     private var _boardStateMap:Dictionary;
 
-    public function SLTChunk(id:String,levelSettings:SLTLevelSettings) {
+    public function SLTChunk(id:String, levelSettings:SLTLevelSettings) {
         _id = id;
         _chunkAssets = new Vector.<SLTAssetInChunk>();
         _cells = new Vector.<SLTCell>();
         _boardAssetMap = levelSettings.assetMap;
         _boardStateMap = levelSettings.stateMap;
+    }
+
+    public function get id():String {
+        return _id;
+    }
+
+    public function set id(value:String):void {
+        _id = value;
+    }
+
+    public function addCell(cell:SLTCell):void {
+        _cells.push(cell);
     }
 
     public function generate():void {
@@ -46,17 +58,13 @@ public class SLTChunk {
         generateWeakAssets(weakChunkAsset);
     }
 
-    private function generateAsset(count:uint, id:String, stateId:String):void {
-        var assetTemplate:SLTAsset = _boardAssetMap[id] as SLTAsset;
+    private function generateAsset(count:uint, assetId:String, stateId:String):void {
+        var asset:SLTAsset = _boardAssetMap[assetId] as SLTAsset;
         var state:String = _boardStateMap[stateId] as String;
-        for (var i:uint = 0; i < count; ++i) {
+        for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _cells.length);
             var randCell:SLTCell = _cells[randCellIndex];
-            var asset:SLTAssetInstance = new SLTAssetInstance();
-            asset.keys = assetTemplate.keys;
-            asset.state = state;
-            asset.type = assetTemplate.type;
-            randCell.assetInstance = asset;
+            randCell.assetInstance = new SLTAssetInstance(asset.keys, state, asset.type);
             _cells.splice(randCellIndex, 1);
             if (_cells.length == 0) {
                 return;
@@ -72,8 +80,8 @@ public class SLTChunk {
             var lastChunkAssetIndex:int = weakChunkAsset.length - 1;
 
             for (var i:uint = 0; i < weakChunkAsset.length && _cells.length != 0; ++i) {
-                var chunkAsset : SLTAssetInChunk = weakChunkAsset[i];
-                var count : uint = i == lastChunkAssetIndex ? _cells.length : randomWithin(minAssetCount, maxAssetCount);
+                var chunkAsset:SLTAssetInChunk = weakChunkAsset[i];
+                var count:uint = i == lastChunkAssetIndex ? _cells.length : randomWithin(minAssetCount, maxAssetCount);
                 generateAsset(count, chunkAsset.id, chunkAsset.stateId);
             }
         }
@@ -84,19 +92,7 @@ public class SLTChunk {
     }
 
     public function toString():String {
-        return "Chunk : [cells :" + _cells + " ]" + "[chunkAssets : " + _chunkAssets + " ]";
-    }
-
-    public function addCell(cell:SLTCell):void {
-        _cells.push(cell);
-    }
-
-    public function get id():String {
-        return _id;
-    }
-
-    public function set id(value:String):void {
-        _id = value;
+        return "[Chunk] cells:" + _cells + ", " + " chunkAssets: " + _chunkAssets;
     }
 
     private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {
