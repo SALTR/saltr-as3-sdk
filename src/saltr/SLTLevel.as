@@ -24,7 +24,8 @@ public class SLTLevel {
     private var _boards:Dictionary;
     private var _dataFetched:Boolean;
     private var _version:String;
-    private var _data:Object;
+    private var _levelData:Object;
+    private var _levelSettings:SLTLevelSettings;
 
     public function SLTLevel(id:String, index:int, dataUrl:String, properties:Object, version:String) {
         _id = id;
@@ -36,15 +37,26 @@ public class SLTLevel {
     }
 
     public function parseData(data:Object):void {
-        _data = data;
-        var levelSettings:SLTLevelSettings = SLTLevelBoardParser.parseLevelSettings(data);
-
-        _boards = new Dictionary();
-        var boardsObject:Object = data["boards"];
-        for (var key:String in boardsObject) {
-            _boards[key] = new SLTLevelBoard(boardsObject[key], levelSettings);
-        }
+        _levelData = data;
+        _levelSettings = SLTLevelBoardParser.parseLevelSettings(data);
+        _boards = SLTLevelBoardParser.parseLevelBoards(data["boards"], _levelSettings);
         _dataFetched = true;
+    }
+
+    public function regenerateLevelBoards(boardIds : Vector.<String>) : void {
+        for(var i : uint = 0; i < boardIds.length; i++) {
+            var boardId : String = boardIds[i];
+            var boardsData : Object = _levelData["boards"];
+            var boardData : Object = boardsData[boardId];
+            if(boardData != null) {
+                var levelBoard : SLTLevelBoard = SLTLevelBoardParser.parseLevelBoard(boardData, _levelSettings);
+                _boards[boardId] = levelBoard;
+            }
+        }
+    }
+
+    public function get levelSettings():SLTLevelSettings {
+        return _levelSettings;
     }
 
     public function get id():String {
@@ -76,7 +88,7 @@ public class SLTLevel {
     }
 
     public function get innerProperties():Object {
-        return _data["properties"];
+        return _levelData["properties"];
     }
 
     public function getBoardById(id:String):SLTLevelBoard {

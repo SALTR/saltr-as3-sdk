@@ -18,27 +18,29 @@ public class SLTLevelBoard {
     private var _position:Array;
     private var _boardVector:SLTVector2D;
     private var _rawBoard:Object;
-    private var _levelSettings:SLTLevelSettings;
+    private var _boardProperties : Object;
 
-    public function SLTLevelBoard(rawBoard:Object, levelSettings:SLTLevelSettings) {
+    //TODO:: @daal rename boardVector to something else.
+    public function SLTLevelBoard(rawBoard:Object, boardVector : SLTVector2D) {
         _rawBoard = rawBoard;
-        _levelSettings = levelSettings;
         _cols = _rawBoard.cols;
         _rows = _rawBoard.rows;
         _position = _rawBoard.position;
 
-        _boardVector = new SLTVector2D(_cols, _rows);
-        SLTLevelBoardParser.parseBoard(_boardVector, _rawBoard, _levelSettings);
+        _boardVector = boardVector;
+
+        _boardProperties = {};
+        if(_rawBoard.hasOwnProperty("properties") && _rawBoard.properties.hasOwnProperty("board")) {
+            _boardProperties = _rawBoard.properties.board;
+        }
     }
 
-    public function regenerateChunks():void {
-        SLTLevelBoardParser.regenerateChunks(_boardVector, _rawBoard, _levelSettings);
-    }
-
+    //TODO:: @daal. Do we need this getter?
     public function get composites():Dictionary {
         return _rawBoard.composites;
     }
 
+    //TODO:: @daal. Do we need this getter?
     public function get chunks():Dictionary {
         return _rawBoard.chunks;
     }
@@ -56,19 +58,11 @@ public class SLTLevelBoard {
     }
 
     public function get boardProperties():Object {
-        if(_rawBoard.hasOwnProperty("properties") && _rawBoard.properties.hasOwnProperty("board")) {
-            return _rawBoard.properties.board;
-        }
-        return {};
-
+        return _boardProperties;
     }
 
     public function get boardVector():SLTVector2D {
         return _boardVector;
-    }
-
-    public function get levelSettings():SLTLevelSettings {
-        return _levelSettings;
     }
 }
 }

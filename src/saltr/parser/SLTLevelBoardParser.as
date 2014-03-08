@@ -13,6 +13,8 @@
 package saltr.parser {
 import flash.utils.Dictionary;
 
+import saltr.SLTLevelBoard;
+
 import saltr.parser.data.SLTVector2D;
 import saltr.parser.gameeditor.SLTLevelSettings;
 import saltr.parser.gameeditor.SLTCell;
@@ -24,17 +26,28 @@ import saltr.parser.gameeditor.SLTAsset;
 
 final public class SLTLevelBoardParser {
 
-    public static function parseBoard(outputBoard:SLTVector2D, rawBoard:Object, levelSettings:SLTLevelSettings):void {
-        createEmptyBoard(outputBoard, rawBoard);
-        var composites:Dictionary = parseComposites(rawBoard.composites as Array, outputBoard, levelSettings);
-        var boardChunks:Dictionary = parseChunks(rawBoard.chunks as Array, outputBoard, levelSettings);
-        generateComposites(composites);
-        generateChunks(boardChunks);
+    public static function parseLevelBoard(boardObject : Object, levelSettings:SLTLevelSettings):SLTLevelBoard {
+        var boardVector : SLTVector2D = parseBoardVector(boardObject, levelSettings);
+        return new SLTLevelBoard(boardObject, boardVector);
     }
 
-    public static function regenerateChunks(outputBoard:SLTVector2D, board:Object, levelSettings:SLTLevelSettings):void {
-        var boardChunks:Dictionary = parseChunks(board.chunks as Array, outputBoard, levelSettings);
+    public static function parseLevelBoards(boardsObject:Object, levelSettings:SLTLevelSettings):Dictionary {
+        var boards : Dictionary = new Dictionary();
+        for (var key:String in boardsObject) {
+            boards[key] = parseLevelBoard(boardsObject[key], levelSettings);
+        }
+        return boards;
+    }
+
+    private static function parseBoardVector(rawBoard : Object, levelSettings : SLTLevelSettings) : SLTVector2D {
+        var boardVector : SLTVector2D = new SLTVector2D(rawBoard.cols, rawBoard.raws);
+        createEmptyBoard(boardVector, rawBoard);
+        var composites:Dictionary = parseComposites(rawBoard.composites as Array, boardVector, levelSettings);
+        var boardChunks:Dictionary = parseChunks(rawBoard.chunks as Array, boardVector, levelSettings);
+        generateComposites(composites);
         generateChunks(boardChunks);
+
+        return boardVector;
     }
 
     private static function generateChunks(chunks:Dictionary):void {
