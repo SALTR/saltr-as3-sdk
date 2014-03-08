@@ -13,33 +13,14 @@ import saltr.parser.gameeditor.SLTLevelSettings;
 public class SLTLevelBoard {
     private var _rows:int;
     private var _cols:int;
-    private var _position:Array;
     private var _cells:SLTCellMatrix;
-    private var _boardData:Object;
-    private var _boardProperties:Object;
+    private var _properties:Object;
 
-    public function SLTLevelBoard(boardData:Object, cells:SLTCellMatrix) {
-        _boardData = boardData;
-        _cols = _boardData.cols;
-        _rows = _boardData.rows;
-        _position = _boardData.position;
-
+    public function SLTLevelBoard(cells:SLTCellMatrix, properties:Object) {
         _cells = cells;
-
-        _boardProperties = {};
-        if (_boardData.hasOwnProperty("properties") && _boardData.properties.hasOwnProperty("board")) {
-            _boardProperties = _boardData.properties.board;
-        }
-    }
-
-    //TODO:: @daal. Do we need this getter?
-    public function get composites():Dictionary {
-        return _boardData.composites;
-    }
-
-    //TODO:: @daal. Do we need this getter?
-    public function get chunks():Dictionary {
-        return _boardData.chunks;
+        _cols = cells.width;
+        _rows = cells.height;
+        _properties = properties;
     }
 
     public function get rows():int {
@@ -50,12 +31,8 @@ public class SLTLevelBoard {
         return _cols;
     }
 
-    public function get position():Array {
-        return _position;
-    }
-
-    public function get boardProperties():Object {
-        return _boardProperties;
+    public function get properties():Object {
+        return _properties;
     }
 
     public function get cells():SLTCellMatrix {

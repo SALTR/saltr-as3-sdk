@@ -41,10 +41,6 @@ public class SLTLevel {
         return _id;
     }
 
-    public function get levelSettings():SLTLevelSettings {
-        return _levelSettings;
-    }
-
     public function get index():int {
         return _index;
     }
@@ -65,7 +61,7 @@ public class SLTLevel {
         return _version;
     }
 
-    public function getBoardById(id:String):SLTLevelBoard {
+    public function getBoard(id:String):SLTLevelBoard {
         return _boards[id];
     }
 
@@ -88,6 +84,10 @@ public class SLTLevel {
         if (_boardsContent != null) {
             _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(boardId, _boardsContent, _levelSettings);
         }
+    }
+
+    internal function dispose():void {
+        //TODO @GSAR: implement
     }
 
 }

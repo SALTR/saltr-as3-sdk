@@ -34,8 +34,14 @@ final public class SLTLevelBoardParser {
     }
 
     public static function parseLevelBoard(boardId:String, boardsObject:Object, levelSettings:SLTLevelSettings):SLTLevelBoard {
-        var cells:SLTCellMatrix = parseBoardCells(boardsObject[boardId], levelSettings);
-        return new SLTLevelBoard(boardId, cells);
+        var boardObject:Object = boardsObject[boardId];
+        var boardProperties:Object = {};
+        var cells:SLTCellMatrix = parseBoardCells(boardObject, levelSettings);
+
+        if (boardObject.hasOwnProperty("properties") && boardObject.properties.hasOwnProperty("board")) {
+            boardProperties = boardObject.properties.board;
+        }
+        return new SLTLevelBoard(cells, boardProperties);
     }
 
     private static function parseBoardCells(boardData:Object, levelSettings:SLTLevelSettings):SLTCellMatrix {
