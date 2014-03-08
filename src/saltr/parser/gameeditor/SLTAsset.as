@@ -29,7 +29,7 @@ public class SLTAsset {
     }
 
     public function toString():String {
-        return "AssetTemplate : [type : " + _type + "]" + "[keys : " + _keys + "]";
+        return "[Asset] type: " + _type + ", " + " keys: " + _keys;
     }
 }
 }
