@@ -9,7 +9,8 @@ import saltr.parser.gameeditor.SLTAssetInstance;
 public class SLTCompositeInstance extends SLTAssetInstance {
     private var _shifts:Array;
 
-    public function SLTCompositeInstance() {
+    public function SLTCompositeInstance(keys:Object, state:String, type:String) {
+        super(keys, state, type);
     }
 
     public function get shifts():Array {

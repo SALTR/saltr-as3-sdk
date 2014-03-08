@@ -4,12 +4,10 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor.composite {
-import flash.geom.Point;
 import flash.utils.Dictionary;
 
-import saltr.parser.data.SLTCellMatrix;
-import saltr.parser.gameeditor.SLTLevelSettings;
 import saltr.parser.gameeditor.SLTCell;
+import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTComposite {
     private var _id:String;
@@ -27,12 +25,10 @@ public class SLTComposite {
     }
 
     public function generate():void {
-        var compositeAssetTemplate:SLTCompositeAsset = _boardAssetMap[id] as SLTCompositeAsset;
-        var compositeAsset:SLTCompositeInstance = new SLTCompositeInstance();
-        compositeAsset.keys = compositeAssetTemplate.keys;
-        compositeAsset.type = compositeAssetTemplate.type;
-        compositeAsset.shifts = compositeAssetTemplate.shifts;
-        _cell.assetInstance = compositeAsset;
+        var asset:SLTCompositeAsset = _boardAssetMap[id] as SLTCompositeAsset;
+        var instance:SLTCompositeInstance = new SLTCompositeInstance();
+        instance.shifts = asset.shifts;
+        _cell.assetInstance = instance;
     }
 }
 }

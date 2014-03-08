@@ -10,8 +10,8 @@ public class SLTCompositeAsset extends SLTAsset {
 
     private var _shifts:Array;
 
-    public function SLTCompositeAsset(shifts:Array, typeKey:String, keys:Object) {
-        super(typeKey, keys);
+    public function SLTCompositeAsset(shifts:Array, type:String, keys:Object) {
+        super(type, keys);
         _shifts = shifts;
     }
 

@@ -12,11 +12,12 @@
  */
 package saltr.parser.gameeditor {
 public class SLTAsset {
+    //TODO @GSAR: clarify why _keys is Object?
     private var _keys:Object;
     private var _type:String;
 
-    public function SLTAsset(typeKey:String, keys:Object) {
-        _type = typeKey;
+    public function SLTAsset(type:String, keys:Object) {
+        _type = type;
         _keys = keys;
     }
 
