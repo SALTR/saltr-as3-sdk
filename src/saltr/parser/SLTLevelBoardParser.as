@@ -125,11 +125,7 @@ final public class SLTLevelBoardParser {
     }
 
     public static function parseLevelSettings(data:Object):SLTLevelSettings {
-        var levelSettings:SLTLevelSettings = new SLTLevelSettings();
-        levelSettings.assetMap = parseBoardAssets(data["assets"]);
-        levelSettings.keyset = data["keySets"];
-        levelSettings.stateMap = parseAssetStates(data["assetStates"]);
-        return levelSettings;
+        return new SLTLevelSettings(parseBoardAssets(data["assets"]), data["keySets"], parseAssetStates(data["assetStates"]));
     }
 
     private static function parseAssetStates(states:Object):Dictionary {
@@ -153,6 +149,7 @@ final public class SLTLevelBoardParser {
 
     private static function parseAsset(asset:Object):SLTAsset {
         if (asset.cells/*if asset is composite asset*/) {
+            //TODO @GSAR: rename asset.type_key to asset.type when everyone is ready!
             return new SLTCompositeAsset(asset.cells as Array, asset.type_key, asset.keys);
         }
         return new SLTAsset(asset.type_key, asset.keys);
