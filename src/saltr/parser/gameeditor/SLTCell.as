@@ -14,9 +14,9 @@ package saltr.parser.gameeditor {
 public class SLTCell {
     private var _x:int;
     private var _y:int;
-    private var _properties : Object;
-    private var _isBlocked : Boolean;
-    private var _assetInstance : SLTAssetInstance;
+    private var _properties:Object;
+    private var _isBlocked:Boolean;
+    private var _assetInstance:SLTAssetInstance;
 
     public function SLTCell(x:int, y:int) {
         _x = x;

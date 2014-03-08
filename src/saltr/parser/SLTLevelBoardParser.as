@@ -72,18 +72,21 @@ final public class SLTLevelBoardParser {
         var cellProperties:Array = rawBoard.hasOwnProperty("properties") && rawBoard.properties.hasOwnProperty("cell") ? rawBoard.properties.cell : [];
         var cols:int = board.width;
         var rows:int = board.height;
+        var len:int = 0;
         for (var i:int = 0; i < rows; ++i) {
             for (var j:int = 0; j < cols; ++j) {
                 var cell:SLTCell = new SLTCell(j, i);
                 board.insert(j, i, cell);
-                for (var p:int = 0; p < cellProperties.length; p++) {
+                len = cellProperties.length;
+                for (var p:int = 0; p < len; ++p) {
                     var property:Object = cellProperties[p];
                     if (property.coords[0] == j && property.coords[1] == i) {
                         cell.properties = property.value;
                         break;
                     }
                 }
-                for (var b:int = 0; b < blockedCells.length; b++) {
+                len = blockedCells.length;
+                for (var b:int = 0; b < len; ++b) {
                     var blockedCell:Array = blockedCells[b];
                     if (blockedCell[0] == j && blockedCell[1] == i) {
                         cell.isBlocked = true;
