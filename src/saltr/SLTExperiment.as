@@ -12,47 +12,32 @@
  */
 package saltr {
 public class SLTExperiment {
-    public static const SPLIT_TEST_TYPE_FEATURE : String = "FEATURE";
-    public static const SPLIT_TEST_TYPE_LEVEL_PACK : String = "LEVEL_PACK";
+    public static const SPLIT_TEST_TYPE_FEATURE:String = "FEATURE";
+    public static const SPLIT_TEST_TYPE_LEVEL_PACK:String = "LEVEL_PACK";
 
     private var _partition:String;
     private var _token:String;
     private var _type:String;
     private var _customEvents:Array;
 
-    public function SLTExperiment() {
+    public function SLTExperiment(token:String, partition:String, type:String, customEvents:Array) {
     }
 
     public function get partition():String {
         return _partition;
     }
 
-    public function set partition(value:String):void {
-        _partition = value;
-    }
-
     public function get token():String {
         return _token;
-    }
-
-    public function set token(value:String):void {
-        _token = value;
     }
 
     public function get type():String {
         return _type;
     }
 
-    public function set type(value:String):void {
-        _type = value;
-    }
-
     public function get customEvents():Array {
         return _customEvents;
     }
 
-    public function set customEvents(value:Array):void {
-        _customEvents = value;
-    }
 }
 }

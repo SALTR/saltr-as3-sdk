@@ -20,28 +20,28 @@ internal class SLTDeserializer {
         return p1.index - p2.index;
     }
 
-    public function decodeExperiments(data : Object) : Vector.<SLTExperiment> {
-        var experiments : Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
+    public function decodeExperiments(data:Object):Vector.<SLTExperiment> {
+        var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
         var experimentInfo:Array = data.experimentInfo;
         if (experimentInfo != null) {
             for each (var item:Object in experimentInfo) {
-                var experiment:SLTExperiment = new SLTExperiment();
-                experiment.token = item.token;
+                var token:String = item.token;
                 //TODO @GSAR: rename to just .partition
-                experiment.partition = item.partitionName;
-                experiment.type = item.type;
+                var partition:String = item.partitionName;
+                var type:String = item.type;
 
                 //TODO @GSAR: rename and review item.customEventList!!!
-                experiment.customEvents = item.customEventList as Array;
-                experiments.push(experiment);
+                var customEvents:Array = item.customEventList as Array;
+
+                experiments.push(new SLTExperiment(token, partition, type, customEvents));
             }
         }
         return experiments;
     }
 
-    public function decodeLevels(data : Object) : Vector.<SLTLevelPack> {
+    public function decodeLevels(data:Object):Vector.<SLTLevelPack> {
         var levelPacksObject:Object = data.levelPackList;
-        var levelPacks : Vector.<SLTLevelPack> = new <SLTLevelPack>[];
+        var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var levels:Vector.<SLTLevel>;
         var levelsObject:Object;
         for each(var levelPack:Object in levelPacksObject) {
@@ -57,8 +57,8 @@ internal class SLTDeserializer {
         return levelPacks;
     }
 
-    public function decodeFeatures(data : Object) : Dictionary {
-        var features : Dictionary = new Dictionary();
+    public function decodeFeatures(data:Object):Dictionary {
+        var features:Dictionary = new Dictionary();
         var featuresList:Array = data.featureList;
         if (featuresList != null) {
             for each(var featureObj:Object in featuresList) {
