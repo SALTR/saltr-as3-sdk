@@ -7,42 +7,39 @@ package saltr {
 import flash.utils.Dictionary;
 
 import saltr.parser.SLTLevelBoardParser;
-import saltr.parser.data.SLTVector2D;
+import saltr.parser.data.SLTCellMatrix;
 import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTLevelBoard {
-    public static var MAIN_BOARD_ID:String = "main";
-
     private var _rows:int;
     private var _cols:int;
     private var _position:Array;
-    private var _boardVector:SLTVector2D;
-    private var _rawBoard:Object;
-    private var _boardProperties : Object;
+    private var _cells:SLTCellMatrix;
+    private var _boardData:Object;
+    private var _boardProperties:Object;
 
-    //TODO:: @daal rename boardVector to something else.
-    public function SLTLevelBoard(rawBoard:Object, boardVector : SLTVector2D) {
-        _rawBoard = rawBoard;
-        _cols = _rawBoard.cols;
-        _rows = _rawBoard.rows;
-        _position = _rawBoard.position;
+    public function SLTLevelBoard(boardData:Object, cells:SLTCellMatrix) {
+        _boardData = boardData;
+        _cols = _boardData.cols;
+        _rows = _boardData.rows;
+        _position = _boardData.position;
 
-        _boardVector = boardVector;
+        _cells = cells;
 
         _boardProperties = {};
-        if(_rawBoard.hasOwnProperty("properties") && _rawBoard.properties.hasOwnProperty("board")) {
-            _boardProperties = _rawBoard.properties.board;
+        if (_boardData.hasOwnProperty("properties") && _boardData.properties.hasOwnProperty("board")) {
+            _boardProperties = _boardData.properties.board;
         }
     }
 
     //TODO:: @daal. Do we need this getter?
     public function get composites():Dictionary {
-        return _rawBoard.composites;
+        return _boardData.composites;
     }
 
     //TODO:: @daal. Do we need this getter?
     public function get chunks():Dictionary {
-        return _rawBoard.chunks;
+        return _boardData.chunks;
     }
 
     public function get rows():int {
@@ -61,8 +58,8 @@ public class SLTLevelBoard {
         return _boardProperties;
     }
 
-    public function get boardVector():SLTVector2D {
-        return _boardVector;
+    public function get cells():SLTCellMatrix {
+        return _cells;
     }
 }
 }

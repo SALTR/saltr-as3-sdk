@@ -260,13 +260,13 @@ public class Test extends Sprite {
 
     private function testLevelBoardParsing():void {
         var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
-        levels.parseData(sampleLevelJson);
+        levels.updateContent(sampleLevelJson);
         trace("done");
     }
 
     private function testLevelBoardParsingComposite():void {
         var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
-        levels.parseData(sampleLevelWithComposites);
+        levels.updateContent(sampleLevelWithComposites);
         trace("done");
     }
 

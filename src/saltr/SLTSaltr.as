@@ -227,8 +227,8 @@ public class SLTSaltr {
 
     }
 
-    protected function levelLoadSuccessHandler(levelData:SLTLevel, data:Object):void {
-        levelData.parseData(data);
+    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
+        level.updateContent(data);
         _onGetLevelDataBodySuccess();
     }
 
@@ -266,7 +266,7 @@ public class SLTSaltr {
     }
 
     protected function loadLevelDataFromServer(levelPackData:SLTLevelPack, levelData:SLTLevel, forceNoCache:Boolean = false):void {
-        var dataUrl:String = forceNoCache ? levelData.dataUrl + "?_time_=" + new Date().getTime() : levelData.dataUrl;
+        var dataUrl:String = forceNoCache ? levelData.contentDataUrl + "?_time_=" + new Date().getTime() : levelData.contentDataUrl;
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
         var asset:SLTResource = new SLTResource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
         asset.load();

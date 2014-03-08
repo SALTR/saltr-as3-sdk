@@ -7,7 +7,7 @@ package saltr.parser.gameeditor.composite {
 import flash.geom.Point;
 import flash.utils.Dictionary;
 
-import saltr.parser.data.SLTVector2D;
+import saltr.parser.data.SLTCellMatrix;
 import saltr.parser.gameeditor.SLTLevelSettings;
 import saltr.parser.gameeditor.SLTCell;
 
