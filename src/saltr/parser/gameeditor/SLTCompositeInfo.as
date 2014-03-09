@@ -4,12 +4,7 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor {
-import saltr.parser.gameeditor.composite.*;
-
 import flash.utils.Dictionary;
-
-import saltr.parser.gameeditor.SLTCell;
-import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTCompositeInfo {
     private var _assetId:String;

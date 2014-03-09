@@ -11,14 +11,7 @@
  * Time: 7:25 PM
  */
 package saltr.parser.gameeditor {
-import saltr.parser.gameeditor.chunk.*;
-
 import flash.utils.Dictionary;
-
-import saltr.parser.gameeditor.SLTAsset;
-import saltr.parser.gameeditor.SLTAssetInstance;
-import saltr.parser.gameeditor.SLTCell;
-import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTChunk {
     private var _id:String;
