@@ -3,7 +3,7 @@
  * Date: 8/2/13
  * Time: 5:28 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 public class SLTAssetInstance {
     protected var _keys:Object;
     protected var _state:String;

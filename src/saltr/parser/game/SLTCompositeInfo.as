@@ -3,7 +3,7 @@
  * Date: 8/2/13
  * Time: 3:08 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 import flash.utils.Dictionary;
 
 internal class SLTCompositeInfo {

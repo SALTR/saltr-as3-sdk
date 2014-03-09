@@ -10,7 +10,7 @@
  * Date: 4/12/12
  * Time: 7:25 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 import flash.utils.Dictionary;
 
 internal class SLTChunk {

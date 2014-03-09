@@ -10,7 +10,7 @@
  * Date: 11/9/12
  * Time: 4:51 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 public class SLTCell {
     private var _x:int;
     private var _y:int;

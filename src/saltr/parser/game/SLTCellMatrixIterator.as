@@ -3,7 +3,7 @@
  * Date: 1/12/14
  * Time: 4:25 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 public class SLTCellMatrixIterator {
     private var _cells:SLTCellMatrix;
     private var _vectorLength:uint;

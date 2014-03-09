@@ -10,7 +10,7 @@
  * Date: 4/12/12
  * Time: 7:27 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 internal class SLTChunkAssetInfo {
     private var _assetId:String;
     private var _count:uint;
