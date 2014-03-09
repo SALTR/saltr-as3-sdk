@@ -20,18 +20,19 @@ internal class SLTDeserializer {
         return p1.index - p2.index;
     }
 
-    public function decodeExperiments(data:Object):Vector.<SLTExperiment> {
+    //TODO @GSAR: why these methods are not static?
+    public function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
-        var experimentInfo:Array = data.experimentInfo;
-        if (experimentInfo != null) {
-            for each (var item:Object in experimentInfo) {
-                var token:String = item.token;
+        var experimentInfoNodes:Array = rootNode.experimentInfo;
+        if (experimentInfoNodes != null) {
+            for each (var experimentInfoNode:Object in experimentInfoNodes) {
+                var token:String = experimentInfoNode.token;
                 //TODO @GSAR: rename to just .partition
-                var partition:String = item.partitionName;
-                var type:String = item.type;
+                var partition:String = experimentInfoNode.partitionName;
+                var type:String = experimentInfoNode.type;
 
                 //TODO @GSAR: rename and review item.customEventList!!!
-                var customEvents:Array = item.customEventList as Array;
+                var customEvents:Array = experimentInfoNode.customEventList as Array;
 
                 experiments.push(new SLTExperiment(token, partition, type, customEvents));
             }
@@ -39,30 +40,33 @@ internal class SLTDeserializer {
         return experiments;
     }
 
-    public function decodeLevels(data:Object):Vector.<SLTLevelPack> {
-        var levelPacksObject:Object = data.levelPackList;
+    public function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
+        //TODO @GSAR: why not rename .levelPackList to .levelPacks? ask TYOM!
+        var levelPackNodes:Object = rootNode.levelPackList;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var levels:Vector.<SLTLevel>;
-        var levelsObject:Object;
-        for each(var levelPack:Object in levelPacksObject) {
-            levelsObject = levelPack.levelList;
+        var levelNodes:Object;
+        for each(var levelPackNode:Object in levelPackNodes) {
+            //TODO @GSAR: why not rename .levelList to .levels? ask TYOM!
+            levelNodes = levelPackNode.levelList;
             levels = new <SLTLevel>[];
-            for each (var level:Object in levelsObject) {
-                levels.push(new SLTLevel(level.id, level.order, level.url, level.properties, level.version));
+            for each (var levelNode:Object in levelNodes) {
+                levels.push(new SLTLevel(levelNode.id, levelNode.order, levelNode.url, levelNode.properties, levelNode.version));
             }
             levels.sort(sortByIndex);
-            levelPacks.push(new SLTLevelPack(levelPack.token, levelPack.order, levels));
+            levelPacks.push(new SLTLevelPack(levelPackNode.token, levelPackNode.order, levels));
         }
         levelPacks.sort(sortByIndex);
         return levelPacks;
     }
 
-    public function decodeFeatures(data:Object):Dictionary {
+    public function decodeFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
-        var featuresList:Array = data.featureList;
-        if (featuresList != null) {
-            for each(var featureObj:Object in featuresList) {
-                features[featureObj.token] = new SLTFeature(featureObj.token, featureObj.data);
+        //TODO @GSAR: why not rename .featureList to .features? ask TYOM!
+        var featureNodes:Array = rootNode.featureList;
+        if (featureNodes != null) {
+            for each(var featureNode:Object in featureNodes) {
+                features[featureNode.token] = new SLTFeature(featureNode.token, featureNode.data);
             }
         }
         return features;

@@ -24,9 +24,9 @@ public class SLTLevel {
     private var _boards:Dictionary;
     private var _contentReady:Boolean;
     private var _version:String;
-    private var _levelContent:Object;
+    private var _rootNode:Object;
     private var _levelSettings:SLTLevelSettings;
-    private var _boardsContent:Object;
+    private var _boardsNode:Object;
 
     public function SLTLevel(id:String, index:int, contentDataUrl:String, properties:Object, version:String) {
         _id = id;
@@ -65,24 +65,24 @@ public class SLTLevel {
         return _boards[id];
     }
 
-    public function updateContent(contentData:Object):void {
-        _levelContent = contentData;
-        _boardsContent = contentData["boards"];
-        _properties = contentData["properties"];
-        _levelSettings = SLTLevelBoardParser.parseLevelSettings(contentData);
+    public function updateContent(rootNode:Object):void {
+        _rootNode = rootNode;
+        _boardsNode = rootNode["boards"];
+        _properties = rootNode["properties"];
+        _levelSettings = SLTLevelBoardParser.parseLevelSettings(rootNode);
         generateAllBoards();
         _contentReady = true;
     }
 
     public function generateAllBoards():void {
-        if (_boardsContent != null) {
-            _boards = SLTLevelBoardParser.parseLevelBoards(_boardsContent, _levelSettings);
+        if (_boardsNode != null) {
+            _boards = SLTLevelBoardParser.parseLevelBoards(_boardsNode, _levelSettings);
         }
     }
 
     public function generateBoard(boardId:String):void {
-        if (_boardsContent != null) {
-            _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(boardId, _boardsContent, _levelSettings);
+        if (_boardsNode != null) {
+            _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(_boardsNode[boardId], _levelSettings);
         }
     }
 
