@@ -13,7 +13,7 @@
 package saltr {
 import flash.utils.Dictionary;
 
-import saltr.parser.SLTLevelBoardParser;
+import saltr.parser.gameeditor.SLTLevelBoardParser;
 import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTLevel {

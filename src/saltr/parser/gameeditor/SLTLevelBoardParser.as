@@ -10,18 +10,11 @@
  * Date: 4/12/12
  * Time: 9:01 PM
  */
-package saltr.parser {
+package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
 
 import saltr.SLTLevelBoard;
 import saltr.parser.data.SLTCellMatrix;
-import saltr.parser.gameeditor.SLTAsset;
-import saltr.parser.gameeditor.SLTCell;
-import saltr.parser.gameeditor.SLTLevelSettings;
-import saltr.parser.gameeditor.SLTChunkAssetInfo;
-import saltr.parser.gameeditor.SLTChunk;
-import saltr.parser.gameeditor.SLTCompositeInfo;
-import saltr.parser.gameeditor.SLTCompositeAsset;
 
 final public class SLTLevelBoardParser {
 
@@ -31,7 +24,7 @@ final public class SLTLevelBoardParser {
             var boardNode:Object = boardNodes[boardId];
             boards[boardId] = parseLevelBoard(boardNode, levelSettings);
         }
-        return boards;
+        return boards
     }
 
     public static function parseLevelBoard(boardNode:Object, levelSettings:SLTLevelSettings):SLTLevelBoard {
@@ -47,17 +40,18 @@ final public class SLTLevelBoardParser {
         var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
         createEmptyBoard(cells, boardNode);
         var composites:Dictionary = parseComposites(boardNode.composites as Array, cells, levelSettings);
-        var boardChunks:Dictionary = parseChunks(boardNode.chunks as Array, cells, levelSettings);
+        var boardChunks:Vector.<SLTChunk> = parseChunks(boardNode.chunks as Array, cells, levelSettings);
         generateComposites(composites);
         generateChunks(boardChunks);
 
         return cells;
     }
 
-    private static function generateChunks(chunks:Dictionary):void {
-        for (var key:Object in chunks) {
-            (chunks[key] as SLTChunk).generate();
-        }
+    private static function generateChunks(chunks:Vector.<SLTChunk>):void {
+        for (var i:int = 0, len:int = chunks.length; i < len; ++i) {
+            chunks[i].generate();
+
+        } 
     }
 
     private static function generateComposites(composites:Dictionary):void {
@@ -96,25 +90,24 @@ final public class SLTLevelBoardParser {
         }
     }
 
-    private static function parseChunks(chunkNodes:Array, outputBoard:SLTCellMatrix, levelSettings:SLTLevelSettings):Dictionary {
-        var chunks:Dictionary = new Dictionary();
-        for each (var chunkNode:* in chunkNodes) {
-            var cellsNode:Array = chunkNode.cells as Array;
+    private static function parseChunks(chunkNodes:Array, outputBoard:SLTCellMatrix, levelSettings:SLTLevelSettings):Vector.<SLTChunk> {
+        var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
+        for each (var chunkNode:Object in chunkNodes) {
+            var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
-            for each(var cellNode:* in cellsNode) {
+            for each(var cellNode:Object in cellNodes) {
                 chunkCells.push(outputBoard.retrieve(cellNode[0], cellNode[1]) as SLTCell);
             }
 
 
             var assetNodes:Array = chunkNode.assets as Array;
             var chunkAssetInfoList:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
-            for each (var assetNode:* in assetNodes) {
+            for each (var assetNode:Object in assetNodes) {
                 chunkAssetInfoList.push(new SLTChunkAssetInfo(assetNode.assetId, assetNode.count, assetNode.stateId));
             }
 
-            var chunkId:String = chunkNode.chunkId;
-            var chunk:SLTChunk = new SLTChunk(chunkId, chunkCells, chunkAssetInfoList, levelSettings);
-            chunks[chunk.id] = chunk;
+            var chunk:SLTChunk = new SLTChunk(chunkCells, chunkAssetInfoList, levelSettings);
+            chunks.push(chunk);
         }
         return chunks;
     }
@@ -122,7 +115,8 @@ final public class SLTLevelBoardParser {
     //TODO @GSAR: check if we need to use outputBoard!
     private static function parseComposites(compositeNodes:Array, outputBoard:SLTCellMatrix, levelSettings:SLTLevelSettings):Dictionary {
         var compositesMap:Dictionary = new Dictionary();
-        for each(var compositeNode:* in compositeNodes) {
+        for each(var compositeNode:Object in compositeNodes) {
+            //TODO @GSAR: rename .position to .cell when everyone is ready!
             var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, outputBoard.retrieve(compositeNode.position[0], compositeNode.position[1]) as SLTCell, levelSettings);
             compositesMap[compositeInfo.assetId] = compositeInfo;
         }
@@ -154,7 +148,8 @@ final public class SLTLevelBoardParser {
 
     private static function parseAsset(assetNode:Object):SLTAsset {
         if (assetNode.cells/*if asset is composite asset*/) {
-            //TODO @GSAR: rename asset.type_key to asset.type when everyone is ready!
+            //TODO @GSAR: rename .type_key to asset.type when everyone is ready!
+            //TODO @GSAR: rename .cells to .cellInfos when everyone is ready!
             return new SLTCompositeAsset(assetNode.cells as Array, assetNode.type_key, assetNode.keys);
         }
         return new SLTAsset(assetNode.type_key, assetNode.keys);

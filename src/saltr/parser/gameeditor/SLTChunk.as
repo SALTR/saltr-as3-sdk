@@ -13,30 +13,20 @@
 package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
 
-public class SLTChunk {
-    private var _id:String;
+internal class SLTChunk {
     private var _chunkAssetInfos:Vector.<SLTChunkAssetInfo>;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
     private var _stateMap:Dictionary;
 
-    public function SLTChunk(id:String, chunkCells:Vector.<SLTCell>, chunkAssetInfos:Vector.<SLTChunkAssetInfo>, levelSettings:SLTLevelSettings) {
-        _id = id;
+    public function SLTChunk(chunkCells:Vector.<SLTCell>, chunkAssetInfos:Vector.<SLTChunkAssetInfo>, levelSettings:SLTLevelSettings) {
         _chunkCells = chunkCells;
         _chunkAssetInfos = chunkAssetInfos;
 
         _availableCells = new <SLTCell>[];
         _assetMap = levelSettings.assetMap;
         _stateMap = levelSettings.stateMap;
-    }
-
-    public function get id():String {
-        return _id;
-    }
-
-    public function set id(value:String):void {
-        _id = value;
     }
 
     public function toString():String {

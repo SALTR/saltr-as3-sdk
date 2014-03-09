@@ -4,11 +4,7 @@
  * Time: 3:01 PM
  */
 package saltr {
-import flash.utils.Dictionary;
-
-import saltr.parser.SLTLevelBoardParser;
 import saltr.parser.data.SLTCellMatrix;
-import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTLevelBoard {
     private var _rows:int;
