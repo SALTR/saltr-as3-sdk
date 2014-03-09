@@ -4,7 +4,7 @@
  * Time: 1:39 PM
  */
 package saltr.parser.gameeditor {
-internal class SLTCellMatrix {
+public class SLTCellMatrix {
     private var _width:int;
     private var _height:int;
     private var _rawData:Vector.<SLTCell>;

@@ -11,7 +11,7 @@
  * Time: 4:51 PM
  */
 package saltr.parser.gameeditor {
-internal class SLTCell {
+public class SLTCell {
     private var _x:int;
     private var _y:int;
     private var _properties:Object;
