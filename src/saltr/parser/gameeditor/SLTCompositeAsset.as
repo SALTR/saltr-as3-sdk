@@ -3,7 +3,7 @@
  * Date: 8/2/13
  * Time: 3:08 PM
  */
-package saltr.parser.gameeditor.composite {
+package saltr.parser.gameeditor {
 import saltr.parser.gameeditor.SLTAsset;
 
 public class SLTCompositeAsset extends SLTAsset {

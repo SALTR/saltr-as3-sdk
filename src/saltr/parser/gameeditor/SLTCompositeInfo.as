@@ -3,7 +3,9 @@
  * Date: 8/2/13
  * Time: 3:08 PM
  */
-package saltr.parser.gameeditor.composite {
+package saltr.parser.gameeditor {
+import saltr.parser.gameeditor.composite.*;
+
 import flash.utils.Dictionary;
 
 import saltr.parser.gameeditor.SLTCell;

@@ -10,7 +10,9 @@
  * Date: 4/12/12
  * Time: 7:25 PM
  */
-package saltr.parser.gameeditor.chunk {
+package saltr.parser.gameeditor {
+import saltr.parser.gameeditor.chunk.*;
+
 import flash.utils.Dictionary;
 
 import saltr.parser.gameeditor.SLTAsset;
