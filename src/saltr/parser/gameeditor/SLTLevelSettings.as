@@ -13,7 +13,7 @@
 package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
 
-public class SLTLevelSettings {
+internal class SLTLevelSettings {
     private var _assetMap:Dictionary;
     private var _keySetMap:Object;
     private var _stateMap:Dictionary;

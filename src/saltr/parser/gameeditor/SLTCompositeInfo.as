@@ -6,7 +6,7 @@
 package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
 
-public class SLTCompositeInfo {
+internal class SLTCompositeInfo {
     private var _assetId:String;
     private var _stateId:String;
     private var _cell:SLTCell;

@@ -4,7 +4,7 @@
  * Time: 5:28 PM
  */
 package saltr.parser.gameeditor {
-public class SLTAssetInstance {
+internal class SLTAssetInstance {
     protected var _keys:Object;
     protected var _state:String;
     protected var _type:String;

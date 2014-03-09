@@ -4,7 +4,7 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor {
-public class SLTCompositeInstance extends SLTAssetInstance {
+internal class SLTCompositeInstance extends SLTAssetInstance {
     private var _cells:Array;
 
     public function SLTCompositeInstance(keys:Object, state:String, type:String, cells:Array) {

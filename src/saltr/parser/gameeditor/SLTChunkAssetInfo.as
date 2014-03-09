@@ -11,7 +11,7 @@
  * Time: 7:27 PM
  */
 package saltr.parser.gameeditor {
-public class SLTChunkAssetInfo {
+internal class SLTChunkAssetInfo {
     private var _assetId:String;
     private var _count:uint;
     private var _stateId:String;

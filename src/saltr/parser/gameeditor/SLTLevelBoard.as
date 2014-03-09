@@ -3,9 +3,7 @@
  * Date: 2/11/14
  * Time: 3:01 PM
  */
-package saltr {
-import saltr.parser.data.SLTCellMatrix;
-
+package saltr.parser.gameeditor {
 public class SLTLevelBoard {
     private var _rows:int;
     private var _cols:int;

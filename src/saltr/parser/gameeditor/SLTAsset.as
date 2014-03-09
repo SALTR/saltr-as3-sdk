@@ -11,7 +11,7 @@
  * Time: 12:31 PM
  */
 package saltr.parser.gameeditor {
-public class SLTAsset {
+internal class SLTAsset {
     //TODO @GSAR: clarify why _keys is Object?
     private var _keys:Object;
     private var _type:String;

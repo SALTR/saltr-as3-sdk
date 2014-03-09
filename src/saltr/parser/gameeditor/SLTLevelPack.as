@@ -10,8 +10,7 @@
  * Date: 10/23/12
  * Time: 3:48 PM
  */
-package saltr {
-
+package saltr.parser.gameeditor {
 public class SLTLevelPack {
     private var _token:String;
     private var _levels:Vector.<SLTLevel>;

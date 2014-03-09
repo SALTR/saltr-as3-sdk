@@ -14,6 +14,9 @@ package saltr {
 
 import flash.utils.Dictionary;
 
+import saltr.parser.gameeditor.SLTLevel;
+import saltr.parser.gameeditor.SLTLevelPack;
+
 internal class SLTDeserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {

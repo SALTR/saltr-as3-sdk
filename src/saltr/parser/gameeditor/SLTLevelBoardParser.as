@@ -13,10 +13,7 @@
 package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
 
-import saltr.SLTLevelBoard;
-import saltr.parser.data.SLTCellMatrix;
-
-final public class SLTLevelBoardParser {
+internal class SLTLevelBoardParser {
 
     public static function parseLevelBoards(boardNodes:Object, levelSettings:SLTLevelSettings):Dictionary {
         var boards:Dictionary = new Dictionary();
@@ -51,7 +48,7 @@ final public class SLTLevelBoardParser {
         for (var i:int = 0, len:int = chunks.length; i < len; ++i) {
             chunks[i].generate();
 
-        } 
+        }
     }
 
     private static function generateComposites(composites:Dictionary):void {

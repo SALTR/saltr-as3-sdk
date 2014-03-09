@@ -6,11 +6,10 @@
 package test {
 import flash.display.Sprite;
 
-import saltr.SLTLevelPack;
-
-import saltr.SLTLevel;
 import saltr.SLTSaltr;
 import saltr.builder.SLTMobileSaltrBuilder;
+import saltr.parser.gameeditor.SLTLevel;
+import saltr.parser.gameeditor.SLTLevelPack;
 
 public class Test extends Sprite {
 
@@ -255,7 +254,7 @@ public class Test extends Sprite {
         testLevelBoardParsing();
 //        testLevelBoardParsingComposite();
 
-       // flowTest();
+        // flowTest();
     }
 
     private function testLevelBoardParsing():void {

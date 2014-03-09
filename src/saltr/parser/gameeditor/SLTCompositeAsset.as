@@ -4,7 +4,7 @@
  * Time: 3:08 PM
  */
 package saltr.parser.gameeditor {
-public class SLTCompositeAsset extends SLTAsset {
+internal class SLTCompositeAsset extends SLTAsset {
 
     private var _cellInfos:Array;
 

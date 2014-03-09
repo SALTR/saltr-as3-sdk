@@ -10,11 +10,8 @@
  * Date: 10/23/12
  * Time: 4:35 PM
  */
-package saltr {
+package saltr.parser.gameeditor {
 import flash.utils.Dictionary;
-
-import saltr.parser.gameeditor.SLTLevelBoardParser;
-import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTLevel {
     private var _id:String;

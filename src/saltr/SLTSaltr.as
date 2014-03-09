@@ -14,6 +14,9 @@ package saltr {
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
+import saltr.parser.gameeditor.SLTLevel;
+import saltr.parser.gameeditor.SLTLevelPack;
+
 import saltr.repository.ISLTRepository;
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;

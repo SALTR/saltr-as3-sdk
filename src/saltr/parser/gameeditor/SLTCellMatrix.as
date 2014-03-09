@@ -3,11 +3,8 @@
  * Date: 1/12/14
  * Time: 1:39 PM
  */
-package saltr.parser.data {
-import saltr.parser.data.SLTCellMatrixIterator;
-import saltr.parser.gameeditor.SLTCell;
-
-public class SLTCellMatrix {
+package saltr.parser.gameeditor {
+internal class SLTCellMatrix {
     private var _width:int;
     private var _height:int;
     private var _rawData:Vector.<SLTCell>;
