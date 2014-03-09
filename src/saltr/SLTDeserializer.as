@@ -57,6 +57,7 @@ internal class SLTDeserializer {
                 levels.push(new SLTLevel(levelNode.id, levelNode.order, levelNode.url, levelNode.properties, levelNode.version));
             }
             levels.sort(sortByIndex);
+            //TODO @GSAR: why not rename .order to .index? ask TYOM!
             levelPacks.push(new SLTLevelPack(levelPackNode.token, levelPackNode.order, levels));
         }
         levelPacks.sort(sortByIndex);
