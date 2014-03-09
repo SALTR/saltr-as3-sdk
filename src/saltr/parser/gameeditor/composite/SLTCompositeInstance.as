@@ -7,18 +7,16 @@ package saltr.parser.gameeditor.composite {
 import saltr.parser.gameeditor.SLTAssetInstance;
 
 public class SLTCompositeInstance extends SLTAssetInstance {
-    private var _shifts:Array;
+    private var _cells:Array;
 
-    public function SLTCompositeInstance(keys:Object, state:String, type:String) {
+    public function SLTCompositeInstance(keys:Object, state:String, type:String, cells:Array) {
         super(keys, state, type);
+        _cells = cells;
     }
 
-    public function get shifts():Array {
-        return _shifts;
+    public function get cells():Array {
+        return _cells;
     }
 
-    public function set shifts(value:Array):void {
-        _shifts = value;
-    }
 }
 }
