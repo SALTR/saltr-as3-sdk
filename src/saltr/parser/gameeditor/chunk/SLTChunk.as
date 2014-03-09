@@ -13,24 +13,27 @@
 package saltr.parser.gameeditor.chunk {
 import flash.utils.Dictionary;
 
-import saltr.parser.gameeditor.SLTAssetInstance;
-import saltr.parser.gameeditor.SLTLevelSettings;
-import saltr.parser.gameeditor.SLTCell;
 import saltr.parser.gameeditor.SLTAsset;
+import saltr.parser.gameeditor.SLTAssetInstance;
+import saltr.parser.gameeditor.SLTCell;
+import saltr.parser.gameeditor.SLTLevelSettings;
 
 public class SLTChunk {
     private var _id:String;
-    private var _chunkAssets:Vector.<SLTAssetInChunk>;
-    private var _cells:Vector.<SLTCell>;
-    private var _boardAssetMap:Dictionary;
-    private var _boardStateMap:Dictionary;
+    private var _chunkAssetInfos:Vector.<SLTChunkAssetInfo>;
+    private var _chunkCells:Vector.<SLTCell>;
+    private var _availableCells:Vector.<SLTCell>;
+    private var _assetMap:Dictionary;
+    private var _stateMap:Dictionary;
 
-    public function SLTChunk(id:String, levelSettings:SLTLevelSettings) {
+    public function SLTChunk(id:String, chunkCells:Vector.<SLTCell>, chunkAssetInfos:Vector.<SLTChunkAssetInfo>, levelSettings:SLTLevelSettings) {
         _id = id;
-        _chunkAssets = new Vector.<SLTAssetInChunk>();
-        _cells = new Vector.<SLTCell>();
-        _boardAssetMap = levelSettings.assetMap;
-        _boardStateMap = levelSettings.stateMap;
+        _chunkCells = chunkCells;
+        _chunkAssetInfos = chunkAssetInfos;
+
+        _availableCells = new <SLTCell>[];
+        _assetMap = levelSettings.assetMap;
+        _stateMap = levelSettings.stateMap;
     }
 
     public function get id():String {
@@ -41,58 +44,54 @@ public class SLTChunk {
         _id = value;
     }
 
-    public function addCell(cell:SLTCell):void {
-        _cells.push(cell);
+    public function toString():String {
+        return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetInfos.length;
     }
 
     public function generate():void {
-        var weakChunkAsset:Vector.<SLTAssetInChunk> = new Vector.<SLTAssetInChunk>();
-        for each(var chunkAsset:SLTAssetInChunk in _chunkAssets) {
-            if (chunkAsset.count != 0) {
-                generateAsset(chunkAsset.count, chunkAsset.id, chunkAsset.stateId);
+        _availableCells = _chunkCells.concat();
+        var weakChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
+        var len:int = _chunkAssetInfos.length;
+        for (var i:int = 0; i < len; ++i) {
+            var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
+            if (assetInfo.count != 0) {
+                generateAssetInstances(assetInfo.count, assetInfo.assetId, assetInfo.stateId);
             }
             else {
-                weakChunkAsset.push(chunkAsset);
+                weakChunkAssetInfos.push(assetInfo);
             }
         }
-        generateWeakAssets(weakChunkAsset);
+        generateWeakAssetsInstances(weakChunkAssetInfos);
     }
 
-    private function generateAsset(count:uint, assetId:String, stateId:String):void {
-        var asset:SLTAsset = _boardAssetMap[assetId] as SLTAsset;
-        var state:String = _boardStateMap[stateId] as String;
+    private function generateAssetInstances(count:uint, assetId:String, stateId:String):void {
+        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
+        var state:String = _stateMap[stateId] as String;
         for (var i:int = 0; i < count; ++i) {
-            var randCellIndex:int = int(Math.random() * _cells.length);
-            var randCell:SLTCell = _cells[randCellIndex];
+            var randCellIndex:int = int(Math.random() * _availableCells.length);
+            var randCell:SLTCell = _availableCells[randCellIndex];
             randCell.assetInstance = new SLTAssetInstance(asset.keys, state, asset.type);
-            _cells.splice(randCellIndex, 1);
-            if (_cells.length == 0) {
+            _availableCells.splice(randCellIndex, 1);
+            if (_availableCells.length == 0) {
                 return;
             }
         }
     }
 
-    private function generateWeakAssets(weakChunkAsset:Vector.<SLTAssetInChunk>):void {
-        if (weakChunkAsset.length != 0) {
-            var assetConcentration:Number = _cells.length > weakChunkAsset.length ? _cells.length / weakChunkAsset.length : 1;
+    private function generateWeakAssetsInstances(weakChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+        var len:int = weakChunkAssetInfos.length;
+        if (len > 0) {
+            var assetConcentration:Number = _availableCells.length > len ? _availableCells.length / len : 1;
             var minAssetCount:uint = assetConcentration <= 2 ? 1 : assetConcentration - 2;
             var maxAssetCount:uint = assetConcentration == 1 ? 1 : assetConcentration + 2;
-            var lastChunkAssetIndex:int = weakChunkAsset.length - 1;
+            var lastChunkAssetIndex:int = len - 1;
 
-            for (var i:uint = 0; i < weakChunkAsset.length && _cells.length != 0; ++i) {
-                var chunkAsset:SLTAssetInChunk = weakChunkAsset[i];
-                var count:uint = i == lastChunkAssetIndex ? _cells.length : randomWithin(minAssetCount, maxAssetCount);
-                generateAsset(count, chunkAsset.id, chunkAsset.stateId);
+            for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
+                var chunkAssetInfo:SLTChunkAssetInfo = weakChunkAssetInfos[i];
+                var count:uint = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
+                generateAssetInstances(count, chunkAssetInfo.assetId, chunkAssetInfo.stateId);
             }
         }
-    }
-
-    public function addChunkAsset(chunkAsset:SLTAssetInChunk):void {
-        _chunkAssets.push(chunkAsset);
-    }
-
-    public function toString():String {
-        return "[Chunk] cells:" + _cells + ", " + " chunkAssets: " + _chunkAssets;
     }
 
     private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {
