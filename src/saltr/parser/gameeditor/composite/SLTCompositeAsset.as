@@ -8,15 +8,15 @@ import saltr.parser.gameeditor.SLTAsset;
 
 public class SLTCompositeAsset extends SLTAsset {
 
-    private var _shifts:Array;
+    private var _cells:Array;
 
-    public function SLTCompositeAsset(shifts:Array, type:String, keys:Object) {
+    public function SLTCompositeAsset(cells:Array, type:String, keys:Object) {
         super(type, keys);
-        _shifts = shifts;
+        _cells = cells;
     }
 
-    public function get shifts():Array {
-        return _shifts;
+    public function get cells():Array {
+        return _cells;
     }
 }
 }
