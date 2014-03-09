@@ -11,19 +11,19 @@
  * Time: 7:27 PM
  */
 package saltr.parser.gameeditor.chunk {
-public class SLTAssetInChunk {
-    private var _id:String;
+public class SLTChunkAssetInfo {
+    private var _assetId:String;
     private var _count:uint;
     private var _stateId:String;
 
-    public function SLTAssetInChunk(id:String, count:uint, stateId:String) {
-        _id = id;
+    public function SLTChunkAssetInfo(assetId:String, count:uint, stateId:String) {
+        _assetId = assetId;
         _count = count;
         _stateId = stateId;
     }
 
-    public function get id():String {
-        return _id;
+    public function get assetId():String {
+        return _assetId;
     }
 
     public function get count():uint {
