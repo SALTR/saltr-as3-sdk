@@ -34,10 +34,10 @@ public class SLTSaltrWeb {
     protected var _levelPacks:Vector.<SLTLevelPack>;
     protected var _experiments:Vector.<SLTExperiment>;
     protected var _device:SLTDevice;
-    protected var _onDataLoadSuccess:Function;
-    protected var _onDataLoadFail:Function;
-    protected var _onGetLevelDataBodySuccess:Function;
-    protected var _onGetLevelDataBodyFail:Function;
+    protected var _onAppDataLoadSuccess:Function;
+    protected var _onAppDataLoadFail:Function;
+    protected var _onContentDataLoadSuccess:Function;
+    protected var _onContentDataFail:Function;
 
     private var _isInDevMode:Boolean;
     private var _appVersion : String;
@@ -100,7 +100,7 @@ public class SLTSaltrWeb {
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
-    //TODO @GSAR: add Properties class to handle correct feature properties assignment
+        //TODO @GSAR: add Properties class to handle correct feature properties assignment
     public function defineFeature(token:String, properties:Object):void {
         var feature:SLTFeature = _features[token];
         if (feature == null) {
@@ -115,19 +115,13 @@ public class SLTSaltrWeb {
         if (_isLoading) {
             return;
         }
-        _onDataLoadSuccess = onDataLoadSuccess;
-        _onDataLoadFail = onDataLoadFail;
+        _onAppDataLoadSuccess = onDataLoadSuccess;
+        _onAppDataLoadFail = onDataLoadFail;
 
         _isLoading = true;
         _connected = false;
-        var resource:SLTResource = createDataResource(resourceLoadSuccessHandler, resourceLoadFailHandler);
+        var resource:SLTResource = createAppDataResource(appDataLoadCompleteCallback, appDataLoadFailedCallback);
         resource.load();
-    }
-
-    public function getLevelDataBody(levelData:SLTLevel, onGetLevelDataBodySuccess:Function, onGetLevelDataBodyFail:Function):void {
-        _onGetLevelDataBodySuccess = onGetLevelDataBodySuccess;
-        _onGetLevelDataBodyFail = onGetLevelDataBodyFail;
-        loadLevelDataFromServer(levelData);
     }
 
     //TODO @GSAR: port this later when SALTR is ready
@@ -161,7 +155,19 @@ public class SLTSaltrWeb {
         resource.load();
     }
 
-    protected function loadDataSuccessHandler(jsonData:Object):void {
+    private function appDataLoadFailedCallback(resource:SLTResource):void {
+        trace("[Saltr] App data is failed to load.");
+        resource.dispose();
+        _isLoading = false;
+        _connected = false;
+        _onAppDataLoadFail();
+    }
+
+    //TODO:: @daal. Error case should be handled. if resource.jsonData contains any error from salt.
+    private function appDataLoadCompleteCallback(resource:SLTResource):void {
+        var data:Object = resource.jsonData;
+        var jsonData:Object = data.responseData;
+        resource.dispose();
         _isLoading = false;
         _connected = true;
 
@@ -183,7 +189,7 @@ public class SLTSaltrWeb {
         }
 
         trace("[Saltr] packs=" + _levelPacks.length);
-        _onDataLoadSuccess();
+        _onAppDataLoadSuccess();
 
         //TODO @GSAR: implement this!
         if (_isInDevMode) {
@@ -191,62 +197,7 @@ public class SLTSaltrWeb {
         }
     }
 
-    private function loadDataFailHandler():void {
-        _isLoading = false;
-        _connected = false;
-        _onDataLoadFail();
-        trace("[Saltr] ERROR: Level Packs are not loaded.");
-    }
-
-    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
-        level.updateContent(data);
-        _onGetLevelDataBodySuccess();
-    }
-
-    protected function levelLoadErrorHandler():void {
-        trace("[Saltr] ERROR: Level data is not loaded.");
-        _onGetLevelDataBodyFail();
-    }
-
-    protected function loadLevelDataFromServer(levelData:SLTLevel):void {
-        var dataUrl:String = levelData.contentDataUrl + "?_time_=" + new Date().getTime();
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
-        var resource:SLTResource = new SLTResource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
-        resource.load();
-        //
-        //TODO @GSAR: get rid of nested functions!
-        function levelDataAssetLoadedHandler():void {
-            var data:Object = resource.jsonData;
-            if (resource.jsonData == null) {
-                levelLoadErrorHandler();
-            }
-            else {
-                levelLoadSuccessHandler(levelData, data);
-            }
-            resource.dispose();
-        }
-
-        function levelDataAssetLoadErrorHandler():void {
-            levelLoadErrorHandler();
-            resource.dispose();
-        }
-    }
-
-    private function resourceLoadFailHandler(resource:SLTResource):void {
-        trace("[Saltr] App data is failed to load.");
-        loadDataFailHandler();
-        resource.dispose();
-    }
-
-    private function resourceLoadSuccessHandler(resource:SLTResource):void {
-        var data:Object = resource.jsonData;
-        var jsonData:Object = data.responseData;
-        trace("[Saltr] Loaded App data. json=" + jsonData);
-        loadDataSuccessHandler(jsonData);
-        resource.dispose();
-    }
-
-    private function createDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
+    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_APP_DATA;
         var args:Object = {};
@@ -278,12 +229,55 @@ public class SLTSaltrWeb {
         }
         urlVars.data = JSON.stringify(featureList);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_URL, urlVars);
-        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
+        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessCallback, syncFailCallback);
         resource.load();
     }
 
-    protected function syncSuccessHandler(resource:SLTResource):void {}
+    protected function syncSuccessCallback(resource:SLTResource):void {}
+    protected function syncFailCallback(resource:SLTResource):void {}
 
-    protected function syncFailHandler(resource:SLTResource):void {}
+
+    /////////////////////////////////////// level content data loading methods.
+
+    public function loadLevelContentData(levelPack:SLTLevelPack, level:SLTLevel, successCallback:Function, failCallback:Function):void {
+        _onContentDataLoadSuccess = successCallback;
+        _onContentDataFail = failCallback;
+        loadLevelContentDataFromSaltr(levelPack, level, true);
+    }
+
+    //TODO:: @daal do we need this forceNoCache?
+    protected function loadLevelContentDataFromSaltr(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
+        var dataUrl:String = forceNoCache ? level.contentDataUrl + "?_time_=" + new Date().getTime() : level.contentDataUrl;
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+        var resource:SLTResource = new SLTResource("saltr", ticket, contentDataLoadedCallback, contentDataLoadFailedCallback);
+        resource.load();
+        //
+        //TODO @GSAR: get rid of nested functions!
+        function contentDataLoadedCallback():void {
+            var contentData:Object = resource.jsonData;
+            if (contentData == null) {
+                levelLoadErrorHandler();
+            }
+            else {
+                levelLoadSuccessHandler(level, contentData);
+            }
+            resource.dispose();
+        }
+
+        function contentDataLoadFailedCallback():void {
+            levelLoadErrorHandler();
+            resource.dispose();
+        }
+    }
+
+    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
+        level.updateContent(data);
+        _onContentDataLoadSuccess();
+    }
+
+    protected function levelLoadErrorHandler():void {
+        trace("[Saltr] ERROR: Level data is not loaded.");
+        _onContentDataFail();
+    }
 }
 }

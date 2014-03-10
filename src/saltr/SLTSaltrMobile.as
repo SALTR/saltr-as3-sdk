@@ -38,10 +38,10 @@ public class SLTSaltrMobile {
     protected var _levelPacks:Vector.<SLTLevelPack>;
     protected var _experiments:Vector.<SLTExperiment>;
     protected var _device:SLTDevice;
-    protected var _onDataLoadSuccess:Function;
-    protected var _onDataLoadFail:Function;
-    protected var _onGetLevelDataBodySuccess:Function;
-    protected var _onGetLevelDataBodyFail:Function;
+    protected var _onAppDataLoadSuccess:Function;
+    protected var _onAppDataLoadFail:Function;
+    protected var _onContentDataLoadSuccess:Function;
+    protected var _onContentDataFail:Function;
 
     private var _isInDevMode:Boolean;
     private var _appVersion : String;
@@ -97,7 +97,7 @@ public class SLTSaltrMobile {
     }
 
     public function importLevels(path : String = null) : void {
-        path = path == null ? SLTConfig.LEVEL_PACK_URL_LOCAL : path;
+        path = path == null ? SLTConfig.LEVEL_PACK_URL_PACKAGE : path;
         var applicationData:Object = _repository.getObjectFromApplication(path);
         _levelPacks = _deserializer.decodeLevels(applicationData);
     }
@@ -120,13 +120,13 @@ public class SLTSaltrMobile {
         if (_isLoading) {
             return;
         }
-        _onDataLoadSuccess = onDataLoadSuccess;
-        _onDataLoadFail = onDataLoadFail;
+        _onAppDataLoadSuccess = onDataLoadSuccess;
+        _onAppDataLoadFail = onDataLoadFail;
         applyCachedFeatures();
 
         _isLoading = true;
         _connected = false;
-        var resource:SLTResource = createDataResource(resourceLoadSuccessHandler, resourceLoadFailHandler);
+        var resource:SLTResource = createAppDataResource(appDataLoadCompleteCallback, appDataLoadFailedCallback);
         resource.load();
     }
 
@@ -142,126 +142,6 @@ public class SLTSaltrMobile {
             _features[token] = saltrFeature;
         }
     }
-
-    protected function loadDataSuccessHandler(jsonData:Object):void {
-        _isLoading = false;
-        _connected = true;
-
-        //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
-        _saltrUserId = jsonData.saltId;
-
-        _experiments = _deserializer.decodeExperiments(jsonData);
-        _levelPacks = _deserializer.decodeLevels(jsonData);
-        var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
-
-        //merging with defaults...
-        for (var token:String in saltrFeatures) {
-            var saltrFeature:SLTFeature = saltrFeatures[token];
-            var defaultFeature:SLTFeature = _features[token];
-            if (defaultFeature != null) {
-                saltrFeature.defaultProperties = defaultFeature.defaultProperties;
-            }
-            _features[token] = saltrFeature;
-        }
-
-        trace("[Saltr] packs=" + _levelPacks.length);
-        _onDataLoadSuccess();
-
-        //TODO @GSAR: implement this!
-        if (_isInDevMode) {
-            syncFeatures();
-        }
-    }
-
-    private function loadDataFailHandler():void {
-        _isLoading = false;
-        _connected = false;
-        _onDataLoadFail();
-        trace("[Saltr] ERROR: Level Packs are not loaded.");
-    }
-
-    public function getLevelDataBody(levelPackData:SLTLevelPack, levelData:SLTLevel, onGetLevelDataBodySuccess:Function, onGetLevelDataBodyFail:Function, useCache:Boolean = true):void {
-        _onGetLevelDataBodySuccess = onGetLevelDataBodySuccess;
-        _onGetLevelDataBodyFail = onGetLevelDataBodyFail;
-        if (!useCache) {
-            loadLevelDataFromServer(levelPackData, levelData, true);
-            return;
-        }
-
-        //if there are no version change than load from cache
-        var cachedFileName:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-        if (levelData.version == _repository.getObjectVersion(cachedFileName)) {
-            loadLevelDataCached(levelData, cachedFileName);
-        } else {
-            loadLevelDataFromServer(levelPackData, levelData);
-        }
-    }
-
-    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
-        level.updateContent(data);
-        _onGetLevelDataBodySuccess();
-    }
-
-    protected function levelLoadErrorHandler():void {
-        trace("[Saltr] ERROR: Level data is not loaded.");
-        _onGetLevelDataBodyFail();
-    }
-
-    protected function loadLevelDataLocally(levelPackData:SLTLevelPack, levelData:SLTLevel, cachedFileName:String):void {
-        if (loadLevelDataCached(levelData, cachedFileName) == true) {
-            return;
-        }
-        loadLevelDataInternal(levelPackData, levelData);
-    }
-
-    protected function loadLevelDataCached(levelData:SLTLevel, cachedFileName:String):Boolean {
-        trace("[SaltClient::loadLevelData] LOADING LEVEL DATA CACHE IMMEDIATELY.");
-        var data:Object = _repository.getObjectFromCache(cachedFileName);
-        if (data != null) {
-            levelLoadSuccessHandler(levelData, data);
-            return true;
-        }
-        return false;
-    }
-
-    private function loadLevelDataInternal(levelPackData:SLTLevelPack, levelData:SLTLevel):void {
-        var url:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_LOCAL_TEMPLATE, levelPackData.index, levelData.index);
-        var data:Object = _repository.getObjectFromApplication(url);
-        if (data != null) {
-            levelLoadSuccessHandler(levelData, data);
-        }
-        else {
-            levelLoadErrorHandler();
-        }
-    }
-
-    protected function loadLevelDataFromServer(levelPackData:SLTLevelPack, levelData:SLTLevel, forceNoCache:Boolean = false):void {
-        var dataUrl:String = forceNoCache ? levelData.contentDataUrl + "?_time_=" + new Date().getTime() : levelData.contentDataUrl;
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
-        var asset:SLTResource = new SLTResource("saltr", ticket, levelDataAssetLoadedHandler, levelDataAssetLoadErrorHandler);
-        asset.load();
-        //
-        //TODO @GSAR: get rid of nested functions!
-        function levelDataAssetLoadedHandler():void {
-            var data:Object = asset.jsonData;
-            var cachedFileName:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-            if (asset.jsonData == null) {
-                loadLevelDataLocally(levelPackData, levelData, cachedFileName);
-            }
-            else {
-                levelLoadSuccessHandler(levelData, data);
-                _repository.cacheObject(cachedFileName, String(levelData.version), data);
-            }
-            asset.dispose();
-        }
-
-        function levelDataAssetLoadErrorHandler():void {
-            var cachedFileName:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPackData.index, levelData.index);
-            loadLevelDataLocally(levelPackData, levelData, cachedFileName);
-            asset.dispose();
-        }
-    }
-
 
     //TODO @GSAR: port this later when SALTR is ready
     public function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
@@ -294,22 +174,50 @@ public class SLTSaltrMobile {
         resource.load();
     }
 
-    private function resourceLoadFailHandler(resource:SLTResource):void {
+    private function appDataLoadFailedCallback(resource:SLTResource):void {
         trace("[Saltr] App data is failed to load.");
-        loadDataFailHandler();
         resource.dispose();
+        _isLoading = false;
+        _connected = false;
+        _onAppDataLoadFail();
     }
 
-    private function resourceLoadSuccessHandler(resource:SLTResource):void {
+    //TODO:: @daal. Error case should be handled. if resource.jsonData contains any error from salt.
+    private function appDataLoadCompleteCallback(resource:SLTResource):void {
         var data:Object = resource.jsonData;
         var jsonData:Object = data.responseData;
-        trace("[Saltr] Loaded App data. json=" + jsonData);
-        loadDataSuccessHandler(jsonData);
         _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", jsonData);
         resource.dispose();
+        _isLoading = false;
+        _connected = true;
+
+        //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
+        _saltrUserId = jsonData.saltId;
+
+        _experiments = _deserializer.decodeExperiments(jsonData);
+        _levelPacks = _deserializer.decodeLevels(jsonData);
+        var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
+
+        //merging with defaults...
+        for (var token:String in saltrFeatures) {
+            var saltrFeature:SLTFeature = saltrFeatures[token];
+            var defaultFeature:SLTFeature = _features[token];
+            if (defaultFeature != null) {
+                saltrFeature.defaultProperties = defaultFeature.defaultProperties;
+            }
+            _features[token] = saltrFeature;
+        }
+
+        trace("[Saltr] packs=" + _levelPacks.length);
+        _onAppDataLoadSuccess();
+
+        //TODO @GSAR: implement this!
+        if (_isInDevMode) {
+            syncFeatures();
+        }
     }
 
-    private function createDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
+    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_APP_DATA;
         var args:Object = {};
@@ -341,12 +249,103 @@ public class SLTSaltrMobile {
         }
         urlVars.data = JSON.stringify(featureList);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_URL, urlVars);
-        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
+        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessCallback, syncFailCallback);
         resource.load();
     }
 
-    protected function syncSuccessHandler(resource:SLTResource):void {}
+    protected function syncSuccessCallback(resource:SLTResource):void {}
+    protected function syncFailCallback(resource:SLTResource):void {}
 
-    protected function syncFailHandler(resource:SLTResource):void {}
+
+    /////////////////////////////////////// level content data loading methods.
+
+    public function loadLevelContentData(levelPack:SLTLevelPack, level:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+        _onContentDataLoadSuccess = successCallback;
+        _onContentDataFail = failCallback;
+        if (!useCache) {
+            loadLevelContentDataFromSaltr(levelPack, level, true);
+        }
+        else {
+            //if there are no version change than load from cache
+            var cachedVersion : String = getCachedLevelVersion(levelPack, level);
+            if (level.version == cachedVersion) {
+                var contentData = loadLevelContentDataFromCache(levelPack, level);
+                levelLoadSuccessHandler(level, contentData);
+            }
+            else {
+                loadLevelContentDataFromSaltr(levelPack, level);
+            }
+        }
+    }
+
+    private function getCachedLevelVersion(levelPack : SLTLevelPack, level : SLTLevel) : String {
+        var cachedFileName:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPack.index, level.index);
+        return _repository.getObjectVersion(cachedFileName);
+    }
+
+    private function cacheLevelContentData(levelPack:SLTLevelPack, level:SLTLevel, contentData : Object):void {
+        var cachedFileName:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPack.index, level.index);
+        _repository.cacheObject(cachedFileName, String(level.version), contentData);
+    }
+
+    private function loadLevelContentDataFromInternalStorage(levelPack : SLTLevelPack, level : SLTLevel) : Object {
+        var contentData = loadLevelContentDataFromCache(levelPack, level);
+        if(contentData == null) {
+            contentData = loadLevelContentDataFromPackage(levelPack, level);
+        }
+        return contentData;
+    }
+
+    private function loadLevelContentDataFromCache(levelPack : SLTLevelPack, level : SLTLevel) : Object {
+        var url : String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPack.index, level.index);
+        return _repository.getObjectFromCache(url);
+    }
+    private function loadLevelContentDataFromPackage(levelPack : SLTLevelPack, level : SLTLevel) : Object {
+        var url:String = formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_PACKAGE_TEMPLATE, levelPack.index, level.index);
+        return _repository.getObjectFromApplication(url);
+    }
+
+    //TODO:: @daal do we need this forceNoCache?
+    protected function loadLevelContentDataFromSaltr(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
+        var dataUrl:String = forceNoCache ? level.contentDataUrl + "?_time_=" + new Date().getTime() : level.contentDataUrl;
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+        var resource:SLTResource = new SLTResource("saltr", ticket, contentDataLoadedCallback, contentDataLoadFailedCallback);
+        resource.load();
+        //
+        //TODO @GSAR: get rid of nested functions!
+        function contentDataLoadedCallback():void {
+            var contentData:Object = resource.jsonData;
+            if(contentData != null) {
+                cacheLevelContentData(levelPack, level, contentData);
+            }
+            else {
+                contentData = loadLevelContentDataFromInternalStorage(levelPack, level);
+            }
+
+            if(contentData != null) {
+                levelLoadSuccessHandler(level, contentData);
+            }
+            else {
+                levelLoadErrorHandler();
+            }
+            resource.dispose();
+        }
+
+        function contentDataLoadFailedCallback():void {
+            var contentData : Object = loadLevelContentDataFromInternalStorage(levelPack, level);
+            levelLoadSuccessHandler(level, contentData);
+            resource.dispose();
+        }
+    }
+
+    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
+        level.updateContent(data);
+        _onContentDataLoadSuccess();
+    }
+
+    protected function levelLoadErrorHandler():void {
+        trace("[Saltr] ERROR: Level data is not loaded.");
+        _onContentDataFail();
+    }
 }
 }

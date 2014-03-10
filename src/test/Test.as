@@ -276,7 +276,7 @@ public class Test extends Sprite {
         saltrClient.importLevels();
         var pack:SLTLevelPack = saltrClient.levelPacks[0];
         var level0:SLTLevel = pack.levels[0];
-        saltrClient.getLevelDataBody(pack, level0, levelLoadCompleteHandler, levelLoadFailedHandler);
+        saltrClient.loadLevelContentData(pack, level0, levelLoadCompleteHandler, levelLoadFailedHandler);
 //        saltrClient.start(loadCompleteHandler, loadFailedHandler);
     }
 
