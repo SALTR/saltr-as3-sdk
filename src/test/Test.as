@@ -6,7 +6,7 @@
 package test {
 import flash.display.Sprite;
 
-import saltr.SLTSaltr;
+import saltr.SLTSaltrMobile;
 import saltr.builder.SLTMobileSaltrBuilder;
 import saltr.parser.game.SLTLevel;
 import saltr.parser.game.SLTLevelPack;
@@ -271,7 +271,7 @@ public class Test extends Sprite {
 
 
     private function flowTest():void {
-        var saltrClient:SLTSaltr = SLTMobileSaltrBuilder.create(instanceKey, true);
+        var saltrClient:SLTSaltrMobile = SLTMobileSaltrBuilder.create(instanceKey, true);
         saltrClient.initDevice(deviceId, deviceType);
 
         saltrClient.importLevels();

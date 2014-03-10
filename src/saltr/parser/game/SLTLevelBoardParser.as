@@ -145,11 +145,10 @@ internal class SLTLevelBoardParser {
 
     private static function parseAsset(assetNode:Object):SLTAsset {
         if (assetNode.cells/*if asset is composite asset*/) {
-            //TODO @GSAR: rename .type_key to asset.type when everyone is ready!
             //TODO @GSAR: rename .cells to .cellInfos when everyone is ready!
-            return new SLTCompositeAsset(assetNode.cells as Array, assetNode.type_key, assetNode.keys);
+            return new SLTCompositeAsset(assetNode.cells as Array, assetNode.type, assetNode.keys);
         }
-        return new SLTAsset(assetNode.type_key, assetNode.keys);
+        return new SLTAsset(assetNode.type, assetNode.keys);
     }
 }
 }
