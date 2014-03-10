@@ -270,7 +270,7 @@ public class SLTSaltrMobile {
             var cachedVersion : String = getCachedLevelVersion(levelPack, level);
             if (level.version == cachedVersion) {
                 var contentData = loadLevelContentDataFromCache(levelPack, level);
-                levelLoadSuccessHandler(level, contentData);
+                contentDataLoadSuccessCallback(level, contentData);
             }
             else {
                 loadLevelContentDataFromSaltr(levelPack, level);
@@ -309,11 +309,11 @@ public class SLTSaltrMobile {
     protected function loadLevelContentDataFromSaltr(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? level.contentDataUrl + "?_time_=" + new Date().getTime() : level.contentDataUrl;
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
-        var resource:SLTResource = new SLTResource("saltr", ticket, contentDataLoadedCallback, contentDataLoadFailedCallback);
+        var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessCallback, loadFailedCallback);
         resource.load();
         //
         //TODO @GSAR: get rid of nested functions!
-        function contentDataLoadedCallback():void {
+        function loadSuccessCallback():void {
             var contentData:Object = resource.jsonData;
             if(contentData != null) {
                 cacheLevelContentData(levelPack, level, contentData);
@@ -323,27 +323,27 @@ public class SLTSaltrMobile {
             }
 
             if(contentData != null) {
-                levelLoadSuccessHandler(level, contentData);
+                contentDataLoadSuccessCallback(level, contentData);
             }
             else {
-                levelLoadErrorHandler();
+                contentDataLoadFailedCallback();
             }
             resource.dispose();
         }
 
-        function contentDataLoadFailedCallback():void {
+        function loadFailedCallback():void {
             var contentData : Object = loadLevelContentDataFromInternalStorage(levelPack, level);
-            levelLoadSuccessHandler(level, contentData);
+            contentDataLoadSuccessCallback(level, contentData);
             resource.dispose();
         }
     }
 
-    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
+    protected function contentDataLoadSuccessCallback(level:SLTLevel, data:Object):void {
         level.updateContent(data);
         _onContentDataLoadSuccess();
     }
 
-    protected function levelLoadErrorHandler():void {
+    protected function contentDataLoadFailedCallback():void {
         trace("[Saltr] ERROR: Level data is not loaded.");
         _onContentDataFail();
     }
