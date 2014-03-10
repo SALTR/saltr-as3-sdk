@@ -18,6 +18,7 @@ import saltr.parser.game.SLTLevel;
 import saltr.parser.game.SLTLevelPack;
 
 import saltr.repository.ISLTRepository;
+import saltr.repository.SLTMobileRepository;
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
 import saltr.utils.formatString;
@@ -56,6 +57,7 @@ public class SLTSaltrMobile {
         _isInDevMode = true;
         _features = new Dictionary();
         _deserializer = new SLTDeserializer();
+        _repository = new SLTMobileRepository();
     }
 
     public function set appVersion(value:String):void {
