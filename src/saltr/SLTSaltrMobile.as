@@ -130,6 +130,9 @@ public class SLTSaltrMobile {
 
     private function applyCachedFeatures():void {
         var cachedData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
+        if(cachedData == null) {
+            return;
+        }
         var cachedFeatures:Dictionary = SLTDeserializer.decodeFeatures(cachedData);
         for (var token:String in cachedFeatures) {
             var saltrFeature:SLTFeature = cachedFeatures[token];
@@ -189,8 +192,9 @@ public class SLTSaltrMobile {
         _isLoading = false;
         _connected = true;
 
-        //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
-        _saltrUserId = jsonData.saltId;
+        //TODO @daal. supporting saltId(old) and saltrUserId.
+        var saltrUserId = jsonData.hasOwnProperty("saltrUserId") ? jsonData.saltrUserId : jsonData.saltId;
+        _saltrUserId = saltrUserId;
 
         _experiments = SLTDeserializer.decodeExperiments(jsonData);
         _levelPacks = SLTDeserializer.decodeLevels(jsonData);
