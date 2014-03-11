@@ -28,7 +28,6 @@ public class SLTSaltrWeb {
     protected var _connected:Boolean;
     protected var _partner:SLTPartner;
 
-    protected var _deserializer:SLTDeserializer;
     protected var _instanceKey:String;
     protected var _features:Dictionary;
     protected var _levelPacks:Vector.<SLTLevelPack>;
@@ -40,7 +39,7 @@ public class SLTSaltrWeb {
     protected var _onContentDataFail:Function;
 
     private var _isInDevMode:Boolean;
-    private var _appVersion : String;
+    private var _appVersion:String;
 
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
@@ -52,7 +51,6 @@ public class SLTSaltrWeb {
         //TODO @GSAR: implement usage of dev mode variable
         _isInDevMode = true;
         _features = new Dictionary();
-        _deserializer = new SLTDeserializer();
     }
 
     public function set appVersion(value:String):void {
@@ -87,14 +85,14 @@ public class SLTSaltrWeb {
         _device = new SLTDevice(deviceId, deviceType);
     }
 
-    public function importLevelFromJSON(json : String, level : SLTLevel) : void {
-        var data : Object = JSON.parse(json);
+    public function importLevelFromJSON(json:String, level:SLTLevel):void {
+        var data:Object = JSON.parse(json);
         level.updateContent(data);
     }
 
-    public function importLevelPacksFromJSON(json : String) : void {
+    public function importLevelPacksFromJSON(json:String):void {
         var applicationData:Object = JSON.parse(json);
-        _levelPacks = _deserializer.decodeLevels(applicationData);
+        _levelPacks = SLTDeserializer.decodeLevels(applicationData);
     }
 
     /**
@@ -174,9 +172,9 @@ public class SLTSaltrWeb {
         //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
         _saltrUserId = jsonData.saltId;
 
-        _experiments = _deserializer.decodeExperiments(jsonData);
-        _levelPacks = _deserializer.decodeLevels(jsonData);
-        var saltrFeatures:Dictionary = _deserializer.decodeFeatures(jsonData);
+        _experiments = SLTDeserializer.decodeExperiments(jsonData);
+        _levelPacks = SLTDeserializer.decodeLevels(jsonData);
+        var saltrFeatures:Dictionary = SLTDeserializer.decodeFeatures(jsonData);
 
         //merging with defaults...
         for (var token:String in saltrFeatures) {
@@ -217,7 +215,7 @@ public class SLTSaltrWeb {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.instanceKey = _instanceKey;
-        if(_appVersion) {
+        if (_appVersion) {
             urlVars.appVersion = _appVersion;
         }
         var featureList:Array = [];
@@ -233,8 +231,11 @@ public class SLTSaltrWeb {
         resource.load();
     }
 
-    protected function syncSuccessCallback(resource:SLTResource):void {}
-    protected function syncFailCallback(resource:SLTResource):void {}
+    protected function syncSuccessCallback(resource:SLTResource):void {
+    }
+
+    protected function syncFailCallback(resource:SLTResource):void {
+    }
 
 
     /////////////////////////////////////// level content data loading methods.

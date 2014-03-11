@@ -12,7 +12,6 @@
  */
 package saltr.parser.game {
 internal class SLTAsset {
-    //TODO @GSAR: clarify why _keys is Object?
     private var _keys:Object;
     private var _type:String;
 

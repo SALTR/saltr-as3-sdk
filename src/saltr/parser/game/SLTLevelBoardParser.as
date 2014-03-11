@@ -87,13 +87,13 @@ internal class SLTLevelBoardParser {
         }
     }
 
-    private static function parseChunks(chunkNodes:Array, outputBoard:SLTCellMatrix, levelSettings:SLTLevelSettings):Vector.<SLTChunk> {
+    private static function parseChunks(chunkNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Vector.<SLTChunk> {
         var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
         for each (var chunkNode:Object in chunkNodes) {
             var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
             for each(var cellNode:Object in cellNodes) {
-                chunkCells.push(outputBoard.retrieve(cellNode[0], cellNode[1]) as SLTCell);
+                chunkCells.push(cellMatrix.retrieve(cellNode[0], cellNode[1]) as SLTCell);
             }
 
 
@@ -109,12 +109,11 @@ internal class SLTLevelBoardParser {
         return chunks;
     }
 
-    //TODO @GSAR: check if we need to use outputBoard!
-    private static function parseComposites(compositeNodes:Array, outputBoard:SLTCellMatrix, levelSettings:SLTLevelSettings):Dictionary {
+    private static function parseComposites(compositeNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Dictionary {
         var compositesMap:Dictionary = new Dictionary();
         for each(var compositeNode:Object in compositeNodes) {
             //TODO @GSAR: rename .position to .cell when everyone is ready!
-            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, outputBoard.retrieve(compositeNode.position[0], compositeNode.position[1]) as SLTCell, levelSettings);
+            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(compositeNode.position[0], compositeNode.position[1]) as SLTCell, levelSettings);
             compositesMap[compositeInfo.assetId] = compositeInfo;
         }
         return compositesMap;

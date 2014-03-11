@@ -19,7 +19,7 @@ internal class SLTDevice {
     public function SLTDevice(deviceId:String = null, deviceType:String = null) {
         _deviceId = deviceId;
 
-        //TODO: remove device type after it is removed from Salt Bend
+        //TODO @GSAR: add strict typing from a static class here
         _deviceType = deviceType;
     }
 

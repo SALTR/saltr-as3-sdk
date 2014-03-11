@@ -23,8 +23,7 @@ internal class SLTDeserializer {
         return p1.index - p2.index;
     }
 
-    //TODO @GSAR: why these methods are not static?
-    public function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
+    public static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
         var experimentInfoNodes:Array = rootNode.experimentInfo;
         if (experimentInfoNodes != null) {
@@ -43,7 +42,7 @@ internal class SLTDeserializer {
         return experiments;
     }
 
-    public function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
+    public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
         //TODO @GSAR: why not rename .levelPackList to .levelPacks? ask TYOM!
         var levelPackNodes:Object = rootNode.levelPackList;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
@@ -64,7 +63,7 @@ internal class SLTDeserializer {
         return levelPacks;
     }
 
-    public function decodeFeatures(rootNode:Object):Dictionary {
+    public static function decodeFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
         //TODO @GSAR: why not rename .featureList to .features? ask TYOM!
         var featureNodes:Array = rootNode.featureList;
