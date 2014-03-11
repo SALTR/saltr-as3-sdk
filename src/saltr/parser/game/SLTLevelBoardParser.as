@@ -112,8 +112,9 @@ internal class SLTLevelBoardParser {
     private static function parseComposites(compositeNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Dictionary {
         var compositesMap:Dictionary = new Dictionary();
         for each(var compositeNode:Object in compositeNodes) {
-            //TODO @GSAR: rename .position to .cell when everyone is ready!
-            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(compositeNode.position[0], compositeNode.position[1]) as SLTCell, levelSettings);
+            //TODO @daal. supporting position(old) and cell.
+            var cellPosition : Array = compositeNode.hasOwnProperty("cell") ? compositeNode.cell : compositeNode.position;
+            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[0], cellPosition[1]) as SLTCell, levelSettings);
             compositesMap[compositeInfo.assetId] = compositeInfo;
         }
         return compositesMap;
@@ -144,11 +145,13 @@ internal class SLTLevelBoardParser {
 
     private static function parseAsset(assetNode:Object):SLTAsset {
         if (assetNode.cells/*if asset is composite asset*/) {
-            //TODO @GSAR: rename .cells to .cellInfos when everyone is ready!
-            return new SLTCompositeAsset(assetNode.cells as Array, assetNode.type, assetNode.keys);
+            //TODO @daal. supporting cells(old) and cellInfos.
+            var cellInfos : Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
+            return new SLTCompositeAsset(cellInfos, assetNode.type, assetNode.keys);
         }
 
-        var type : String = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
+        //TODO @daal. supporting type_key(old) and type.
+        var type : String  = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
         return new SLTAsset(type, assetNode.keys);
     }
 }
