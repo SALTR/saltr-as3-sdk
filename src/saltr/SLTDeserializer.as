@@ -44,7 +44,7 @@ internal class SLTDeserializer {
 
     public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
         //TODO @daal. supporting levePackList(old) and levelPacks
-        var levelPackNodes:Object = rootNode.hasOwnProperty("levelPacks") ? rootNode.levelPacks : rootNode.levePackList;
+        var levelPackNodes:Object = rootNode.hasOwnProperty("levelPacks") ? rootNode.levelPacks : rootNode.levelPackList;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var levels:Vector.<SLTLevel>;
         var levelNodes:Object;
