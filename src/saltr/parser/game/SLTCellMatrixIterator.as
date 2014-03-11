@@ -18,7 +18,7 @@ public class SLTCellMatrixIterator {
         return _currentPosition != _vectorLength;
     }
 
-    public function next():Object {
+    public function next():SLTCell {
         return _cells.rawData[_currentPosition++];
     }
 

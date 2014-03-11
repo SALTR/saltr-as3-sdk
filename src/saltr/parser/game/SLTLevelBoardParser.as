@@ -147,7 +147,9 @@ internal class SLTLevelBoardParser {
             //TODO @GSAR: rename .cells to .cellInfos when everyone is ready!
             return new SLTCompositeAsset(assetNode.cells as Array, assetNode.type, assetNode.keys);
         }
-        return new SLTAsset(assetNode.type, assetNode.keys);
+
+        var type : String = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
+        return new SLTAsset(type, assetNode.keys);
     }
 }
 }

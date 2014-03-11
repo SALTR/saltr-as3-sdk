@@ -34,6 +34,10 @@ public class SLTLevel {
         _version = version;
     }
 
+    public function get levelSettings():SLTLevelSettings {
+        return _levelSettings;
+    }
+
     public function get id():String {
         return _id;
     }
@@ -86,6 +90,5 @@ public class SLTLevel {
     internal function dispose():void {
         //TODO @GSAR: implement
     }
-
 }
 }
