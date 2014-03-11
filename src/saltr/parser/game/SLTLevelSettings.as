@@ -10,39 +10,30 @@
  * Date: 11/9/12
  * Time: 5:27 PM
  */
-package saltr.parser.gameeditor {
+package saltr.parser.game {
 import flash.utils.Dictionary;
 
-public class BoardData {
+internal class SLTLevelSettings {
     private var _assetMap:Dictionary;
-    private var _keyset:Object;
+    private var _keySetMap:Object;
     private var _stateMap:Dictionary;
 
-    public function BoardData() {
+    public function SLTLevelSettings(assetMap:Dictionary, keySetMap:Object, stateMap:Dictionary) {
+        _assetMap = assetMap;
+        _keySetMap = keySetMap;
+        _stateMap = stateMap;
     }
 
     public function get assetMap():Dictionary {
         return _assetMap;
     }
 
-    public function set assetMap(value:Dictionary):void {
-        _assetMap = value;
-    }
-
-    public function get keyset():Object {
-        return _keyset;
-    }
-
-    public function set keyset(value:Object):void {
-        _keyset = value;
+    public function get keySetMap():Object {
+        return _keySetMap;
     }
 
     public function get stateMap():Dictionary {
         return _stateMap;
-    }
-
-    public function set stateMap(value:Dictionary):void {
-        _stateMap = value;
     }
 
 }

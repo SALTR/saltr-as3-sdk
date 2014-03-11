@@ -20,11 +20,11 @@ import flash.utils.Timer;
 
 import saltr.utils.HTTPStatus;
 
-public class Resource {
+public class SLTResource {
 
     protected var _id:String;
     protected var _isLoaded:Boolean;
-    protected var _ticket:ResourceURLTicket;
+    protected var _ticket:SLTResourceURLTicket;
     protected var _fails:int;
     protected var _maxAttempts:int;
     protected var _dropTimeout:int;
@@ -44,7 +44,7 @@ public class Resource {
      * @param onFail callback function if loading fail, function signature is function(asset:Asset)
      * @param onProgress callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int)
      */
-    public function Resource(id:String, ticket:ResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
+    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
         //
         _id = id;
         _ticket = ticket;
@@ -90,7 +90,7 @@ public class Resource {
         return json;
     }
 
-    public function get ticket():ResourceURLTicket {
+    public function get ticket():SLTResourceURLTicket {
         return _ticket;
     }
 

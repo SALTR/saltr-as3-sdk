@@ -10,13 +10,13 @@
  * Date: 11/10/12
  * Time: 12:31 PM
  */
-package saltr.parser.gameeditor {
-public class Asset {
+package saltr.parser.game {
+internal class SLTAsset {
     private var _keys:Object;
     private var _type:String;
 
-    public function Asset(typeKey:String, keys:Object) {
-        _type = typeKey;
+    public function SLTAsset(type:String, keys:Object) {
+        _type = type;
         _keys = keys;
     }
 
@@ -29,7 +29,7 @@ public class Asset {
     }
 
     public function toString():String {
-        return "AssetTemplate : [type : " + _type + "]" + "[keys : " + _keys + "]";
+        return "[Asset] type: " + _type + ", " + " keys: " + _keys;
     }
 }
 }

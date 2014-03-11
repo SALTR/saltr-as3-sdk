@@ -10,26 +10,26 @@
  * Date: 11/9/12
  * Time: 4:51 PM
  */
-package saltr.parser.gameeditor {
-public class Cell {
+package saltr.parser.game {
+public class SLTCell {
     private var _x:int;
     private var _y:int;
-    private var _properties : Object;
-    private var _isBlocked : Boolean;
-    private var _assetInstance : AssetInstance;
+    private var _properties:Object;
+    private var _isBlocked:Boolean;
+    private var _assetInstance:SLTAssetInstance;
 
-    public function Cell(x:int, y:int) {
+    public function SLTCell(x:int, y:int) {
         _x = x;
         _y = y;
         _properties = {};
         _isBlocked = false;
     }
 
-    public function get assetInstance():AssetInstance {
+    public function get assetInstance():SLTAssetInstance {
         return _assetInstance;
     }
 
-    public function set assetInstance(value:AssetInstance):void {
+    public function set assetInstance(value:SLTAssetInstance):void {
         _assetInstance = value;
     }
 

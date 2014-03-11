@@ -11,12 +11,12 @@
  * Time: 2:03 PM
  */
 package saltr {
-public class Feature {
+public class SLTFeature {
     private var _token:String;
     private var _properties:Object;
     private var _defaultProperties:Object;
 
-    public function Feature(token:String, data:Object = null, defaultProperties:Object = null) {
+    public function SLTFeature(token:String, data:Object = null, defaultProperties:Object = null) {
         _token = token;
         _properties = data;
         _defaultProperties = defaultProperties;

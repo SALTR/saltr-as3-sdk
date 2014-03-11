@@ -11,7 +11,7 @@
  * Time: 9:13 PM
  */
 package saltr.repository {
-public interface IRepository {
+public interface ISLTRepository {
 
     function getObjectFromStorage(name:String):Object;
 
