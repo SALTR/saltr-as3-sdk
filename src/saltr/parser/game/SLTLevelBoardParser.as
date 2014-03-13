@@ -66,7 +66,7 @@ internal class SLTLevelBoardParser {
         for (var i:int = 0; i < rows; ++i) {
             for (var j:int = 0; j < cols; ++j) {
                 var cell:SLTCell = new SLTCell(j, i);
-                board.insert(j, i, cell);
+                board.insert(i, j, cell);
                 len = cellProperties.length;
                 for (var p:int = 0; p < len; ++p) {
                     var property:Object = cellProperties[p];
@@ -93,7 +93,7 @@ internal class SLTLevelBoardParser {
             var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
             for each(var cellNode:Object in cellNodes) {
-                chunkCells.push(cellMatrix.retrieve(cellNode[0], cellNode[1]) as SLTCell);
+                chunkCells.push(cellMatrix.retrieve(cellNode[1], cellNode[0]) as SLTCell);
             }
 
 
