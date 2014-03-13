@@ -82,7 +82,7 @@ public class SLTLevel {
     }
 
     public function generateBoard(boardId:String):void {
-        if (_boardsNode != null) {
+        if (_boardsNode != null && _boardsNode[boardId] != null) {
             _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(_boardsNode[boardId], _levelSettings);
         }
     }
