@@ -158,41 +158,48 @@ public class SLTSaltrWeb {
         resource.dispose();
         _isLoading = false;
         _connected = false;
-        _onAppDataLoadFail();
+        _onAppDataLoadFail(new SLTError(SLTError.GENERAL_ERROR_CODE, "could not connect to SALTR"));
     }
 
-    //TODO:: @daal. Error case should be handled. if resource.jsonData contains any error from salt.
     private function appDataLoadCompleteCallback(resource:SLTResource):void {
         var data:Object = resource.jsonData;
-        var jsonData:Object = data.responseData;
-        resource.dispose();
+        var status : String = data.status;
+        var responseData:Object = data.responseData;
         _isLoading = false;
-        _connected = true;
+        if(status == SLTConfig.RESULT_SUCCEED) {
+            _connected = true;
 
-        //TODO @GSAR: rename jsonData.saltId to jsonData.saltrUserId
-        _saltrUserId = jsonData.saltId;
+            //TODO @daal. supporting saltId(old) and saltrUserId.
+            var saltrUserId = responseData.hasOwnProperty("saltrUserId") ? responseData.saltrUserId : responseData.saltId;
+            _saltrUserId = saltrUserId;
 
-        _experiments = SLTDeserializer.decodeExperiments(jsonData);
-        _levelPacks = SLTDeserializer.decodeLevels(jsonData);
-        var saltrFeatures:Dictionary = SLTDeserializer.decodeFeatures(jsonData);
+            _experiments = SLTDeserializer.decodeExperiments(responseData);
+            _levelPacks = SLTDeserializer.decodeLevels(responseData);
+            var saltrFeatures:Dictionary = SLTDeserializer.decodeFeatures(responseData);
 
-        //merging with defaults...
-        for (var token:String in saltrFeatures) {
-            var saltrFeature:SLTFeature = saltrFeatures[token];
-            var defaultFeature:SLTFeature = _features[token];
-            if (defaultFeature != null) {
-                saltrFeature.defaultProperties = defaultFeature.defaultProperties;
+            //merging with defaults...
+            for (var token:String in saltrFeatures) {
+                var saltrFeature:SLTFeature = saltrFeatures[token];
+                var defaultFeature:SLTFeature = _features[token];
+                if (defaultFeature != null) {
+                    saltrFeature.defaultProperties = defaultFeature.defaultProperties;
+                }
+                _features[token] = saltrFeature;
             }
-            _features[token] = saltrFeature;
-        }
 
-        trace("[Saltr] packs=" + _levelPacks.length);
-        _onAppDataLoadSuccess();
+            trace("[Saltr] packs=" + _levelPacks.length);
+            _onAppDataLoadSuccess();
 
-        //TODO @GSAR: implement this!
-        if (_isInDevMode) {
-            syncFeatures();
+            //TODO @GSAR: implement this!
+            if (_isInDevMode) {
+                syncFeatures();
+            }
         }
+        else {
+            _connected = false;
+            _onAppDataLoadFail(new SLTError(responseData.errorCode, responseData.errorMessage));
+        }
+        resource.dispose();
     }
 
     private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {

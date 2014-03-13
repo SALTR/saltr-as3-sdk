@@ -29,8 +29,8 @@ internal class SLTConfig {
     public static const PROPERTY_OPERATIONS_INCREMENT:String = "inc";
     public static const PROPERTY_OPERATIONS_SET:String = "set";
 
-    protected static const RESULT_SUCCEED:String = "SUCCEED";
-    protected static const RESULT_ERROR:String = "ERROR";
+    public static const RESULT_SUCCEED:String = "SUCCEED";
+    public static const RESULT_ERROR:String = "FAILED";
 
 }
 }

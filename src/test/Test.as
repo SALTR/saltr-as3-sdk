@@ -6,138 +6,232 @@
 package test {
 import flash.display.Sprite;
 
+import saltr.SLTError;
+
 import saltr.SLTSaltrMobile;
+import saltr.parser.game.SLTCellMatrix;
+import saltr.parser.game.SLTCellMatrixIterator;
 import saltr.parser.game.SLTLevel;
 import saltr.parser.game.SLTLevelPack;
 
 public class Test extends Sprite {
-
-    private static var sampleLevelJson:Object = {"boards": {"main": {"composites": [], "chunks": [
-        {"chunkId": 1, "assets": [
-            {"assetId": "995", "count": 2},
-            {"assetId": "996", "count": 2},
-            {"assetId": "997", "count": 1},
-            {"assetId": "998", "count": 1},
-            {"assetId": "999", "count": 1}
-        ], "cells": [
-            [0, 0],
-            [1, 0],
-            [2, 0],
-            [3, 0],
-            [4, 0],
-            [5, 0],
-            [6, 0]
-        ]},
-        {"chunkId": 2, "assets": [
-            {"assetId": "995", "count": 10},
-            {"assetId": "996", "count": 10},
-            {"assetId": "997", "count": 10},
-            {"assetId": "999", "count": 8},
-            {"assetId": "998", "count": 9}
-        ], "cells": [
-            [0, 8],
-            [1, 8],
-            [2, 8],
-            [3, 8],
-            [4, 8],
-            [5, 8],
-            [6, 8],
-            [0, 7],
-            [1, 7],
-            [2, 7],
-            [3, 7],
-            [4, 7],
-            [5, 7],
-            [6, 7],
-            [1, 5],
-            [2, 5],
-            [3, 5],
-            [4, 5],
-            [5, 5],
-            [0, 4],
-            [1, 4],
-            [2, 4],
-            [3, 4],
-            [4, 4],
-            [5, 4],
-            [6, 4],
-            [0, 3],
-            [1, 3],
-            [2, 3],
-            [3, 3],
-            [4, 3],
-            [5, 3],
-            [6, 3],
-            [0, 2],
-            [1, 2],
-            [2, 2],
-            [3, 2],
-            [4, 2],
-            [5, 2],
-            [6, 2],
-            [0, 1],
-            [1, 1],
-            [2, 1],
-            [3, 1],
-            [4, 1],
-            [5, 1],
-            [6, 1]
-        ]},
-        {"chunkId": 3, "assets": [
-            {"assetId": "995", "count": 2},
-            {"assetId": "996", "count": 2},
-            {"assetId": "997", "count": 1},
-            {"assetId": "998", "count": 1},
-            {"assetId": "999", "count": 1}
-        ], "cells": [
-            [0, 6],
-            [1, 6],
-            [2, 6],
-            [3, 6],
-            [4, 6],
-            [5, 6],
-            [6, 6]
-        ]}
-    ], "blockedCells": [
-        [0, 5],
-        [6, 5]
-    ], "rows": 9, "cols": 7, "cellSize": [30, 30], "orientation": "TOP_LEFT", "position": [30, 180], "properties": {"cell": [
-        {"coords": [0, 6], "value": {"jelly": 2}},
-        {"coords": [1, 6], "value": {"jelly": 1}},
-        {"coords": [2, 6], "value": {"jelly": "2"}},
-        {"coords": [3, 6], "value": {"jelly": 2}},
-        {"coords": [4, 6], "value": {"jelly": "1"}},
-        {"coords": [5, 6], "value": {"jelly": "2"}},
-        {"coords": [6, 6], "value": {"jelly": "2"}},
-        {"coords": [3, 4], "value": {"walls": {"bottom": "true"}}},
-        {"coords": [0, 2], "value": {"walls": {"right": "true"}}},
-        {"coords": [1, 2], "value": {"walls": {"bottom": true}}},
-        {"coords": [2, 2], "value": {"walls": {"bottom": "value"}}},
-        {"coords": [4, 2], "value": {"walls": {"bottom": "true"}}},
-        {"coords": [5, 2], "value": {"walls": {"bottom": true, "right": "true"}}}
-    ], "board": {}}}, "appended": {"composites": [], "chunks": [
-        {"chunkId": 1, "assets": [
-            {"assetId": "995", "count": 2},
-            {"assetId": "996", "count": 2},
-            {"assetId": "997", "count": 2},
-            {"assetId": "999", "count": 2},
-            {"assetId": "998", "count": 2}
-        ], "cells": [
-            [0, 0],
-            [1, 0],
-            [2, 0],
-            [3, 0],
-            [4, 0],
-            [5, 0],
-            [6, 0],
-            [7, 0],
-            [8, 0],
-            [9, 0]
-        ]}
-    ], "blockedCells": [], "rows": 1, "cols": 10, "cellSize": [30, 30], "orientation": "TOP_LEFT", "position": [30, 90], "properties": {"board": {}}}}, "keySets": {"COLOR": {"3": "red", "4": "green", "5": "blue", "7": "purple", "12": "orange"}}, "assetStates": {"491": "radialbomb", "492": "linebomb", "493": "colorbomb", "467": "cobweb", "367": "jumping"}, "assets": {"1859": {"keys": {}, "states": [], "type_key": "dragoninbox"}, "1858": {"keys": {}, "states": [], "type_key": "dragon"}, "1857": {"keys": {}, "states": [], "type_key": "blocked"}, "1860": {"keys": {}, "states": [], "type_key": "jelly"}, "1918": {"keys": {}, "states": [], "type_key": "doublejelly"}, "996": {"keys": {"COLOR": 4}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "997": {"keys": {"COLOR": 5}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "995": {"keys": {"COLOR": 3}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "1724": {"keys": {}, "states": [], "type_key": "virus"}, "1919": {"keys": {}, "states": [], "type_key": "doublewax"}, "1977": {"keys": {}, "states": [], "type_key": "explosiveink"}, "1723": {"keys": {}, "states": [], "type_key": "wax"}, "1978": {"cells": [
-        [0, 0],
-        [1, 0]
-    ], "keys": {}, "states": [], "type_key": "bigitem"}, "998": {"keys": {"COLOR": 12}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "999": {"keys": {"COLOR": 7}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}}, "properties": {"movesCount": "70", "levelType": "jellyCleaning", "boost_extra_moves": "true", "boost_hammer": "true", "boost_chameleon_bomb": "true", "PRE_GAME_LINE_BOMB_BOOST": "true", "PRE_GAME_RADIAL_BOMB_BOOST": "true", "IN_GAME_EYEDROPPER_BOOST": "true", "IN_GAME_EXTRA_MOVES_BOOST": "true"}};
+    private static var sampleLevelJson : Object =  {"boards": {
+        "main": {
+            "composites": [],
+            "chunks": [
+                {
+                    "chunkId": 1,
+                    "assets": [
+                        {
+                            "assetId": "2211",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2210",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2208",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2207",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2209",
+                            "count": 0
+                        }
+                    ],
+                    "cells": [
+                        [0, 7],
+                        [1, 7],
+                        [2, 7],
+                        [3, 7],
+                        [4, 7],
+                        [5, 7],
+                        [6, 7],
+                        [7, 7],
+                        [0, 6],
+                        [1, 6],
+                        [2, 6],
+                        [3, 6],
+                        [4, 6],
+                        [5, 6],
+                        [6, 6],
+                        [7, 6],
+                        [0, 5],
+                        [1, 5],
+                        [2, 5],
+                        [3, 5],
+                        [4, 5],
+                        [5, 5],
+                        [6, 5],
+                        [7, 5],
+                        [0, 4],
+                        [1, 4],
+                        [2, 4],
+                        [3, 4],
+                        [4, 4],
+                        [5, 4],
+                        [6, 4],
+                        [7, 4],
+                        [0, 3],
+                        [1, 3],
+                        [2, 3],
+                        [3, 3],
+                        [4, 3],
+                        [5, 3],
+                        [6, 3],
+                        [7, 3],
+                        [0, 2],
+                        [1, 2],
+                        [2, 2],
+                        [3, 2],
+                        [4, 2],
+                        [5, 2],
+                        [6, 2],
+                        [7, 2],
+                        [0, 1],
+                        [1, 1],
+                        [2, 1],
+                        [3, 1],
+                        [4, 1],
+                        [5, 1],
+                        [6, 1],
+                        [7, 1],
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0]
+                    ]
+                }
+            ],
+            "blockedCells": [],
+            "rows": 8,
+            "cols": 8
+        },
+        "appended": {
+            "chunks": [
+                {
+                    "chunkId": 1,
+                    "assets": [
+                        {
+                            "assetId": "2207",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2208",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2209",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2210",
+                            "count": 0
+                        },
+                        {
+                            "assetId": "2211",
+                            "count": 0
+                        }
+                    ],
+                    "cells": [
+                        [0, 0],
+                        [1, 0],
+                        [2, 0],
+                        [3, 0],
+                        [4, 0],
+                        [5, 0],
+                        [6, 0],
+                        [7, 0]
+                    ]
+                }
+            ],
+            "cols": 8,
+            "rows": 1
+        }
+    }, "keySets": {
+        "COLOR": {
+            "1": "white",
+            "2": "black",
+            "3": "red",
+            "4": "green",
+            "5": "blue",
+            "6": "yellow",
+            "7": "purple",
+            "8": "magenta",
+            "9": "cyan",
+            "10": "aqua",
+            "11": "pink",
+            "12": "orange",
+            "13": "brown"
+        },
+        "CARD_SUIT": {
+            "1": "spade",
+            "2": "club",
+            "3": "heart",
+            "4": "diamond"
+        },
+        "CARD_VALUE": {
+            "1": "2",
+            "2": "3",
+            "3": "4",
+            "4": "5",
+            "5": "6",
+            "6": "7",
+            "7": "8",
+            "8": "9",
+            "9": "10",
+            "10": "ace",
+            "11": "jack",
+            "12": "queen",
+            "13": "king"
+        }
+    }, "assetStates": {}, "assets": {
+        "2207": {
+            "keys": {
+                "COLOR": 4
+            },
+            "states": [],
+            "type_key": "normal"
+        },
+        "2210": {
+            "keys": {
+                "COLOR": 12
+            },
+            "states": [],
+            "type_key": "normal"
+        },
+        "2211": {
+            "keys": {
+                "COLOR": 6
+            },
+            "states": [],
+            "type_key": "normal"
+        },
+        "2209": {
+            "keys": {
+                "COLOR": 7
+            },
+            "states": [],
+            "type_key": "normal"
+        },
+        "2208": {
+            "keys": {
+                "COLOR": 3
+            },
+            "states": [],
+            "type_key": "normal"
+        }
+    }, "properties": {
+        "stars": "10,20,30"
+    }};
     private static var sampleLevelWithComposites:Object = {"boards": {"main": {"composites": [
         {"assetId": 1978, "position": [2, 0]}
     ], "chunks": [
@@ -250,7 +344,7 @@ public class Test extends Sprite {
     private var deviceType:String = "iphone";
 
     public function Test() {
-        testLevelBoardParsing();
+//        testLevelBoardParsing();
 //        testLevelBoardParsingComposite();
 
         flowTest();
@@ -259,7 +353,26 @@ public class Test extends Sprite {
     private function testLevelBoardParsing():void {
         var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
         levels.updateContent(sampleLevelJson);
+//        traceCellMatrix(levels.getBoard("appended").cells);
+//        levels.generateBoard("appended");
+//        traceCellMatrix(levels.getBoard("appended").cells);
+
+        for(var i : uint = 0; i < 10; i++) {
+            levels.generateBoard("appended");
+            traceCellMatrix(levels.getBoard("appended").cells);
+        }
+
         trace("done");
+    }
+
+
+    private function traceCellMatrix(cells : SLTCellMatrix) : void {
+        var iterator : SLTCellMatrixIterator = cells.iterator;
+        var result : String = "";
+        while(iterator.hasNext()) {
+            result += iterator.next().assetInstance.keys.COLOR + "  ";
+        }
+        trace(result);
     }
 
     private function testLevelBoardParsingComposite():void {
@@ -270,12 +383,12 @@ public class Test extends Sprite {
 
 
     private function flowTest():void {
-        var saltrClient:SLTSaltrMobile = new SLTSaltrMobile(instanceKey);
+        var saltrClient:SLTSaltrMobile = new SLTSaltrMobile(instanceKey + "XX");
         saltrClient.initDevice(deviceId, deviceType);
 
-        saltrClient.importLevels();
-        var pack:SLTLevelPack = saltrClient.levelPacks[0];
-        var level0:SLTLevel = pack.levels[0];
+        //saltrClient.importLevels();
+        //var pack:SLTLevelPack = saltrClient.levelPacks[0];
+        //var level0:SLTLevel = pack.levels[0];
         //saltrClient.loadLevelContentData(pack, level0, levelLoadCompleteHandler, levelLoadFailedHandler);
         saltrClient.start(loadCompleteHandler, loadFailedHandler);
     }
@@ -284,8 +397,8 @@ public class Test extends Sprite {
         trace("load complete ");
     }
 
-    private function loadFailedHandler():void {
-        trace("load failed");
+    private function loadFailedHandler(error : SLTError):void {
+        trace("load failed " + error.errorCode + ":::" + error.errorMessage);
     }
 
     private function levelLoadCompleteHandler():void {

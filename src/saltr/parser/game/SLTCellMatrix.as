@@ -21,11 +21,11 @@ public class SLTCellMatrix {
     }
 
     public function insert(row:int, col:int, cell:SLTCell):void {
-        _rawData[ (col * _width) + row ] = cell;
+        _rawData[ (row * _width) + col] = cell;
     }
 
     public function retrieve(row:int, col:int):SLTCell {
-        return _rawData[(col * _width) + row];
+        return _rawData[(row * _width) + col];
     }
 
     public function get width():int {
