@@ -21,6 +21,8 @@ public class SLTDummyRepository implements ISLTRepository {
     private var _fileStream:FileStream;
 
     public function SLTDummyRepository() {
+        _applicationDirectory = File.applicationDirectory;
+        _fileStream = new FileStream();
     }
 
     public function getObjectFromStorage(name:String):Object {
