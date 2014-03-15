@@ -147,7 +147,9 @@ internal class SLTLevelBoardParser {
         if (assetNode.cells/*if asset is composite asset*/) {
             //TODO @daal. supporting cells(old) and cellInfos.
             var cellInfos : Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
-            return new SLTCompositeAsset(cellInfos, assetNode.type, assetNode.keys);
+            //TODO @daal. supporting type_key(old) and type.
+            var compositeType : String  = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
+            return new SLTCompositeAsset(cellInfos, compositeType, assetNode.keys);
         }
 
         //TODO @daal. supporting type_key(old) and type.
