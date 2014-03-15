@@ -114,7 +114,7 @@ internal class SLTLevelBoardParser {
         for each(var compositeNode:Object in compositeNodes) {
             //TODO @daal. supporting position(old) and cell.
             var cellPosition : Array = compositeNode.hasOwnProperty("cell") ? compositeNode.cell : compositeNode.position;
-            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[0], cellPosition[1]) as SLTCell, levelSettings);
+            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[1], cellPosition[0]) as SLTCell, levelSettings);
             compositesMap[compositeInfo.assetId] = compositeInfo;
         }
         return compositesMap;
