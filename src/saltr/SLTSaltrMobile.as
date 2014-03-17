@@ -195,7 +195,7 @@ public class SLTSaltrMobile {
             _connected = true;
 
             //TODO @daal. supporting saltId(old) and saltrUserId.
-            var saltrUserId = responseData.hasOwnProperty("saltrUserId") ? responseData.saltrUserId : responseData.saltId;
+            var saltrUserId : String = responseData.hasOwnProperty("saltrUserId") ? responseData.saltrUserId : responseData.saltId;
             _saltrUserId = saltrUserId;
 
             _experiments = SLTDeserializer.decodeExperiments(responseData);
@@ -281,7 +281,7 @@ public class SLTSaltrMobile {
             //if there are no version change than load from cache
             var cachedVersion:String = getCachedLevelVersion(levelPack, level);
             if (level.version == cachedVersion) {
-                var contentData = loadCachedLevelContentData(levelPack, level);
+                var contentData : Object = loadCachedLevelContentData(levelPack, level);
                 contentDataLoadSuccessCallback(level, contentData);
             }
             else {
@@ -301,7 +301,7 @@ public class SLTSaltrMobile {
     }
 
     private function loadLevelContentDataInternally(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var contentData = loadCachedLevelContentData(levelPack, level);
+        var contentData : Object = loadCachedLevelContentData(levelPack, level);
         if (contentData == null) {
             contentData = loadDefaultLevelContentData(levelPack, level);
         }
