@@ -21,6 +21,10 @@ public class SLTExperiment {
     private var _customEvents:Array;
 
     public function SLTExperiment(token:String, partition:String, type:String, customEvents:Array) {
+        _token = token;
+        _partition = partition;
+        _type = type;
+        _customEvents = customEvents;
     }
 
     public function get partition():String {

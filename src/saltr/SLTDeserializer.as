@@ -53,7 +53,9 @@ internal class SLTDeserializer {
             levelNodes = levelPackNode.hasOwnProperty("levels") ? levelPackNode.levels : levelPackNode.levelList;
             levels = new <SLTLevel>[];
             for each (var levelNode:Object in levelNodes) {
-                levels.push(new SLTLevel(levelNode.id, levelNode.order, levelNode.url, levelNode.properties, levelNode.version));
+                //TODO @daal. supporting order(old) and index.
+                var levelIndex : int = levelNode.hasOwnProperty("index") ? levelNode.index : levelNode.order;
+                levels.push(new SLTLevel(levelNode.id, levelIndex, levelNode.url, levelNode.properties, levelNode.version));
             }
             levels.sort(sortByIndex);
             //TODO @daal. supporting order(old) and index.
