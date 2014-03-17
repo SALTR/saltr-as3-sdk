@@ -144,7 +144,8 @@ internal class SLTLevelBoardParser {
     }
 
     private static function parseAsset(assetNode:Object):SLTAsset {
-        if (assetNode.cells/*if asset is composite asset*/) {
+        //TODO @daal. supporting cells(old) and cellInfos.
+        if (assetNode.cells || assetNode.cellInfos) { /*if asset is composite asset*/
             //TODO @daal. supporting cells(old) and cellInfos.
             var cellInfos : Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
             //TODO @daal. supporting type_key(old) and type.
