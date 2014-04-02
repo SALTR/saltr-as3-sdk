@@ -25,7 +25,8 @@ internal class SLTDeserializer {
 
     public static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
-        var experimentInfoNodes:Array = rootNode.experimentInfo;
+        //TODO @daal. supporting partitionName(old) and partition.
+        var experimentInfoNodes:Array = rootNode.hasOwnProperty("experimentInfo") ? rootNode.experimentInfo : rootNode.splitTestInfo;
         if (experimentInfoNodes != null) {
             for each (var experimentInfoNode:Object in experimentInfoNodes) {
                 var token:String = experimentInfoNode.token;
