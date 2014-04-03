@@ -36,7 +36,7 @@ internal class SLTLevelBoardParser {
     private static function parseBoardCells(boardNode:Object, levelSettings:SLTLevelSettings):SLTCellMatrix {
         var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
         createEmptyBoard(cells, boardNode);
-        var composites:Dictionary = parseComposites(boardNode.composites as Array, cells, levelSettings);
+        var composites:Array = parseComposites(boardNode.composites as Array, cells, levelSettings);
         var boardChunks:Vector.<SLTChunk> = parseChunks(boardNode.chunks as Array, cells, levelSettings);
         generateComposites(composites);
         generateChunks(boardChunks);
@@ -51,9 +51,9 @@ internal class SLTLevelBoardParser {
         }
     }
 
-    private static function generateComposites(composites:Dictionary):void {
-        for (var key:Object in composites) {
-            (composites[key] as SLTCompositeInfo).generate();
+    private static function generateComposites(composites:Array):void {
+        for (var i:int, len:int = composites.length; i < len; ++i) {
+            (composites[i] as SLTCompositeInfo).generate();
         }
     }
 
@@ -109,15 +109,14 @@ internal class SLTLevelBoardParser {
         return chunks;
     }
 
-    private static function parseComposites(compositeNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Dictionary {
-        var compositesMap:Dictionary = new Dictionary();
+    private static function parseComposites(compositeNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Array {
+        var compositesArray:Array = [];
         for each(var compositeNode:Object in compositeNodes) {
             //TODO @daal. supporting position(old) and cell.
-            var cellPosition : Array = compositeNode.hasOwnProperty("cell") ? compositeNode.cell : compositeNode.position;
-            var compositeInfo:SLTCompositeInfo = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[1], cellPosition[0]) as SLTCell, levelSettings);
-            compositesMap[compositeInfo.assetId] = compositeInfo;
+            var cellPosition:Array = compositeNode.hasOwnProperty("cell") ? compositeNode.cell : compositeNode.position;
+            compositesArray[compositesArray.length] = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[1], cellPosition[0]) as SLTCell, levelSettings);
         }
-        return compositesMap;
+        return compositesArray;
     }
 
     public static function parseLevelSettings(rootNode:Object):SLTLevelSettings {
@@ -147,14 +146,14 @@ internal class SLTLevelBoardParser {
         //TODO @daal. supporting cells(old) and cellInfos.
         if (assetNode.cells || assetNode.cellInfos) { /*if asset is composite asset*/
             //TODO @daal. supporting cells(old) and cellInfos.
-            var cellInfos : Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
+            var cellInfos:Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
             //TODO @daal. supporting type_key(old) and type.
-            var compositeType : String  = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
+            var compositeType:String = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
             return new SLTCompositeAsset(cellInfos, compositeType, assetNode.keys);
         }
 
         //TODO @daal. supporting type_key(old) and type.
-        var type : String  = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
+        var type:String = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
         return new SLTAsset(type, assetNode.keys);
     }
 }
