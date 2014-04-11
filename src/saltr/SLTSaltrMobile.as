@@ -56,6 +56,7 @@ public class SLTSaltrMobile {
         //TODO @GSAR: implement usage of dev mode variable
         _isInDevMode = true;
         _features = new Dictionary();
+        _experiments = new <SLTExperiment>[];
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
     }
