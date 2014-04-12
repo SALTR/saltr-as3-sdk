@@ -120,7 +120,7 @@ internal class SLTLevelBoardParser {
     }
 
     public static function parseLevelSettings(rootNode:Object):SLTLevelSettings {
-        return new SLTLevelSettings(parseBoardAssets(rootNode["assets"]), rootNode["keySets"], parseAssetStates(rootNode["assetStates"]));
+        return new SLTLevelSettings(parseBoardAssets(rootNode["assets"]), parseAssetStates(rootNode["assetStates"]));
     }
 
     private static function parseAssetStates(states:Object):Dictionary {
@@ -143,18 +143,30 @@ internal class SLTLevelBoardParser {
     }
 
     private static function parseAsset(assetNode:Object):SLTAsset {
-        //TODO @daal. supporting cells(old) and cellInfos.
-        if (assetNode.cells || assetNode.cellInfos) { /*if asset is composite asset*/
-            //TODO @daal. supporting cells(old) and cellInfos.
-            var cellInfos:Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
-            //TODO @daal. supporting type_key(old) and type.
-            var compositeType:String = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
-            return new SLTCompositeAsset(cellInfos, compositeType, assetNode.keys);
-        }
+
+        var token:String;
+        var properties:Object = assetNode.properties;
 
         //TODO @daal. supporting type_key(old) and type.
-        var type:String = assetNode.hasOwnProperty("type") ? assetNode.type : assetNode.type_key;
-        return new SLTAsset(type, assetNode.keys);
+        if (assetNode.hasOwnProperty("token")) {
+            token = assetNode.token;
+        } else if (assetNode.hasOwnProperty("type_key")) {
+            token = assetNode.type_key;
+        } else if (assetNode.hasOwnProperty("type")) {
+            token = assetNode.type;
+        }
+
+        //TODO @daal. supporting cells(old) and cellInfos.
+        //if asset is a composite asset!
+        if (assetNode.cells || assetNode.cellInfos) {
+            //TODO @daal. supporting cells(old) and cellInfos.
+            var cellInfos:Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
+
+            return new SLTCompositeAsset(token, cellInfos, properties);
+
+        }
+
+        return new SLTAsset(token, properties);
     }
 }
 }

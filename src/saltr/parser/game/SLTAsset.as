@@ -12,24 +12,24 @@
  */
 package saltr.parser.game {
 internal class SLTAsset {
-    private var _keys:Object;
-    private var _type:String;
+    private var _properties:Object;
+    private var _token:String;
 
-    public function SLTAsset(type:String, keys:Object) {
-        _type = type;
-        _keys = keys;
+    public function SLTAsset(token:String, properties:Object) {
+        _token = token;
+        _properties = properties;
     }
 
-    public function get keys():Object {
-        return _keys;
+    public function get token():String {
+        return _token;
     }
 
-    public function get type():String {
-        return _type;
+    public function get properties():Object {
+        return _properties;
     }
 
     public function toString():String {
-        return "[Asset] type: " + _type + ", " + " keys: " + _keys;
+        return "[Asset] token: " + _token + ", " + " properties: " + _properties;
     }
 }
 }

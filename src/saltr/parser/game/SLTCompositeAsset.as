@@ -8,8 +8,8 @@ internal class SLTCompositeAsset extends SLTAsset {
 
     private var _cellInfos:Array;
 
-    public function SLTCompositeAsset(cellInfos:Array, type:String, keys:Object) {
-        super(type, keys);
+    public function SLTCompositeAsset(token:String, cellInfos:Array, properties:Object) {
+        super(token, properties);
         _cellInfos = cellInfos;
     }
 

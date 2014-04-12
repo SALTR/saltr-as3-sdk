@@ -29,7 +29,7 @@ internal class SLTCompositeInfo {
     public function generate():void {
         var asset:SLTCompositeAsset = _assetMap[_assetId] as SLTCompositeAsset;
         var state:String = _stateMap[_stateId] as String;
-        _cell.assetInstance = new SLTCompositeInstance(asset.keys, state, asset.type, asset.cellInfos);
+        _cell.assetInstance = new SLTCompositeInstance(asset.token, state, asset.properties, asset.cellInfos);
     }
 }
 }

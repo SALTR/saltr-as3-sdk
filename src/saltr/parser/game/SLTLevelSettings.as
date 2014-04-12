@@ -15,21 +15,15 @@ import flash.utils.Dictionary;
 
 internal class SLTLevelSettings {
     private var _assetMap:Dictionary;
-    private var _keySetMap:Object;
     private var _stateMap:Dictionary;
 
-    public function SLTLevelSettings(assetMap:Dictionary, keySetMap:Object, stateMap:Dictionary) {
+    public function SLTLevelSettings(assetMap:Dictionary, stateMap:Dictionary) {
         _assetMap = assetMap;
-        _keySetMap = keySetMap;
         _stateMap = stateMap;
     }
 
     public function get assetMap():Dictionary {
         return _assetMap;
-    }
-
-    public function get keySetMap():Object {
-        return _keySetMap;
     }
 
     public function get stateMap():Dictionary {

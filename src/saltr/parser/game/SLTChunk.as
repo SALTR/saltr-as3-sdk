@@ -55,7 +55,7 @@ internal class SLTChunk {
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _availableCells.length);
             var randCell:SLTCell = _availableCells[randCellIndex];
-            randCell.assetInstance = new SLTAssetInstance(asset.keys, state, asset.type);
+            randCell.assetInstance = new SLTAssetInstance(asset.token, state, asset.properties);
             _availableCells.splice(randCellIndex, 1);
             if (_availableCells.length == 0) {
                 return;
