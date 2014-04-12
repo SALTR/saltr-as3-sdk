@@ -16,9 +16,9 @@ public class Test extends Sprite {
 
 
     private static var sampleLevelJson2:Object = {
-        "boards": {
-            layers: {
-                "default": {
+        "layers": {
+            "default": {
+                "boards": {
                     "main": {
                         "composites": [],
                         "chunks": [

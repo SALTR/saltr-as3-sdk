@@ -68,7 +68,13 @@ public class SLTLevel {
 
     public function updateContent(rootNode:Object):void {
         _rootNode = rootNode;
-        _boardsNode = rootNode["boards"];
+
+        if(rootNode.hasOwnProperty("boards")){
+            _boardsNode = rootNode["boards"];
+        } else {
+            _boardsNode = rootNode["layers"].default.boards;
+        }
+
         _properties = rootNode["properties"];
         _levelSettings = SLTLevelBoardParser.parseLevelSettings(rootNode);
         generateAllBoards();
