@@ -72,7 +72,7 @@ public class SLTLevel {
         if(rootNode.hasOwnProperty("boards")){
             _boardsNode = rootNode["boards"];
         } else {
-            _boardsNode = rootNode["layers"].default.boards;
+            _boardsNode = rootNode["layers"]["default"].boards;
         }
 
         _properties = rootNode["properties"];
