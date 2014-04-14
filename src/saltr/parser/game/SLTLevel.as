@@ -69,10 +69,14 @@ public class SLTLevel {
     public function updateContent(rootNode:Object):void {
         _rootNode = rootNode;
 
-        if(rootNode.hasOwnProperty("boards")){
-            _boardsNode = rootNode["boards"];
+        if (rootNode.hasOwnProperty("boards")) {
+            if (rootNode["boards"].hasOwnProperty("layers")) {
+                _boardsNode = rootNode["boards"]["layers"]["default"];
+            } else {
+                _boardsNode = rootNode["boards"];
+            }
         } else {
-            _boardsNode = rootNode["layers"]["default"].boards;
+            throw new Error("Boards node is not found.");
         }
 
         _properties = rootNode["properties"];
