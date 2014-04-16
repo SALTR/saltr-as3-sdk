@@ -90,7 +90,7 @@ internal class SLTChunk {
 
     private function generateAssetInstancesCount(countChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
         for (var i:int = 0; i < countChunkAssetInfos.length; ++i) {
-           var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
+           var assetInfo:SLTChunkAssetInfo = countChunkAssetInfos[i];
            generateAssetInstances(assetInfo.distributionValue, assetInfo.assetId, assetInfo.stateId);
         }
     }

@@ -53,12 +53,12 @@ public class Test extends Sprite {
                                     },
                                     {
                                         "assetId": "2659",
-                                        "distributionType": "count",
+                                        "distributionType": "ratio",
                                         "distributionValue": "3"
                                     },
                                     {
                                         "assetId": "2660",
-                                        "distributionType": "ratio",
+                                        "distributionType": "count",
                                         "distributionValue": "5"
                                     },
                                     {
