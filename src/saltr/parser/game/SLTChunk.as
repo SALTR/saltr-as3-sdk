@@ -39,9 +39,7 @@ internal class SLTChunk {
         var ratioChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
         var randomChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
 
-        var len:int = _chunkAssetInfos.length;
-
-        for (var i:int = 0; i < len; ++i) {
+        for (var i:int = 0, len:int = _chunkAssetInfos.length; i < len; ++i) {
             var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
             switch (assetInfo.distributionType) {
                 case "count":
@@ -58,16 +56,13 @@ internal class SLTChunk {
 
         trace(" ");
         trace(_availableCells.length);
-        if(countChunkAssetInfos.length > 0)
-        {
+        if (countChunkAssetInfos.length > 0) {
             generateAssetInstancesByCount(countChunkAssetInfos);
         }
-        if(ratioChunkAssetInfos.length > 0)
-        {
+        if (ratioChunkAssetInfos.length > 0) {
             generateAssetInstancesByRatio(ratioChunkAssetInfos);
         }
-        else if(randomChunkAssetInfos.length > 0)
-        {
+        else if (randomChunkAssetInfos.length > 0) {
             generateAssetInstancesRandomly(randomChunkAssetInfos);
         }
     }
@@ -77,9 +72,12 @@ internal class SLTChunk {
         var state:String = _stateMap[stateId] as String;
 
         trace("assetID:" + assetId + " count:" + count);
+        var randCell:SLTCell;
+        var randCellIndex:int;
+
         for (var i:int = 0; i < count; ++i) {
-            var randCellIndex:int = int(Math.random() * _availableCells.length);
-            var randCell:SLTCell = _availableCells[randCellIndex];
+            randCellIndex = int(Math.random() * _availableCells.length);
+            randCell = _availableCells[randCellIndex];
             randCell.assetInstance = new SLTAssetInstance(asset.token, state, asset.properties);
             _availableCells.splice(randCellIndex, 1);
             if (_availableCells.length == 0) {
@@ -89,40 +87,39 @@ internal class SLTChunk {
     }
 
     private function generateAssetInstancesByCount(countChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
-        var len:int = countChunkAssetInfos.length;
-        for (var i:int = 0; i < len; ++i) {
-           var assetInfo:SLTChunkAssetInfo = countChunkAssetInfos[i];
-           generateAssetInstances(assetInfo.distributionValue, assetInfo.assetId, assetInfo.stateId);
+        for (var i:int = 0, len:int = countChunkAssetInfos.length; i < len; ++i) {
+            var assetInfo:SLTChunkAssetInfo = countChunkAssetInfos[i];
+            generateAssetInstances(assetInfo.distributionValue, assetInfo.assetId, assetInfo.stateId);
         }
     }
 
     private function generateAssetInstancesByRatio(ratioChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
         var ratioSum:uint = 0;
         var len:int = ratioChunkAssetInfos.length;
-        for (var i:uint = 0; i < len; ++i) {
-            var assetInfo:SLTChunkAssetInfo = ratioChunkAssetInfos[i];
+        var assetInfo:SLTChunkAssetInfo;
+        for (var i:int = 0; i < len; ++i) {
+            assetInfo = ratioChunkAssetInfos[i];
             ratioSum += assetInfo.distributionValue;
         }
         var availableCellsNum:uint = _availableCells.length;
-        var ratioFloatingAssets:Array = new Array;
-        if(ratioSum != 0){
-            for (i = 0; i < len; ++i) {
-                var assetInfo:SLTChunkAssetInfo = ratioChunkAssetInfos[i];
+        var proportion:Number;
+        var count:uint;
 
-                var proportion:Number = assetInfo.distributionValue / ratioSum * availableCellsNum;
-                var count:uint = proportion;
-
-                var object:Object ={float:proportion - count, assetInfo:assetInfo};
-                ratioFloatingAssets.push(object);
-
+        var fractionAssets:Array = [];
+        if (ratioSum != 0) {
+            for (var j:int = 0; j < len; ++j) {
+                assetInfo = ratioChunkAssetInfos[j];
+                proportion = assetInfo.distributionValue / ratioSum * availableCellsNum;
+                count = proportion; //assigning number to int to floor the value;
+                fractionAssets.push({fraction: proportion - count, assetInfo: assetInfo});
                 generateAssetInstances(count, assetInfo.assetId, assetInfo.stateId);
             }
 
-            ratioFloatingAssets.sortOn("float",Array.DESCENDING);
+            fractionAssets.sortOn("fraction", Array.DESCENDING);
             availableCellsNum = _availableCells.length;
 
-            for (i = 0; i < availableCellsNum; i++) {
-                generateAssetInstances(1, ratioFloatingAssets[i].assetInfo.assetId, ratioFloatingAssets[i].assetInfo.stateId);
+            for (var k:int = 0; k < availableCellsNum; ++k) {
+                generateAssetInstances(1, fractionAssets[k].assetInfo.assetId, fractionAssets[k].assetInfo.stateId);
             }
         }
     }
@@ -131,14 +128,16 @@ internal class SLTChunk {
         var len:int = randomChunkAssetInfos.length;
         var availableCellsNum:uint = _availableCells.length;
         if (len > 0) {
-            var assetConcentration:Number = _availableCells.length > len ? _availableCells.length / len : 1;
+            var assetConcentration:Number = availableCellsNum > len ? availableCellsNum / len : 1;
             var minAssetCount:uint = assetConcentration <= 2 ? 1 : assetConcentration - 2;
             var maxAssetCount:uint = assetConcentration == 1 ? 1 : assetConcentration + 2;
             var lastChunkAssetIndex:int = len - 1;
 
+            var chunkAssetInfo:SLTChunkAssetInfo;
+            var count:uint;
             for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
-                var chunkAssetInfo:SLTChunkAssetInfo = randomChunkAssetInfos[i];
-                var count:uint = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
+                chunkAssetInfo = randomChunkAssetInfos[i];
+                count = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
                 generateAssetInstances(count, chunkAssetInfo.assetId, chunkAssetInfo.stateId);
             }
         }
