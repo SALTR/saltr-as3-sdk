@@ -40,6 +40,7 @@ internal class SLTChunk {
         var weakChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
         var len:int = _chunkAssetInfos.length;
         var ratioSum:Number = 0;
+        var ratioFloatingAssets:Array = new Array();
         switch (_distribution){
             case "COUNT":
                 for (var i:int = 0; i < len; ++i) {
@@ -58,13 +59,41 @@ internal class SLTChunk {
                     var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
                     ratioSum += assetInfo.ratio;
                 }
+
                 if(ratioSum == 0){
                     generateWeakAssetsInstances(weakChunkAssetInfos);
                 }
                 else{
                     for (i = 0; i < len; ++i) {
-                        var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
-                        generateAssetInstancesRatio(ratioSum, assetInfo.ratio, assetInfo.assetId, assetInfo.stateId);
+                        assetInfo = _chunkAssetInfos[i];
+                        var proportion:Number = assetInfo.ratio / ratioSum * _chunkCells.length;
+                        var count:uint = proportion;
+                        var object:Object = new Object();
+                        object.float = proportion - count;
+                        object.assetId = assetInfo.assetId;
+                        object.stateId = assetInfo.stateId;
+                        var isSpliced:Boolean = false;
+                        for(var j:uint = 0; j < ratioFloatingAssets.length; j++)
+                        {
+                            if(object.float > ratioFloatingAssets[j].float)
+                            {
+                                ratioFloatingAssets.splice(j,0,object);
+                                isSpliced = true;
+                                break;
+                            }
+                        }
+                        if(!isSpliced)
+                        {
+                            ratioFloatingAssets.push(object);
+                        }
+
+                        generateAssetInstancesCount(count, assetInfo.assetId, assetInfo.stateId);
+                    }
+                    var availableCellsNum:uint = _availableCells.length;
+
+                    for(i = 0; i < availableCellsNum; i++)
+                    {
+                        generateAssetInstancesCount(1, ratioFloatingAssets[i].assetId, ratioFloatingAssets[i].stateId);
                     }
                 }
                 break;
@@ -76,6 +105,11 @@ internal class SLTChunk {
     private function generateAssetInstancesCount(count:uint, assetId:String, stateId:String):void {
         var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
         var state:String = _stateMap[stateId] as String;
+        if(_distribution == "RATIO")
+        {
+            trace("count:" + count + " assetId:" + assetId);
+        }
+
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _availableCells.length);
             var randCell:SLTCell = _availableCells[randCellIndex];
@@ -87,16 +121,11 @@ internal class SLTChunk {
         }
     }
 
-    private function generateAssetInstancesRatio(ratioSum:Number, ratio:Number, assetId:String, stateId:String):void {
+    /*private function generateAssetInstancesRatio(ratioSum:Number, ratio:Number, assetId:String, stateId:String):void {
         var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
         var state:String = _stateMap[stateId] as String;
-        var proportion:Number = ratio / ratioSum * _chunkCells.length;
-        var count:uint = ((proportion - int(proportion)) > .5) ? proportion + 1 : proportion;
-        if(count > _availableCells.length)
-        {
-            count = _availableCells.length;
-        }
-        trace("ratio:" + ratio + " count:" + count + " allCells:" + _chunkCells.length);
+
+
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _availableCells.length);
             var randCell:SLTCell = _availableCells[randCellIndex];
@@ -106,7 +135,7 @@ internal class SLTChunk {
                 return;
             }
         }
-    }
+    }*/
 
     private function generateWeakAssetsInstances(weakChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
         var len:int = weakChunkAssetInfos.length;
