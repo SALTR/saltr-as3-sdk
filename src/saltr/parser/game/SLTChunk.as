@@ -60,15 +60,15 @@ internal class SLTChunk {
         trace(_availableCells.length);
         if(countChunkAssetInfos.length > 0)
         {
-            generateAssetInstancesCount(countChunkAssetInfos);
+            generateAssetInstancesByCount(countChunkAssetInfos);
         }
         if(ratioChunkAssetInfos.length > 0)
         {
-            generateAssetInstancesRatio(ratioChunkAssetInfos);
+            generateAssetInstancesByRatio(ratioChunkAssetInfos);
         }
         else if(randomChunkAssetInfos.length > 0)
         {
-            generateAssetInstancesRandom(randomChunkAssetInfos);
+            generateAssetInstancesRandomly(randomChunkAssetInfos);
         }
     }
 
@@ -88,57 +88,46 @@ internal class SLTChunk {
         }
     }
 
-    private function generateAssetInstancesCount(countChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
-        for (var i:int = 0; i < countChunkAssetInfos.length; ++i) {
+    private function generateAssetInstancesByCount(countChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+        var len:int = countChunkAssetInfos.length;
+        for (var i:int = 0; i < len; ++i) {
            var assetInfo:SLTChunkAssetInfo = countChunkAssetInfos[i];
            generateAssetInstances(assetInfo.distributionValue, assetInfo.assetId, assetInfo.stateId);
         }
     }
 
-    private function generateAssetInstancesRatio(ratioChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
-        var ratioSum:Number = 0;
-        for (i = 0; i < ratioChunkAssetInfos.length; ++i) {
+    private function generateAssetInstancesByRatio(ratioChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+        var ratioSum:uint = 0;
+        var len:int = ratioChunkAssetInfos.length;
+        for (var i:uint = 0; i < len; ++i) {
             var assetInfo:SLTChunkAssetInfo = ratioChunkAssetInfos[i];
             ratioSum += assetInfo.distributionValue;
         }
         var availableCellsNum:uint = _availableCells.length;
-        var ratioFloatingAssets:Array = new Array();
+        var ratioFloatingAssets:Array = new Array;
         if(ratioSum != 0){
-            for (var i:uint = 0; i < ratioChunkAssetInfos.length; ++i) {
+            for (i = 0; i < len; ++i) {
                 var assetInfo:SLTChunkAssetInfo = ratioChunkAssetInfos[i];
 
                 var proportion:Number = assetInfo.distributionValue / ratioSum * availableCellsNum;
                 var count:uint = proportion;
 
-                var object:Object = new Object();
-                object.float = proportion - count;
-                object.assetId = assetInfo.assetId;
-                object.stateId = assetInfo.stateId;
-
-                var isSpliced:Boolean = false;
-                for (var j:uint = 0; j < ratioFloatingAssets.length; j++) {
-                    if (object.float > ratioFloatingAssets[j].float) {
-                        ratioFloatingAssets.splice(j, 0, object);
-                        isSpliced = true;
-                        break;
-                    }
-                }
-                if (!isSpliced) {
-                    ratioFloatingAssets.push(object);
-                }
+                var object:Object ={float:proportion - count, assetInfo:assetInfo};
+                ratioFloatingAssets.push(object);
 
                 generateAssetInstances(count, assetInfo.assetId, assetInfo.stateId);
             }
 
+            ratioFloatingAssets.sortOn("float",Array.DESCENDING);
             availableCellsNum = _availableCells.length;
 
             for (i = 0; i < availableCellsNum; i++) {
-                generateAssetInstances(1, ratioFloatingAssets[i].assetId, ratioFloatingAssets[i].stateId);
+                generateAssetInstances(1, ratioFloatingAssets[i].assetInfo.assetId, ratioFloatingAssets[i].assetInfo.stateId);
             }
         }
     }
 
-    private function generateAssetInstancesRandom(randomChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+    private function generateAssetInstancesRandomly(randomChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
         var len:int = randomChunkAssetInfos.length;
         var availableCellsNum:uint = _availableCells.length;
         if (len > 0) {

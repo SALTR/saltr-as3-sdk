@@ -32,8 +32,13 @@ public class Test extends Sprite {
                                     },
                                     {
                                         "assetId": "2659",
+                                        "distributionType": "count",
+                                        "distributionValue": "1"
+                                    },
+                                    {
+                                        "assetId": "2660",
                                         "distributionType": "random",
-                                        "distributionValue": "3"
+                                        "distributionValue": "1"
                                     }
                                 ],
                                 "cells": [
@@ -48,23 +53,23 @@ public class Test extends Sprite {
                                 "assets": [
                                     {
                                         "assetId": "2658",
-                                        "distributionType": "count",
+                                        "distributionType": "ratio",
                                         "distributionValue": "2"
                                     },
                                     {
                                         "assetId": "2659",
                                         "distributionType": "ratio",
-                                        "distributionValue": "3"
+                                        "distributionValue": "8"
                                     },
                                     {
                                         "assetId": "2660",
-                                        "distributionType": "count",
+                                        "distributionType": "ratio",
                                         "distributionValue": "5"
                                     },
                                     {
                                         "assetId": "2662",
                                         "distributionType": "ratio",
-                                        "distributionValue": "8"
+                                        "distributionValue": "3"
                                     }
                                 ],
                                 "cells": [
