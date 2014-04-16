@@ -39,8 +39,7 @@ internal class SLTChunk {
         _availableCells = _chunkCells.concat();
         var weakChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
         var len:int = _chunkAssetInfos.length;
-        var ratioSum:Number = 0;
-        var ratioFloatingAssets:Array = new Array();
+
         switch (_distribution){
             case "COUNT":
                 for (var i:int = 0; i < len; ++i) {
@@ -55,23 +54,28 @@ internal class SLTChunk {
                 generateWeakAssetsInstances(weakChunkAssetInfos);
                 break;
             case "RATIO":
+                var ratioSum:Number = 0;
+                var ratioFloatingAssets:Array = new Array();
+
                 for (i = 0; i < len; ++i) {
                     var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
                     ratioSum += assetInfo.ratio;
                 }
 
                 if(ratioSum == 0){
-                    generateWeakAssetsInstances(weakChunkAssetInfos);
+                    generateWeakAssetsInstances(_chunkAssetInfos);
                 }
                 else{
                     for (i = 0; i < len; ++i) {
                         assetInfo = _chunkAssetInfos[i];
                         var proportion:Number = assetInfo.ratio / ratioSum * _chunkCells.length;
                         var count:uint = proportion;
+
                         var object:Object = new Object();
                         object.float = proportion - count;
                         object.assetId = assetInfo.assetId;
                         object.stateId = assetInfo.stateId;
+
                         var isSpliced:Boolean = false;
                         for(var j:uint = 0; j < ratioFloatingAssets.length; j++)
                         {
