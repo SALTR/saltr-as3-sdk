@@ -91,7 +91,7 @@ public class Test extends Sprite {
                     "chunkId": 2,
                     "assets": [{
                         "assetId": "1902",
-                        "ratio": 1.6,
+                        "ratio": 1.8,
                         "stateId": 1045
                     }, {
                         "assetId": "1910",
@@ -102,7 +102,7 @@ public class Test extends Sprite {
                         "ratio": 3.9
                     }, {
                         "assetId": "1910",
-                        "ratio": 4.9
+                        "ratio": 9.9
                     }],
                     "cells": [
                         [

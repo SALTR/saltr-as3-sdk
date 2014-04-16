@@ -57,7 +57,6 @@ internal class SLTChunk {
                 for (i = 0; i < len; ++i) {
                     var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
                     ratioSum += assetInfo.ratio;
-                    trace(assetInfo.ratio);
                 }
                 if(ratioSum == 0){
                     generateWeakAssetsInstances(weakChunkAssetInfos);
@@ -93,6 +92,10 @@ internal class SLTChunk {
         var state:String = _stateMap[stateId] as String;
         var proportion:Number = ratio / ratioSum * _chunkCells.length;
         var count:uint = ((proportion - int(proportion)) > .5) ? proportion + 1 : proportion;
+        if(count > _availableCells.length)
+        {
+            count = _availableCells.length;
+        }
         trace("ratio:" + ratio + " count:" + count + " allCells:" + _chunkCells.length);
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _availableCells.length);
