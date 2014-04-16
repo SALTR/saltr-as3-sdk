@@ -91,19 +91,19 @@ internal class SLTLevelBoardParser {
         var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
         for each (var chunkNode:Object in chunkNodes) {
             var cellNodes:Array = chunkNode.cells as Array;
+            var distribution:String = chunkNode.distribution;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
             for each(var cellNode:Object in cellNodes) {
                 chunkCells.push(cellMatrix.retrieve(cellNode[1], cellNode[0]) as SLTCell);
             }
 
-
             var assetNodes:Array = chunkNode.assets as Array;
             var chunkAssetInfoList:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
             for each (var assetNode:Object in assetNodes) {
-                chunkAssetInfoList.push(new SLTChunkAssetInfo(assetNode.assetId, assetNode.count, assetNode.stateId));
+                chunkAssetInfoList.push(new SLTChunkAssetInfo(assetNode.assetId, assetNode.count, assetNode.ratio, assetNode.stateId));
             }
 
-            var chunk:SLTChunk = new SLTChunk(chunkCells, chunkAssetInfoList, levelSettings);
+            var chunk:SLTChunk = new SLTChunk(chunkCells, distribution, chunkAssetInfoList, levelSettings);
             chunks.push(chunk);
         }
         return chunks;

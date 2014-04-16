@@ -12,13 +12,17 @@
  */
 package saltr.parser.game {
 internal class SLTChunkAssetInfo {
+
     private var _assetId:String;
     private var _count:uint;
+    private var _ratio:Number;
     private var _stateId:String;
 
-    public function SLTChunkAssetInfo(assetId:String, count:uint, stateId:String) {
+    public function SLTChunkAssetInfo(assetId:String, count:uint, ratio:Number, stateId:String) {
+
         _assetId = assetId;
         _count = count;
+        _ratio = ratio;
         _stateId = stateId;
     }
 
@@ -28,6 +32,10 @@ internal class SLTChunkAssetInfo {
 
     public function get count():uint {
         return _count;
+    }
+
+    public function get ratio():Number {
+        return _ratio;
     }
 
     public function get stateId():String {
