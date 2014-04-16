@@ -91,7 +91,6 @@ internal class SLTLevelBoardParser {
         var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
         for each (var chunkNode:Object in chunkNodes) {
             var cellNodes:Array = chunkNode.cells as Array;
-            var distribution:String = chunkNode.distribution;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
             for each(var cellNode:Object in cellNodes) {
                 chunkCells.push(cellMatrix.retrieve(cellNode[1], cellNode[0]) as SLTCell);
