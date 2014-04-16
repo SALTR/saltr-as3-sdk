@@ -19,12 +19,10 @@ internal class SLTChunk {
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
     private var _stateMap:Dictionary;
-    private var _distribution:String;
 
-    public function SLTChunk(chunkCells:Vector.<SLTCell>, distribution:String, chunkAssetInfos:Vector.<SLTChunkAssetInfo>, levelSettings:SLTLevelSettings) {
+    public function SLTChunk(chunkCells:Vector.<SLTCell>, chunkAssetInfos:Vector.<SLTChunkAssetInfo>, levelSettings:SLTLevelSettings) {
         _chunkCells = chunkCells;
         _chunkAssetInfos = chunkAssetInfos;
-        _distribution = distribution;
 
         _availableCells = new <SLTCell>[];
         _assetMap = levelSettings.assetMap;
@@ -37,83 +35,48 @@ internal class SLTChunk {
 
     public function generate():void {
         _availableCells = _chunkCells.concat();
-        var weakChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
+        var countChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
+        var ratioChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
+        var randomChunkAssetInfos:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
+
         var len:int = _chunkAssetInfos.length;
 
-        switch (_distribution){
-            case "COUNT":
-                for (var i:int = 0; i < len; ++i) {
-                    var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
-                    if (assetInfo.count != 0) {
-                        generateAssetInstancesCount(assetInfo.count, assetInfo.assetId, assetInfo.stateId);
-                    }
-                    else {
-                        weakChunkAssetInfos.push(assetInfo);
-                    }
-                }
-                generateWeakAssetsInstances(weakChunkAssetInfos);
-                break;
-            case "RATIO":
-                var ratioSum:Number = 0;
-                var ratioFloatingAssets:Array = new Array();
-
-                for (i = 0; i < len; ++i) {
-                    var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
-                    ratioSum += assetInfo.ratio;
-                }
-
-                if(ratioSum == 0){
-                    generateWeakAssetsInstances(_chunkAssetInfos);
-                }
-                else{
-                    for (i = 0; i < len; ++i) {
-                        assetInfo = _chunkAssetInfos[i];
-                        var proportion:Number = assetInfo.ratio / ratioSum * _chunkCells.length;
-                        var count:uint = proportion;
-
-                        var object:Object = new Object();
-                        object.float = proportion - count;
-                        object.assetId = assetInfo.assetId;
-                        object.stateId = assetInfo.stateId;
-
-                        var isSpliced:Boolean = false;
-                        for(var j:uint = 0; j < ratioFloatingAssets.length; j++)
-                        {
-                            if(object.float > ratioFloatingAssets[j].float)
-                            {
-                                ratioFloatingAssets.splice(j,0,object);
-                                isSpliced = true;
-                                break;
-                            }
-                        }
-                        if(!isSpliced)
-                        {
-                            ratioFloatingAssets.push(object);
-                        }
-
-                        generateAssetInstancesCount(count, assetInfo.assetId, assetInfo.stateId);
-                    }
-                    var availableCellsNum:uint = _availableCells.length;
-
-                    for(i = 0; i < availableCellsNum; i++)
-                    {
-                        generateAssetInstancesCount(1, ratioFloatingAssets[i].assetId, ratioFloatingAssets[i].stateId);
-                    }
-                }
-                break;
+        for (var i:int = 0; i < len; ++i) {
+            var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
+            switch (assetInfo.distributionType) {
+                case "count":
+                    countChunkAssetInfos.push(assetInfo);
+                    break;
+                case "ratio":
+                    ratioChunkAssetInfos.push(assetInfo);
+                    break;
+                case "random":
+                    randomChunkAssetInfos.push(assetInfo);
+                    break;
+            }
         }
 
-
-    }
-
-    private function generateAssetInstancesCount(count:uint, assetId:String, stateId:String):void {
-        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
-        var state:String = _stateMap[stateId] as String;
-        if(_distribution == "RATIO")
+        trace(" ");
+        trace(_availableCells.length);
+        if(countChunkAssetInfos.length > 0)
         {
-            trace("count:" + count + " assetId:" + assetId);
+            generateAssetInstancesCount(countChunkAssetInfos);
         }
+        if(ratioChunkAssetInfos.length > 0)
+        {
+            generateAssetInstancesRatio(ratioChunkAssetInfos);
+        }
+        else if(randomChunkAssetInfos.length > 0)
+        {
+            generateAssetInstancesRandom(randomChunkAssetInfos);
+        }
+    }
 
+    private function generateAssetInstances(count:uint, assetId:String, stateId:String):void {
+        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
+        var state:String = _stateMap[stateId] as String;
+
+        trace("assetID:" + assetId + " count:" + count);
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = int(Math.random() * _availableCells.length);
             var randCell:SLTCell = _availableCells[randCellIndex];
@@ -125,24 +88,59 @@ internal class SLTChunk {
         }
     }
 
-    /*private function generateAssetInstancesRatio(ratioSum:Number, ratio:Number, assetId:String, stateId:String):void {
-        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
-        var state:String = _stateMap[stateId] as String;
+    private function generateAssetInstancesCount(countChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+        for (var i:int = 0; i < countChunkAssetInfos.length; ++i) {
+           var assetInfo:SLTChunkAssetInfo = _chunkAssetInfos[i];
+           generateAssetInstances(assetInfo.distributionValue, assetInfo.assetId, assetInfo.stateId);
+        }
+    }
 
+    private function generateAssetInstancesRatio(ratioChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+        var ratioSum:Number = 0;
+        for (i = 0; i < ratioChunkAssetInfos.length; ++i) {
+            var assetInfo:SLTChunkAssetInfo = ratioChunkAssetInfos[i];
+            ratioSum += assetInfo.distributionValue;
+        }
+        var availableCellsNum:uint = _availableCells.length;
+        var ratioFloatingAssets:Array = new Array();
+        if(ratioSum != 0){
+            for (var i:uint = 0; i < ratioChunkAssetInfos.length; ++i) {
+                var assetInfo:SLTChunkAssetInfo = ratioChunkAssetInfos[i];
 
-        for (var i:int = 0; i < count; ++i) {
-            var randCellIndex:int = int(Math.random() * _availableCells.length);
-            var randCell:SLTCell = _availableCells[randCellIndex];
-            randCell.assetInstance = new SLTAssetInstance(asset.token, state, asset.properties);
-            _availableCells.splice(randCellIndex, 1);
-            if (_availableCells.length == 0) {
-                return;
+                var proportion:Number = assetInfo.distributionValue / ratioSum * availableCellsNum;
+                var count:uint = proportion;
+
+                var object:Object = new Object();
+                object.float = proportion - count;
+                object.assetId = assetInfo.assetId;
+                object.stateId = assetInfo.stateId;
+
+                var isSpliced:Boolean = false;
+                for (var j:uint = 0; j < ratioFloatingAssets.length; j++) {
+                    if (object.float > ratioFloatingAssets[j].float) {
+                        ratioFloatingAssets.splice(j, 0, object);
+                        isSpliced = true;
+                        break;
+                    }
+                }
+                if (!isSpliced) {
+                    ratioFloatingAssets.push(object);
+                }
+
+                generateAssetInstances(count, assetInfo.assetId, assetInfo.stateId);
+            }
+
+            availableCellsNum = _availableCells.length;
+
+            for (i = 0; i < availableCellsNum; i++) {
+                generateAssetInstances(1, ratioFloatingAssets[i].assetId, ratioFloatingAssets[i].stateId);
             }
         }
-    }*/
+    }
 
-    private function generateWeakAssetsInstances(weakChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
-        var len:int = weakChunkAssetInfos.length;
+    private function generateAssetInstancesRandom(randomChunkAssetInfos:Vector.<SLTChunkAssetInfo>):void {
+        var len:int = randomChunkAssetInfos.length;
+        var availableCellsNum:uint = _availableCells.length;
         if (len > 0) {
             var assetConcentration:Number = _availableCells.length > len ? _availableCells.length / len : 1;
             var minAssetCount:uint = assetConcentration <= 2 ? 1 : assetConcentration - 2;
@@ -150,9 +148,9 @@ internal class SLTChunk {
             var lastChunkAssetIndex:int = len - 1;
 
             for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
-                var chunkAssetInfo:SLTChunkAssetInfo = weakChunkAssetInfos[i];
+                var chunkAssetInfo:SLTChunkAssetInfo = randomChunkAssetInfos[i];
                 var count:uint = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
-                generateAssetInstancesCount(count, chunkAssetInfo.assetId, chunkAssetInfo.stateId);
+                generateAssetInstances(count, chunkAssetInfo.assetId, chunkAssetInfo.stateId);
             }
         }
     }

@@ -100,10 +100,10 @@ internal class SLTLevelBoardParser {
             var assetNodes:Array = chunkNode.assets as Array;
             var chunkAssetInfoList:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
             for each (var assetNode:Object in assetNodes) {
-                chunkAssetInfoList.push(new SLTChunkAssetInfo(assetNode.assetId, assetNode.count, assetNode.ratio, assetNode.stateId));
+                chunkAssetInfoList.push(new SLTChunkAssetInfo(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.stateId));
             }
 
-            var chunk:SLTChunk = new SLTChunk(chunkCells, distribution, chunkAssetInfoList, levelSettings);
+            var chunk:SLTChunk = new SLTChunk(chunkCells, chunkAssetInfoList, levelSettings);
             chunks.push(chunk);
         }
         return chunks;
