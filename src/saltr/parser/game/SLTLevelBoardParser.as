@@ -36,8 +36,19 @@ internal class SLTLevelBoardParser {
     private static function parseBoardCells(boardNode:Object, levelSettings:SLTLevelSettings):SLTCellMatrix {
         var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
         createEmptyBoard(cells, boardNode);
-        var composites:Array = parseComposites(boardNode.composites as Array, cells, levelSettings);
-        var boardChunks:Vector.<SLTChunk> = parseChunks(boardNode.chunks as Array, cells, levelSettings);
+
+        var boardContent:Object;
+        var composites:Array;
+        var boardChunks:Vector.<SLTChunk>
+        if (boardNode.hasOwnProperty("layers")) {
+            boardContent = boardNode["layers"][0];
+            composites = parseComposites(boardContent.composites as Array, cells, levelSettings);
+            boardChunks = parseChunks(boardContent.chunks as Array, cells, levelSettings);
+        }
+        else{
+            composites = parseComposites(boardNode.composites as Array, cells, levelSettings);
+            boardChunks = parseChunks(boardNode.chunks as Array, cells, levelSettings);
+        }
         generateComposites(composites);
         generateChunks(boardChunks);
 

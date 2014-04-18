@@ -70,12 +70,8 @@ public class SLTLevel {
         _rootNode = rootNode;
 
         if (rootNode.hasOwnProperty("boards")) {
-            if (rootNode["boards"].hasOwnProperty("layers")) {
-                _boardsNode = rootNode["boards"]["layers"]["default"];
-            } else {
-                _boardsNode = rootNode["boards"];
-            }
-        } else {
+             _boardsNode = rootNode["boards"];
+        }else {
             throw new Error("Boards node is not found.");
         }
 

@@ -16,144 +16,650 @@ public class Test extends Sprite {
 
 
     private static var sampleLevelJson2:Object = {
-        "boards": {
-            "layers": {
-                "default": {
-                    "main": {
-                        "composites": [],
-                        "chunks": [
+        boards: {
+            main: {
+                layers: [
+                    {
+                        layerId: "default",
+                        composites: [ ],
+                        chunks: [
                             {
-                                "chunkId": 1,
-                                "assets": [
+                                chunkId: 1,
+                                assets: [
                                     {
-                                        "assetId": "2663",
-                                        "distributionType": "random",
-                                        "distributionValue": "3"
-                                    },
-                                    {
-                                        "assetId": "2659",
-                                        "distributionType": "count",
-                                        "distributionValue": "1"
-                                    },
-                                    {
-                                        "assetId": "2660",
-                                        "distributionType": "random",
-                                        "distributionValue": "1"
+                                        assetId: 1797,
+                                        distributionType: "count",
+                                        distributionValue: 1
                                     }
                                 ],
-                                "cells": [
-                                    [1, 8],
-                                    [2, 8],
-                                    [9, 8],
-                                    [10, 8]
+                                cells: [
+                                    [
+                                        1,
+                                        7
+                                    ],
+                                    [
+                                        2,
+                                        7
+                                    ]
                                 ]
                             },
                             {
-                                "chunkId": 2,
-                                "assets": [
+                                chunkId: 2,
+                                assets: [
                                     {
-                                        "assetId": "2658",
-                                        "distributionType": "ratio",
-                                        "distributionValue": "2"
-                                    },
-                                    {
-                                        "assetId": "2659",
-                                        "distributionType": "ratio",
-                                        "distributionValue": "8"
-                                    },
-                                    {
-                                        "assetId": "2660",
-                                        "distributionType": "ratio",
-                                        "distributionValue": "5"
-                                    },
-                                    {
-                                        "assetId": "2662",
-                                        "distributionType": "ratio",
-                                        "distributionValue": "3"
+                                        assetId: 1797,
+                                        distributionType: "count",
+                                        distributionValue: 1
                                     }
                                 ],
-                                "cells": [
-                                    [1, 7],
-                                    [10, 7],
-                                    [0, 6],
-                                    [1, 6],
-                                    [2, 6],
-                                    [9, 6],
-                                    [10, 6],
-                                    [11, 6],
-                                    [1, 5],
-                                    [2, 5],
-                                    [3, 5],
-                                    [8, 5],
-                                    [9, 5],
-                                    [10, 5],
-                                    [2, 4],
-                                    [9, 4]
-                                ]},
+                                cells: [
+                                    [
+                                        9,
+                                        7
+                                    ],
+                                    [
+                                        10,
+                                        7
+                                    ]
+                                ]
+                            },
+                            {
+                                chunkId: 3,
+                                assets: [
+                                    {
+                                        assetId: 1793,
+                                        distributionType: "count",
+                                        distributionValue: 7,
+                                        stateId: 312
+                                    },
+                                    {
+                                        assetId: 1796,
+                                        distributionType: "count",
+                                        distributionValue: 7,
+                                        stateId: 312
+                                    },
+                                    {
+                                        assetId: 1795,
+                                        distributionType: "random",
+                                        stateId: 312
+                                    },
+                                    {
+                                        assetId: 1794,
+                                        distributionType: "count",
+                                        distributionValue: 7,
+                                        stateId: 312
+                                    }
+                                ],
+                                cells: [
+                                    [
+                                        0,
+                                        6
+                                    ],
+                                    [
+                                        1,
+                                        6
+                                    ],
+                                    [
+                                        2,
+                                        6
+                                    ],
+                                    [
+                                        4,
+                                        6
+                                    ],
+                                    [
+                                        5,
+                                        6
+                                    ],
+                                    [
+                                        6,
+                                        6
+                                    ],
+                                    [
+                                        7,
+                                        6
+                                    ],
+                                    [
+                                        9,
+                                        6
+                                    ],
+                                    [
+                                        10,
+                                        6
+                                    ],
+                                    [
+                                        11,
+                                        6
+                                    ],
+                                    [
+                                        0,
+                                        5
+                                    ],
+                                    [
+                                        11,
+                                        5
+                                    ],
+                                    [
+                                        0,
+                                        4
+                                    ],
+                                    [
+                                        11,
+                                        4
+                                    ],
+                                    [
+                                        0,
+                                        2
+                                    ],
+                                    [
+                                        11,
+                                        2
+                                    ],
+                                    [
+                                        0,
+                                        1
+                                    ],
+                                    [
+                                        11,
+                                        1
+                                    ],
+                                    [
+                                        4,
+                                        0
+                                    ],
+                                    [
+                                        5,
+                                        0
+                                    ],
+                                    [
+                                        6,
+                                        0
+                                    ],
+                                    [
+                                        7,
+                                        0
+                                    ],
+                                    [
+                                        9,
+                                        0
+                                    ],
+                                    [
+                                        10,
+                                        0
+                                    ],
+                                    [
+                                        11,
+                                        0
+                                    ]
+                                ]
+                            },
+                            {
+                                chunkId: 4,
+                                assets: [
+                                    {
+                                        assetId: 1793,
+                                        distributionType: "count",
+                                        distributionValue: 1,
+                                        stateId: 313
+                                    },
+                                    {
+                                        assetId: 1796,
+                                        distributionType: "count",
+                                        distributionValue: 1,
+                                        stateId: 313
+                                    },
+                                    {
+                                        assetId: 1796,
+                                        distributionType: "count",
+                                        distributionValue: 9
+                                    },
+                                    {
+                                        assetId: 1793,
+                                        distributionType: "count",
+                                        distributionValue: 9
+                                    },
+                                    {
+                                        assetId: 1794,
+                                        distributionType: "count",
+                                        distributionValue: 10
+                                    },
+                                    {
+                                        assetId: 1795,
+                                        distributionType: "count",
+                                        distributionValue: 10
+                                    }
+                                ],
+                                cells: [
+                                    [
+                                        1,
+                                        5
+                                    ],
+                                    [
+                                        2,
+                                        5
+                                    ],
+                                    [
+                                        4,
+                                        5
+                                    ],
+                                    [
+                                        5,
+                                        5
+                                    ],
+                                    [
+                                        6,
+                                        5
+                                    ],
+                                    [
+                                        7,
+                                        5
+                                    ],
+                                    [
+                                        9,
+                                        5
+                                    ],
+                                    [
+                                        10,
+                                        5
+                                    ],
+                                    [
+                                        1,
+                                        4
+                                    ],
+                                    [
+                                        2,
+                                        4
+                                    ],
+                                    [
+                                        4,
+                                        4
+                                    ],
+                                    [
+                                        5,
+                                        4
+                                    ],
+                                    [
+                                        6,
+                                        4
+                                    ],
+                                    [
+                                        7,
+                                        4
+                                    ],
+                                    [
+                                        9,
+                                        4
+                                    ],
+                                    [
+                                        10,
+                                        4
+                                    ],
+                                    [
+                                        1,
+                                        3
+                                    ],
+                                    [
+                                        2,
+                                        3
+                                    ],
+                                    [
+                                        4,
+                                        3
+                                    ],
+                                    [
+                                        5,
+                                        3
+                                    ],
+                                    [
+                                        6,
+                                        3
+                                    ],
+                                    [
+                                        7,
+                                        3
+                                    ],
+                                    [
+                                        9,
+                                        3
+                                    ],
+                                    [
+                                        10,
+                                        3
+                                    ],
+                                    [
+                                        1,
+                                        2
+                                    ],
+                                    [
+                                        2,
+                                        2
+                                    ],
+                                    [
+                                        4,
+                                        2
+                                    ],
+                                    [
+                                        5,
+                                        2
+                                    ],
+                                    [
+                                        6,
+                                        2
+                                    ],
+                                    [
+                                        7,
+                                        2
+                                    ],
+                                    [
+                                        9,
+                                        2
+                                    ],
+                                    [
+                                        10,
+                                        2
+                                    ],
+                                    [
+                                        1,
+                                        1
+                                    ],
+                                    [
+                                        2,
+                                        1
+                                    ],
+                                    [
+                                        4,
+                                        1
+                                    ],
+                                    [
+                                        5,
+                                        1
+                                    ],
+                                    [
+                                        6,
+                                        1
+                                    ],
+                                    [
+                                        7,
+                                        1
+                                    ],
+                                    [
+                                        9,
+                                        1
+                                    ],
+                                    [
+                                        10,
+                                        1
+                                    ]
+                                ]
+                            },
+                            {
+                                chunkId: 5,
+                                assets: [
+                                    {
+                                        assetId: 1793,
+                                        distributionType: "count",
+                                        distributionValue: 2
+                                    },
+                                    {
+                                        assetId: 1794,
+                                        distributionType: "count",
+                                        distributionValue: 2
+                                    },
+                                    {
+                                        assetId: 1796,
+                                        distributionType: "random"
+                                    },
+                                    {
+                                        assetId: 1795,
+                                        distributionType: "count",
+                                        distributionValue: 1
+                                    }
+                                ],
+                                cells: [
+                                    [
+                                        3,
+                                        5
+                                    ],
+                                    [
+                                        8,
+                                        5
+                                    ],
+                                    [
+                                        3,
+                                        4
+                                    ],
+                                    [
+                                        8,
+                                        4
+                                    ],
+                                    [
+                                        3,
+                                        3
+                                    ],
+                                    [
+                                        8,
+                                        3
+                                    ],
+                                    [
+                                        3,
+                                        2
+                                    ],
+                                    [
+                                        8,
+                                        2
+                                    ],
+                                    [
+                                        3,
+                                        1
+                                    ],
+                                    [
+                                        8,
+                                        1
+                                    ]
+                                ]
+                            },
+                            {
+                                chunkId: 6,
+                                assets: [
+                                    {
+                                        assetId: 1793,
+                                        distributionType: "count",
+                                        distributionValue: 2,
+                                        stateId: 315
+                                    },
+                                    {
+                                        assetId: 1796,
+                                        distributionType: "random",
+                                        stateId: 315
+                                    },
+                                    {
+                                        assetId: 1794,
+                                        distributionType: "count",
+                                        distributionValue: 1,
+                                        stateId: 315
+                                    },
+                                    {
+                                        assetId: 1795,
+                                        distributionType: "random",
+                                        stateId: 315
+                                    }
+                                ],
+                                cells: [
+                                    [
+                                        3,
+                                        6
+                                    ],
+                                    [
+                                        8,
+                                        6
+                                    ],
+                                    [
+                                        0,
+                                        3
+                                    ],
+                                    [
+                                        11,
+                                        3
+                                    ],
+                                    [
+                                        8,
+                                        0
+                                    ]
+                                ]
+                            },
+                            {
+                                chunkId: 7,
+                                assets: [
+                                    {
+                                        assetId: 1795,
+                                        distributionType: "random",
+                                        stateId: 312
+                                    }
+                                ],
+                                cells: [
+                                    [
+                                        0,
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        0
+                                    ],
+                                    [
+                                        2,
+                                        0
+                                    ]
+                                ]
+                            },
+                            {
+                                chunkId: 8,
+                                assets: [
+                                    {
+                                        assetId: 1795,
+                                        distributionType: "random",
+                                        stateId: 315
+                                    }
+                                ],
+                                cells: [
+                                    [
+                                        3,
+                                        0
+                                    ]
+                                ]
+                            }
                         ],
-                        "rows": 10,
-                        "cols": 12,
-                        "blockedCells": []
+                        fixedAssets: [ ]
                     }
-                }
-            }
-
-        },
-
-        "assetStates": {
-            "470": "ice",
-            "468": "1111",
-            "471": "strawberry",
-            "469": "question",
-            "472": "skull",
-            "474": "111",
-            "473": "1112"
-        },
-
-        "assets": {
-            "2660": {
-                "properties": {"COLOR": 13},
-                "states": [470, 471, 472, 469],
-                "token": "normal"
-            },
-            "2658": {
-                "properties": {"COLOR": 5},
-                "states": [470, 471, 472, 469],
-                "token": "normal"
-            },
-            "2661": {
-                "properties": {"COLOR": 6},
-                "states": [470, 471, 472, 469],
-                "token": "normal"
-            },
-            "2662": {
-                "properties": {"COLOR": 4},
-                "states": [470, 471, 472, 469],
-                "token": "normal"
-            },
-            "2663": {
-                "properties": {"COLOR": 1},
-                "states": [],
-                "token": "panda"
-            },
-            "2659": {
-                "properties": {"COLOR": 12},
-                "states": [470, 471, 472, 469],
-                "token": "normal"
+                ],
+                rows: 8,
+                cols: 12
             }
         },
-
-        "properties": {
-            "appendingRowsCount": "1",
-            "cellHeight": "40",
-            "cellWidth": "40",
-            "playTime": "60",
-            "starsRange": "250,400,600",
-            "rowAddingSpeed": "4000",
-            "type": "match",
-            "clickCount": "35",
-            "maxStrawberriesCount": "20",
-            "tornadoAppearing": "25"
+        assetStates: {
+            309: "1112",
+            310: "111",
+            311: "1111",
+            312: "ice",
+            313: "strawberry",
+            314: "skull",
+            315: "question"
+        },
+        assets: {
+            1793: {
+                keys: {
+                    COLOR: 255
+                },
+                states: [
+                    312,
+                    313,
+                    315,
+                    314
+                ],
+                type: "regular"
+            },
+            1794: {
+                keys: {
+                    COLOR: 249
+                },
+                states: [
+                    315,
+                    314,
+                    313,
+                    312
+                ],
+                type: "regular"
+            },
+            1795: {
+                keys: {
+                    COLOR: 247
+                },
+                states: [
+                    315,
+                    314,
+                    313,
+                    312
+                ],
+                type: "regular"
+            },
+            1796: {
+                keys: {
+                    COLOR: 256
+                },
+                states: [
+                    315,
+                    314,
+                    313,
+                    312
+                ],
+                type: "regular"
+            },
+            1797: {
+                keys: {
+                    COLOR: 244
+                },
+                states: [ ],
+                type: "panda"
+            },
+            1798: {
+                keys: {
+                    COLOR: 248
+                },
+                states: [
+                    315,
+                    314,
+                    313,
+                    312
+                ],
+                type: "regular"
+            }
+        },
+        keySets: {
+            COLOR: {
+                350: "black",
+                351: "green",
+                352: "yellow",
+                353: "magenta",
+                354: "aqua",
+                355: "orange",
+                356: "white",
+                357: "red",
+                358: "blue",
+                359: "purple",
+                360: "cyan",
+                361: "pink",
+                362: "brown"
+            }
+        },
+        properties: {
+            appendingRowsCount: "1",
+            cellHeight: "40",
+            cellWidth: "40",
+            playTime: "60",
+            starsRange: "250,400,600",
+            rowAddingSpeed: "4000",
+            type: "match",
+            clickCount: "45",
+            maxStrawberriesCount: "20"
         }
     };
 
