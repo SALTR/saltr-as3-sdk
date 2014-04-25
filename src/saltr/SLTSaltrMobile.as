@@ -27,17 +27,18 @@ import saltr.utils.formatString;
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrMobile {
 
-    protected var _repository:ISLTRepository;
+    protected var _partner:SLTPartner;
+    protected var _device:SLTDevice;
+    protected var _connected:Boolean;
+    protected var _clientKey:String;
     protected var _saltrUserId:String;
     protected var _isLoading:Boolean;
-    protected var _connected:Boolean;
-    protected var _partner:SLTPartner;
 
-    protected var _clientKey:String;
+    protected var _repository:ISLTRepository;
     protected var _features:Dictionary;
     protected var _levelPacks:Vector.<SLTLevelPack>;
     protected var _experiments:Vector.<SLTExperiment>;
-    protected var _device:SLTDevice;
+
     protected var _onAppDataLoadSuccess:Function;
     protected var _onAppDataLoadFail:Function;
     protected var _onContentDataLoadSuccess:Function;
