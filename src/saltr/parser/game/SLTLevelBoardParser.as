@@ -39,7 +39,7 @@ internal class SLTLevelBoardParser {
 
         var boardContent:Object;
         var composites:Array;
-        var boardChunks:Vector.<SLTChunk>
+        var boardChunks:Vector.<SLTChunk>;
         if (boardNode.hasOwnProperty("layers")) {
             boardContent = boardNode["layers"][0];
             composites = parseComposites(boardContent.composites as Array, cells, levelSettings);

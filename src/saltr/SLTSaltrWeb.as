@@ -28,7 +28,7 @@ public class SLTSaltrWeb {
     protected var _connected:Boolean;
     protected var _partner:SLTPartner;
 
-    protected var _instanceKey:String;
+    protected var _clientKey:String;
     protected var _features:Dictionary;
     protected var _levelPacks:Vector.<SLTLevelPack>;
     protected var _experiments:Vector.<SLTExperiment>;
@@ -43,8 +43,8 @@ public class SLTSaltrWeb {
 
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
-    public function SLTSaltrWeb(instanceKey:String) {
-        _instanceKey = instanceKey;
+    public function SLTSaltrWeb(clientKey:String) {
+        _clientKey = clientKey;
         _isLoading = false;
         _connected = false;
 
@@ -135,7 +135,7 @@ public class SLTSaltrWeb {
             properties.push({key: propertyName, value: propertyValue, operation: operation});
         }
         args.properties = properties;
-        args.instanceKey = _instanceKey;
+        args.clientKey = _clientKey;
         urlVars.arguments = JSON.stringify(args);
 
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
@@ -212,7 +212,7 @@ public class SLTSaltrWeb {
         if (_partner != null) {
             args.partner = _partner;
         }
-        args.instanceKey = _instanceKey;
+        args.clientKey = _clientKey;
         urlVars.arguments = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
@@ -221,7 +221,7 @@ public class SLTSaltrWeb {
     private function syncFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_SAVE_OR_UPDATE_FEATURE;
-        urlVars.instanceKey = _instanceKey;
+        urlVars.clientKey = _clientKey;
         if (_appVersion) {
             urlVars.appVersion = _appVersion;
         }

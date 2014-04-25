@@ -33,7 +33,7 @@ public class SLTSaltrMobile {
     protected var _connected:Boolean;
     protected var _partner:SLTPartner;
 
-    protected var _instanceKey:String;
+    protected var _clientKey:String;
     protected var _features:Dictionary;
     protected var _levelPacks:Vector.<SLTLevelPack>;
     protected var _experiments:Vector.<SLTExperiment>;
@@ -43,18 +43,18 @@ public class SLTSaltrMobile {
     protected var _onContentDataLoadSuccess:Function;
     protected var _onContentDataFail:Function;
 
-    private var _isInDevMode:Boolean;
+    private var _devMode:Boolean;
     private var _appVersion:String;
 
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
-    public function SLTSaltrMobile(instanceKey:String, useCache : Boolean = true) {
-        _instanceKey = instanceKey;
+    public function SLTSaltrMobile(clientKey:String, useCache:Boolean = true) {
+        _clientKey = clientKey;
         _isLoading = false;
         _connected = false;
 
         //TODO @GSAR: implement usage of dev mode variable
-        _isInDevMode = true;
+        _devMode = true;
         _features = new Dictionary();
         _experiments = new <SLTExperiment>[];
 
@@ -133,7 +133,7 @@ public class SLTSaltrMobile {
 
     private function applyCachedFeatures():void {
         var cachedData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
-        if(cachedData == null) {
+        if (cachedData == null) {
             return;
         }
         var cachedFeatures:Dictionary = SLTDeserializer.decodeFeatures(cachedData);
@@ -160,7 +160,7 @@ public class SLTSaltrMobile {
 //            properties.push({key: propertyName, value: propertyValue, operation: operation});
 //        }
 //        args.properties = properties;
-//        args.instanceKey = _instanceKey;
+//        args.clientKey = _clientKey;
 //        urlVars.arguments = JSON.stringify(args);
 //
 //        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
@@ -188,15 +188,15 @@ public class SLTSaltrMobile {
 
     private function appDataLoadCompleteCallback(resource:SLTResource):void {
         var data:Object = resource.jsonData;
-        var status : String = data.status;
+        var status:String = data.status;
         var responseData:Object = data.responseData;
         _isLoading = false;
-        if(status == SLTConfig.RESULT_SUCCEED) {
+        if (status == SLTConfig.RESULT_SUCCEED) {
             _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", responseData);
             _connected = true;
 
             //TODO @daal. supporting saltId(old) and saltrUserId.
-            var saltrUserId : String = responseData.hasOwnProperty("saltrUserId") ? responseData.saltrUserId : responseData.saltId;
+            var saltrUserId:String = responseData.hasOwnProperty("saltrUserId") ? responseData.saltrUserId : responseData.saltId;
             _saltrUserId = saltrUserId;
 
             _experiments = SLTDeserializer.decodeExperiments(responseData);
@@ -216,7 +216,7 @@ public class SLTSaltrMobile {
             trace("[Saltr] packs=" + _levelPacks.length);
             _onAppDataLoadSuccess();
 
-            if (_isInDevMode) {
+            if (_devMode) {
                 syncFeatures();
             }
         }
@@ -237,7 +237,7 @@ public class SLTSaltrMobile {
         if (_partner != null) {
             args.partner = _partner;
         }
-        args.instanceKey = _instanceKey;
+        args.clientKey = _clientKey;
         urlVars.arguments = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
@@ -246,7 +246,7 @@ public class SLTSaltrMobile {
     private function syncFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_SAVE_OR_UPDATE_FEATURE;
-        urlVars.instanceKey = _instanceKey;
+        urlVars.clientKey = _clientKey;
         if (_appVersion) {
             urlVars.appVersion = _appVersion;
         }
@@ -282,7 +282,7 @@ public class SLTSaltrMobile {
             //if there are no version change than load from cache
             var cachedVersion:String = getCachedLevelVersion(levelPack, level);
             if (level.version == cachedVersion) {
-                var contentData : Object = loadCachedLevelContentData(levelPack, level);
+                var contentData:Object = loadCachedLevelContentData(levelPack, level);
                 contentDataLoadSuccessCallback(level, contentData);
             }
             else {
@@ -302,7 +302,7 @@ public class SLTSaltrMobile {
     }
 
     private function loadLevelContentDataInternally(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var contentData : Object = loadCachedLevelContentData(levelPack, level);
+        var contentData:Object = loadCachedLevelContentData(levelPack, level);
         if (contentData == null) {
             contentData = loadDefaultLevelContentData(levelPack, level);
         }

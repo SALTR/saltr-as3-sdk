@@ -12,7 +12,7 @@ import saltr.SLTSaltrMobile;
 
 public class Example extends Sprite{
 
-    private static var instanceKey:String = "08626247-f03d-0d83-b69f-4f03f80ef555";
+    private static var clientKey:String = "08626247-f03d-0d83-b69f-4f03f80ef555";
     private var _saltrMobile:SLTSaltrMobile;
 
     public function Example() {
@@ -22,7 +22,7 @@ public class Example extends Sprite{
     }
 
     private function connectToSalt():void {
-        _saltrMobile = new SLTSaltrMobile(instanceKey);
+        _saltrMobile = new SLTSaltrMobile(clientKey);
         _saltrMobile.initDevice("deviceId", "iphone");
         _saltrMobile.start(saltrLoadSuccessCallback, saltrLoadFailCallback);
     }
