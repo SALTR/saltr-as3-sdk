@@ -21,7 +21,8 @@ internal class SLTPartner {
 
     //TODO @GSAR: add strict typing from a static class here for Partner ID and TYPE
     public function SLTPartner(partnerId:String = null, partnerType:String = null) {
-
+        _partnerId = partnerId;
+        _partnerType = partnerType;
     }
 
     public function get partnerId():String {
