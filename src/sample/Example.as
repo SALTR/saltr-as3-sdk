@@ -23,8 +23,8 @@ public class Example extends Sprite{
 
     private function connectToSalt():void {
         _saltrMobile = new SLTSaltrMobile(clientKey);
-        _saltrMobile.initDevice("deviceId", "iphone");
-        _saltrMobile.start(saltrLoadSuccessCallback, saltrLoadFailCallback);
+        _saltrMobile.setDevice("deviceId", "iphone");
+        _saltrMobile.connect(saltrLoadSuccessCallback, saltrLoadFailCallback);
     }
 
 

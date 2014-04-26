@@ -1028,13 +1028,13 @@ public class Test extends Sprite {
 
     private function flowTest():void {
         var saltrClient:SLTSaltrMobile = new SLTSaltrMobile(clientKey + "XX");
-        saltrClient.initDevice(deviceId, deviceType);
+        saltrClient.setDevice(deviceId, deviceType);
 
         //saltrClient.importLevels();
         //var pack:SLTLevelPack = saltrClient.levelPacks[0];
         //var level0:SLTLevel = pack.levels[0];
         //saltrClient.loadLevelContentData(pack, level0, levelLoadCompleteHandler, levelLoadFailedHandler);
-        saltrClient.start(loadCompleteHandler, loadFailedHandler);
+        saltrClient.connect(loadCompleteHandler, loadFailedHandler);
     }
 
     private function loadCompleteHandler():void {
