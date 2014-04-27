@@ -25,6 +25,8 @@ public class SLTLevel {
     private var _levelSettings:SLTLevelSettings;
     private var _boardsNode:Object;
 
+
+    //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
     public function SLTLevel(id:String, index:int, contentDataUrl:String, properties:Object, version:String) {
         _id = id;
         _index = index;
@@ -32,10 +34,6 @@ public class SLTLevel {
         _contentReady = false;
         _properties = properties;
         _version = version;
-    }
-
-    public function get levelSettings():SLTLevelSettings {
-        return _levelSettings;
     }
 
     public function get id():String {
