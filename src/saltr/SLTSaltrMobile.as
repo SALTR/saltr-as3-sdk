@@ -26,8 +26,9 @@ import saltr.utils.Utils;
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrMobile {
 
-    protected var _partner:SLTPartner;
-    protected var _device:SLTDevice;
+    protected var _socialId:String;
+    protected var _socialNetwork:String;
+    protected var _deviceId:String;
     protected var _connected:Boolean;
     protected var _clientKey:String;
     protected var _saltrUserId:String;
@@ -89,12 +90,26 @@ public class SLTSaltrMobile {
         return _experiments;
     }
 
-    public function setPartner(partnerId:String, partnerType:String):void {
-        _partner = new SLTPartner(partnerId, partnerType);
+    public function set useNoLevels(value:Boolean):void {
+        _useNoLevels = value;
     }
 
-    public function setDevice(deviceId:String, deviceType:String):void {
-        _device = new SLTDevice(deviceId, deviceType);
+    public function set useNoFeatures(value:Boolean):void {
+        _useNoFeatures = value;
+    }
+
+    public function set deviceId(value:String):void {
+        _deviceId = value;
+    }
+
+    public function setSocial(socialId:String, socialNetwork:String):void {
+        if (socialId == null || socialNetwork == null) {
+            //TODO @GSAR: throw a proper error here!
+            throw new Error("Both variables should be non nulls.")
+        }
+
+        _socialId = socialId;
+        _socialNetwork = socialNetwork;
     }
 
     public function getFeatureProperties(token:String):Object {
@@ -346,11 +361,12 @@ public class SLTSaltrMobile {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_APP_DATA;
         var args:Object = {};
-        if (_device != null) {
-            args.device = _device;
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
         }
-        if (_partner != null) {
-            args.partner = _partner;
+        if (_socialId != null && _socialNetwork != null) {
+            args.socialId = _socialId;
+            args.socialNetwork = _socialNetwork;
         }
         args.clientKey = _clientKey;
         urlVars.arguments = JSON.stringify(args);
@@ -387,14 +403,6 @@ public class SLTSaltrMobile {
 //                    resource.dispose();
 //                });
 //        resource.load();
-    }
-
-    public function set useNoLevels(value:Boolean):void {
-        _useNoLevels = value;
-    }
-
-    public function set useNoFeatures(value:Boolean):void {
-        _useNoFeatures = value;
     }
 }
 }

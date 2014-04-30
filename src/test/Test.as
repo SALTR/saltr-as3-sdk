@@ -1028,7 +1028,7 @@ public class Test extends Sprite {
 
     private function flowTest():void {
         var saltrClient:SLTSaltrMobile = new SLTSaltrMobile(clientKey + "XX");
-        saltrClient.setDevice(deviceId, deviceType);
+        saltrClient.deviceId = deviceId;
 
         //saltrClient.importLevels();
         //var pack:SLTLevelPack = saltrClient.levelPacks[0];

@@ -32,7 +32,7 @@ public class SLTSaltrWeb {
     protected var _features:Dictionary;
     protected var _levelPacks:Vector.<SLTLevelPack>;
     protected var _experiments:Vector.<SLTExperiment>;
-    protected var _device:SLTDevice;
+    protected var _deviceId:String;
     protected var _onAppDataLoadSuccess:Function;
     protected var _onAppDataLoadFail:Function;
     protected var _onContentDataLoadSuccess:Function;
@@ -206,8 +206,8 @@ public class SLTSaltrWeb {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_APP_DATA;
         var args:Object = {};
-        if (_device != null) {
-            args.device = _device;
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
         }
         if (_partner != null) {
             args.partner = _partner;

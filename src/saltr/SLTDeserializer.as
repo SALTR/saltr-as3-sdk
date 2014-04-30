@@ -25,16 +25,12 @@ internal class SLTDeserializer {
 
     public static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
-        //TODO @daal. supporting partitionName(old) and partition.
-        var experimentInfoNodes:Array = rootNode.hasOwnProperty("experimentInfo") ? rootNode.experimentInfo : rootNode.splitTestInfo;
+        var experimentInfoNodes:Array = rootNode.experimentInfo;
         if (experimentInfoNodes != null) {
             for each (var experimentInfoNode:Object in experimentInfoNodes) {
                 var token:String = experimentInfoNode.token;
-                //TODO @daal. supporting partitionName(old) and partition.
-                var partition:String = experimentInfoNode.hasOwnProperty("partition") ? experimentInfoNode.partition : experimentInfoNode.partitionName;
+                var partition:String = experimentInfoNode.partition;
                 var type:String = experimentInfoNode.type;
-
-                //TODO @GSAR: rename and review item.customEventList!!!
                 var customEvents:Array = experimentInfoNode.customEventList as Array;
 
                 experiments.push(new SLTExperiment(token, partition, type, customEvents));
@@ -44,23 +40,19 @@ internal class SLTDeserializer {
     }
 
     public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
-        //TODO @daal. supporting levePackList(old) and levelPacks
-        var levelPackNodes:Object = rootNode.hasOwnProperty("levelPacks") ? rootNode.levelPacks : rootNode.levelPackList;
+        var levelPackNodes:Object = rootNode.levelPacks;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var levels:Vector.<SLTLevel>;
         var levelNodes:Object;
         for each(var levelPackNode:Object in levelPackNodes) {
-            //TODO @daal. supporting levelList(old) and levels.
-            levelNodes = levelPackNode.hasOwnProperty("levels") ? levelPackNode.levels : levelPackNode.levelList;
+            levelNodes = levelPackNode.levels;
             levels = new <SLTLevel>[];
             for each (var levelNode:Object in levelNodes) {
-                //TODO @daal. supporting order(old) and index.
-                var levelIndex : int = levelNode.hasOwnProperty("index") ? levelNode.index : levelNode.order;
+                var levelIndex:int = levelNode.index;
                 levels.push(new SLTLevel(levelNode.id, levelIndex, levelNode.url, levelNode.properties, levelNode.version));
             }
             levels.sort(sortByIndex);
-            //TODO @daal. supporting order(old) and index.
-            var index : int = levelPackNode.hasOwnProperty("index") ? levelPackNode.index : levelPackNode.order;
+            var index:int = levelPackNode.index;
             levelPacks.push(new SLTLevelPack(levelPackNode.token, index, levels));
         }
         levelPacks.sort(sortByIndex);
@@ -69,8 +61,7 @@ internal class SLTDeserializer {
 
     public static function decodeFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
-        //TODO @daal. supporting featureList(old) and features.
-        var featureNodes:Array = rootNode.hasOwnProperty("features") ? rootNode.features : rootNode.featureList;
+        var featureNodes:Array = rootNode.features;
         if (featureNodes != null) {
             for each(var featureNode:Object in featureNodes) {
                 features[featureNode.token] = new SLTFeature(featureNode.token, featureNode.data);
