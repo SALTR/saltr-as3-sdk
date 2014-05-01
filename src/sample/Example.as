@@ -6,11 +6,11 @@
 package sample {
 import flash.display.Sprite;
 
-import saltr.SLTError;
+import saltr.status.SLTStatus;
 
 import saltr.SLTSaltrMobile;
 
-public class Example extends Sprite{
+public class Example extends Sprite {
 
     private static var clientKey:String = "08626247-f03d-0d83-b69f-4f03f80ef555";
     private var _saltrMobile:SLTSaltrMobile;
@@ -28,15 +28,13 @@ public class Example extends Sprite{
     }
 
 
-    private function saltrLoadSuccessCallback() : void {
+    private function saltrLoadSuccessCallback():void {
         trace("[saltrLoadSuccessCallback]");
     }
 
-    private function saltrLoadFailCallback(error : SLTError) : void {
+    private function saltrLoadFailCallback(status:SLTStatus):void {
         trace("[saltrLoadFailCallback]");
     }
-
-
 
 
 }

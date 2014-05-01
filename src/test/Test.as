@@ -6,7 +6,7 @@
 package test {
 import flash.display.Sprite;
 
-import saltr.SLTError;
+import saltr.status.SLTStatus;
 import saltr.SLTSaltrMobile;
 import saltr.parser.game.SLTCellMatrix;
 import saltr.parser.game.SLTCellMatrixIterator;
@@ -1041,8 +1041,8 @@ public class Test extends Sprite {
         trace("load complete ");
     }
 
-    private function loadFailedHandler(error:SLTError):void {
-        trace("load failed " + error.errorCode + ":::" + error.errorMessage);
+    private function loadFailedHandler(error:SLTStatus):void {
+        trace("load failed " + error.statusCode + ":::" + error.statusMessage);
     }
 
     private function levelLoadCompleteHandler():void {

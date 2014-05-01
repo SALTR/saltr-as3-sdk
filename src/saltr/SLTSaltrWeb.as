@@ -16,31 +16,42 @@ import flash.utils.Dictionary;
 
 import saltr.parser.game.SLTLevel;
 import saltr.parser.game.SLTLevelPack;
-
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
+import saltr.status.SLTStatus;
+import saltr.status.SLTStatusAppDataLoadFail;
+import saltr.status.SLTStatusExperimentsParseError;
+import saltr.status.SLTStatusFeaturesParseError;
+import saltr.status.SLTStatusLevelContentLoadFail;
+import saltr.status.SLTStatusLevelsParseError;
+import saltr.utils.Utils;
 
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrWeb {
 
+    protected var _socialId:String;
+    protected var _socialNetwork:String;
+    protected var _connected:Boolean;
+    protected var _clientKey:String;
     protected var _saltrUserId:String;
     protected var _isLoading:Boolean;
-    protected var _connected:Boolean;
-    protected var _partner:SLTPartner;
 
-    protected var _clientKey:String;
-    protected var _features:Dictionary;
-    protected var _levelPacks:Vector.<SLTLevelPack>;
+    protected var _activeFeatures:Dictionary;
+    protected var _developerFeatures:Dictionary;
+
     protected var _experiments:Vector.<SLTExperiment>;
-    protected var _deviceId:String;
-    protected var _onAppDataLoadSuccess:Function;
-    protected var _onAppDataLoadFail:Function;
-    protected var _onContentDataLoadSuccess:Function;
-    protected var _onContentDataFail:Function;
+    protected var _levelPacks:Vector.<SLTLevelPack>;
 
-    private var _isInDevMode:Boolean;
+    protected var _appDataLoadSuccessCallback:Function;
+    protected var _appDataLoadFailCallback:Function;
+    protected var _levelContentLoadSuccessCallback:Function;
+    protected var _levelContentLoadFailCallback:Function;
+
+    private var _devMode:Boolean;
     private var _appVersion:String;
-
+    private var _started:Boolean;
+    private var _useNoLevels:Boolean;
+    private var _useNoFeatures:Boolean;
 
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function SLTSaltrWeb(clientKey:String) {
@@ -48,9 +59,16 @@ public class SLTSaltrWeb {
         _isLoading = false;
         _connected = false;
 
+        _useNoLevels = false;
+        _useNoFeatures = false;
+
         //TODO @GSAR: implement usage of dev mode variable
-        _isInDevMode = true;
-        _features = new Dictionary();
+        _devMode = true;
+        _started = false;
+
+        _activeFeatures = new Dictionary();
+        _developerFeatures = new Dictionary();
+        _experiments = new <SLTExperiment>[];
     }
 
     public function set appVersion(value:String):void {
@@ -61,8 +79,12 @@ public class SLTSaltrWeb {
         return _connected;
     }
 
-    public function get features():Dictionary {
-        return _features;
+    public function set useNoLevels(value:Boolean):void {
+        _useNoLevels = value;
+    }
+
+    public function set useNoFeatures(value:Boolean):void {
+        _useNoFeatures = value;
     }
 
     public function get levelPacks():Vector.<SLTLevelPack> {
@@ -73,16 +95,27 @@ public class SLTSaltrWeb {
         return _experiments;
     }
 
-    public function getFeature(token:String):SLTFeature {
-        return _features[token];
+    public function setSocial(socialId:String, socialNetwork:String):void {
+        if (socialId == null || socialNetwork == null) {
+            throw new Error("Both variables - 'socialId' and 'socialNetwork' are required and should be non 'null'.");
+        }
+
+        _socialId = socialId;
+        _socialNetwork = socialNetwork;
     }
 
-    public function initPartner(partnerId:String, partnerType:String):void {
-        _partner = new SLTPartner(partnerId, partnerType);
-    }
+    public function getFeatureProperties(token:String):Object {
+        var activeFeature:SLTFeature = _activeFeatures[token];
+        if (activeFeature != null) {
+            return activeFeature.properties;
+        } else {
+            var devFeature:SLTFeature = _developerFeatures[token];
+            if (devFeature != null && devFeature.required) {
+                return devFeature.properties;
+            }
+        }
 
-    public function initDevice(deviceId:String, deviceType:String):void {
-        _device = new SLTDevice(deviceId, deviceType);
+        return null;
     }
 
     public function importLevelFromJSON(json:String, level:SLTLevel):void {
@@ -98,106 +131,100 @@ public class SLTSaltrWeb {
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
-        //TODO @GSAR: add Properties class to handle correct feature properties assignment
-    public function defineFeature(token:String, properties:Object):void {
-        var feature:SLTFeature = _features[token];
-        if (feature == null) {
-            _features[token] = new SLTFeature(token, null, properties);
-        }
-        else {
-            feature.defaultProperties = properties;
+    public function defineFeature(token:String, properties:Object, required:Boolean = false):void {
+        if (_started == false) {
+            _developerFeatures[token] = new SLTFeature(token, properties, required);
+        } else {
+            throw new Error("Method 'defineFeature()' should be called before 'start()' only.");
         }
     }
 
-    public function start(onDataLoadSuccess:Function, onDataLoadFail:Function):void {
-        if (_isLoading) {
+    public function start():void {
+        if (Utils.getDictionarySize(_developerFeatures) == 0 && _useNoFeatures == false) {
+            throw new Error("Features should be defined.");
+        }
+
+        if (_levelPacks.length == 0 && _useNoLevels == false) {
+            throw new Error("Levels should be imported.");
+        }
+
+        for (var i:String in _developerFeatures) {
+            _activeFeatures[i] = _developerFeatures[i];
+        }
+
+        _started = true;
+    }
+
+    public function connect(loadSuccessCallback:Function, loadFailCallback:Function):void {
+        if (_isLoading || !_started) {
             return;
         }
-        _onAppDataLoadSuccess = onDataLoadSuccess;
-        _onAppDataLoadFail = onDataLoadFail;
+        _appDataLoadSuccessCallback = loadSuccessCallback;
+        _appDataLoadFailCallback = loadFailCallback;
 
         _isLoading = true;
-        _connected = false;
-        var resource:SLTResource = createAppDataResource(appDataLoadCompleteCallback, appDataLoadFailedCallback);
+        var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler);
         resource.load();
     }
 
-    //TODO @GSAR: port this later when SALTR is ready
-    public function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
-        var urlVars:URLVariables = new URLVariables();
-        urlVars.command = SLTConfig.COMMAND_ADD_PROPERTY;
-        var args:Object = {saltId: _saltrUserId};
-        var properties:Array = [];
-        for (var i:uint = 0; i < propertyNames.length; i++) {
-            var propertyName:String = propertyNames[i];
-            var propertyValue:* = propertyValues[i];
-            var operation:String = operations[i];
-            properties.push({key: propertyName, value: propertyValue, operation: operation});
-        }
-        args.properties = properties;
-        args.clientKey = _clientKey;
-        urlVars.arguments = JSON.stringify(args);
+    /////////////////////////////////////// level content data loading methods.
 
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
-
-        var resource:SLTResource = new SLTResource("property", ticket,
-                function (resource:SLTResource):void {
-                    trace("getSaltLevelPacks : success");
-                    var data:Object = resource.jsonData;
-                    resource.dispose();
-                },
-                function (resource:SLTResource):void {
-                    trace("getSaltLevelPacks : error");
-                    resource.dispose();
-                });
-        resource.load();
+    public function loadLevelContent(levelPack:SLTLevelPack, level:SLTLevel, loadSuccessCallback:Function, loadFailCallback:Function):void {
+        _levelContentLoadSuccessCallback = loadSuccessCallback;
+        _levelContentLoadFailCallback = loadFailCallback;
+        loadLevelContentFromSALTR(levelPack, level, true);
     }
 
-    private function appDataLoadFailedCallback(resource:SLTResource):void {
-        trace("[Saltr] App data is failed to load.");
+    private function appDataLoadFailHandler(resource:SLTResource):void {
         resource.dispose();
         _isLoading = false;
-        _connected = false;
-        _onAppDataLoadFail(new SLTError(SLTError.GENERAL_ERROR_CODE, "could not connect to SALTR"));
+        _appDataLoadFailCallback(new SLTStatusAppDataLoadFail());
     }
 
-    private function appDataLoadCompleteCallback(resource:SLTResource):void {
+    private function appDataLoadSuccessHandler(resource:SLTResource):void {
         var data:Object = resource.jsonData;
-        var status : String = data.status;
+        var status:String = data.status;
         var responseData:Object = data.responseData;
         _isLoading = false;
-        if(status == SLTConfig.RESULT_SUCCEED) {
+        if (_devMode) {
+            syncDeveloperFeatures();
+        }
+
+        if (status == SLTConfig.RESULT_SUCCEED) {
+            var saltrFeatures:Dictionary;
+            try {
+                saltrFeatures = SLTDeserializer.decodeFeatures(responseData);
+            } catch (e:Error) {
+                _appDataLoadFailCallback(new SLTStatusFeaturesParseError());
+                return;
+            }
+
+            try {
+                _experiments = SLTDeserializer.decodeExperiments(responseData);
+            } catch (e:Error) {
+                _appDataLoadFailCallback(new SLTStatusExperimentsParseError());
+                return;
+            }
+
+            try {
+                _levelPacks = SLTDeserializer.decodeLevels(responseData);
+            } catch (e:Error) {
+                _appDataLoadFailCallback(new SLTStatusLevelsParseError());
+                return;
+            }
+
+            _saltrUserId = responseData.saltrUserId;
             _connected = true;
 
-            //TODO @daal. supporting saltId(old) and saltrUserId.
-            var saltrUserId = responseData.hasOwnProperty("saltrUserId") ? responseData.saltrUserId : responseData.saltId;
-            _saltrUserId = saltrUserId;
+            _activeFeatures = saltrFeatures;
+            _appDataLoadSuccessCallback();
 
-            _experiments = SLTDeserializer.decodeExperiments(responseData);
-            _levelPacks = SLTDeserializer.decodeLevels(responseData);
-            var saltrFeatures:Dictionary = SLTDeserializer.decodeFeatures(responseData);
+            trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelPacks.length);
 
-            //merging with defaults...
-            for (var token:String in saltrFeatures) {
-                var saltrFeature:SLTFeature = saltrFeatures[token];
-                var defaultFeature:SLTFeature = _features[token];
-                if (defaultFeature != null) {
-                    saltrFeature.defaultProperties = defaultFeature.defaultProperties;
-                }
-                _features[token] = saltrFeature;
-            }
-
-            trace("[Saltr] packs=" + _levelPacks.length);
-            _onAppDataLoadSuccess();
-
-            //TODO @GSAR: implement this!
-            if (_isInDevMode) {
-                syncFeatures();
-            }
+            //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
         }
         else {
-            _connected = false;
-            _onAppDataLoadFail(new SLTError(responseData.errorCode, responseData.errorMessage));
+            _appDataLoadFailCallback(new SLTStatus(responseData.errorCode, responseData.errorMessage));
         }
         resource.dispose();
     }
@@ -206,19 +233,20 @@ public class SLTSaltrWeb {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_APP_DATA;
         var args:Object = {};
-        if (_deviceId != null) {
-            args.deviceId = _deviceId;
+        if (_socialId != null && _socialNetwork != null) {
+            args.socialId = _socialId;
+            args.socialNetwork = _socialNetwork;
+        } else {
+            throw new Error("In SALTR for Web 'socialId' and 'socialNetwork' are required fields.");
         }
-        if (_partner != null) {
-            args.partner = _partner;
-        }
+
         args.clientKey = _clientKey;
         urlVars.arguments = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
-    private function syncFeatures():void {
+    private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         urlVars.command = SLTConfig.COMMAND_SAVE_OR_UPDATE_FEATURE;
         urlVars.clientKey = _clientKey;
@@ -226,66 +254,56 @@ public class SLTSaltrWeb {
             urlVars.appVersion = _appVersion;
         }
         var featureList:Array = [];
-        for (var i:String in _features) {
-            var feature:SLTFeature = _features[i];
-            if (feature.defaultProperties != null) {
-                featureList.push({token: feature.token, value: JSON.stringify(feature.defaultProperties)});
-            }
+        for (var i:String in _developerFeatures) {
+            var feature:SLTFeature = _developerFeatures[i];
+            featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
         urlVars.data = JSON.stringify(featureList);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_URL, urlVars);
-        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessCallback, syncFailCallback);
+        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
 
-    protected function syncSuccessCallback(resource:SLTResource):void {
+    protected function syncSuccessHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev feature Sync is complete.");
     }
 
-    protected function syncFailCallback(resource:SLTResource):void {
-    }
-
-
-    /////////////////////////////////////// level content data loading methods.
-
-    public function loadLevelContentData(levelPack:SLTLevelPack, level:SLTLevel, successCallback:Function, failCallback:Function):void {
-        _onContentDataLoadSuccess = successCallback;
-        _onContentDataFail = failCallback;
-        loadLevelContentDataFromSaltr(levelPack, level, true);
+    protected function syncFailHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev feature Sync has failed.");
     }
 
     //TODO:: @daal do we need this forceNoCache?
-    protected function loadLevelContentDataFromSaltr(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
-        var dataUrl:String = forceNoCache ? level.contentDataUrl + "?_time_=" + new Date().getTime() : level.contentDataUrl;
+    protected function loadLevelContentFromSALTR(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
+        var dataUrl:String = forceNoCache ? level.contentUrl + "?_time_=" + new Date().getTime() : level.contentUrl;
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
-        var resource:SLTResource = new SLTResource("saltr", ticket, contentDataLoadedCallback, contentDataLoadFailedCallback);
+        var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalCallback, loadFailInternalCallback);
         resource.load();
-        //
+
         //TODO @GSAR: get rid of nested functions!
-        function contentDataLoadedCallback():void {
+        function loadSuccessInternalCallback():void {
             var contentData:Object = resource.jsonData;
-            if (contentData == null) {
-                levelLoadErrorHandler();
+            if (contentData != null) {
+                levelContentLoadSuccessHandler(level, contentData);
             }
             else {
-                levelLoadSuccessHandler(level, contentData);
+                levelContentLoadFailHandler();
             }
             resource.dispose();
         }
 
-        function contentDataLoadFailedCallback():void {
-            levelLoadErrorHandler();
+        function loadFailInternalCallback():void {
+            levelContentLoadFailHandler();
             resource.dispose();
         }
     }
 
-    protected function levelLoadSuccessHandler(level:SLTLevel, data:Object):void {
+    protected function levelContentLoadSuccessHandler(level:SLTLevel, data:Object):void {
         level.updateContent(data);
-        _onContentDataLoadSuccess();
+        _levelContentLoadSuccessCallback();
     }
 
-    protected function levelLoadErrorHandler():void {
-        trace("[Saltr] ERROR: Level data is not loaded.");
-        _onContentDataFail();
+    protected function levelContentLoadFailHandler():void {
+        _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
     }
 }
 }

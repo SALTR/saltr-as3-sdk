@@ -15,7 +15,7 @@ import flash.utils.Dictionary;
 
 public class SLTLevel {
     private var _id:String;
-    private var _contentDataUrl:String;
+    private var _contentUrl:String;
     private var _index:int;
     private var _properties:Object;
     private var _boards:Dictionary;
@@ -27,10 +27,10 @@ public class SLTLevel {
 
 
     //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
-    public function SLTLevel(id:String, index:int, contentDataUrl:String, properties:Object, version:String) {
+    public function SLTLevel(id:String, index:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
         _index = index;
-        _contentDataUrl = contentDataUrl;
+        _contentUrl = contentUrl;
         _contentReady = false;
         _properties = properties;
         _version = version;
@@ -48,8 +48,8 @@ public class SLTLevel {
         return _properties;
     }
 
-    public function get contentDataUrl():String {
-        return _contentDataUrl;
+    public function get contentUrl():String {
+        return _contentUrl;
     }
 
     public function get contentReady():Boolean {
