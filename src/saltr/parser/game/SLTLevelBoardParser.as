@@ -33,14 +33,17 @@ internal class SLTLevelBoardParser {
         var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
         initializeCells(cells, boardNode);
 
+
+        var layers:Dictionary = new Dictionary();
         var layerNodes:Array = boardNode.layers;
         for (var i:int = 0, len:int = layerNodes.length; i < len; ++i) {
             var layerNode:Object = layerNodes[i];
             var layer:SLTLevelBoardLayer = new SLTLevelBoardLayer(layerNode.layerId, i, layerNode.fixedAssets, layerNode.chunks, layerNode.composites);
             parseLayer(layer, cells, levelSettings);
+            layers[layer.layerId] = layer.layerIndex;
         }
 
-        return new SLTLevelBoard(cells, boardProperties);
+        return new SLTLevelBoard(cells, layers, boardProperties);
     }
 
 
@@ -83,7 +86,7 @@ internal class SLTLevelBoardParser {
     }
 
     private static function parseFixedAssets(layer:SLTLevelBoardLayer, cells:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
-        var fixedAssetsNode:Array = layer.fixedAssets;
+        var fixedAssetsNode:Array = layer.fixedAssetsNodes;
         var assetMap:Dictionary = levelSettings.assetMap;
         var stateMap:Dictionary = levelSettings.stateMap;
 
@@ -102,7 +105,7 @@ internal class SLTLevelBoardParser {
     }
 
     private static function parseChunks(layer:SLTLevelBoardLayer, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
-        var chunkNodes:Array = layer.chunks;
+        var chunkNodes:Array = layer.chunkNodes;
         for (var i:int = 0, len:int = chunkNodes.length; i < len; ++i) {
             var chunkNode:Object = chunkNodes[i];
             var cellNodes:Array = chunkNode.cells as Array;
@@ -122,7 +125,7 @@ internal class SLTLevelBoardParser {
     }
 
     private static function parseComposites(layer:SLTLevelBoardLayer, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
-        var compositeNodes:Array = layer.composites;
+        var compositeNodes:Array = layer.compositeNodes;
         for (var i:int = 0, len:int = compositeNodes.length; i < len; ++i) {
             var compositeNode:Object = compositeNodes[i];
             var cellPosition:Array = compositeNode.cell;

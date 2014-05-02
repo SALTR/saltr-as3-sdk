@@ -4,19 +4,19 @@
  * Time: 10:41 AM
  */
 package saltr.parser.game {
-public class SLTLevelBoardLayer {
+internal class SLTLevelBoardLayer {
     private var _layerId:String;
     private var _layerIndex:int;
-    private var _fixedAssets:Array;
-    private var _chunks:Array;
-    private var _composites:Array;
+    private var _fixedAssetsNodes:Array;
+    private var _chunkNodes:Array;
+    private var _compositeNodes:Array;
 
-    public function SLTLevelBoardLayer(layerId:String, layerIndex:int, fixedAssets:Array, chunks:Array, composites:Array) {
+    public function SLTLevelBoardLayer(layerId:String, layerIndex:int, fixedAssetsNodes:Array, chunkNodes:Array, compositeNodes:Array) {
         _layerId = layerId;
         _layerIndex = layerIndex;
-        _fixedAssets = fixedAssets;
-        _chunks = chunks;
-        _composites = composites;
+        _fixedAssetsNodes = fixedAssetsNodes;
+        _chunkNodes = chunkNodes;
+        _compositeNodes = compositeNodes;
     }
 
     public function get layerId():String {
@@ -27,16 +27,16 @@ public class SLTLevelBoardLayer {
         return _layerIndex;
     }
 
-    public function get fixedAssets():Array {
-        return _fixedAssets;
+    public function get fixedAssetsNodes():Array {
+        return _fixedAssetsNodes;
     }
 
-    public function get chunks():Array {
-        return _chunks;
+    public function get chunkNodes():Array {
+        return _chunkNodes;
     }
 
-    public function get composites():Array {
-        return _composites;
+    public function get compositeNodes():Array {
+        return _compositeNodes;
     }
 }
 }
