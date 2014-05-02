@@ -78,6 +78,7 @@ public class SLTSaltrMobile {
         _activeFeatures = new Dictionary();
         _developerFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
+        _levelPacks = new Vector.<SLTLevelPack>;
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
     }
