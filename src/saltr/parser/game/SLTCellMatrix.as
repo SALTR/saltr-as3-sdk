@@ -20,11 +20,11 @@ public class SLTCellMatrix {
         _rawData = new Vector.<SLTCell>(_width * _height);
     }
 
-    public function insert(row:int, col:int, cell:SLTCell):void {
+    public function insert(col:int, row:int, cell:SLTCell):void {
         _rawData[ (row * _width) + col] = cell;
     }
 
-    public function retrieve(row:int, col:int):SLTCell {
+    public function retrieve(col:int, row:int):SLTCell {
         return _rawData[(row * _width) + col];
     }
 

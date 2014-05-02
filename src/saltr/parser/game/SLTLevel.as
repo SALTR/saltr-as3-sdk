@@ -31,9 +31,9 @@ public class SLTLevel {
         _id = id;
         _index = index;
         _contentUrl = contentUrl;
-        _contentReady = false;
         _properties = properties;
         _version = version;
+        _contentReady = false;
     }
 
     public function get id():String {

@@ -26,85 +26,89 @@ internal class SLTLevelBoardParser {
 
     public static function parseLevelBoard(boardNode:Object, levelSettings:SLTLevelSettings):SLTLevelBoard {
         var boardProperties:Object = {};
-        var cells:SLTCellMatrix = parseBoardCells(boardNode, levelSettings);
         if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
             boardProperties = boardNode.properties.board;
         }
+
+        var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
+        initializeCells(cells, boardNode);
+
+        var layerNodes:Array = boardNode.layers;
+        for (var i:int = 0, len:int = layerNodes.length; i < len; ++i) {
+            var layerNode:Object = layerNodes[i];
+            var layer:SLTLevelBoardLayer = new SLTLevelBoardLayer(layerNode.layerId, i, layerNode.fixedAssets, layerNode.chunks, layerNode.composites);
+            parseLayer(layer, cells, levelSettings);
+        }
+
         return new SLTLevelBoard(cells, boardProperties);
     }
 
-    private static function parseBoardCells(boardNode:Object, levelSettings:SLTLevelSettings):SLTCellMatrix {
-        var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
-        createEmptyBoard(cells, boardNode);
 
-        var boardContent:Object;
-        var composites:Array;
-        var chunks:Vector.<SLTChunk>;
-        if (boardNode.hasOwnProperty("layers")) {
-            boardContent = boardNode["layers"][0];
-            composites = parseComposites(boardContent.composites as Array, cells, levelSettings);
-            chunks = parseChunks(boardContent.chunks as Array, cells, levelSettings);
-        }
-        else{
-            composites = parseComposites(boardNode.composites as Array, cells, levelSettings);
-            chunks = parseChunks(boardNode.chunks as Array, cells, levelSettings);
-        }
-        generateComposites(composites);
-        generateChunks(chunks);
-
-        return cells;
+    private static function parseLayer(layer:SLTLevelBoardLayer, cells:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
+        parseFixedAssets(layer, cells, levelSettings);
+        parseChunks(layer, cells, levelSettings);
+        parseComposites(layer, cells, levelSettings);
     }
 
-    private static function generateChunks(chunks:Vector.<SLTChunk>):void {
-        for (var i:int = 0, len:int = chunks.length; i < len; ++i) {
-            chunks[i].generate();
-
-        }
-    }
-
-    private static function generateComposites(composites:Array):void {
-        for (var i:int, len:int = composites.length; i < len; ++i) {
-            (composites[i] as SLTCompositeInfo).generate();
-        }
-    }
-
-    private static function createEmptyBoard(board:SLTCellMatrix, boardNode:Object):void {
+    private static function initializeCells(cells:SLTCellMatrix, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
         var cellProperties:Array = boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("cell") ? boardNode.properties.cell : [];
-        var cols:int = board.width;
-        var rows:int = board.height;
-        var len:int = 0;
-        for (var i:int = 0; i < rows; ++i) {
-            for (var j:int = 0; j < cols; ++j) {
-                var cell:SLTCell = new SLTCell(j, i);
-                board.insert(i, j, cell);
-                len = cellProperties.length;
-                for (var p:int = 0; p < len; ++p) {
-                    var property:Object = cellProperties[p];
-                    if (property.coords[0] == j && property.coords[1] == i) {
-                        cell.properties = property.value;
-                        break;
-                    }
-                }
-                len = blockedCells.length;
-                for (var b:int = 0; b < len; ++b) {
-                    var blockedCell:Array = blockedCells[b];
-                    if (blockedCell[0] == j && blockedCell[1] == i) {
-                        cell.isBlocked = true;
-                        break;
-                    }
-                }
+        var cols:int = cells.width;
+        var rows:int = cells.height;
+
+        for (var i:int = 0; i < cols; ++i) {
+            for (var j:int = 0; j < rows; ++j) {
+                var cell:SLTCell = new SLTCell(i, j);
+                cells.insert(i, j, cell);
+            }
+        }
+
+        //assigning cell properties
+        for (var p:int = 0, len:int = cellProperties.length; p < len; ++p) {
+            var property:Object = cellProperties[p];
+            var cell:SLTCell = cells.retrieve(property.coords[0], property.coords[1]);
+            if (cell != null) {
+                cell.properties = property.value;
+            }
+        }
+
+        //blocking cells
+        for (var b:int = 0, len:int = blockedCells.length; b < len; ++b) {
+            var blockedCell:Array = blockedCells[b];
+            var cell:SLTCell = cells.retrieve(blockedCell[0], blockedCell[1]);
+            if (cell != null) {
+                cell.isBlocked = true;
             }
         }
     }
 
-    private static function parseChunks(chunkNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Vector.<SLTChunk> {
-        var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
-        for each (var chunkNode:Object in chunkNodes) {
+    private static function parseFixedAssets(layer:SLTLevelBoardLayer, cells:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
+        var fixedAssetsNode:Array = layer.fixedAssets;
+        var assetMap:Dictionary = levelSettings.assetMap;
+        var stateMap:Dictionary = levelSettings.stateMap;
+
+        for (var i:int = 0, len:int = fixedAssetsNode.length; i < len; ++i) {
+            var fixedAsset:Object = fixedAssetsNode[i];
+            var asset:SLTAsset = assetMap[fixedAsset.assetId] as SLTAsset;
+            var state:String = stateMap[fixedAsset.stateId] as String;
+            var cellPositions:Array = fixedAsset.cells;
+
+            for (var j:int = 0, len:int = cellPositions.length; j < len; j++) {
+                var position:Array = cellPositions[j];
+                var cell:SLTCell = cells.retrieve(position[0], position[1]);
+                cell.setAssetInstance(layer.layerId, layer.layerIndex, new SLTAssetInstance(asset.token, state, asset.properties))
+            }
+        }
+    }
+
+    private static function parseChunks(layer:SLTLevelBoardLayer, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
+        var chunkNodes:Array = layer.chunks;
+        for (var i:int = 0, len:int = chunkNodes.length; i < len; ++i) {
+            var chunkNode:Object = chunkNodes[i];
             var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
             for each(var cellNode:Object in cellNodes) {
-                chunkCells.push(cellMatrix.retrieve(cellNode[1], cellNode[0]) as SLTCell);
+                chunkCells.push(cellMatrix.retrieve(cellNode[0], cellNode[1]) as SLTCell);
             }
 
             var assetNodes:Array = chunkNode.assets as Array;
@@ -113,20 +117,17 @@ internal class SLTLevelBoardParser {
                 chunkAssetRules.push(new SLTChunkAssetRule(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.stateId));
             }
 
-            var chunk:SLTChunk = new SLTChunk(chunkCells, chunkAssetRules, levelSettings);
-            chunks.push(chunk);
+            new SLTChunk(layer, chunkCells, chunkAssetRules, levelSettings);
         }
-        return chunks;
     }
 
-    private static function parseComposites(compositeNodes:Array, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):Array {
-        var compositesArray:Array = [];
-        for each(var compositeNode:Object in compositeNodes) {
-            //TODO @daal. supporting position(old) and cell.
-            var cellPosition:Array = compositeNode.hasOwnProperty("cell") ? compositeNode.cell : compositeNode.position;
-            compositesArray[compositesArray.length] = new SLTCompositeInfo(compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[1], cellPosition[0]) as SLTCell, levelSettings);
+    private static function parseComposites(layer:SLTLevelBoardLayer, cellMatrix:SLTCellMatrix, levelSettings:SLTLevelSettings):void {
+        var compositeNodes:Array = layer.composites;
+        for (var i:int = 0, len:int = compositeNodes.length; i < len; ++i) {
+            var compositeNode:Object = compositeNodes[i];
+            var cellPosition:Array = compositeNode.cell;
+            new SLTComposite(layer, compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[0], cellPosition[1]) as SLTCell, levelSettings);
         }
-        return compositesArray;
     }
 
     public static function parseLevelSettings(rootNode:Object):SLTLevelSettings {
@@ -153,27 +154,19 @@ internal class SLTLevelBoardParser {
     }
 
     private static function parseAsset(assetNode:Object):SLTAsset {
-
         var token:String;
         var properties:Object = assetNode.properties;
 
-        //TODO @daal. supporting type_key(old) and type.
+        //TODO @daal. supporting type(old) and token.
         if (assetNode.hasOwnProperty("token")) {
             token = assetNode.token;
-        } else if (assetNode.hasOwnProperty("type_key")) {
-            token = assetNode.type_key;
         } else if (assetNode.hasOwnProperty("type")) {
             token = assetNode.type;
         }
 
-        //TODO @daal. supporting cells(old) and cellInfos.
         //if asset is a composite asset!
         if (assetNode.cells || assetNode.cellInfos) {
-            //TODO @daal. supporting cells(old) and cellInfos.
-            var cellInfos:Array = assetNode.hasOwnProperty("cellInfos") ? assetNode.cellInfos : assetNode.cells;
-
-            return new SLTCompositeAsset(token, cellInfos, properties);
-
+            return new SLTCompositeAsset(token, assetNode.cellInfos, properties);
         }
 
         return new SLTAsset(token, properties);

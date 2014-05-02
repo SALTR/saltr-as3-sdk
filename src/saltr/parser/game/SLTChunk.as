@@ -14,26 +14,29 @@ package saltr.parser.game {
 import flash.utils.Dictionary;
 
 internal class SLTChunk {
+    private var _layer:SLTLevelBoardLayer;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
     private var _stateMap:Dictionary;
 
-    public function SLTChunk(chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, levelSettings:SLTLevelSettings) {
+    public function SLTChunk(layer:SLTLevelBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, levelSettings:SLTLevelSettings) {
+        _layer = layer;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
 
         _availableCells = new <SLTCell>[];
         _assetMap = levelSettings.assetMap;
         _stateMap = levelSettings.stateMap;
+        generateCellContent();
     }
 
     public function toString():String {
         return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
     }
 
-    public function generate():void {
+    private function generateCellContent():void {
         _availableCells = _chunkCells.concat();
         var countChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
         var ratioChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
@@ -78,7 +81,7 @@ internal class SLTChunk {
         for (var i:int = 0; i < count; ++i) {
             randCellIndex = int(Math.random() * _availableCells.length);
             randCell = _availableCells[randCellIndex];
-            randCell.assetInstance = new SLTAssetInstance(asset.token, state, asset.properties);
+            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, new SLTAssetInstance(asset.token, state, asset.properties));
             _availableCells.splice(randCellIndex, 1);
             if (_availableCells.length == 0) {
                 return;
