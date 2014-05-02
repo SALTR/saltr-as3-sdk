@@ -11,14 +11,14 @@
  * Time: 7:27 PM
  */
 package saltr.parser.game {
-internal class SLTChunkAssetInfo {
+internal class SLTChunkAssetRule {
 
     private var _assetId:String;
     private var _stateId:String;
     private var _distributionType:String;
     private var _distributionValue:uint;
 
-    public function SLTChunkAssetInfo(assetId:String, distributionType:String,  distributionValue:uint, stateId:String) {
+    public function SLTChunkAssetRule(assetId:String, distributionType:String,  distributionValue:uint, stateId:String) {
 
         _assetId = assetId;
         _distributionType = distributionType;

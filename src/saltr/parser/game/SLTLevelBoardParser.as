@@ -39,18 +39,18 @@ internal class SLTLevelBoardParser {
 
         var boardContent:Object;
         var composites:Array;
-        var boardChunks:Vector.<SLTChunk>;
+        var chunks:Vector.<SLTChunk>;
         if (boardNode.hasOwnProperty("layers")) {
             boardContent = boardNode["layers"][0];
             composites = parseComposites(boardContent.composites as Array, cells, levelSettings);
-            boardChunks = parseChunks(boardContent.chunks as Array, cells, levelSettings);
+            chunks = parseChunks(boardContent.chunks as Array, cells, levelSettings);
         }
         else{
             composites = parseComposites(boardNode.composites as Array, cells, levelSettings);
-            boardChunks = parseChunks(boardNode.chunks as Array, cells, levelSettings);
+            chunks = parseChunks(boardNode.chunks as Array, cells, levelSettings);
         }
         generateComposites(composites);
-        generateChunks(boardChunks);
+        generateChunks(chunks);
 
         return cells;
     }
@@ -108,12 +108,12 @@ internal class SLTLevelBoardParser {
             }
 
             var assetNodes:Array = chunkNode.assets as Array;
-            var chunkAssetInfoList:Vector.<SLTChunkAssetInfo> = new <SLTChunkAssetInfo>[];
+            var chunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
             for each (var assetNode:Object in assetNodes) {
-                chunkAssetInfoList.push(new SLTChunkAssetInfo(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.stateId));
+                chunkAssetRules.push(new SLTChunkAssetRule(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.stateId));
             }
 
-            var chunk:SLTChunk = new SLTChunk(chunkCells, chunkAssetInfoList, levelSettings);
+            var chunk:SLTChunk = new SLTChunk(chunkCells, chunkAssetRules, levelSettings);
             chunks.push(chunk);
         }
         return chunks;

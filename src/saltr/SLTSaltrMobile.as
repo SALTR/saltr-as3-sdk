@@ -59,6 +59,8 @@ public class SLTSaltrMobile {
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
 
+
+    //TODO @GSAR: make common class for mobile and web
     //TODO @GSAR: add Properties class to handle correct feature properties assignment
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function SLTSaltrMobile(clientKey:String, useCache:Boolean = true) {
