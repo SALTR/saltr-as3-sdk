@@ -66,7 +66,7 @@ public class SLTCell {
         return _instancesByLayerId[layerId];
     }
 
-    public function getAssetInstanceByLayerIndex(layerIndex:String):SLTAssetInstance {
+    public function getAssetInstanceByLayerIndex(layerIndex:int):SLTAssetInstance {
         return _instancesByLayerIndex[layerIndex];
     }
 
