@@ -13,11 +13,11 @@ public class SLTLevelBoard {
     private var _properties:Object;
     private var _layers:Dictionary;
 
-    public function SLTLevelBoard(cells:SLTCellMatrix, layers:Dictionary, boardProperties:Object) {
+    public function SLTLevelBoard(cells:SLTCellMatrix, layers:Dictionary, properties:Object) {
         _cells = cells;
         _cols = cells.width;
         _rows = cells.height;
-        _properties = boardProperties;
+        _properties = properties;
         _layers = layers;
     }
 

@@ -259,7 +259,7 @@ public class SLTSaltrWeb {
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
         urlVars.data = JSON.stringify(featureList);
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_URL, urlVars);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }

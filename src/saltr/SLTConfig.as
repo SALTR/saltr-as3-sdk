@@ -18,13 +18,13 @@ internal class SLTConfig {
     public static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
 
     public static const SALTR_API_URL:String = "https://api.saltr.com/httpjson.action";
-    public static const SALTR_URL:String = "https://saltr.com/httpjson.action";
+    public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/syncFeatures.action";
 
     //used to
     public static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
-    public static const LEVEL_PACK_URL_PACKAGE:String = "saltr/level_packs.json";
-    public static const LEVEL_CONTENT_DATA_URL_PACKAGE_TEMPLATE:String = "saltr/pack_{0}/level_{1}.json";
-    public static const LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE:String = "pack_{0}_level_{1}.json";
+    public static const LOCAL_LEVELPACK_PACKAGE_URL:String = "saltr/level_packs.json";
+    public static const LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE:String = "saltr/pack_{0}/level_{1}.json";
+    public static const LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE:String = "pack_{0}_level_{1}.json";
 
     public static const PROPERTY_OPERATIONS_INCREMENT:String = "inc";
     public static const PROPERTY_OPERATIONS_SET:String = "set";

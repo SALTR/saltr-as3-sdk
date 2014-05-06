@@ -136,7 +136,7 @@ public class SLTSaltrMobile {
 
     public function importLevels(path:String = null):void {
         if (_started == false) {
-            path = path == null ? SLTConfig.LEVEL_PACK_URL_PACKAGE : path;
+            path = path == null ? SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL : path;
             var applicationData:Object = _repository.getObjectFromApplication(path);
             _levelPacks = SLTDeserializer.decodeLevels(applicationData);
         } else {
@@ -299,7 +299,7 @@ public class SLTSaltrMobile {
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
         urlVars.data = JSON.stringify(featureList);
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_URL, urlVars);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
@@ -313,12 +313,12 @@ public class SLTSaltrMobile {
     }
 
     private function getCachedLevelVersion(levelPack:SLTLevelPack, level:SLTLevel):String {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPack.index, level.index);
+        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, levelPack.index, level.index);
         return _repository.getObjectVersion(cachedFileName);
     }
 
     private function cacheLevelContent(levelPack:SLTLevelPack, level:SLTLevel, content:Object):void {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPack.index, level.index);
+        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, levelPack.index, level.index);
         _repository.cacheObject(cachedFileName, String(level.version), content);
     }
 
@@ -331,12 +331,12 @@ public class SLTSaltrMobile {
     }
 
     private function loadLevelContentFromCache(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_CACHE_TEMPLATE, levelPack.index, level.index);
+        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, levelPack.index, level.index);
         return _repository.getObjectFromCache(url);
     }
 
     private function loadLevelContentFromDisk(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LEVEL_CONTENT_DATA_URL_PACKAGE_TEMPLATE, levelPack.index, level.index);
+        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, levelPack.index, level.index);
         return _repository.getObjectFromApplication(url);
     }
 
