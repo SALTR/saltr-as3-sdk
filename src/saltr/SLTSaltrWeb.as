@@ -231,7 +231,7 @@ public class SLTSaltrWeb {
 
     private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = SLTConfig.COMMAND_APP_DATA;
+        urlVars.cmd = SLTConfig.CMD_APP_DATA;
         var args:Object = {};
         if (_socialId != null && _socialNetwork != null) {
             args.socialId = _socialId;
@@ -241,14 +241,14 @@ public class SLTSaltrWeb {
         }
 
         args.clientKey = _clientKey;
-        urlVars.arguments = JSON.stringify(args);
+        urlVars.args = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = SLTConfig.COMMAND_SAVE_OR_UPDATE_FEATURE;
+        urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         urlVars.clientKey = _clientKey;
         if (_appVersion) {
             urlVars.appVersion = _appVersion;

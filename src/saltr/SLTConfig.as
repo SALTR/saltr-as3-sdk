@@ -13,9 +13,9 @@
 package saltr {
 internal class SLTConfig {
 
-    public static const COMMAND_APP_DATA:String = "APPDATA";
-    public static const COMMAND_ADD_PROPERTY:String = "ADDPROP";
-    public static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
+    public static const CMD_APP_DATA:String = "getAppData";
+    public static const CMD_ADD_PROPERTY:String = "addProperty";
+    public static const CMD_DEV_SYNC_FEATURES:String = "syncFeatures";
 
     public static const SALTR_API_URL:String = "https://api.saltr.com/httpjson.action";
     public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call.action";

@@ -992,7 +992,7 @@ public class Test extends Sprite {
             [1, 0]
         ], "keys": {}, "states": [], "type_key": "bigitem"}, "998": {"keys": {"COLOR": 12}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "999": {"keys": {"COLOR": 7}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}}, "properties": {"levelType": "dragonDropping", "movesCount": "32", "boost_hammer": "true", "boost_extra_moves": "true"}};
 
-    //private static var http://api.saltr.com/httpjson.action?command=APPDATA&insatnceKey=08626247-f03d-0d83-b69f-4f03f80ef555&arguments={%22instanceKey%22:%2208626247-f03d-0d83-b69f-4f03f80ef555%22,%22partner%22:{%22partnerId%22:%22100000024783448%22,%22partnerType%22:%22facebook%22,%22gender%22:%22male%22,%22age%22:36,%22firstName%22:%22Artem%22,%22lastName%22:%22Sukiasyan%22},%22device%22:{%22deviceId%22:%22asdas123kasd%22,%22deviceType%22:%22iphone%22}}
+    //private static var http://api.saltr.com/httpjson.action?cmd=APPDATA&insatnceKey=08626247-f03d-0d83-b69f-4f03f80ef555&args={%22instanceKey%22:%2208626247-f03d-0d83-b69f-4f03f80ef555%22,%22partner%22:{%22partnerId%22:%22100000024783448%22,%22partnerType%22:%22facebook%22,%22gender%22:%22male%22,%22age%22:36,%22firstName%22:%22Artem%22,%22lastName%22:%22Sukiasyan%22},%22device%22:{%22deviceId%22:%22asdas123kasd%22,%22deviceType%22:%22iphone%22}}
 
 
     public function Test() {

@@ -213,7 +213,7 @@ public class SLTSaltrMobile {
 
     private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = SLTConfig.COMMAND_APP_DATA;
+        urlVars.cmd = SLTConfig.CMD_APP_DATA;
         var args:Object = {};
         if (_deviceId != null) {
             args.deviceId = _deviceId;
@@ -226,7 +226,7 @@ public class SLTSaltrMobile {
             args.socialNetwork = _socialNetwork;
         }
         args.clientKey = _clientKey;
-        urlVars.arguments = JSON.stringify(args);
+        urlVars.args = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
@@ -288,7 +288,7 @@ public class SLTSaltrMobile {
 
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.command = SLTConfig.COMMAND_SAVE_OR_UPDATE_FEATURE;
+        urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         urlVars.clientKey = _clientKey;
         if (_appVersion) {
             urlVars.appVersion = _appVersion;
@@ -383,7 +383,7 @@ public class SLTSaltrMobile {
     //TODO @GSAR: port this later when SALTR is ready
     private function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
 //        var urlVars:URLVariables = new URLVariables();
-//        urlVars.command = SLTConfig.COMMAND_ADD_PROPERTY;
+//        urlVars.cmd = SLTConfig.COMMAND_ADD_PROPERTY;
 //        var args:Object = {saltId: _saltrUserId};
 //        var properties:Array = [];
 //        for (var i:uint = 0; i < propertyNames.length; i++) {
@@ -394,7 +394,7 @@ public class SLTSaltrMobile {
 //        }
 //        args.properties = properties;
 //        args.clientKey = _clientKey;
-//        urlVars.arguments = JSON.stringify(args);
+//        urlVars.args = JSON.stringify(args);
 //
 //        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
 //
