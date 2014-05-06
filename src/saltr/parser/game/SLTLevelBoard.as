@@ -17,7 +17,7 @@ public class SLTLevelBoard {
         _cells = cells;
         _cols = cells.width;
         _rows = cells.height;
-        _properties = properties;
+        _properties = boardProperties;
         _layers = layers;
     }
 
