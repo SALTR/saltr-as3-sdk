@@ -18,7 +18,7 @@ internal class SLTConfig {
     public static const COMMAND_SAVE_OR_UPDATE_FEATURE:String = "SOUFTR";
 
     public static const SALTR_API_URL:String = "https://api.saltr.com/httpjson.action";
-    public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/syncFeatures.action";
+    public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call.action";
 
     //used to
     public static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
