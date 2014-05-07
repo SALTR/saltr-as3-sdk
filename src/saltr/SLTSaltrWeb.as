@@ -248,19 +248,23 @@ public class SLTSaltrWeb {
 
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
+        var args:Object = {};
         urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
-        urlVars.clientKey = _clientKey;
+        args.clientKey = _clientKey;
         if (_appVersion) {
-            urlVars.appVersion = _appVersion;
+            args.appVersion = _appVersion;
         }
+
         var featureList:Array = [];
         for (var i:String in _developerFeatures) {
             var feature:SLTFeature = _developerFeatures[i];
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
-        urlVars.data = JSON.stringify(featureList);
+        args.developerFeatures = JSON.stringify(featureList);
+        urlVars.args = JSON.stringify(args);
+
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
-        var resource:SLTResource = new SLTResource("saveOrUpdateFeature", ticket, syncSuccessHandler, syncFailHandler);
+        var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
 
