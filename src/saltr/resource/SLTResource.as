@@ -1,5 +1,5 @@
 /*
- * Copyright Plexonic Ltd (c) 2014.
+ * Copyright (c) 2014 Plexonic Ltd
  */
 
 package saltr.resource {
