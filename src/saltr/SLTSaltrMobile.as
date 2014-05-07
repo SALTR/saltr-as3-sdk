@@ -69,8 +69,7 @@ public class SLTSaltrMobile {
         _useNoLevels = false;
         _useNoFeatures = false;
 
-        //TODO @GSAR: implement usage of dev mode variable
-        _devMode = true;
+        _devMode = false;
         _started = false;
         _requestIdleTimeout = 0;
 
