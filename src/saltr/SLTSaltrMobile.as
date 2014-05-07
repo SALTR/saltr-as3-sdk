@@ -50,6 +50,7 @@ public class SLTSaltrMobile {
     protected var _levelContentLoadSuccessCallback:Function;
     protected var _levelContentLoadFailCallback:Function;
 
+    private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
     private var _appVersion:String;
     private var _started:Boolean;
@@ -71,6 +72,7 @@ public class SLTSaltrMobile {
         //TODO @GSAR: implement usage of dev mode variable
         _devMode = true;
         _started = false;
+        _requestIdleTimeout = 0;
 
         _activeFeatures = new Dictionary();
         _developerFeatures = new Dictionary();
@@ -94,6 +96,10 @@ public class SLTSaltrMobile {
 
     public function set useNoFeatures(value:Boolean):void {
         _useNoFeatures = value;
+    }
+
+    public function set requestIdleTimeout(value:int):void {
+        _requestIdleTimeout = value;
     }
 
     public function set deviceId(value:String):void {
@@ -153,7 +159,7 @@ public class SLTSaltrMobile {
     }
 
     public function start():void {
-        if(_deviceId == null){
+        if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
         }
 
@@ -229,6 +235,9 @@ public class SLTSaltrMobile {
         args.clientKey = _clientKey;
         urlVars.args = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
+        if (_requestIdleTimeout > 0) {
+            ticket.idleTimeout = _requestIdleTimeout;
+        }
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
@@ -348,6 +357,9 @@ public class SLTSaltrMobile {
     protected function loadLevelContentFromSaltr(levelPack:SLTLevelPack, level:SLTLevel):void {
         var dataUrl:String = level.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+        if (_requestIdleTimeout > 0) {
+            ticket.idleTimeout = _requestIdleTimeout;
+        }
         var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalHandler, loadFailInternalHandler);
         resource.load();
 
@@ -402,6 +414,9 @@ public class SLTSaltrMobile {
 //        urlVars.args = JSON.stringify(args);
 //
 //        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
+//        if (_requestIdleTimeout > 0) {
+//            ticket.idleTimeout = _requestIdleTimeout;
+//        }
 //
 //        var resource:SLTResource = new SLTResource("property", ticket,
 //                function (resource:SLTResource):void {
@@ -415,5 +430,7 @@ public class SLTSaltrMobile {
 //                });
 //        resource.load();
     }
+
+
 }
 }

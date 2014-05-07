@@ -32,7 +32,6 @@ public class SLTResourceURLTicket {
     private var _checkPolicy:Boolean;
     private var _useSameDomain:Boolean;
     private var _maxAttempts:int;
-    private var _dropTimeout:int;
 
 
     public function SLTResourceURLTicket(url:String, variables:Object = null) {
@@ -52,7 +51,6 @@ public class SLTResourceURLTicket {
         _checkPolicy = false;
         _maxAttempts = 3;
         _useSameDomain = true;
-        _dropTimeout = 0;
     }
 
     public function getURLRequest():URLRequest {
@@ -218,12 +216,5 @@ public class SLTResourceURLTicket {
         _useSameDomain = value;
     }
 
-    public function get dropTimeout():int {
-        return _dropTimeout;
-    }
-
-    public function set dropTimeout(value:int):void {
-        _dropTimeout = value;
-    }
 }
 }

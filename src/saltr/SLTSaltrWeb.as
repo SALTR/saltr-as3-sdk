@@ -44,6 +44,8 @@ public class SLTSaltrWeb {
     protected var _levelContentLoadSuccessCallback:Function;
     protected var _levelContentLoadFailCallback:Function;
 
+    private var _requestIdleTimeout:int;
+
     private var _devMode:Boolean;
     private var _appVersion:String;
     private var _started:Boolean;
@@ -62,6 +64,7 @@ public class SLTSaltrWeb {
         //TODO @GSAR: implement usage of dev mode variable
         _devMode = true;
         _started = false;
+        _requestIdleTimeout = 0;
 
         _activeFeatures = new Dictionary();
         _developerFeatures = new Dictionary();
@@ -82,6 +85,10 @@ public class SLTSaltrWeb {
 
     public function set useNoFeatures(value:Boolean):void {
         _useNoFeatures = value;
+    }
+
+    public function set requestIdleTimeout(value:int):void {
+        _requestIdleTimeout = value;
     }
 
     public function get levelPacks():Vector.<SLTLevelPack> {
@@ -244,6 +251,9 @@ public class SLTSaltrWeb {
         args.clientKey = _clientKey;
         urlVars.args = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
+        if (_requestIdleTimeout > 0) {
+            ticket.idleTimeout = _requestIdleTimeout;
+        }
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
@@ -281,6 +291,9 @@ public class SLTSaltrWeb {
     protected function loadLevelContentFromSALTR(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
         var dataUrl:String = forceNoCache ? level.contentUrl + "?_time_=" + new Date().getTime() : level.contentUrl;
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+        if (_requestIdleTimeout > 0) {
+            ticket.idleTimeout = _requestIdleTimeout;
+        }
         var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalCallback, loadFailInternalCallback);
         resource.load();
 
