@@ -1,3 +1,7 @@
+/*
+ * Copyright Plexonic Ltd (c) 2014.
+ */
+
 /**
  * User: gsar
  * Date: 4/27/14

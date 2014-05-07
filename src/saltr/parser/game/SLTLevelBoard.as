@@ -1,3 +1,7 @@
+/*
+ * Copyright Plexonic Ltd (c) 2014.
+ */
+
 /**
  * User: hrut
  * Date: 2/11/14

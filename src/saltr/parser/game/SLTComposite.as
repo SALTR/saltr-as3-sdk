@@ -1,3 +1,7 @@
+/*
+ * Copyright Plexonic Ltd (c) 2014.
+ */
+
 /**
  * User: sarg
  * Date: 8/2/13
