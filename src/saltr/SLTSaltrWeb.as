@@ -140,6 +140,10 @@ public class SLTSaltrWeb {
     }
 
     public function start():void {
+        if(_socialId == null || _socialNetwork == null){
+            throw new Error("'socialId' and 'socialNetwork' fields are required and can't be null.");
+        }
+
         if (Utils.getDictionarySize(_developerFeatures) == 0 && _useNoFeatures == false) {
             throw new Error("Features should be defined.");
         }

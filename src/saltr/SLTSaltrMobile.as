@@ -156,6 +156,10 @@ public class SLTSaltrMobile {
     }
 
     public function start():void {
+        if(_deviceId == null){
+            throw new Error("deviceId field is required and can't be null.");
+        }
+
         if (Utils.getDictionarySize(_developerFeatures) == 0 && _useNoFeatures == false) {
             throw new Error("Features should be defined.");
         }
@@ -203,7 +207,7 @@ public class SLTSaltrMobile {
             levelContentLoadSuccessHandler(level, content);
         } else {
             if (useCache == false || level.version != getCachedLevelVersion(levelPack, level)) {
-                loadLevelContentFromSALTR(levelPack, level);
+                loadLevelContentFromSaltr(levelPack, level);
             } else {
                 content = loadLevelContentFromCache(levelPack, level);
                 levelContentLoadSuccessHandler(level, content);
@@ -344,7 +348,7 @@ public class SLTSaltrMobile {
         return _repository.getObjectFromApplication(url);
     }
 
-    protected function loadLevelContentFromSALTR(levelPack:SLTLevelPack, level:SLTLevel):void {
+    protected function loadLevelContentFromSaltr(levelPack:SLTLevelPack, level:SLTLevel):void {
         var dataUrl:String = level.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
         var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalHandler, loadFailInternalHandler);
