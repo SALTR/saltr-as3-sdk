@@ -107,6 +107,15 @@ public class SLTSaltrWeb {
         _socialNetwork = socialNetwork;
     }
 
+    public function getActiveFeatureTokens():Vector.<String> {
+        var tokens:Vector.<String> = new Vector.<String>();
+        for each(var feature:SLTFeature in _activeFeatures) {
+            tokens.push(feature.token);
+        }
+
+        return tokens;
+    }
+
     public function getFeatureProperties(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
         if (activeFeature != null) {
@@ -130,7 +139,6 @@ public class SLTSaltrWeb {
         var applicationData:Object = JSON.parse(json);
         _levelPacks = SLTDeserializer.decodeLevels(applicationData);
     }
-
 
     public function importDeveloperFeaturesFromJSON(json:String):void {
         var featuresJSON:Object = JSON.parse(json);

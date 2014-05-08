@@ -122,6 +122,15 @@ public class SLTSaltrMobile {
         _socialNetwork = socialNetwork;
     }
 
+    public function getActiveFeatureTokens():Vector.<String> {
+        var tokens:Vector.<String> = new Vector.<String>();
+        for each(var feature:SLTFeature in _activeFeatures) {
+            tokens.push(feature.token);
+        }
+
+        return tokens;
+    }
+
     public function getFeatureProperties(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
         if (activeFeature != null) {
