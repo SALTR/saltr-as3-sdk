@@ -22,14 +22,14 @@ internal class SLTDeserializer {
 
     public static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
-        var experimentInfoNodes:Array = rootNode.experimentInfo;
-        if (experimentInfoNodes != null) {
-            for each (var experimentInfoNode:Object in experimentInfoNodes) {
-                var token:String = experimentInfoNode.token;
-                var partition:String = experimentInfoNode.partition;
-                var type:String = experimentInfoNode.type;
-                var customEvents:Array = experimentInfoNode.customEventList as Array;
-
+        var experimentNodes:Array = rootNode.hasOwnProperty("experiments") ? rootNode["experiments"] : rootNode["experimentInfo"];
+        if (experimentNodes != null) {
+            for (var i:int = 0, len:int = experimentNodes.length; i < len; ++i) {
+                var experimentNode:Object = experimentNodes[i];
+                var token:String = experimentNode.token;
+                var partition:String = experimentNode.partition;
+                var type:String = experimentNode.type;
+                var customEvents:Array = experimentNode.customEventList as Array;
                 experiments.push(new SLTExperiment(token, partition, type, customEvents));
             }
         }
@@ -37,22 +37,25 @@ internal class SLTDeserializer {
     }
 
     public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
-        var levelPackNodes:Object = rootNode.hasOwnProperty("levelPacks") ? rootNode["levelPacks"] : rootNode["levelPackList"];
+        var levelPackNodes:Object = rootNode.levelPacks;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var levels:Vector.<SLTLevel>;
         var levelNodes:Object;
-        for each(var levelPackNode:Object in levelPackNodes) {
-            levelNodes = levelPackNode.levels;
-            levels = new <SLTLevel>[];
-            for each (var levelNode:Object in levelNodes) {
-                var levelIndex:int = levelNode.index;
-                levels.push(new SLTLevel(levelNode.id, levelIndex, levelNode.url, levelNode.properties, levelNode.version));
+        if (levelPackNodes != null) {
+            for (var i:int = 0, len:int = levelPackNodes.length; i < len; ++i) {
+                var levelPackNode:Object = levelPackNodes[i];
+                levelNodes = levelPackNode.levels;
+                levels = new <SLTLevel>[];
+                for each (var levelNode:Object in levelNodes) {
+                    var levelIndex:int = levelNode.index;
+                    levels.push(new SLTLevel(levelNode.id, levelIndex, levelNode.url, levelNode.properties, levelNode.version));
+                }
+                levels.sort(sortByIndex);
+                var index:int = levelPackNode.index;
+                levelPacks.push(new SLTLevelPack(levelPackNode.token, index, levels));
             }
-            levels.sort(sortByIndex);
-            var index:int = levelPackNode.index;
-            levelPacks.push(new SLTLevelPack(levelPackNode.token, index, levels));
+            levelPacks.sort(sortByIndex);
         }
-        levelPacks.sort(sortByIndex);
         return levelPacks;
     }
 
@@ -60,7 +63,8 @@ internal class SLTDeserializer {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features;
         if (featureNodes != null) {
-            for each(var featureNode:Object in featureNodes) {
+            for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
+                var featureNode:Object = featureNodes[i];
                 features[featureNode.token] = new SLTFeature(featureNode.token, featureNode.data);
             }
         }
