@@ -65,7 +65,7 @@ internal class SLTDeserializer {
         if (featureNodes != null) {
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 var featureNode:Object = featureNodes[i];
-                features[featureNode.token] = new SLTFeature(featureNode.token, featureNode.data);
+                features[featureNode.token] = new SLTFeature(featureNode.token, featureNode.data, featureNode.required);
             }
         }
         return features;

@@ -131,6 +131,11 @@ public class SLTSaltrWeb {
         _levelPacks = SLTDeserializer.decodeLevels(applicationData);
     }
 
+
+    public function importDeveloperFeaturesFromJSON(json:String):void {
+        var featuresJSON:Object = JSON.parse(json);
+        _developerFeatures = SLTDeserializer.decodeFeatures(featuresJSON);
+    }
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
