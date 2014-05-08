@@ -14,8 +14,8 @@ internal class SLTConfig {
     public static const CMD_ADD_PROPERTY:String = "addProperty";
     public static const CMD_DEV_SYNC_FEATURES:String = "syncFeatures";
 
-    public static const SALTR_API_URL:String = "https://api.saltr.com/httpjson.action";
-    public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call.action";
+    public static const SALTR_API_URL:String = "https://api.saltr.com/call";
+    public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";
 
     //used to
     public static const APP_DATA_URL_CACHE:String = "app_data_cache.json";
