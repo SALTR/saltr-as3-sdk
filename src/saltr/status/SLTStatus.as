@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: daal
- * Date: 3/13/14
- * Time: 12:23 PM
- */
 package saltr.status {
 public class SLTStatus {
 

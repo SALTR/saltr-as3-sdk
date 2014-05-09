@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: gsar
- * Date: 10/13/13
- * Time: 1:51 PM
- */
 package saltr.utils {
 public class HTTPStatus {
 

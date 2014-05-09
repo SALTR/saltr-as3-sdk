@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 10/23/12
- * Time: 4:35 PM
- */
 package saltr.parser.game {
 import flash.utils.Dictionary;
 

@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 1/12/14
- * Time: 4:25 PM
- */
 package saltr.parser.game {
 public class SLTCellMatrixIterator {
     private var _cells:SLTCellMatrix;

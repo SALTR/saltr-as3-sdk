@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 1/14/14
- * Time: 6:37 PM
- */
 package saltr.repository {
 import flash.filesystem.File;
 import flash.filesystem.FileMode;

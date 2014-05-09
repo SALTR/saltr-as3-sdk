@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: gsar
- * Date: 5/2/14
- * Time: 10:41 AM
- */
 package saltr.parser.game {
 internal class SLTLevelBoardLayer {
     private var _layerId:String;

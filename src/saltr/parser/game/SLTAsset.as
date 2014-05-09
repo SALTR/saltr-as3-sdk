@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 11/10/12
- * Time: 12:31 PM
- */
 package saltr.parser.game {
 internal class SLTAsset {
     private var _properties:Object;

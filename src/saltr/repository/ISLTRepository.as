@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: gsar
- * Date: 4/1/13
- * Time: 9:13 PM
- */
 package saltr.repository {
 public interface ISLTRepository {
 

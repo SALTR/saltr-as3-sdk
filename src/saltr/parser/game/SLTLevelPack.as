@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 10/23/12
- * Time: 3:48 PM
- */
 package saltr.parser.game {
 public class SLTLevelPack {
     private var _token:String;

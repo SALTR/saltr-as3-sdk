@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: gsar
- * Date: 5/1/14
- * Time: 5:11 PM
- */
 package saltr.status {
 public class SLTStatusLevelContentLoadFail extends SLTStatus {
     public function SLTStatusLevelContentLoadFail() {

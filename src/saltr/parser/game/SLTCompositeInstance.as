@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 8/2/13
- * Time: 3:08 PM
- */
 package saltr.parser.game {
 public class SLTCompositeInstance extends SLTAssetInstance {
     private var _cells:Array;

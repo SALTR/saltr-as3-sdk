@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: daal
- * Date: 3/5/14
- * Time: 6:18 PM
- */
 package test {
 import flash.display.Sprite;
 
@@ -1018,7 +1013,7 @@ public class Test extends Sprite {
         var iterator:SLTCellMatrixIterator = cells.iterator;
         var result:String = "";
         while (iterator.hasNext()) {
-            result += iterator.next().assetInstance.properties.COLOR + "  ";
+//            result += iterator.next().assetInstance.properties.COLOR + "  ";
         }
         trace(result);
     }

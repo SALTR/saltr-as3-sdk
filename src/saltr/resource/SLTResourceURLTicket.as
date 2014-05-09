@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: gsar
- * Date: 10/13/13
- * Time: 2:41 PM
- */
 package saltr.resource {
 import flash.net.URLRequest;
 import flash.net.URLRequestHeader;

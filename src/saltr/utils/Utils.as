@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: gsar
- * Date: 4/27/14
- * Time: 8:37 PM
- */
 package saltr.utils {
 import flash.utils.Dictionary;
 

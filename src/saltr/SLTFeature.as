@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: daal
- * Date: 6/12/12
- * Time: 2:03 PM
- */
 package saltr {
 internal class SLTFeature {
     private var _token:String;

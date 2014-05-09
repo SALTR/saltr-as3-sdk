@@ -2,11 +2,6 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: daal
- * Date: 3/9/14
- * Time: 7:34 PM
- */
 package saltr {
 internal class SLTConfig {
 
