@@ -50,27 +50,28 @@ internal class SLTLevelBoardParser {
         var cellProperties:Array = boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("cell") ? boardNode.properties.cell : [];
         var cols:int = cells.width;
         var rows:int = cells.height;
+        var cell:SLTCell;
 
         for (var i:int = 0; i < cols; ++i) {
             for (var j:int = 0; j < rows; ++j) {
-                var cell:SLTCell = new SLTCell(i, j);
+                cell = new SLTCell(i, j);
                 cells.insert(i, j, cell);
             }
         }
 
         //assigning cell properties
-        for (var p:int = 0, len:int = cellProperties.length; p < len; ++p) {
+        for (var p:int = 0, pLen:int = cellProperties.length; p < pLen; ++p) {
             var property:Object = cellProperties[p];
-            var cell:SLTCell = cells.retrieve(property.coords[0], property.coords[1]);
+            cell = cells.retrieve(property.coords[0], property.coords[1]);
             if (cell != null) {
                 cell.properties = property.value;
             }
         }
 
         //blocking cells
-        for (var b:int = 0, len:int = blockedCells.length; b < len; ++b) {
+        for (var b:int = 0, bLen:int = blockedCells.length; b < bLen; ++b) {
             var blockedCell:Array = blockedCells[b];
-            var cell:SLTCell = cells.retrieve(blockedCell[0], blockedCell[1]);
+            cell = cells.retrieve(blockedCell[0], blockedCell[1]);
             if (cell != null) {
                 cell.isBlocked = true;
             }
@@ -81,16 +82,22 @@ internal class SLTLevelBoardParser {
         var fixedAssetsNode:Array = layer.fixedAssetsNodes;
         var assetMap:Dictionary = levelSettings.assetMap;
         var stateMap:Dictionary = levelSettings.stateMap;
+        var cell:SLTCell;
+        var position:Array;
+        var fixedAsset:Object;
+        var asset:SLTAsset;
+        var state:String;
+        var cellPositions:Array;
 
-        for (var i:int = 0, len:int = fixedAssetsNode.length; i < len; ++i) {
-            var fixedAsset:Object = fixedAssetsNode[i];
-            var asset:SLTAsset = assetMap[fixedAsset.assetId] as SLTAsset;
-            var state:String = stateMap[fixedAsset.stateId] as String;
-            var cellPositions:Array = fixedAsset.cells;
+        for (var i:int = 0, iLen:int = fixedAssetsNode.length; i < iLen; ++i) {
+            fixedAsset = fixedAssetsNode[i];
+            asset = assetMap[fixedAsset.assetId] as SLTAsset;
+            state = stateMap[fixedAsset.stateId] as String;
+            cellPositions = fixedAsset.cells;
 
-            for (var j:int = 0, len:int = cellPositions.length; j < len; j++) {
-                var position:Array = cellPositions[j];
-                var cell:SLTCell = cells.retrieve(position[0], position[1]);
+            for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
+                position = cellPositions[j];
+                cell = cells.retrieve(position[0], position[1]);
                 cell.setAssetInstance(layer.layerId, layer.layerIndex, new SLTAssetInstance(asset.token, state, asset.properties))
             }
         }
