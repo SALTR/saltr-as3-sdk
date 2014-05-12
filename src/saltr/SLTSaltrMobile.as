@@ -3,6 +3,7 @@
  */
 
 package saltr {
+import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
@@ -313,10 +314,11 @@ public class SLTSaltrMobile {
             var feature:SLTFeature = _developerFeatures[i];
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
-        args.developerFeatures = JSON.stringify(featureList);
+        args.developerFeatures = featureList;
         urlVars.args = JSON.stringify(args);
 
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
+        ticket.method = URLRequestMethod.POST;
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
@@ -435,5 +437,8 @@ public class SLTSaltrMobile {
     }
 
 
+    public function set devMode(value:Boolean):void {
+        _devMode = value;
+    }
 }
 }
