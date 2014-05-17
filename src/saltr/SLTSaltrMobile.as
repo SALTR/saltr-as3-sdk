@@ -23,7 +23,7 @@ import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.Utils;
 
 //TODO:: @daal add some flushCache method.
-public class SLTSaltrMobile {
+public class SLTSaltrMobile implements IMobileSaltr {
 
     protected var _socialId:String;
     protected var _socialNetwork:String;
@@ -57,8 +57,9 @@ public class SLTSaltrMobile {
     //TODO @GSAR: make common class for mobile and web
     //TODO @GSAR: add Properties class to handle correct feature properties assignment
     //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
-    public function SLTSaltrMobile(clientKey:String, useCache:Boolean = true) {
+    public function SLTSaltrMobile(clientKey:String, deviceId:String, useCache:Boolean = true) {
         _clientKey = clientKey;
+        _deviceId = deviceId;
         _isLoading = false;
         _connected = false;
 
@@ -93,12 +94,12 @@ public class SLTSaltrMobile {
         _useNoFeatures = value;
     }
 
-    public function set requestIdleTimeout(value:int):void {
-        _requestIdleTimeout = value;
+    public function set devMode(value:Boolean):void {
+        _devMode = value;
     }
 
-    public function set deviceId(value:String):void {
-        _deviceId = value;
+    public function set requestIdleTimeout(value:int):void {
+        _requestIdleTimeout = value;
     }
 
     public function get levelPacks():Vector.<SLTLevelPack> {
@@ -189,35 +190,35 @@ public class SLTSaltrMobile {
         _started = true;
     }
 
-    public function connect(loadSuccessCallback:Function, loadFailCallback:Function):void {
+    public function connect(successCallback:Function, failCallback:Function):void {
         if (_isLoading || !_started) {
             return;
         }
-        _appDataLoadSuccessCallback = loadSuccessCallback;
-        _appDataLoadFailCallback = loadFailCallback;
+        _appDataLoadSuccessCallback = successCallback;
+        _appDataLoadFailCallback = failCallback;
 
         _isLoading = true;
         var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler);
         resource.load();
     }
 
-    public function loadLevelContent(levelPack:SLTLevelPack, level:SLTLevel, loadSuccessCallback:Function, loadFailCallback:Function, useCache:Boolean = true):void {
-        _levelContentLoadSuccessCallback = loadSuccessCallback;
-        _levelContentLoadFailCallback = loadFailCallback;
+    public function loadLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+        _levelContentLoadSuccessCallback = successCallback;
+        _levelContentLoadFailCallback = failCallback;
         var content:Object;
         if (_connected == false) {
             if (useCache) {
-                content = loadLevelContentInternally(levelPack, level);
+                content = loadLevelContentInternally(sltLevel, sltLevelPack);
             } else {
-                content = loadLevelContentFromDisk(levelPack, level);
+                content = loadLevelContentFromDisk(sltLevel, sltLevelPack);
             }
-            levelContentLoadSuccessHandler(level, content);
+            levelContentLoadSuccessHandler(sltLevel, content);
         } else {
-            if (useCache == false || level.version != getCachedLevelVersion(levelPack, level)) {
-                loadLevelContentFromSaltr(levelPack, level);
+            if (useCache == false || sltLevel.version != getCachedLevelVersion(sltLevel, sltLevelPack)) {
+                loadLevelContentFromSaltr(sltLevel, sltLevelPack);
             } else {
-                content = loadLevelContentFromCache(levelPack, level);
-                levelContentLoadSuccessHandler(level, content);
+                content = loadLevelContentFromCache(sltLevel, sltLevelPack);
+                levelContentLoadSuccessHandler(sltLevel, content);
             }
         }
     }
@@ -331,36 +332,36 @@ public class SLTSaltrMobile {
         trace("[Saltr] Dev feature Sync has failed.");
     }
 
-    private function getCachedLevelVersion(levelPack:SLTLevelPack, level:SLTLevel):String {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, levelPack.index, level.index);
+    private function getCachedLevelVersion(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):String {
+        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
         return _repository.getObjectVersion(cachedFileName);
     }
 
-    private function cacheLevelContent(levelPack:SLTLevelPack, level:SLTLevel, content:Object):void {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, levelPack.index, level.index);
-        _repository.cacheObject(cachedFileName, String(level.version), content);
+    private function cacheLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, content:Object):void {
+        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
+        _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
     }
 
-    private function loadLevelContentInternally(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var contentData:Object = loadLevelContentFromCache(levelPack, level);
-        if (contentData == null) {
-            contentData = loadLevelContentFromDisk(levelPack, level);
+    private function loadLevelContentInternally(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):Object {
+        var content:Object = loadLevelContentFromCache(sltLevel, sltLevelPack);
+        if (content == null) {
+            content = loadLevelContentFromDisk(sltLevel, sltLevelPack);
         }
-        return contentData;
+        return content;
     }
 
-    private function loadLevelContentFromCache(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, levelPack.index, level.index);
+    private function loadLevelContentFromCache(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):Object {
+        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
         return _repository.getObjectFromCache(url);
     }
 
-    private function loadLevelContentFromDisk(levelPack:SLTLevelPack, level:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, levelPack.index, level.index);
+    private function loadLevelContentFromDisk(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):Object {
+        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
         return _repository.getObjectFromApplication(url);
     }
 
-    protected function loadLevelContentFromSaltr(levelPack:SLTLevelPack, level:SLTLevel):void {
-        var dataUrl:String = level.contentUrl + "?_time_=" + new Date().getTime();
+    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):void {
+        var dataUrl:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
         if (_requestIdleTimeout > 0) {
             ticket.idleTimeout = _requestIdleTimeout;
@@ -369,16 +370,16 @@ public class SLTSaltrMobile {
         resource.load();
 
         function loadSuccessInternalHandler():void {
-            var contentData:Object = resource.jsonData;
-            if (contentData != null) {
-                cacheLevelContent(levelPack, level, contentData);
+            var content:Object = resource.jsonData;
+            if (content != null) {
+                cacheLevelContent(sltLevel, sltLevelPack, content);
             }
             else {
-                contentData = loadLevelContentInternally(levelPack, level);
+                content = loadLevelContentInternally(sltLevel, sltLevelPack);
             }
 
-            if (contentData != null) {
-                levelContentLoadSuccessHandler(level, contentData);
+            if (content != null) {
+                levelContentLoadSuccessHandler(sltLevel, content);
             }
             else {
                 levelContentLoadFailHandler();
@@ -387,8 +388,8 @@ public class SLTSaltrMobile {
         }
 
         function loadFailInternalHandler():void {
-            var contentData:Object = loadLevelContentInternally(levelPack, level);
-            levelContentLoadSuccessHandler(level, contentData);
+            var content:Object = loadLevelContentInternally(sltLevel, sltLevelPack);
+            levelContentLoadSuccessHandler(sltLevel, content);
             resource.dispose();
         }
     }
@@ -434,11 +435,6 @@ public class SLTSaltrMobile {
 //                    resource.dispose();
 //                });
 //        resource.load();
-    }
-
-
-    public function set devMode(value:Boolean):void {
-        _devMode = value;
     }
 }
 }

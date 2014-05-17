@@ -19,7 +19,7 @@ import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.Utils;
 
 //TODO:: @daal add some flushCache method.
-public class SLTSaltrWeb {
+public class SLTSaltrWeb implements IWebSaltr {
 
     protected var _socialId:String;
     protected var _socialNetwork:String;
@@ -139,6 +139,7 @@ public class SLTSaltrWeb {
         var featuresJSON:Object = JSON.parse(json);
         _developerFeatures = SLTDeserializer.decodeFeatures(featuresJSON);
     }
+
     /**
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
@@ -151,7 +152,7 @@ public class SLTSaltrWeb {
     }
 
     public function start():void {
-        if(_socialId == null || _socialNetwork == null){
+        if (_socialId == null || _socialNetwork == null) {
             throw new Error("'socialId' and 'socialNetwork' fields are required and can't be null.");
         }
 
@@ -170,12 +171,12 @@ public class SLTSaltrWeb {
         _started = true;
     }
 
-    public function connect(loadSuccessCallback:Function, loadFailCallback:Function):void {
+    public function connect(successCallback:Function, failCallback:Function):void {
         if (_isLoading || !_started) {
             return;
         }
-        _appDataLoadSuccessCallback = loadSuccessCallback;
-        _appDataLoadFailCallback = loadFailCallback;
+        _appDataLoadSuccessCallback = successCallback;
+        _appDataLoadFailCallback = failCallback;
 
         _isLoading = true;
         var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler);
@@ -184,10 +185,10 @@ public class SLTSaltrWeb {
 
     /////////////////////////////////////// level content data loading methods.
 
-    public function loadLevelContent(levelPack:SLTLevelPack, level:SLTLevel, loadSuccessCallback:Function, loadFailCallback:Function):void {
-        _levelContentLoadSuccessCallback = loadSuccessCallback;
-        _levelContentLoadFailCallback = loadFailCallback;
-        loadLevelContentFromSALTR(levelPack, level, true);
+    public function loadLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, successCallback:Function, failCallback:Function):void {
+        _levelContentLoadSuccessCallback = successCallback;
+        _levelContentLoadFailCallback = failCallback;
+        loadLevelContentFromSALTR(sltLevel, sltLevelPack, true);
     }
 
     private function appDataLoadFailHandler(resource:SLTResource):void {
@@ -295,8 +296,8 @@ public class SLTSaltrWeb {
     }
 
     //TODO:: @daal do we need this forceNoCache?
-    protected function loadLevelContentFromSALTR(levelPack:SLTLevelPack, level:SLTLevel, forceNoCache:Boolean = false):void {
-        var dataUrl:String = forceNoCache ? level.contentUrl + "?_time_=" + new Date().getTime() : level.contentUrl;
+    protected function loadLevelContentFromSALTR(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, forceNoCache:Boolean = false):void {
+        var dataUrl:String = forceNoCache ? sltLevel.contentUrl + "?_time_=" + new Date().getTime() : sltLevel.contentUrl;
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
         if (_requestIdleTimeout > 0) {
             ticket.idleTimeout = _requestIdleTimeout;
@@ -306,9 +307,9 @@ public class SLTSaltrWeb {
 
         //TODO @GSAR: get rid of nested functions!
         function loadSuccessInternalCallback():void {
-            var contentData:Object = resource.jsonData;
-            if (contentData != null) {
-                levelContentLoadSuccessHandler(level, contentData);
+            var content:Object = resource.jsonData;
+            if (content != null) {
+                levelContentLoadSuccessHandler(sltLevel, content);
             }
             else {
                 levelContentLoadFailHandler();
