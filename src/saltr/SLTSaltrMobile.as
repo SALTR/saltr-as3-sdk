@@ -106,6 +106,27 @@ public class SLTSaltrMobile implements IMobileSaltr {
         return _levelPacks;
     }
 
+    public function get allLevels():Vector.<SLTLevel> {
+        var allLevels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            var packLevels:Vector.<SLTLevel> = _levelPacks[i].levels;
+            for (var j:int = 0, len2:int = packLevels.length; j < len2; ++j) {
+                allLevels.push(packLevels[j]);
+            }
+        }
+
+        return allLevels;
+    }
+
+    public function get allLevelsCount():uint {
+        var count:uint = 0;
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            count += _levelPacks[i].levels.length;
+        }
+
+        return count;
+    }
+
     public function get experiments():Vector.<SLTExperiment> {
         return _experiments;
     }
