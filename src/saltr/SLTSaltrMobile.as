@@ -109,9 +109,9 @@ public class SLTSaltrMobile implements IMobileSaltr {
     public function get allLevels():Vector.<SLTLevel> {
         var allLevels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
-            var packLevels:Vector.<SLTLevel> = _levelPacks[i].levels;
-            for (var j:int = 0, len2:int = packLevels.length; j < len2; ++j) {
-                allLevels.push(packLevels[j]);
+            var levels:Vector.<SLTLevel> = _levelPacks[i].levels;
+            for (var j:int = 0, len2:int = levels.length; j < len2; ++j) {
+                allLevels.push(levels[j]);
             }
         }
 
@@ -125,6 +125,19 @@ public class SLTSaltrMobile implements IMobileSaltr {
         }
 
         return count;
+    }
+
+    public function getLevelByGlobalIndex(index:int):SLTLevel {
+        var levelsSum:int = 0;
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            var packLength:int = _levelPacks[i].levels.length;
+            if (index > levelsSum + packLength) {
+                levelsSum += packLength;
+            } else {
+                return _levelPacks[i].levels[index - levelsSum];
+            }
+        }
+        return null;
     }
 
     public function get experiments():Vector.<SLTExperiment> {
