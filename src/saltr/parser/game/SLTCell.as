@@ -1,44 +1,25 @@
 /*
- * Copyright Teoken LLC. (c) 2013. All rights reserved.
- * Copying or usage of any piece of this source code without written notice from Teoken LLC is a major crime.
- * Այս կոդը Թեոկեն ՍՊԸ ընկերության սեփականությունն է:
- * Առանց գրավոր թույլտվության այս կոդի պատճենահանումը կամ օգտագործումը քրեական հանցագործություն է:
+ * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 11/9/12
- * Time: 4:51 PM
- */
 package saltr.parser.game {
+import flash.utils.Dictionary;
+
 public class SLTCell {
-    private var _x:int;
-    private var _y:int;
+    private var _col:int;
+    private var _row:int;
     private var _properties:Object;
     private var _isBlocked:Boolean;
-    private var _assetInstance:SLTAssetInstance;
+    private var _instancesByLayerId:Dictionary;
+    private var _instancesByLayerIndex:Dictionary;
 
-    public function SLTCell(x:int, y:int) {
-        _x = x;
-        _y = y;
+    public function SLTCell(col:int, row:int) {
+        _col = col;
+        _row = row;
         _properties = {};
         _isBlocked = false;
-    }
-
-    public function get assetInstance():SLTAssetInstance {
-        return _assetInstance;
-    }
-
-    public function set assetInstance(value:SLTAssetInstance):void {
-        _assetInstance = value;
-    }
-
-    public function set properties(value:Object):void {
-        _properties = value;
-    }
-
-    public function set isBlocked(value:Boolean):void {
-        _isBlocked = value;
+        _instancesByLayerId = new Dictionary();
+        _instancesByLayerIndex = new Dictionary();
     }
 
     public function get properties():Object {
@@ -49,20 +30,43 @@ public class SLTCell {
         return _isBlocked;
     }
 
-    public function get x():int {
-        return _x;
+    public function get col():int {
+        return _col;
     }
 
-    public function get y():int {
-        return _y;
+    public function get row():int {
+        return _row;
     }
 
-    public function set y(value:int):void {
-        _y = value;
+    public function set properties(value:Object):void {
+        _properties = value;
     }
 
-    public function set x(value:int):void {
-        _x = value;
+    public function set isBlocked(value:Boolean):void {
+        _isBlocked = value;
+    }
+
+    public function set row(value:int):void {
+        _row = value;
+    }
+
+    public function set col(value:int):void {
+        _col = value;
+    }
+
+    public function getAssetInstanceByLayerId(layerId:String):SLTAssetInstance {
+        return _instancesByLayerId[layerId];
+    }
+
+    public function getAssetInstanceByLayerIndex(layerIndex:int):SLTAssetInstance {
+        return _instancesByLayerIndex[layerIndex];
+    }
+
+    public function setAssetInstance(layerId:String, layerIndex:int, assetInstance:SLTAssetInstance):void {
+        if (_isBlocked == false) {
+            _instancesByLayerId[layerId] = assetInstance;
+            _instancesByLayerId[layerIndex] = assetInstance;
+        }
     }
 }
 }

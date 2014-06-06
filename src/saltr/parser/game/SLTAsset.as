@@ -1,35 +1,27 @@
 /*
- * Copyright Teoken LLC. (c) 2013. All rights reserved.
- * Copying or usage of any piece of this source code without written notice from Teoken LLC is a major crime.
- * Այս կոդը Թեոկեն ՍՊԸ ընկերության սեփականությունն է:
- * Առանց գրավոր թույլտվության այս կոդի պատճենահանումը կամ օգտագործումը քրեական հանցագործություն է:
+ * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 11/10/12
- * Time: 12:31 PM
- */
 package saltr.parser.game {
 internal class SLTAsset {
-    private var _keys:Object;
-    private var _type:String;
+    private var _properties:Object;
+    private var _token:String;
 
-    public function SLTAsset(type:String, keys:Object) {
-        _type = type;
-        _keys = keys;
+    public function SLTAsset(token:String, properties:Object) {
+        _token = token;
+        _properties = properties;
     }
 
-    public function get keys():Object {
-        return _keys;
+    public function get token():String {
+        return _token;
     }
 
-    public function get type():String {
-        return _type;
+    public function get properties():Object {
+        return _properties;
     }
 
     public function toString():String {
-        return "[Asset] type: " + _type + ", " + " keys: " + _keys;
+        return "[Asset] token: " + _token + ", " + " properties: " + _properties;
     }
 }
 }

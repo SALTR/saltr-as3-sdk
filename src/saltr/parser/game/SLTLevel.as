@@ -1,21 +1,13 @@
 /*
- * Copyright Teoken LLC. (c) 2013. All rights reserved.
- * Copying or usage of any piece of this source code without written notice from Teoken LLC is a major crime.
- * Այս կոդը Թեոկեն ՍՊԸ ընկերության սեփականությունն է:
- * Առանց գրավոր թույլտվության այս կոդի պատճենահանումը կամ օգտագործումը քրեական հանցագործություն է:
+ * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: sarg
- * Date: 10/23/12
- * Time: 4:35 PM
- */
 package saltr.parser.game {
 import flash.utils.Dictionary;
 
 public class SLTLevel {
     private var _id:String;
-    private var _contentDataUrl:String;
+    private var _contentUrl:String;
     private var _index:int;
     private var _properties:Object;
     private var _boards:Dictionary;
@@ -25,17 +17,15 @@ public class SLTLevel {
     private var _levelSettings:SLTLevelSettings;
     private var _boardsNode:Object;
 
-    public function SLTLevel(id:String, index:int, contentDataUrl:String, properties:Object, version:String) {
+
+    //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
+    public function SLTLevel(id:String, index:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
         _index = index;
-        _contentDataUrl = contentDataUrl;
-        _contentReady = false;
+        _contentUrl = contentUrl;
         _properties = properties;
         _version = version;
-    }
-
-    public function get levelSettings():SLTLevelSettings {
-        return _levelSettings;
+        _contentReady = false;
     }
 
     public function get id():String {
@@ -50,8 +40,8 @@ public class SLTLevel {
         return _properties;
     }
 
-    public function get contentDataUrl():String {
-        return _contentDataUrl;
+    public function get contentUrl():String {
+        return _contentUrl;
     }
 
     public function get contentReady():Boolean {
@@ -68,7 +58,13 @@ public class SLTLevel {
 
     public function updateContent(rootNode:Object):void {
         _rootNode = rootNode;
-        _boardsNode = rootNode["boards"];
+
+        if (rootNode.hasOwnProperty("boards")) {
+             _boardsNode = rootNode["boards"];
+        }else {
+            throw new Error("Boards node is not found.");
+        }
+
         _properties = rootNode["properties"];
         _levelSettings = SLTLevelBoardParser.parseLevelSettings(rootNode);
         generateAllBoards();
@@ -82,7 +78,7 @@ public class SLTLevel {
     }
 
     public function generateBoard(boardId:String):void {
-        if (_boardsNode != null) {
+        if (_boardsNode != null && _boardsNode[boardId] != null) {
             _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(_boardsNode[boardId], _levelSettings);
         }
     }

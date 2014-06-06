@@ -1,8 +1,7 @@
-/**
- * User: sarg
- * Date: 1/12/14
- * Time: 1:39 PM
+/*
+ * Copyright (c) 2014 Plexonic Ltd
  */
+
 package saltr.parser.game {
 public class SLTCellMatrix {
     private var _width:int;
@@ -20,12 +19,12 @@ public class SLTCellMatrix {
         _rawData = new Vector.<SLTCell>(_width * _height);
     }
 
-    public function insert(row:int, col:int, cell:SLTCell):void {
-        _rawData[ (col * _width) + row ] = cell;
+    public function insert(col:int, row:int, cell:SLTCell):void {
+        _rawData[ (row * _width) + col] = cell;
     }
 
-    public function retrieve(row:int, col:int):SLTCell {
-        return _rawData[(col * _width) + row];
+    public function retrieve(col:int, row:int):SLTCell {
+        return _rawData[(row * _width) + col];
     }
 
     public function get width():int {

@@ -1,15 +1,7 @@
 /*
- * Copyright Teoken LLC. (c) 2013. All rights reserved.
- * Copying or usage of any piece of this source code without written notice from Teoken LLC is a major crime.
- * Այս կոդը Թեոկեն ՍՊԸ ընկերության սեփականությունն է:
- * Առանց գրավոր թույլտվության այս կոդի պատճենահանումը կամ օգտագործումը քրեական հանցագործություն է:
+ * Copyright (c) 2014 Plexonic Ltd
  */
 
-/**
- * User: daal
- * Date: 6/12/12
- * Time: 2:03 PM
- */
 package saltr {
 public class SLTExperiment {
     public static const SPLIT_TEST_TYPE_FEATURE:String = "FEATURE";
@@ -21,6 +13,10 @@ public class SLTExperiment {
     private var _customEvents:Array;
 
     public function SLTExperiment(token:String, partition:String, type:String, customEvents:Array) {
+        _token = token;
+        _partition = partition;
+        _type = type;
+        _customEvents = customEvents;
     }
 
     public function get partition():String {
