@@ -28,10 +28,6 @@ public class SLTLevel {
         _contentReady = false;
     }
 
-    public function get id():String {
-        return _id;
-    }
-
     public function get index():int {
         return _index;
     }
