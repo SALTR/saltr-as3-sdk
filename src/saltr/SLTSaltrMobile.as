@@ -48,7 +48,6 @@ public class SLTSaltrMobile implements IMobileSaltr {
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
-    private var _appVersion:String;
     private var _started:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
@@ -62,7 +61,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         _deviceId = deviceId;
         _isLoading = false;
         _connected = false;
-
+        _saltrUserId = null;
         _useNoLevels = false;
         _useNoFeatures = false;
 
@@ -76,10 +75,6 @@ public class SLTSaltrMobile implements IMobileSaltr {
         _levelPacks = new <SLTLevelPack>[];
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
-    }
-
-    public function set appVersion(value:String):void {
-        _appVersion = value;
     }
 
     public function set repository(value:ISLTRepository):void {
@@ -224,7 +219,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         _started = true;
     }
 
-    public function connect(successCallback:Function, failCallback:Function):void {
+    public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
         if (_isLoading || !_started) {
             return;
         }
@@ -232,7 +227,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         _appDataLoadFailCallback = failCallback;
 
         _isLoading = true;
-        var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler);
+        var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler, basicProperties, customProperties);
         resource.load();
     }
 
@@ -257,26 +252,74 @@ public class SLTSaltrMobile implements IMobileSaltr {
         }
     }
 
-    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
+    public function addProperties(basicProperties:Object = null, customProperties:Object = null):void {
+        if (!basicProperties && !customProperties || !_saltrUserId) {
+            return;
+        }
+
+        var urlVars:URLVariables = new URLVariables();
+        var args:Object = {};
+        urlVars.cmd = SLTConfig.CMD_ADD_PROPERTIES;
+
+        args.clientKey = _clientKey;
+        args.saltrUserId = _saltrUserId;
+
+        if (basicProperties != null) {
+            args.basicProperties = basicProperties;
+        }
+
+        if (customProperties != null) {
+            args.customProperties = customProperties;
+        }
+
+        urlVars.args = JSON.stringify(args);
+
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
+        var resource:SLTResource = new SLTResource("property", ticket,
+                function (resource:SLTResource):void {
+                    trace("success");
+                    var data:Object = resource.jsonData;
+                    resource.dispose();
+                },
+                function (resource:SLTResource):void {
+                    trace("error");
+                    resource.dispose();
+                });
+        resource.load();
+    }
+
+    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
         var urlVars:URLVariables = new URLVariables();
         urlVars.cmd = SLTConfig.CMD_APP_DATA;
         var args:Object = {};
-        if (_deviceId != null) {
-            args.deviceId = _deviceId;
+
+        if (!_saltrUserId) {
+            if (_deviceId != null) {
+                args.deviceId = _deviceId;
+            } else {
+                throw new Error("Field 'deviceId' is a required.")
+            }
+
+            if (_socialId != null && _socialNetwork != null) {
+                args.socialId = _socialId;
+                args.socialNetwork = _socialNetwork;
+            }
         } else {
-            throw new Error("Field 'deviceId' is a required.")
+            args.saltrUserId = _saltrUserId;
         }
 
-        if (_socialId != null && _socialNetwork != null) {
-            args.socialId = _socialId;
-            args.socialNetwork = _socialNetwork;
-        }
         args.clientKey = _clientKey;
-        urlVars.args = JSON.stringify(args);
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
-        if (_requestIdleTimeout > 0) {
-            ticket.idleTimeout = _requestIdleTimeout;
+
+        if (basicProperties != null) {
+            args.basicProperties = basicProperties;
         }
+
+        if (customProperties != null) {
+            args.customProperties = customProperties;
+        }
+
+        urlVars.args = JSON.stringify(args);
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
         return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
@@ -340,9 +383,6 @@ public class SLTSaltrMobile implements IMobileSaltr {
         var args:Object = {};
         urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         args.clientKey = _clientKey;
-        if (_appVersion) {
-            args.appVersion = _appVersion;
-        }
 
         var featureList:Array = [];
         for (var i:String in _developerFeatures) {
@@ -352,8 +392,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         args.developerFeatures = featureList;
         urlVars.args = JSON.stringify(args);
 
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
-        ticket.method = URLRequestMethod.POST;
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
@@ -395,8 +434,8 @@ public class SLTSaltrMobile implements IMobileSaltr {
     }
 
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):void {
-        var dataUrl:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+        var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url);
         if (_requestIdleTimeout > 0) {
             ticket.idleTimeout = _requestIdleTimeout;
         }
@@ -437,38 +476,13 @@ public class SLTSaltrMobile implements IMobileSaltr {
         _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
     }
 
-    //TODO @GSAR: port this later when SALTR is ready
-    private function addUserProperty(propertyNames:Vector.<String>, propertyValues:Vector.<*>, operations:Vector.<String>):void {
-//        var urlVars:URLVariables = new URLVariables();
-//        urlVars.cmd = SLTConfig.COMMAND_ADD_PROPERTY;
-//        var args:Object = {saltId: _saltrUserId};
-//        var properties:Array = [];
-//        for (var i:uint = 0; i < propertyNames.length; i++) {
-//            var propertyName:String = propertyNames[i];
-//            var propertyValue:* = propertyValues[i];
-//            var operation:String = operations[i];
-//            properties.push({key: propertyName, value: propertyValue, operation: operation});
-//        }
-//        args.properties = properties;
-//        args.clientKey = _clientKey;
-//        urlVars.args = JSON.stringify(args);
-//
-//        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
-//        if (_requestIdleTimeout > 0) {
-//            ticket.idleTimeout = _requestIdleTimeout;
-//        }
-//
-//        var resource:SLTResource = new SLTResource("property", ticket,
-//                function (resource:SLTResource):void {
-//                    trace("getSaltLevelPacks : success");
-//                    var data:Object = resource.jsonData;
-//                    resource.dispose();
-//                },
-//                function (resource:SLTResource):void {
-//                    trace("getSaltLevelPacks : error");
-//                    resource.dispose();
-//                });
-//        resource.load();
+    private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, vars);
+        ticket.method = URLRequestMethod.POST;
+        if (timeout > 0) {
+            ticket.idleTimeout = timeout;
+        }
+        return ticket;
     }
 }
 }
