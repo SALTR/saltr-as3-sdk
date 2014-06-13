@@ -32,24 +32,32 @@ internal class SLTDeserializer {
     }
 
     public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
-        var levelPackNodes:Object = rootNode.levelPacks;
+        var levelPackNodes:Array = rootNode.levelPacks;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var levels:Vector.<SLTLevel>;
-        var levelNodes:Object;
+        var levelNodes:Array;
+        var index:int = -1;
         if (levelPackNodes != null) {
+            //TODO @GSAR: remove this sort when SALTR confirms correct ordering
+            levelPackNodes.sort(sortByIndex);
+
             for (var i:int = 0, len:int = levelPackNodes.length; i < len; ++i) {
                 var levelPackNode:Object = levelPackNodes[i];
                 levelNodes = levelPackNode.levels;
+
+                //TODO @GSAR: remove this sort when SALTR confirms correct ordering
+                levelNodes.sort(sortByIndex);
+
                 levels = new <SLTLevel>[];
-                for each (var levelNode:Object in levelNodes) {
-                    var levelIndex:int = levelNode.index;
-                    levels.push(new SLTLevel(levelNode.id, levelIndex, levelNode.url, levelNode.properties, levelNode.version));
+                var packIndex:int = levelPackNode.index;
+                for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
+                    ++index;
+                    var levelNode:Object = levelNodes[j];
+                    var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
+                    levels.push(new SLTLevel(levelNode.id, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
                 }
-                levels.sort(sortByIndex);
-                var index:int = levelPackNode.index;
-                levelPacks.push(new SLTLevelPack(levelPackNode.token, index, levels));
+                levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
             }
-            levelPacks.sort(sortByIndex);
         }
         return levelPacks;
     }

@@ -129,13 +129,14 @@ public class SLTSaltrMobile implements IMobileSaltr {
             if (index > levelsSum + packLength) {
                 levelsSum += packLength;
             } else {
-                return _levelPacks[i].levels[index - levelsSum];
+                var localIndex:int = index - levelsSum;
+                return _levelPacks[i].levels[localIndex];
             }
         }
         return null;
     }
 
-    //TODO @GSAR: wil be removed probably later
+    //TODO @GSAR: will be removed probably later
     public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
@@ -245,22 +246,24 @@ public class SLTSaltrMobile implements IMobileSaltr {
         resource.load();
     }
 
-    public function loadLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+    //TODO @GSAR: when this method is called, controller's currentLevel here is still not created - but objectives care shown in popup. This leaves risk of having inconsistency if saltr gets updated between popup show and level creation.
+    public function loadLevelContent(index:int, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+        var sltLevel:SLTLevel = getLevelByGlobalIndex(index);
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         var content:Object;
         if (_connected == false) {
             if (useCache) {
-                content = loadLevelContentInternally(sltLevel, sltLevelPack);
+                content = loadLevelContentInternally(sltLevel);
             } else {
-                content = loadLevelContentFromDisk(sltLevel, sltLevelPack);
+                content = loadLevelContentFromDisk(sltLevel);
             }
             levelContentLoadSuccessHandler(sltLevel, content);
         } else {
-            if (useCache == false || sltLevel.version != getCachedLevelVersion(sltLevel, sltLevelPack)) {
-                loadLevelContentFromSaltr(sltLevel, sltLevelPack);
+            if (useCache == false || sltLevel.version != getCachedLevelVersion(sltLevel)) {
+                loadLevelContentFromSaltr(sltLevel);
             } else {
-                content = loadLevelContentFromCache(sltLevel, sltLevelPack);
+                content = loadLevelContentFromCache(sltLevel);
                 levelContentLoadSuccessHandler(sltLevel, content);
             }
         }
@@ -419,35 +422,35 @@ public class SLTSaltrMobile implements IMobileSaltr {
         trace("[Saltr] Dev feature Sync has failed.");
     }
 
-    private function getCachedLevelVersion(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):String {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
+    private function getCachedLevelVersion(sltLevel:SLTLevel):String {
+        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectVersion(cachedFileName);
     }
 
-    private function cacheLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, content:Object):void {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
+    private function cacheLevelContent(sltLevel:SLTLevel, content:Object):void {
+        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
     }
 
-    private function loadLevelContentInternally(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):Object {
-        var content:Object = loadLevelContentFromCache(sltLevel, sltLevelPack);
+    private function loadLevelContentInternally(sltLevel:SLTLevel):Object {
+        var content:Object = loadLevelContentFromCache(sltLevel);
         if (content == null) {
-            content = loadLevelContentFromDisk(sltLevel, sltLevelPack);
+            content = loadLevelContentFromDisk(sltLevel);
         }
         return content;
     }
 
-    private function loadLevelContentFromCache(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
+    private function loadLevelContentFromCache(sltLevel:SLTLevel):Object {
+        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromCache(url);
     }
 
-    private function loadLevelContentFromDisk(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevelPack.index, sltLevel.index);
+    private function loadLevelContentFromDisk(sltLevel:SLTLevel):Object {
+        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromApplication(url);
     }
 
-    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack):void {
+    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url);
         if (_requestIdleTimeout > 0) {
@@ -459,10 +462,10 @@ public class SLTSaltrMobile implements IMobileSaltr {
         function loadSuccessInternalHandler():void {
             var content:Object = resource.jsonData;
             if (content != null) {
-                cacheLevelContent(sltLevel, sltLevelPack, content);
+                cacheLevelContent(sltLevel, content);
             }
             else {
-                content = loadLevelContentInternally(sltLevel, sltLevelPack);
+                content = loadLevelContentInternally(sltLevel);
             }
 
             if (content != null) {
@@ -475,7 +478,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         }
 
         function loadFailInternalHandler():void {
-            var content:Object = loadLevelContentInternally(sltLevel, sltLevelPack);
+            var content:Object = loadLevelContentInternally(sltLevel);
             levelContentLoadSuccessHandler(sltLevel, content);
             resource.dispose();
         }

@@ -3,7 +3,6 @@
  */
 
 package saltr {
-import saltr.parser.game.SLTLevel;
 import saltr.parser.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
 
@@ -31,7 +30,7 @@ public interface IMobileSaltr {
 
     function defineFeature(token:String, properties:Object, required:Boolean = false):void
 
-    function loadLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, successCallback:Function, failCallback:Function, useCache:Boolean = true):void
+    function loadLevelContent(index:int, successCallback:Function, failCallback:Function, useCache:Boolean = true):void
 
 }
 }

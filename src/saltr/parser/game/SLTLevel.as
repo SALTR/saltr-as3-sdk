@@ -16,12 +16,16 @@ public class SLTLevel {
     private var _rootNode:Object;
     private var _levelSettings:SLTLevelSettings;
     private var _boardsNode:Object;
+    private var _packIndex:int;
+    private var _localIndex:int;
 
 
     //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
-    public function SLTLevel(id:String, index:int, contentUrl:String, properties:Object, version:String) {
+    public function SLTLevel(id:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
         _index = index;
+        _localIndex = localIndex;
+        _packIndex = packIndex;
         _contentUrl = contentUrl;
         _properties = properties;
         _version = version;
@@ -48,6 +52,14 @@ public class SLTLevel {
         return _version;
     }
 
+    public function get localIndex():int {
+        return _localIndex;
+    }
+
+    public function get packIndex():int {
+        return _packIndex;
+    }
+
     public function getBoard(id:String):SLTLevelBoard {
         return _boards[id];
     }
@@ -56,8 +68,8 @@ public class SLTLevel {
         _rootNode = rootNode;
 
         if (rootNode.hasOwnProperty("boards")) {
-             _boardsNode = rootNode["boards"];
-        }else {
+            _boardsNode = rootNode["boards"];
+        } else {
             throw new Error("Boards node is not found.");
         }
 
