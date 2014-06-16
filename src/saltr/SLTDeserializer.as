@@ -34,8 +34,6 @@ internal class SLTDeserializer {
     public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
         var levelPackNodes:Array = rootNode.levelPacks;
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
-        var levels:Vector.<SLTLevel>;
-        var levelNodes:Array;
         var index:int = -1;
         if (levelPackNodes != null) {
             //TODO @GSAR: remove this sort when SALTR confirms correct ordering
@@ -43,12 +41,12 @@ internal class SLTDeserializer {
 
             for (var i:int = 0, len:int = levelPackNodes.length; i < len; ++i) {
                 var levelPackNode:Object = levelPackNodes[i];
-                levelNodes = levelPackNode.levels;
+                var levelNodes:Array = levelPackNode.levels;
 
                 //TODO @GSAR: remove this sort when SALTR confirms correct ordering
                 levelNodes.sort(sortByIndex);
 
-                levels = new <SLTLevel>[];
+                var levels:Vector.<SLTLevel> = new <SLTLevel>[];
                 var packIndex:int = levelPackNode.index;
                 for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
                     ++index;
