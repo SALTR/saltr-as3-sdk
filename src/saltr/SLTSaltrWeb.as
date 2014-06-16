@@ -170,9 +170,9 @@ public class SLTSaltrWeb implements IWebSaltr {
         return null;
     }
 
-    public function importLevelContentFromJSON(json:String, level:SLTLevel):void {
-        var data:Object = JSON.parse(json);
-        level.updateContent(data);
+    public function importLevelContentFromJSON(json:String, sltLevel:SLTLevel):void {
+        var content:Object = JSON.parse(json);
+        sltLevel.updateContent(content);
     }
 
     public function importLevelsFromJSON(json:String):void {
@@ -383,7 +383,6 @@ public class SLTSaltrWeb implements IWebSaltr {
         trace("[Saltr] Dev feature Sync has failed.");
     }
 
-    //TODO:: @daal do we need this forceNoCache?
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url);
@@ -410,8 +409,8 @@ public class SLTSaltrWeb implements IWebSaltr {
         }
     }
 
-    protected function levelContentLoadSuccessHandler(level:SLTLevel, data:Object):void {
-        level.updateContent(data);
+    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
+        sltLevel.updateContent(content);
         _levelContentLoadSuccessCallback();
     }
 

@@ -484,8 +484,8 @@ public class SLTSaltrMobile implements IMobileSaltr {
         }
     }
 
-    protected function levelContentLoadSuccessHandler(level:SLTLevel, data:Object):void {
-        level.updateContent(data);
+    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
+        sltLevel.updateContent(content);
         _levelContentLoadSuccessCallback();
     }
 
