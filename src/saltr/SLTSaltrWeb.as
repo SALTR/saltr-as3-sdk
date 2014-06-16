@@ -3,6 +3,7 @@
  */
 
 package saltr {
+import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
@@ -40,9 +41,7 @@ public class SLTSaltrWeb implements IWebSaltr {
     protected var _levelContentLoadFailCallback:Function;
 
     private var _requestIdleTimeout:int;
-
     private var _devMode:Boolean;
-    private var _appVersion:String;
     private var _started:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
@@ -52,7 +51,7 @@ public class SLTSaltrWeb implements IWebSaltr {
         _clientKey = clientKey;
         _isLoading = false;
         _connected = false;
-
+        _saltrUserId = null;
         _useNoLevels = false;
         _useNoFeatures = false;
 
@@ -63,14 +62,7 @@ public class SLTSaltrWeb implements IWebSaltr {
         _activeFeatures = new Dictionary();
         _developerFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
-    }
-
-    public function set appVersion(value:String):void {
-        _appVersion = value;
-    }
-
-    public function get connected():Boolean {
-        return _connected;
+        _levelPacks = new <SLTLevelPack>[];
     }
 
     public function set useNoLevels(value:Boolean):void {
@@ -81,12 +73,65 @@ public class SLTSaltrWeb implements IWebSaltr {
         _useNoFeatures = value;
     }
 
+    public function set devMode(value:Boolean):void {
+        _devMode = value;
+    }
+
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
     }
 
     public function get levelPacks():Vector.<SLTLevelPack> {
         return _levelPacks;
+    }
+
+    public function get allLevels():Vector.<SLTLevel> {
+        var allLevels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            var levels:Vector.<SLTLevel> = _levelPacks[i].levels;
+            for (var j:int = 0, len2:int = levels.length; j < len2; ++j) {
+                allLevels.push(levels[j]);
+            }
+        }
+
+        return allLevels;
+    }
+
+    public function get allLevelsCount():uint {
+        var count:uint = 0;
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            count += _levelPacks[i].levels.length;
+        }
+
+        return count;
+    }
+
+    public function getLevelByGlobalIndex(index:int):SLTLevel {
+        var levelsSum:int = 0;
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            var packLength:int = _levelPacks[i].levels.length;
+            if (index >= levelsSum + packLength) {
+                levelsSum += packLength;
+            } else {
+                var localIndex:int = index - levelsSum;
+                return _levelPacks[i].levels[localIndex];
+            }
+        }
+        return null;
+    }
+
+    //TODO @GSAR: will be removed probably later
+    public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
+        var levelsSum:int = 0;
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            var packLength:int = _levelPacks[i].levels.length;
+            if (index >= levelsSum + packLength) {
+                levelsSum += packLength;
+            } else {
+                return _levelPacks[i];
+            }
+        }
+        return null;
     }
 
     public function get experiments():Vector.<SLTExperiment> {
@@ -125,12 +170,12 @@ public class SLTSaltrWeb implements IWebSaltr {
         return null;
     }
 
-    public function importLevelFromJSON(json:String, level:SLTLevel):void {
+    public function importLevelContentFromJSON(json:String, level:SLTLevel):void {
         var data:Object = JSON.parse(json);
         level.updateContent(data);
     }
 
-    public function importLevelPacksFromJSON(json:String):void {
+    public function importLevelsFromJSON(json:String):void {
         var applicationData:Object = JSON.parse(json);
         _levelPacks = SLTDeserializer.decodeLevels(applicationData);
     }
@@ -171,7 +216,7 @@ public class SLTSaltrWeb implements IWebSaltr {
         _started = true;
     }
 
-    public function connect(successCallback:Function, failCallback:Function):void {
+    public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
         if (_isLoading || !_started) {
             return;
         }
@@ -179,22 +224,82 @@ public class SLTSaltrWeb implements IWebSaltr {
         _appDataLoadFailCallback = failCallback;
 
         _isLoading = true;
-        var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler);
+        var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler, basicProperties, customProperties);
         resource.load();
     }
 
-    /////////////////////////////////////// level content data loading methods.
-
-    public function loadLevelContent(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, successCallback:Function, failCallback:Function):void {
+    public function loadLevelContent(index:int, successCallback:Function, failCallback:Function):void {
+        var sltLevel:SLTLevel = getLevelByGlobalIndex(index);
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
-        loadLevelContentFromSALTR(sltLevel, sltLevelPack, true);
+        loadLevelContentFromSaltr(sltLevel);
     }
 
-    private function appDataLoadFailHandler(resource:SLTResource):void {
-        resource.dispose();
-        _isLoading = false;
-        _appDataLoadFailCallback(new SLTStatusAppDataLoadFail());
+    public function addProperties(basicProperties:Object = null, customProperties:Object = null):void {
+        if (!basicProperties && !customProperties || !_saltrUserId) {
+            return;
+        }
+
+        var urlVars:URLVariables = new URLVariables();
+        var args:Object = {};
+        urlVars.cmd = SLTConfig.CMD_ADD_PROPERTIES;
+
+        args.clientKey = _clientKey;
+        args.saltrUserId = _saltrUserId;
+
+        if (basicProperties != null) {
+            args.basicProperties = basicProperties;
+        }
+
+        if (customProperties != null) {
+            args.customProperties = customProperties;
+        }
+
+        urlVars.args = JSON.stringify(args);
+
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
+        var resource:SLTResource = new SLTResource("property", ticket,
+                function (resource:SLTResource):void {
+                    trace("success");
+                    var data:Object = resource.jsonData;
+                    resource.dispose();
+                },
+                function (resource:SLTResource):void {
+                    trace("error");
+                    resource.dispose();
+                });
+        resource.load();
+    }
+
+    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
+        var urlVars:URLVariables = new URLVariables();
+        urlVars.cmd = SLTConfig.CMD_APP_DATA;
+        var args:Object = {};
+
+        if (!_saltrUserId) {
+            if (_socialId != null && _socialNetwork != null) {
+                args.socialId = _socialId;
+                args.socialNetwork = _socialNetwork;
+            } else {
+                throw new Error("In SALTR for Web 'socialId' and 'socialNetwork' are required fields.");
+            }
+        } else {
+            args.saltrUserId = _saltrUserId;
+        }
+
+        args.clientKey = _clientKey;
+
+        if (basicProperties != null) {
+            args.basicProperties = basicProperties;
+        }
+
+        if (customProperties != null) {
+            args.customProperties = customProperties;
+        }
+
+        urlVars.args = JSON.stringify(args);
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
+        return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
     }
 
     private function appDataLoadSuccessHandler(resource:SLTResource):void {
@@ -245,24 +350,10 @@ public class SLTSaltrWeb implements IWebSaltr {
         resource.dispose();
     }
 
-    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function):SLTResource {
-        var urlVars:URLVariables = new URLVariables();
-        urlVars.cmd = SLTConfig.CMD_APP_DATA;
-        var args:Object = {};
-        if (_socialId != null && _socialNetwork != null) {
-            args.socialId = _socialId;
-            args.socialNetwork = _socialNetwork;
-        } else {
-            throw new Error("In SALTR for Web 'socialId' and 'socialNetwork' are required fields.");
-        }
-
-        args.clientKey = _clientKey;
-        urlVars.args = JSON.stringify(args);
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, urlVars);
-        if (_requestIdleTimeout > 0) {
-            ticket.idleTimeout = _requestIdleTimeout;
-        }
-        return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+    private function appDataLoadFailHandler(resource:SLTResource):void {
+        resource.dispose();
+        _isLoading = false;
+        _appDataLoadFailCallback(new SLTStatusAppDataLoadFail());
     }
 
     private function syncDeveloperFeatures():void {
@@ -270,19 +361,16 @@ public class SLTSaltrWeb implements IWebSaltr {
         var args:Object = {};
         urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         args.clientKey = _clientKey;
-        if (_appVersion) {
-            args.appVersion = _appVersion;
-        }
 
         var featureList:Array = [];
         for (var i:String in _developerFeatures) {
             var feature:SLTFeature = _developerFeatures[i];
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
-        args.developerFeatures = JSON.stringify(featureList);
+        args.developerFeatures = featureList;
         urlVars.args = JSON.stringify(args);
 
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
@@ -296,16 +384,15 @@ public class SLTSaltrWeb implements IWebSaltr {
     }
 
     //TODO:: @daal do we need this forceNoCache?
-    protected function loadLevelContentFromSALTR(sltLevel:SLTLevel, sltLevelPack:SLTLevelPack, forceNoCache:Boolean = false):void {
-        var dataUrl:String = forceNoCache ? sltLevel.contentUrl + "?_time_=" + new Date().getTime() : sltLevel.contentUrl;
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(dataUrl);
+    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
+        var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url);
         if (_requestIdleTimeout > 0) {
             ticket.idleTimeout = _requestIdleTimeout;
         }
         var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalCallback, loadFailInternalCallback);
         resource.load();
 
-        //TODO @GSAR: get rid of nested functions!
         function loadSuccessInternalCallback():void {
             var content:Object = resource.jsonData;
             if (content != null) {
@@ -330,6 +417,15 @@ public class SLTSaltrWeb implements IWebSaltr {
 
     protected function levelContentLoadFailHandler():void {
         _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
+    }
+
+    private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, vars);
+        ticket.method = URLRequestMethod.POST;
+        if (timeout > 0) {
+            ticket.idleTimeout = timeout;
+        }
+        return ticket;
     }
 }
 }

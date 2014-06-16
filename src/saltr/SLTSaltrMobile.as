@@ -409,7 +409,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         args.developerFeatures = featureList;
         urlVars.args = JSON.stringify(args);
 
-        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars);
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
     }
@@ -456,10 +456,10 @@ public class SLTSaltrMobile implements IMobileSaltr {
         if (_requestIdleTimeout > 0) {
             ticket.idleTimeout = _requestIdleTimeout;
         }
-        var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalHandler, loadFailInternalHandler);
+        var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalCallback, loadFailInternalCallback);
         resource.load();
 
-        function loadSuccessInternalHandler():void {
+        function loadSuccessInternalCallback():void {
             var content:Object = resource.jsonData;
             if (content != null) {
                 cacheLevelContent(sltLevel, content);
@@ -477,7 +477,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
             resource.dispose();
         }
 
-        function loadFailInternalHandler():void {
+        function loadFailInternalCallback():void {
             var content:Object = loadLevelContentInternally(sltLevel);
             levelContentLoadSuccessHandler(sltLevel, content);
             resource.dispose();
