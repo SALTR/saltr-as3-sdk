@@ -126,7 +126,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
-            if (index > levelsSum + packLength) {
+            if (index >= levelsSum + packLength) {
                 levelsSum += packLength;
             } else {
                 var localIndex:int = index - levelsSum;
@@ -141,7 +141,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
-            if (index > levelsSum + packLength) {
+            if (index >= levelsSum + packLength) {
                 levelsSum += packLength;
             } else {
                 return _levelPacks[i];
