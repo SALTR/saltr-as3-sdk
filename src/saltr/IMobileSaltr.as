@@ -9,8 +9,6 @@ import saltr.repository.ISLTRepository;
 
 public interface IMobileSaltr {
 
-    function set appVersion(value:String):void
-
     function set useNoLevels(value:Boolean):void
 
     function set useNoFeatures(value:Boolean):void
@@ -29,7 +27,7 @@ public interface IMobileSaltr {
 
     function getFeatureProperties(token:String):Object
 
-    function connect(successCallback:Function, failCallback:Function):void
+    function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void
 
     function defineFeature(token:String, properties:Object, required:Boolean = false):void
 
