@@ -494,7 +494,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
     }
 
     private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, vars);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
         ticket.method = URLRequestMethod.POST;
         if (timeout > 0) {
             ticket.idleTimeout = timeout;
