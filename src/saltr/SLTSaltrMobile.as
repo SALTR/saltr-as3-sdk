@@ -253,7 +253,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         _levelContentLoadFailCallback = failCallback;
         var content:Object;
         if (_connected == false) {
-            if (useCache) {
+            if (useCache == true) {
                 content = loadLevelContentInternally(sltLevel);
             } else {
                 content = loadLevelContentFromDisk(sltLevel);
@@ -343,7 +343,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
     private function appDataLoadSuccessHandler(resource:SLTResource):void {
         var data:Object = resource.jsonData;
         var status:String = data.status;
-        var responseData:Object = data.responseData;
+        var response:Object = data.responseData;
         _isLoading = false;
         if (_devMode) {
             syncDeveloperFeatures();
@@ -352,29 +352,29 @@ public class SLTSaltrMobile implements IMobileSaltr {
         if (status == SLTConfig.RESULT_SUCCEED) {
             var saltrFeatures:Dictionary;
             try {
-                saltrFeatures = SLTDeserializer.decodeFeatures(responseData);
+                saltrFeatures = SLTDeserializer.decodeFeatures(response);
             } catch (e:Error) {
                 _appDataLoadFailCallback(new SLTStatusFeaturesParseError());
                 return;
             }
 
             try {
-                _experiments = SLTDeserializer.decodeExperiments(responseData);
+                _experiments = SLTDeserializer.decodeExperiments(response);
             } catch (e:Error) {
                 _appDataLoadFailCallback(new SLTStatusExperimentsParseError());
                 return;
             }
 
             try {
-                _levelPacks = SLTDeserializer.decodeLevels(responseData);
+                _levelPacks = SLTDeserializer.decodeLevels(response);
             } catch (e:Error) {
                 _appDataLoadFailCallback(new SLTStatusLevelsParseError());
                 return;
             }
 
-            _saltrUserId = responseData.saltrUserId;
+            _saltrUserId = response.saltrUserId;
             _connected = true;
-            _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", responseData);
+            _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", response);
 
             _activeFeatures = saltrFeatures;
             _appDataLoadSuccessCallback();
@@ -384,7 +384,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
             //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
         }
         else {
-            _appDataLoadFailCallback(new SLTStatus(responseData.errorCode, responseData.errorMessage));
+            _appDataLoadFailCallback(new SLTStatus(response.errorCode, response.errorMessage));
         }
         resource.dispose();
     }
