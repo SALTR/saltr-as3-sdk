@@ -304,6 +304,13 @@ public class SLTSaltrWeb implements IWebSaltr {
 
     private function appDataLoadSuccessHandler(resource:SLTResource):void {
         var data:Object = resource.jsonData;
+
+        if (data == null) {
+            _appDataLoadFailCallback(new SLTStatusAppDataLoadFail());
+            resource.dispose();
+            return;
+        }
+
         var status:String = data.status;
         var responseData:Object = data.responseData;
         _isLoading = false;
@@ -347,6 +354,7 @@ public class SLTSaltrWeb implements IWebSaltr {
         else {
             _appDataLoadFailCallback(new SLTStatus(responseData.errorCode, responseData.errorMessage));
         }
+
         resource.dispose();
     }
 
