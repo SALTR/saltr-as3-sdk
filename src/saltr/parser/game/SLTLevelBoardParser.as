@@ -151,18 +151,17 @@ internal class SLTLevelBoardParser {
 
     private static function parseAsset(assetNode:Object):SLTAsset {
         var token:String;
-        var properties:Object = assetNode.properties;
+        var properties:Object = null;
 
-        //TODO @daal. supporting type(old) and token.
         if (assetNode.hasOwnProperty("token")) {
             token = assetNode.token;
         } else if (assetNode.hasOwnProperty("type")) {
+            //TODO: to be removed when usage is gone!
             token = assetNode.type;
         }
 
-        //if asset is a composite asset!
-        if (assetNode.cells || assetNode.cellInfos) {
-            return new SLTCompositeAsset(token, assetNode.cellInfos, properties);
+        if (assetNode.hasOwnProperty("properties")) {
+            properties = assetNode.properties;
         }
 
         return new SLTAsset(token, properties);
