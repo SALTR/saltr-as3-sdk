@@ -12,11 +12,11 @@ import flash.events.SecurityErrorEvent;
 import flash.events.TimerEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
-import flash.net.URLRequestHeader;
 import flash.utils.Timer;
 
 import saltr.utils.HTTPStatus;
 
+//TODO @GSAR: review optimize this class!
 public class SLTResource {
 
     protected var _id:String;
@@ -27,7 +27,6 @@ public class SLTResource {
     protected var _dropTimeout:int;
     protected var _httpStatus:int;
     protected var _timeoutTimer:Timer;
-    protected var _responseHeaders:Vector.<URLRequestHeader>;
     protected var _urlLoader:URLLoader;
     protected var _onSuccess:Function;
     protected var _onFail:Function;
@@ -68,35 +67,15 @@ public class SLTResource {
         return Math.round((bytesLoaded / bytesTotal) * 100);
     }
 
-    public function get id():String {
-        return _id;
-    }
-
-    public function get data():Object {
-        return _urlLoader.data;
-    }
-
     public function get jsonData():Object {
         var json:Object = null;
         try {
-            json = JSON.parse(String(data));
+            json = JSON.parse(String(_urlLoader.data));
         }
         catch (e:Error) {
-            trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + data);
+            trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
         }
         return json;
-    }
-
-    public function get ticket():SLTResourceURLTicket {
-        return _ticket;
-    }
-
-    public function get isLoaded():Boolean {
-        return _isLoaded;
-    }
-
-    public function get responseHeaders():Vector.<URLRequestHeader> {
-        return _responseHeaders;
     }
 
     public function load():void {
@@ -224,7 +203,6 @@ public class SLTResource {
     private function httpResponseStatusHandler(event:HTTPStatusEvent):void {
         var dispatcher:EventDispatcher = event.target as EventDispatcher;
         dispatcher.removeEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, httpResponseStatusHandler);
-        _responseHeaders = Vector.<URLRequestHeader>(event.responseHeaders);
         _httpStatus = event.status;
     }
 }

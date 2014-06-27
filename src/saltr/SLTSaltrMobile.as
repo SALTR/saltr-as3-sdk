@@ -41,8 +41,8 @@ public class SLTSaltrMobile implements IMobileSaltr {
     protected var _experiments:Vector.<SLTExperiment>;
     protected var _levelPacks:Vector.<SLTLevelPack>;
 
-    protected var _appDataLoadSuccessCallback:Function;
-    protected var _appDataLoadFailCallback:Function;
+    protected var _connectSuccessCallback:Function;
+    protected var _connectFailCallback:Function;
     protected var _levelContentLoadSuccessCallback:Function;
     protected var _levelContentLoadFailCallback:Function;
 
@@ -238,11 +238,11 @@ public class SLTSaltrMobile implements IMobileSaltr {
         if (_isLoading || !_started) {
             return;
         }
-        _appDataLoadSuccessCallback = successCallback;
-        _appDataLoadFailCallback = failCallback;
+        _connectSuccessCallback = successCallback;
+        _connectFailCallback = failCallback;
 
         _isLoading = true;
-        var resource:SLTResource = createAppDataResource(appDataLoadSuccessHandler, appDataLoadFailHandler, basicProperties, customProperties);
+        var resource:SLTResource = createAppDataResource(appDataLoadSuccessCallback, appDataLoadFailCallback, basicProperties, customProperties);
         resource.load();
     }
 
@@ -305,7 +305,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         resource.load();
     }
 
-    private function createAppDataResource(appDataAssetLoadCompleteHandler:Function, appDataAssetLoadErrorHandler:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
+    private function createAppDataResource(loadSuccessCallback:Function, loadFailCallback:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
         var urlVars:URLVariables = new URLVariables();
         urlVars.cmd = SLTConfig.CMD_APP_DATA;
         var args:Object = {};
@@ -337,14 +337,14 @@ public class SLTSaltrMobile implements IMobileSaltr {
 
         urlVars.args = JSON.stringify(args);
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
-        return new SLTResource("saltAppConfig", ticket, appDataAssetLoadCompleteHandler, appDataAssetLoadErrorHandler);
+        return new SLTResource("saltAppConfig", ticket, loadSuccessCallback, loadFailCallback);
     }
 
-    private function appDataLoadSuccessHandler(resource:SLTResource):void {
+    private function appDataLoadSuccessCallback(resource:SLTResource):void {
         var data:Object = resource.jsonData;
 
         if (data == null) {
-            _appDataLoadFailCallback(new SLTStatusAppDataLoadFail());
+            _connectFailCallback(new SLTStatusAppDataLoadFail());
             resource.dispose();
             return;
         }
@@ -361,21 +361,21 @@ public class SLTSaltrMobile implements IMobileSaltr {
             try {
                 saltrFeatures = SLTDeserializer.decodeFeatures(response);
             } catch (e:Error) {
-                _appDataLoadFailCallback(new SLTStatusFeaturesParseError());
+                _connectFailCallback(new SLTStatusFeaturesParseError());
                 return;
             }
 
             try {
                 _experiments = SLTDeserializer.decodeExperiments(response);
             } catch (e:Error) {
-                _appDataLoadFailCallback(new SLTStatusExperimentsParseError());
+                _connectFailCallback(new SLTStatusExperimentsParseError());
                 return;
             }
 
             try {
                 _levelPacks = SLTDeserializer.decodeLevels(response);
             } catch (e:Error) {
-                _appDataLoadFailCallback(new SLTStatusLevelsParseError());
+                _connectFailCallback(new SLTStatusLevelsParseError());
                 return;
             }
 
@@ -384,22 +384,22 @@ public class SLTSaltrMobile implements IMobileSaltr {
             _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", response);
 
             _activeFeatures = saltrFeatures;
-            _appDataLoadSuccessCallback();
+            _connectSuccessCallback();
 
             trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelPacks.length);
 
             //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
         }
         else {
-            _appDataLoadFailCallback(new SLTStatus(response.errorCode, response.errorMessage));
+            _connectFailCallback(new SLTStatus(response.errorCode, response.errorMessage));
         }
         resource.dispose();
     }
 
-    private function appDataLoadFailHandler(resource:SLTResource):void {
+    private function appDataLoadFailCallback(resource:SLTResource):void {
         resource.dispose();
         _isLoading = false;
-        _appDataLoadFailCallback(new SLTStatusAppDataLoadFail());
+        _connectFailCallback(new SLTStatusAppDataLoadFail());
     }
 
     private function syncDeveloperFeatures():void {
