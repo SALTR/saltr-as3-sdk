@@ -14,7 +14,7 @@ internal class SLTLevelBoardParser {
             var boardNode:Object = boardNodes[boardId];
             boards[boardId] = parseLevelBoard(boardNode, levelSettings);
         }
-        return boards
+        return boards;
     }
 
     public static function parseLevelBoard(boardNode:Object, levelSettings:SLTLevelSettings):SLTLevelBoard {

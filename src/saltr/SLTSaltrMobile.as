@@ -246,9 +246,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         resource.load();
     }
 
-    //TODO @GSAR: when this method is called, controller's currentLevel here is still not created - but objectives care shown in popup. This leaves risk of having inconsistency if saltr gets updated between popup show and level creation.
-    public function loadLevelContent(index:int, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
-        var sltLevel:SLTLevel = getLevelByGlobalIndex(index);
+    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         var content:Object;
