@@ -3,6 +3,7 @@
  */
 
 package saltr {
+import saltr.parser.game.SLTLevel;
 import saltr.parser.game.SLTLevelPack;
 
 public interface IWebSaltr {
@@ -27,6 +28,6 @@ public interface IWebSaltr {
 
     function defineFeature(token:String, properties:Object, required:Boolean = false):void
 
-    function loadLevelContent(index:int, successCallback:Function, failCallback:Function):void
+    function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void
 }
 }

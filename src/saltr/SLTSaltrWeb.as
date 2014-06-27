@@ -228,8 +228,7 @@ public class SLTSaltrWeb implements IWebSaltr {
         resource.load();
     }
 
-    public function loadLevelContent(index:int, successCallback:Function, failCallback:Function):void {
-        var sltLevel:SLTLevel = getLevelByGlobalIndex(index);
+    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         loadLevelContentFromSaltr(sltLevel);
