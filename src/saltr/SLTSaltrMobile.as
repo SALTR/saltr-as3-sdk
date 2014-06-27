@@ -249,7 +249,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
     public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
-        var content:Object;
+        var content:Object = null;
         if (_connected == false) {
             if (useCache == true) {
                 content = loadLevelContentInternally(sltLevel);
@@ -391,6 +391,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
         else {
             _connectFailCallback(new SLTStatus(response.errorCode, response.errorMessage));
         }
+
         resource.dispose();
     }
 
@@ -457,14 +458,11 @@ public class SLTSaltrMobile implements IMobileSaltr {
 
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url);
-        if (_requestIdleTimeout > 0) {
-            ticket.idleTimeout = _requestIdleTimeout;
-        }
-        var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalCallback, loadFailInternalCallback);
+        var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
+        var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
         resource.load();
 
-        function loadSuccessInternalCallback():void {
+        function loadFromSaltrSuccessCallback():void {
             var content:Object = resource.jsonData;
             if (content != null) {
                 cacheLevelContent(sltLevel, content);
@@ -482,7 +480,7 @@ public class SLTSaltrMobile implements IMobileSaltr {
             resource.dispose();
         }
 
-        function loadFailInternalCallback():void {
+        function loadFromSaltrFailCallback():void {
             var content:Object = loadLevelContentInternally(sltLevel);
             levelContentLoadSuccessHandler(sltLevel, content);
             resource.dispose();

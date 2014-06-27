@@ -311,7 +311,7 @@ public class SLTSaltrWeb implements IWebSaltr {
         }
 
         var status:String = data.status;
-        var responseData:Object = data.responseData;
+        var response:Object = data.responseData;
         _isLoading = false;
         if (_devMode) {
             syncDeveloperFeatures();
@@ -320,27 +320,27 @@ public class SLTSaltrWeb implements IWebSaltr {
         if (status == SLTConfig.RESULT_SUCCEED) {
             var saltrFeatures:Dictionary;
             try {
-                saltrFeatures = SLTDeserializer.decodeFeatures(responseData);
+                saltrFeatures = SLTDeserializer.decodeFeatures(response);
             } catch (e:Error) {
                 _connectFailCallback(new SLTStatusFeaturesParseError());
                 return;
             }
 
             try {
-                _experiments = SLTDeserializer.decodeExperiments(responseData);
+                _experiments = SLTDeserializer.decodeExperiments(response);
             } catch (e:Error) {
                 _connectFailCallback(new SLTStatusExperimentsParseError());
                 return;
             }
 
             try {
-                _levelPacks = SLTDeserializer.decodeLevels(responseData);
+                _levelPacks = SLTDeserializer.decodeLevels(response);
             } catch (e:Error) {
                 _connectFailCallback(new SLTStatusLevelsParseError());
                 return;
             }
 
-            _saltrUserId = responseData.saltrUserId;
+            _saltrUserId = response.saltrUserId;
             _connected = true;
 
             _activeFeatures = saltrFeatures;
@@ -351,7 +351,7 @@ public class SLTSaltrWeb implements IWebSaltr {
             //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
         }
         else {
-            _connectFailCallback(new SLTStatus(responseData.errorCode, responseData.errorMessage));
+            _connectFailCallback(new SLTStatus(response.errorCode, response.errorMessage));
         }
 
         resource.dispose();
@@ -392,14 +392,11 @@ public class SLTSaltrWeb implements IWebSaltr {
 
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url);
-        if (_requestIdleTimeout > 0) {
-            ticket.idleTimeout = _requestIdleTimeout;
-        }
-        var resource:SLTResource = new SLTResource("saltr", ticket, loadSuccessInternalCallback, loadFailInternalCallback);
+        var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
+        var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
         resource.load();
 
-        function loadSuccessInternalCallback():void {
+        function loadFromSaltrSuccessCallback():void {
             var content:Object = resource.jsonData;
             if (content != null) {
                 levelContentLoadSuccessHandler(sltLevel, content);
@@ -410,7 +407,7 @@ public class SLTSaltrWeb implements IWebSaltr {
             resource.dispose();
         }
 
-        function loadFailInternalCallback():void {
+        function loadFromSaltrFailCallback():void {
             levelContentLoadFailHandler();
             resource.dispose();
         }
@@ -426,7 +423,7 @@ public class SLTSaltrWeb implements IWebSaltr {
     }
 
     private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(SLTConfig.SALTR_API_URL, vars);
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
         ticket.method = URLRequestMethod.POST;
         if (timeout > 0) {
             ticket.idleTimeout = timeout;
