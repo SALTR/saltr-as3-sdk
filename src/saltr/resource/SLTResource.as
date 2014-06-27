@@ -187,13 +187,13 @@ public class SLTResource {
         stopDropTimeoutTimer();
         var dispatcher:EventDispatcher = event.target as EventDispatcher;
         removeLoaderListeners(dispatcher);
-        if (HTTPStatus.isInErrorCodes(_httpStatus)) {
-            _onFail(this);
-            trace("[ERROR] Asset with path '" + _ticket.url + "' cannot be found.");
-        }
-        else {
+        if (HTTPStatus.isInSuccessCodes(_httpStatus)) {
             _isLoaded = true;
             _onSuccess(this);
+        }
+        else {
+            _onFail(this);
+            trace("[ERROR] Asset with path '" + _ticket.url + "' cannot be found.");
         }
     }
 

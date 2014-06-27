@@ -13,10 +13,11 @@ public class HTTPStatus {
     public static const HTTP_STATUS_503:int = 503; //Bad gateway
     public static const HTTP_STATUS_OK:int = 200;
     public static const HTTP_STATUS_NOT_MODIFIED:int = 304;
-    public static const HTTP_ERROR_CODES:Vector.<int> = Vector.<int>([HTTP_STATUS_400, HTTP_STATUS_403, HTTP_STATUS_404, HTTP_STATUS_503, HTTP_STATUS_502, HTTP_STATUS_500]);
 
-    public static function isInErrorCodes(statusCode:int):Boolean {
-        return HTTP_ERROR_CODES.indexOf(statusCode) != -1;
+    public static const HTTP_SUCCESS_CODES:Vector.<int> = Vector.<int>([HTTP_STATUS_OK]);
+
+    public static function isInSuccessCodes(statusCode:int):Boolean {
+        return HTTP_SUCCESS_CODES.indexOf(statusCode) != -1;
     }
 }
 }
