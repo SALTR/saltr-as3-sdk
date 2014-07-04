@@ -23,10 +23,9 @@ import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.Utils;
 
 //TODO:: @daal add some flushCache method.
-public class SLTSaltrMobile implements IMobileSaltr {
+public class SLTSaltrMobile {
 
     protected var _socialId:String;
-    protected var _socialNetwork:String;
     protected var _deviceId:String;
     protected var _connected:Boolean;
     protected var _clientKey:String;
@@ -154,13 +153,8 @@ public class SLTSaltrMobile implements IMobileSaltr {
         return _experiments;
     }
 
-    public function setSocial(socialId:String, socialNetwork:String):void {
-        if (socialId == null || socialNetwork == null) {
-            throw new Error("Both variables - 'socialId' and 'socialNetwork' are required and should be non 'null'.");
-        }
-
+    public function set socialId(socialId:String):void {
         _socialId = socialId;
-        _socialNetwork = socialNetwork;
     }
 
     public function getActiveFeatureTokens():Vector.<String> {
@@ -277,7 +271,20 @@ public class SLTSaltrMobile implements IMobileSaltr {
         urlVars.cmd = SLTConfig.CMD_ADD_PROPERTIES;
 
         args.clientKey = _clientKey;
-        args.saltrUserId = _saltrUserId;
+
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
+        } else {
+            throw new Error("Field 'deviceId' is a required.")
+        }
+
+        if (_socialId != null) {
+            args.socialId = _socialId;
+        }
+
+        if (_saltrUserId != null) {
+            args.saltrUserId = _saltrUserId;
+        }
 
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
@@ -308,22 +315,21 @@ public class SLTSaltrMobile implements IMobileSaltr {
         urlVars.cmd = SLTConfig.CMD_APP_DATA;
         var args:Object = {};
 
-        if (!_saltrUserId) {
-            if (_deviceId != null) {
-                args.deviceId = _deviceId;
-            } else {
-                throw new Error("Field 'deviceId' is a required.")
-            }
+        args.clientKey = _clientKey;
 
-            if (_socialId != null && _socialNetwork != null) {
-                args.socialId = _socialId;
-                args.socialNetwork = _socialNetwork;
-            }
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
         } else {
-            args.saltrUserId = _saltrUserId;
+            throw new Error("Field 'deviceId' is a required.")
         }
 
-        args.clientKey = _clientKey;
+        if (_socialId != null) {
+            args.socialId = _socialId;
+        }
+
+        if (_saltrUserId != null) {
+            args.saltrUserId = _saltrUserId;
+        }
 
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
@@ -406,6 +412,20 @@ public class SLTSaltrMobile implements IMobileSaltr {
         var args:Object = {};
         urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         args.clientKey = _clientKey;
+
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
+        } else {
+            throw new Error("Field 'deviceId' is a required.")
+        }
+
+        if (_socialId != null) {
+            args.socialId = _socialId;
+        }
+
+        if (_saltrUserId != null) {
+            args.saltrUserId = _saltrUserId;
+        }
 
         var featureList:Array = [];
         for (var i:String in _developerFeatures) {

@@ -20,10 +20,9 @@ import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.Utils;
 
 //TODO:: @daal add some flushCache method.
-public class SLTSaltrWeb implements IWebSaltr {
+public class SLTSaltrWeb {
 
     protected var _socialId:String;
-    protected var _socialNetwork:String;
     protected var _connected:Boolean;
     protected var _clientKey:String;
     protected var _saltrUserId:String;
@@ -138,13 +137,8 @@ public class SLTSaltrWeb implements IWebSaltr {
         return _experiments;
     }
 
-    public function setSocial(socialId:String, socialNetwork:String):void {
-        if (socialId == null || socialNetwork == null) {
-            throw new Error("Both variables - 'socialId' and 'socialNetwork' are required and should be non 'null'.");
-        }
-
+    public function set socialId(socialId:String):void {
         _socialId = socialId;
-        _socialNetwork = socialNetwork;
     }
 
     public function getActiveFeatureTokens():Vector.<String> {
@@ -197,8 +191,8 @@ public class SLTSaltrWeb implements IWebSaltr {
     }
 
     public function start():void {
-        if (_socialId == null || _socialNetwork == null) {
-            throw new Error("'socialId' and 'socialNetwork' fields are required and can't be null.");
+        if (_socialId == null) {
+            throw new Error("'socialId' field is required and can't be null.");
         }
 
         if (Utils.getDictionarySize(_developerFeatures) == 0 && _useNoFeatures == false) {
@@ -244,7 +238,16 @@ public class SLTSaltrWeb implements IWebSaltr {
         urlVars.cmd = SLTConfig.CMD_ADD_PROPERTIES;
 
         args.clientKey = _clientKey;
-        args.saltrUserId = _saltrUserId;
+
+        if (_socialId != null) {
+            args.socialId = _socialId;
+        } else {
+            throw new Error("Field 'socialId' is required.")
+        }
+
+        if (_saltrUserId != null) {
+            args.saltrUserId = _saltrUserId;
+        }
 
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
@@ -275,18 +278,17 @@ public class SLTSaltrWeb implements IWebSaltr {
         urlVars.cmd = SLTConfig.CMD_APP_DATA;
         var args:Object = {};
 
-        if (!_saltrUserId) {
-            if (_socialId != null && _socialNetwork != null) {
-                args.socialId = _socialId;
-                args.socialNetwork = _socialNetwork;
-            } else {
-                throw new Error("In SALTR for Web 'socialId' and 'socialNetwork' are required fields.");
-            }
+        args.clientKey = _clientKey;
+
+        if (_socialId != null) {
+            args.socialId = _socialId;
         } else {
-            args.saltrUserId = _saltrUserId;
+            throw new Error("Field 'socialId' is required.")
         }
 
-        args.clientKey = _clientKey;
+        if (_saltrUserId != null) {
+            args.saltrUserId = _saltrUserId;
+        }
 
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
@@ -368,6 +370,16 @@ public class SLTSaltrWeb implements IWebSaltr {
         var args:Object = {};
         urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         args.clientKey = _clientKey;
+
+        if (_socialId != null) {
+            args.socialId = _socialId;
+        } else {
+            throw new Error("Field 'socialId' is required.")
+        }
+
+        if (_saltrUserId != null) {
+            args.saltrUserId = _saltrUserId;
+        }
 
         var featureList:Array = [];
         for (var i:String in _developerFeatures) {
