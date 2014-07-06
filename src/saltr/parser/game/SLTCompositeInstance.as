@@ -6,8 +6,8 @@ package saltr.parser.game {
 public class SLTCompositeInstance extends SLTAssetInstance {
     private var _cells:Array;
 
-    public function SLTCompositeInstance(token:String, state:String, properties:Object, cells:Array) {
-        super(token, state, properties);
+    public function SLTCompositeInstance(token:String, stateIds:Vector.<SLTAssetState>, properties:Object, cells:Array) {
+        super(token, stateIds, properties);
         _cells = cells;
     }
 

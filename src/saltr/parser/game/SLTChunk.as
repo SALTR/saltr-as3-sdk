@@ -6,21 +6,19 @@ package saltr.parser.game {
 import flash.utils.Dictionary;
 
 internal class SLTChunk {
-    private var _layer:SLTLevelBoardLayer;
+    private var _layer:SLTMatchBoardLayer;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
-    private var _stateMap:Dictionary;
 
-    public function SLTChunk(layer:SLTLevelBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, levelSettings:SLTLevelSettings) {
+    public function SLTChunk(layer:SLTMatchBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
         _layer = layer;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
 
         _availableCells = new <SLTCell>[];
-        _assetMap = levelSettings.assetMap;
-        _stateMap = levelSettings.stateMap;
+        _assetMap = assetMap;
         generateCellContent();
     }
 
@@ -62,9 +60,8 @@ internal class SLTChunk {
         }
     }
 
-    private function generateAssetInstances(count:uint, assetId:String, stateId:String):void {
+    private function generateAssetInstances(count:uint, assetId:String, stateIds:Array):void {
         var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
-        var state:String = _stateMap[stateId] as String;
 
         trace("assetID:" + assetId + " count:" + count);
         var randCell:SLTCell;
@@ -73,7 +70,7 @@ internal class SLTChunk {
         for (var i:int = 0; i < count; ++i) {
             randCellIndex = int(Math.random() * _availableCells.length);
             randCell = _availableCells[randCellIndex];
-            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, new SLTAssetInstance(asset.token, state, asset.properties));
+            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, asset.getInstance(stateIds));
             _availableCells.splice(randCellIndex, 1);
             if (_availableCells.length == 0) {
                 return;
@@ -84,7 +81,7 @@ internal class SLTChunk {
     private function generateAssetInstancesByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
         for (var i:int = 0, len:int = countChunkAssetRules.length; i < len; ++i) {
             var assetRule:SLTChunkAssetRule = countChunkAssetRules[i];
-            generateAssetInstances(assetRule.distributionValue, assetRule.assetId, assetRule.stateId);
+            generateAssetInstances(assetRule.distributionValue, assetRule.assetId, assetRule.stateIds);
         }
     }
 
@@ -107,14 +104,14 @@ internal class SLTChunk {
                 proportion = assetRule.distributionValue / ratioSum * availableCellsNum;
                 count = proportion; //assigning number to int to floor the value;
                 fractionAssets.push({fraction: proportion - count, assetRule: assetRule});
-                generateAssetInstances(count, assetRule.assetId, assetRule.stateId);
+                generateAssetInstances(count, assetRule.assetId, assetRule.stateIds);
             }
 
             fractionAssets.sortOn("fraction", Array.DESCENDING);
             availableCellsNum = _availableCells.length;
 
             for (var k:int = 0; k < availableCellsNum; ++k) {
-                generateAssetInstances(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateId);
+                generateAssetInstances(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds);
             }
         }
     }
@@ -133,7 +130,7 @@ internal class SLTChunk {
             for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
                 chunkAssetRule = randomChunkAssetRules[i];
                 count = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
-                generateAssetInstances(count, chunkAssetRule.assetId, chunkAssetRule.stateId);
+                generateAssetInstances(count, chunkAssetRule.assetId, chunkAssetRule.stateIds);
             }
         }
     }

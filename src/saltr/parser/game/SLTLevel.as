@@ -14,10 +14,10 @@ public class SLTLevel {
     private var _contentReady:Boolean;
     private var _version:String;
     private var _rootNode:Object;
-    private var _levelSettings:SLTLevelSettings;
     private var _boardsNode:Object;
     private var _packIndex:int;
     private var _localIndex:int;
+    private var _assetMap:Dictionary;
 
 
     //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
@@ -60,7 +60,7 @@ public class SLTLevel {
         return _packIndex;
     }
 
-    public function getBoard(id:String):SLTLevelBoard {
+    public function getBoard(id:String):SLTMatchBoard {
         return _boards[id];
     }
 
@@ -74,20 +74,20 @@ public class SLTLevel {
         }
 
         _properties = rootNode["properties"];
-        _levelSettings = SLTLevelBoardParser.parseLevelSettings(rootNode);
+        _assetMap = SLTLevelBoardParser.parseLevelAssets(rootNode);
         generateAllBoards();
         _contentReady = true;
     }
 
     public function generateAllBoards():void {
         if (_boardsNode != null) {
-            _boards = SLTLevelBoardParser.parseLevelBoards(_boardsNode, _levelSettings);
+            _boards = SLTLevelBoardParser.parseLevelBoards(_boardsNode, _assetMap);
         }
     }
 
     public function generateBoard(boardId:String):void {
         if (_boardsNode != null && _boardsNode[boardId] != null) {
-            _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(_boardsNode[boardId], _levelSettings);
+            _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(_boardsNode[boardId], _assetMap);
         }
     }
 

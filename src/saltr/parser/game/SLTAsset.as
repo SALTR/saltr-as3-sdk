@@ -3,25 +3,46 @@
  */
 
 package saltr.parser.game {
-internal class SLTAsset {
-    private var _properties:Object;
-    private var _token:String;
+import flash.utils.Dictionary;
 
-    public function SLTAsset(token:String, properties:Object) {
+internal class SLTAsset {
+    protected var _properties:Object;
+    protected var _stateNodesMap:Dictionary;
+    protected var _token:String;
+
+    public function SLTAsset(token:String, stateNodesMap:Dictionary, properties:Object) {
         _token = token;
+        _stateNodesMap = stateNodesMap;
         _properties = properties;
     }
 
-    public function get token():String {
+    internal function get token():String {
         return _token;
     }
 
-    public function get properties():Object {
+    internal function get properties():Object {
         return _properties;
     }
 
     public function toString():String {
         return "[Asset] token: " + _token + ", " + " properties: " + _properties;
+    }
+
+    internal function getInstance(stateIds:Array):SLTAssetInstance {
+        return new SLTAssetInstance(_token, getInstanceStates(stateIds), properties);
+    }
+
+    protected function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
+        var states:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
+        for (var i:int = 0, len:int = stateIds.length; i < len; ++i) {
+            var state:SLTAssetState = _stateNodesMap[stateIds[i]] as SLTAssetState;
+            if (state != null) {
+                states.push(state);
+            }
+
+        }
+
+        return states;
     }
 }
 }
