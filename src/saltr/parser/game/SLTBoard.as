@@ -2,14 +2,12 @@
  * Created by GSAR on 7/6/14.
  */
 package saltr.parser.game {
-import flash.utils.Dictionary;
-
 internal class SLTBoard {
 
     protected var _properties:Object;
-    protected var _layers:Dictionary;
+    protected var _layers:Vector.<SLTBoardLayer>;
 
-    public function SLTBoard(layers:Dictionary, properties:Object) {
+    public function SLTBoard(layers:Vector.<SLTBoardLayer>, properties:Object) {
         _properties = properties;
         _layers = layers;
     }
@@ -18,7 +16,7 @@ internal class SLTBoard {
         return _properties;
     }
 
-    public function get layers():Dictionary {
+    public function get layers():Vector.<SLTBoardLayer> {
         return _layers;
     }
 

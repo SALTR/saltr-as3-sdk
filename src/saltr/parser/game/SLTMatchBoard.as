@@ -3,18 +3,20 @@
  */
 
 package saltr.parser.game {
-import flash.utils.Dictionary;
-
 public class SLTMatchBoard extends SLTBoard {
+    private var _cells:SLTCellMatrix;
     private var _rows:int;
     private var _cols:int;
-    private var _cells:SLTCellMatrix;
 
-    public function SLTMatchBoard(cells:SLTCellMatrix, layers:Dictionary, properties:Object) {
+    public function SLTMatchBoard(cells:SLTCellMatrix, layers:Vector.<SLTBoardLayer>, properties:Object) {
         super(layers, properties);
         _cells = cells;
         _cols = cells.width;
         _rows = cells.height;
+    }
+
+    public function get cells():SLTCellMatrix {
+        return _cells;
     }
 
     public function get rows():int {
@@ -25,9 +27,11 @@ public class SLTMatchBoard extends SLTBoard {
         return _cols;
     }
 
-    public function get cells():SLTCellMatrix {
-        return _cells;
+    public function regenerateChunks():void {
+        for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
+            var layer:SLTMatchBoardLayer = _layers[i] as SLTMatchBoardLayer;
+            layer.regenerateChunks();
+        }
     }
-
 }
 }

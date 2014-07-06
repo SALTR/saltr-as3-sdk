@@ -13,8 +13,6 @@ public class SLTLevel {
     private var _boards:Dictionary;
     private var _contentReady:Boolean;
     private var _version:String;
-    private var _rootNode:Object;
-    private var _boardsNode:Object;
     private var _packIndex:int;
     private var _localIndex:int;
     private var _assetMap:Dictionary;
@@ -65,29 +63,43 @@ public class SLTLevel {
     }
 
     public function updateContent(rootNode:Object):void {
-        _rootNode = rootNode;
-
+        var boardsNode:Object;
         if (rootNode.hasOwnProperty("boards")) {
-            _boardsNode = rootNode["boards"];
+            boardsNode = rootNode["boards"];
         } else {
-            throw new Error("Boards node is not found.");
+            throw new Error("[SALTR SDK: ERROR] Level content's 'boards' node can not be found.");
         }
 
         _properties = rootNode["properties"];
-        _assetMap = SLTLevelBoardParser.parseLevelAssets(rootNode);
-        generateAllBoards();
+
+        try {
+            _assetMap = SLTLevelParser.parseLevelAssets(rootNode);
+        }
+        catch (e:Error) {
+            throw new Error("[SALTR SDK: ERROR] Level content asset parsing failed.")
+        }
+
+        try {
+            _boards = SLTLevelParser.parseLevelContent(boardsNode, _assetMap);
+        }
+        catch (e:Error) {
+            throw new Error("[SALTR SDK: ERROR] Level content boards parsing failed.")
+        }
+
+        regenerateAllBoards();
         _contentReady = true;
     }
 
-    public function generateAllBoards():void {
-        if (_boardsNode != null) {
-            _boards = SLTLevelBoardParser.parseLevelBoards(_boardsNode, _assetMap);
+    public function regenerateAllBoards():void {
+        for each (var board:SLTMatchBoard in _boards) {
+            board.regenerateChunks();
         }
     }
 
-    public function generateBoard(boardId:String):void {
-        if (_boardsNode != null && _boardsNode[boardId] != null) {
-            _boards[boardId] = SLTLevelBoardParser.parseLevelBoard(_boardsNode[boardId], _assetMap);
+    public function regenerateBoard(boardId:String):void {
+        if (_boards != null && _boards[boardId] != null) {
+            var board:SLTMatchBoard = _boards[boardId];
+            board.regenerateChunks();
         }
     }
 

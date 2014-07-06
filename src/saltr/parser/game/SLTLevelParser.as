@@ -5,10 +5,10 @@
 package saltr.parser.game {
 import flash.utils.Dictionary;
 
-internal class SLTLevelBoardParser {
+internal class SLTLevelParser {
 
     //TODO @GSAR: add try catch here, and handle situation when parse fails!!!
-    public static function parseLevelBoards(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    public static function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
             var boardNode:Object = boardNodes[boardId];
@@ -17,7 +17,7 @@ internal class SLTLevelBoardParser {
         return boards;
     }
 
-    public static function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchBoard {
+    private static function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchBoard {
         var boardProperties:Object = {};
         if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
             boardProperties = boardNode.properties.board;
@@ -26,23 +26,23 @@ internal class SLTLevelBoardParser {
         var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
         initializeCells(cells, boardNode);
 
-
-        var layers:Dictionary = new Dictionary();
+        var layers:Vector.<SLTBoardLayer> = new Vector.<SLTBoardLayer>();
         var layerNodes:Array = boardNode.layers;
         for (var i:int = 0, len:int = layerNodes.length; i < len; ++i) {
             var layerNode:Object = layerNodes[i];
-            var layer:SLTMatchBoardLayer = new SLTMatchBoardLayer(layerNode.layerId, i, layerNode.fixedAssets, layerNode.chunks, layerNode.composites);
-            parseLayer(layer, cells, assetMap);
-            layers[layer.layerId] = layer.layerIndex;
+            var layer:SLTMatchBoardLayer = parseLayer(layerNode, i, cells, assetMap);
+            layers.push(layer);
         }
 
         return new SLTMatchBoard(cells, layers, boardProperties);
     }
 
-
-    private static function parseLayer(layer:SLTMatchBoardLayer, cells:SLTCellMatrix, assetMap:Dictionary):void {
-        parseFixedAssets(layer, cells, assetMap);
-        parseChunks(layer, cells, assetMap);
+    private static function parseLayer(layerNode:Object, layerIndex:int, cells:SLTCellMatrix, assetMap:Dictionary):SLTMatchBoardLayer {
+        var layerId:String = layerNode.layerId;
+        var layer:SLTMatchBoardLayer = new SLTMatchBoardLayer(layerId, layerIndex);
+        parseFixedAssets(layer, layerNode.fixedAssets as Array, cells, assetMap);
+        parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
+        return layer;
     }
 
     private static function initializeCells(cells:SLTCellMatrix, boardNode:Object):void {
@@ -77,11 +77,10 @@ internal class SLTLevelBoardParser {
         }
     }
 
-    private static function parseFixedAssets(layer:SLTMatchBoardLayer, cells:SLTCellMatrix, assetMap:Dictionary):void {
-        var assetInstancesNode:Array = layer.fixedAssetInstancesNodes;
+    private static function parseFixedAssets(layer:SLTMatchBoardLayer, assetNodes:Array, cells:SLTCellMatrix, assetMap:Dictionary):void {
         //creating fixed asset instances and assigning them to cells where they belong
-        for (var i:int = 0, iLen:int = assetInstancesNode.length; i < iLen; ++i) {
-            var assetInstanceNode:Object = assetInstancesNode[i];
+        for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
+            var assetInstanceNode:Object = assetNodes[i];
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateIds:Array = assetInstanceNode.states as Array;
             var cellPositions:Array = assetInstanceNode.cells;
@@ -94,14 +93,13 @@ internal class SLTLevelBoardParser {
         }
     }
 
-    private static function parseChunks(layer:SLTMatchBoardLayer, cellMatrix:SLTCellMatrix, assetMap:Dictionary):void {
-        var chunkNodes:Array = layer.chunkNodes;
+    private static function parseLayerChunks(layer:SLTMatchBoardLayer, chunkNodes:Array, cells:SLTCellMatrix, assetMap:Dictionary):void {
         for (var i:int = 0, len:int = chunkNodes.length; i < len; ++i) {
             var chunkNode:Object = chunkNodes[i];
             var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
             for each(var cellNode:Object in cellNodes) {
-                chunkCells.push(cellMatrix.retrieve(cellNode[0], cellNode[1]) as SLTCell);
+                chunkCells.push(cells.retrieve(cellNode[0], cellNode[1]) as SLTCell);
             }
 
             var assetNodes:Array = chunkNode.assets as Array;
@@ -110,24 +108,15 @@ internal class SLTLevelBoardParser {
                 chunkAssetRules.push(new SLTChunkAssetRule(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.states));
             }
 
-            new SLTChunk(layer, chunkCells, chunkAssetRules, assetMap);
+            layer.addChunk(new SLTChunk(layer, chunkCells, chunkAssetRules, assetMap));
         }
     }
 
-//    private static function parseComposites(layer:SLTLevelBoardLayer, cellMatrix:SLTCellMatrix, assetMap:Dictionary):void {
-//        var compositeNodes:Array = layer.compositeNodes;
-//        for (var i:int = 0, len:int = compositeNodes.length; i < len; ++i) {
-//            var compositeNode:Object = compositeNodes[i];
-//            var cellPosition:Array = compositeNode.cell;
-//            new SLTComposite(layer, compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[0], cellPosition[1]) as SLTCell, assetMap);
-//        }
-//    }
-
+    //Parsing assets here
     public static function parseLevelAssets(rootNode:Object):Dictionary {
         var assetNodes:Object = rootNode["assets"];
         var assetMap:Dictionary = new Dictionary();
         for (var assetId:Object in assetNodes) {
-            //noinspection JSUnfilteredForInLoop
             assetMap[assetId] = parseAsset(assetNodes[assetId]);
         }
         return assetMap;
@@ -176,5 +165,15 @@ internal class SLTLevelBoardParser {
 
         return new SLTAssetState(token, properties);
     }
+
+//    private static function parseComposites(layer:SLTLevelBoardLayer, cellMatrix:SLTCellMatrix, assetMap:Dictionary):void {
+//        var compositeNodes:Array = layer.compositeNodes;
+//        for (var i:int = 0, len:int = compositeNodes.length; i < len; ++i) {
+//            var compositeNode:Object = compositeNodes[i];
+//            var cellPosition:Array = compositeNode.cell;
+//            new SLTComposite(layer, compositeNode.assetId, compositeNode.stateId, cellMatrix.retrieve(cellPosition[0], cellPosition[1]) as SLTCell, assetMap);
+//        }
+//    }
+
 }
 }
