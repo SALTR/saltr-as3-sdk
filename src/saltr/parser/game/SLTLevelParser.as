@@ -7,7 +7,6 @@ import flash.utils.Dictionary;
 
 internal class SLTLevelParser {
 
-    //TODO @GSAR: add try catch here, and handle situation when parse fails!!!
     public static function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {

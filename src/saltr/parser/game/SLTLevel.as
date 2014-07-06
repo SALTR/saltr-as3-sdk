@@ -67,7 +67,7 @@ public class SLTLevel {
         if (rootNode.hasOwnProperty("boards")) {
             boardsNode = rootNode["boards"];
         } else {
-            throw new Error("[SALTR SDK: ERROR] Level content's 'boards' node can not be found.");
+            throw new Error("[SALTR: ERROR] Level content's 'boards' node can not be found.");
         }
 
         _properties = rootNode["properties"];
@@ -76,14 +76,14 @@ public class SLTLevel {
             _assetMap = SLTLevelParser.parseLevelAssets(rootNode);
         }
         catch (e:Error) {
-            throw new Error("[SALTR SDK: ERROR] Level content asset parsing failed.")
+            throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
         }
 
         try {
             _boards = SLTLevelParser.parseLevelContent(boardsNode, _assetMap);
         }
         catch (e:Error) {
-            throw new Error("[SALTR SDK: ERROR] Level content boards parsing failed.")
+            throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
         }
 
         regenerateAllBoards();

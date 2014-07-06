@@ -19,18 +19,18 @@ import saltr.utils.HTTPStatus;
 //TODO @GSAR: review optimize this class!
 public class SLTResource {
 
-    protected var _id:String;
-    protected var _isLoaded:Boolean;
-    protected var _ticket:SLTResourceURLTicket;
-    protected var _fails:int;
-    protected var _maxAttempts:int;
-    protected var _dropTimeout:int;
-    protected var _httpStatus:int;
-    protected var _timeoutTimer:Timer;
-    protected var _urlLoader:URLLoader;
-    protected var _onSuccess:Function;
-    protected var _onFail:Function;
-    protected var _onProgress:Function;
+    private var _id:String;
+    private var _isLoaded:Boolean;
+    private var _ticket:SLTResourceURLTicket;
+    private var _fails:int;
+    private var _maxAttempts:int;
+    private var _dropTimeout:int;
+    private var _httpStatus:int;
+    private var _timeoutTimer:Timer;
+    private var _urlLoader:URLLoader;
+    private var _onSuccess:Function;
+    private var _onFail:Function;
+    private var _onProgress:Function;
 
     /**
      *
@@ -41,7 +41,6 @@ public class SLTResource {
      * @param onProgress callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int)
      */
     public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
-        //
         _id = id;
         _ticket = ticket;
         _onSuccess = onSuccess;
@@ -51,7 +50,6 @@ public class SLTResource {
         _fails = 0;
         _dropTimeout = _ticket.dropTimeout;
         _httpStatus = -1;
-        //
         initLoader();
     }
 

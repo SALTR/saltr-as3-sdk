@@ -45,7 +45,6 @@ public class SLTSaltrWeb {
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
 
-    //TODO @GSAR: clean up all classes method order - to give SDK a representative look!
     public function SLTSaltrWeb(clientKey:String) {
         _clientKey = clientKey;
         _isLoading = false;
@@ -119,7 +118,6 @@ public class SLTSaltrWeb {
         return null;
     }
 
-    //TODO @GSAR: will be removed probably later
     public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
@@ -273,6 +271,46 @@ public class SLTSaltrWeb {
         resource.load();
     }
 
+    protected function syncSuccessHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev feature Sync is complete.");
+    }
+
+    protected function syncFailHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev feature Sync has failed.");
+    }
+
+    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
+        var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
+        var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
+        var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
+        resource.load();
+
+        function loadFromSaltrSuccessCallback():void {
+            var content:Object = resource.jsonData;
+            if (content != null) {
+                levelContentLoadSuccessHandler(sltLevel, content);
+            }
+            else {
+                levelContentLoadFailHandler();
+            }
+            resource.dispose();
+        }
+
+        function loadFromSaltrFailCallback():void {
+            levelContentLoadFailHandler();
+            resource.dispose();
+        }
+    }
+
+    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
+        sltLevel.updateContent(content);
+        _levelContentLoadSuccessCallback();
+    }
+
+    protected function levelContentLoadFailHandler():void {
+        _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
+    }
+
     private function createAppDataResource(loadSuccessCallback:Function, loadFailCallback:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
         var urlVars:URLVariables = new URLVariables();
         urlVars.cmd = SLTConfig.CMD_APP_DATA;
@@ -349,7 +387,6 @@ public class SLTSaltrWeb {
             _connectSuccessCallback();
 
             trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelPacks.length);
-
             //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
         }
         else {
@@ -392,46 +429,6 @@ public class SLTSaltrWeb {
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
-    }
-
-    protected function syncSuccessHandler(resource:SLTResource):void {
-        trace("[Saltr] Dev feature Sync is complete.");
-    }
-
-    protected function syncFailHandler(resource:SLTResource):void {
-        trace("[Saltr] Dev feature Sync has failed.");
-    }
-
-    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
-        var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
-        var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
-        var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
-        resource.load();
-
-        function loadFromSaltrSuccessCallback():void {
-            var content:Object = resource.jsonData;
-            if (content != null) {
-                levelContentLoadSuccessHandler(sltLevel, content);
-            }
-            else {
-                levelContentLoadFailHandler();
-            }
-            resource.dispose();
-        }
-
-        function loadFromSaltrFailCallback():void {
-            levelContentLoadFailHandler();
-            resource.dispose();
-        }
-    }
-
-    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
-        sltLevel.updateContent(content);
-        _levelContentLoadSuccessCallback();
-    }
-
-    protected function levelContentLoadFailHandler():void {
-        _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
     }
 
     private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
