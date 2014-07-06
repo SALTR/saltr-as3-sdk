@@ -39,9 +39,7 @@ internal class SLTAsset {
             if (state != null) {
                 states.push(state);
             }
-
         }
-
         return states;
     }
 }
