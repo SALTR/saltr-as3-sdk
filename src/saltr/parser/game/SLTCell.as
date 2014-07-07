@@ -22,6 +22,22 @@ public class SLTCell {
         _instancesByLayerIndex = new Dictionary();
     }
 
+    public function get col():int {
+        return _col;
+    }
+
+    public function set col(value:int):void {
+        _col = value;
+    }
+
+    public function get row():int {
+        return _row;
+    }
+
+    public function set row(value:int):void {
+        _row = value;
+    }
+
     public function get properties():Object {
         return _properties;
     }
@@ -30,28 +46,12 @@ public class SLTCell {
         return _isBlocked;
     }
 
-    public function get col():int {
-        return _col;
-    }
-
-    public function get row():int {
-        return _row;
-    }
-
-    public function set properties(value:Object):void {
-        _properties = value;
-    }
-
     public function set isBlocked(value:Boolean):void {
         _isBlocked = value;
     }
 
-    public function set row(value:int):void {
-        _row = value;
-    }
-
-    public function set col(value:int):void {
-        _col = value;
+    public function set properties(value:Object):void {
+        _properties = value;
     }
 
     public function getAssetInstanceByLayerId(layerId:String):SLTAssetInstance {
