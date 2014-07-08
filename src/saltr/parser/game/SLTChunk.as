@@ -71,7 +71,7 @@ internal class SLTChunk {
 
     private function resetChunkCells():void {
         for (var i:int = 0, len:int = _chunkCells.length; i < len; ++i) {
-            _chunkCells[i].removeLayerInstance(_layer.layerId, _layer.layerIndex);
+            _chunkCells[i].removeAssetInstance(_layer.layerId, _layer.layerIndex);
         }
     }
 

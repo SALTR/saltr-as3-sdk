@@ -69,7 +69,7 @@ public class SLTCell {
         }
     }
 
-    public function removeLayerInstance(layerId:String, layerIndex:int):void {
+    public function removeAssetInstance(layerId:String, layerIndex:int):void {
         delete _instancesByLayerId[layerId];
         delete _instancesByLayerId[layerIndex];
     }
