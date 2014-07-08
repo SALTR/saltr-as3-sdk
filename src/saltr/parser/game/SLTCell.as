@@ -65,13 +65,13 @@ public class SLTCell {
     public function setAssetInstance(layerId:String, layerIndex:int, assetInstance:SLTAssetInstance):void {
         if (_isBlocked == false) {
             _instancesByLayerId[layerId] = assetInstance;
-            _instancesByLayerId[layerIndex] = assetInstance;
+            _instancesByLayerIndex[layerIndex] = assetInstance;
         }
     }
 
     public function removeAssetInstance(layerId:String, layerIndex:int):void {
         delete _instancesByLayerId[layerId];
-        delete _instancesByLayerId[layerIndex];
+        delete _instancesByLayerIndex[layerIndex];
     }
 }
 }
