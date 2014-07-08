@@ -32,8 +32,12 @@ internal class SLTChunk {
     }
 
     public function generateContent():void {
+        //resetting chunk cells, as when chunk can contain empty cells, previous generation can leave assigned values to cells
+        resetChunkCells();
+
         //availableCells are being always overwritten here, so no need to initialize
         _availableCells = _chunkCells.concat();
+
         var countChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
         var ratioChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
         var randomChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
@@ -63,6 +67,12 @@ internal class SLTChunk {
             generateAssetInstancesRandomly(randomChunkAssetRules);
         }
         _availableCells.length = 0;
+    }
+
+    private function resetChunkCells():void {
+        for (var i:int = 0, len:int = _chunkCells.length; i < len; ++i) {
+            _chunkCells[i].removeLayerInstance(_layer.layerId, _layer.layerIndex);
+        }
     }
 
     private function generateAssetInstancesByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
