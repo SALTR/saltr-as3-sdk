@@ -7,8 +7,8 @@ import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
-import saltr.parser.game.SLTLevel;
-import saltr.parser.game.SLTLevelPack;
+import saltr.game.SLTLevel;
+import saltr.game.SLTLevelPack;
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
 import saltr.status.SLTStatus;

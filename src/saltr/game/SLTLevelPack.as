@@ -2,7 +2,7 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game {
 public class SLTLevelPack {
     private var _token:String;
     private var _levels:Vector.<SLTLevel>;

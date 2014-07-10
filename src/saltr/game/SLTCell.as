@@ -2,7 +2,7 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game {
 import flash.utils.Dictionary;
 
 public class SLTCell {

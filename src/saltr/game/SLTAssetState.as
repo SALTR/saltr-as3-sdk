@@ -2,7 +2,7 @@
  * Created by GSAR on 7/5/14.
  */
 
-package saltr.parser.game {
+package saltr.game {
 public class SLTAssetState {
 
     private var _token:String;

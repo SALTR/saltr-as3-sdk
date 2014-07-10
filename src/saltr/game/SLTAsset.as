@@ -2,7 +2,9 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game {
+import saltr.parser.game.*;
+
 import flash.utils.Dictionary;
 
 internal class SLTAsset {

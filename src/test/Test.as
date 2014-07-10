@@ -7,9 +7,9 @@ import flash.display.Sprite;
 
 import saltr.status.SLTStatus;
 import saltr.SLTSaltrMobile;
-import saltr.parser.game.SLTCellMatrix;
-import saltr.parser.game.SLTCellMatrixIterator;
-import saltr.parser.game.SLTLevel;
+import saltr.game.SLTCellMatrix;
+import saltr.game.SLTCellMatrixIterator;
+import saltr.game.SLTLevel;
 
 public class Test extends Sprite {
 

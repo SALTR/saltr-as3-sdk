@@ -1,7 +1,7 @@
 /**
  * Created by GSAR on 7/6/14.
  */
-package saltr.parser.game {
+package saltr.game {
 public class SLTBoardLayer {
 
     private var _layerId:String;

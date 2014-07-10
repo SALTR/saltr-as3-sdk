@@ -1,7 +1,9 @@
 /**
  * Created by GSAR on 7/6/14.
  */
-package saltr.parser.game {
+package saltr.game {
+import saltr.parser.game.*;
+
 internal class SLTBoard {
 
     protected var _properties:Object;

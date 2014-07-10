@@ -2,7 +2,9 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game {
+import saltr.parser.game.*;
+
 public class SLTMatchBoard extends SLTBoard {
     private var _cells:SLTCellMatrix;
     private var _rows:int;

@@ -2,7 +2,7 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game {
 public class SLTCompositeInstance extends SLTAssetInstance {
     private var _cells:Array;
 

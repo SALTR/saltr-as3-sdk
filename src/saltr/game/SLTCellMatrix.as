@@ -2,7 +2,9 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game {
+import saltr.parser.game.*;
+
 public class SLTCellMatrix {
     private var _width:int;
     private var _height:int;
