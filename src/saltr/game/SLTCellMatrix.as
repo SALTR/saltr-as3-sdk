@@ -3,7 +3,6 @@
  */
 
 package saltr.game {
-import saltr.parser.game.*;
 
 public class SLTCellMatrix {
     private var _width:int;

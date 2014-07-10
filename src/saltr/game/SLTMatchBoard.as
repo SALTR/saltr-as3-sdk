@@ -3,7 +3,6 @@
  */
 
 package saltr.game {
-import saltr.parser.game.*;
 
 public class SLTMatchBoard extends SLTBoard {
     private var _cells:SLTCellMatrix;
