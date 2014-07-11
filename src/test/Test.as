@@ -7,9 +7,9 @@ import flash.display.Sprite;
 
 import saltr.status.SLTStatus;
 import saltr.SLTSaltrMobile;
-import saltr.game.SLTCells;
-import saltr.game.SLTCellsIterator;
-import saltr.game.SLTMatchingLevel;
+import saltr.game.matching.SLTCells;
+import saltr.game.matching.SLTCellsIterator;
+import saltr.game.SLTLevel;
 
 public class Test extends Sprite {
 
@@ -1002,7 +1002,7 @@ public class Test extends Sprite {
     }
 
     private function testLevelBoardParsing():void {
-        var levels:SLTMatchingLevel = new SLTMatchingLevel("some_id", 1, "", {}, "1");
+        var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
         levels.updateContent(sampleLevelJson2);
 
         trace("done");
@@ -1019,7 +1019,7 @@ public class Test extends Sprite {
     }
 
     private function testLevelBoardParsingComposite():void {
-        var levels:SLTMatchingLevel = new SLTMatchingLevel("some_id", 1, "", {}, "1");
+        var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
         levels.updateContent(sampleLevelWithComposites);
         trace("done");
     }
