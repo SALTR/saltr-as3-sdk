@@ -22,6 +22,8 @@ import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.Utils;
 
+//TODO @GSAR: add namespaces in all packages to isolate functionality
+
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrMobile {
 

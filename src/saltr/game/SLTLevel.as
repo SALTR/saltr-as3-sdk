@@ -3,9 +3,6 @@ import flash.utils.Dictionary;
 
 import plexonic.error.PureVirtualFunctionError;
 
-import saltr.game.SLTBoard;
-import saltr.game.SLTLevelParser;
-
 public class SLTLevel {
     protected var _boards:Dictionary;
 
