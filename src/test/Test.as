@@ -7,9 +7,9 @@ import flash.display.Sprite;
 
 import saltr.status.SLTStatus;
 import saltr.SLTSaltrMobile;
-import saltr.game.SLTCellMatrix;
-import saltr.game.SLTCellMatrixIterator;
-import saltr.game.SLTLevel;
+import saltr.game.SLTCells;
+import saltr.game.SLTCellsIterator;
+import saltr.game.SLTMatchingLevel;
 
 public class Test extends Sprite {
 
@@ -1002,15 +1002,15 @@ public class Test extends Sprite {
     }
 
     private function testLevelBoardParsing():void {
-        var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
+        var levels:SLTMatchingLevel = new SLTMatchingLevel("some_id", 1, "", {}, "1");
         levels.updateContent(sampleLevelJson2);
 
         trace("done");
     }
 
 
-    private function traceCellMatrix(cells:SLTCellMatrix):void {
-        var iterator:SLTCellMatrixIterator = cells.iterator;
+    private function traceCellMatrix(cells:SLTCells):void {
+        var iterator:SLTCellsIterator = cells.iterator;
         var result:String = "";
         while (iterator.hasNext()) {
 //            result += iterator.next().assetInstance.properties.COLOR + "  ";
@@ -1019,7 +1019,7 @@ public class Test extends Sprite {
     }
 
     private function testLevelBoardParsingComposite():void {
-        var levels:SLTLevel = new SLTLevel("some_id", 1, "", {}, "1");
+        var levels:SLTMatchingLevel = new SLTMatchingLevel("some_id", 1, "", {}, "1");
         levels.updateContent(sampleLevelWithComposites);
         trace("done");
     }

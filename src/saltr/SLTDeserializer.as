@@ -6,7 +6,7 @@ package saltr {
 
 import flash.utils.Dictionary;
 
-import saltr.game.SLTLevel;
+import saltr.game.SLTMatchingLevel;
 import saltr.game.SLTLevelPack;
 
 internal class SLTDeserializer {
@@ -46,13 +46,13 @@ internal class SLTDeserializer {
                 //TODO @GSAR: remove this sort when SALTR confirms correct ordering
                 levelNodes.sort(sortByIndex);
 
-                var levels:Vector.<SLTLevel> = new <SLTLevel>[];
+                var levels:Vector.<SLTMatchingLevel> = new <SLTMatchingLevel>[];
                 var packIndex:int = levelPackNode.index;
                 for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
                     ++index;
                     var levelNode:Object = levelNodes[j];
                     var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
-                    levels.push(new SLTLevel(levelNode.id, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
+                    levels.push(new SLTMatchingLevel(levelNode.id, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
                 }
                 levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
             }

@@ -16,35 +16,35 @@ internal class SLTLevelParser {
         return boards;
     }
 
-    private static function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchBoard {
+    private static function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchingBoard {
         var boardProperties:Object = {};
         if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
             boardProperties = boardNode.properties.board;
         }
 
-        var cells:SLTCellMatrix = new SLTCellMatrix(boardNode.cols, boardNode.rows);
+        var cells:SLTCells = new SLTCells(boardNode.cols, boardNode.rows);
         initializeCells(cells, boardNode);
 
         var layers:Vector.<SLTBoardLayer> = new Vector.<SLTBoardLayer>();
         var layerNodes:Array = boardNode.layers;
         for (var i:int = 0, len:int = layerNodes.length; i < len; ++i) {
             var layerNode:Object = layerNodes[i];
-            var layer:SLTMatchBoardLayer = parseLayer(layerNode, i, cells, assetMap);
+            var layer:SLTMatchingBoardLayer = parseLayer(layerNode, i, cells, assetMap);
             layers.push(layer);
         }
 
-        return new SLTMatchBoard(cells, layers, boardProperties);
+        return new SLTMatchingBoard(cells, layers, boardProperties);
     }
 
-    private static function parseLayer(layerNode:Object, layerIndex:int, cells:SLTCellMatrix, assetMap:Dictionary):SLTMatchBoardLayer {
+    private static function parseLayer(layerNode:Object, layerIndex:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
         var layerId:String = layerNode.layerId;
-        var layer:SLTMatchBoardLayer = new SLTMatchBoardLayer(layerId, layerIndex);
+        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(layerId, layerIndex);
         parseFixedAssets(layer, layerNode.fixedAssets as Array, cells, assetMap);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;
     }
 
-    private static function initializeCells(cells:SLTCellMatrix, boardNode:Object):void {
+    private static function initializeCells(cells:SLTCells, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
         var cellProperties:Array = boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("cell") ? boardNode.properties.cell : [];
         var cols:int = cells.width;
@@ -76,7 +76,7 @@ internal class SLTLevelParser {
         }
     }
 
-    private static function parseFixedAssets(layer:SLTMatchBoardLayer, assetNodes:Array, cells:SLTCellMatrix, assetMap:Dictionary):void {
+    private static function parseFixedAssets(layer:SLTMatchingBoardLayer, assetNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
         //creating fixed asset instances and assigning them to cells where they belong
         for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
             var assetInstanceNode:Object = assetNodes[i];
@@ -92,7 +92,7 @@ internal class SLTLevelParser {
         }
     }
 
-    private static function parseLayerChunks(layer:SLTMatchBoardLayer, chunkNodes:Array, cells:SLTCellMatrix, assetMap:Dictionary):void {
+    private static function parseLayerChunks(layer:SLTMatchingBoardLayer, chunkNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
         for (var i:int = 0, len:int = chunkNodes.length; i < len; ++i) {
             var chunkNode:Object = chunkNodes[i];
             var cellNodes:Array = chunkNode.cells as Array;

@@ -4,13 +4,13 @@
 
 package saltr.game {
 
-public class SLTCellMatrix {
+public class SLTCells {
     private var _width:int;
     private var _height:int;
     private var _rawData:Vector.<SLTCell>;
-    private var _iterator:SLTCellMatrixIterator;
+    private var _iterator:SLTCellsIterator;
 
-    public function SLTCellMatrix(width:int, height:int) {
+    public function SLTCells(width:int, height:int) {
         _width = width;
         _height = height;
         allocate();
@@ -36,9 +36,9 @@ public class SLTCellMatrix {
         return _height;
     }
 
-    public function get iterator():SLTCellMatrixIterator {
+    public function get iterator():SLTCellsIterator {
         if (!_iterator) {
-            _iterator = new SLTCellMatrixIterator(this);
+            _iterator = new SLTCellsIterator(this);
         }
         return _iterator;
     }

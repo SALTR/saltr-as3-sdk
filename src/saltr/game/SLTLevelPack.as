@@ -5,10 +5,10 @@
 package saltr.game {
 public class SLTLevelPack {
     private var _token:String;
-    private var _levels:Vector.<SLTLevel>;
+    private var _levels:Vector.<SLTMatchingLevel>;
     private var _index:int;
 
-    public function SLTLevelPack(token:String, index:int, levels:Vector.<SLTLevel>) {
+    public function SLTLevelPack(token:String, index:int, levels:Vector.<SLTMatchingLevel>) {
         _token = token;
         _index = index;
         _levels = levels;
@@ -18,7 +18,7 @@ public class SLTLevelPack {
         return _token;
     }
 
-    public function get levels():Vector.<SLTLevel> {
+    public function get levels():Vector.<SLTMatchingLevel> {
         return _levels;
     }
 

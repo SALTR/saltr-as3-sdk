@@ -7,7 +7,7 @@ import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
-import saltr.game.SLTLevel;
+import saltr.game.SLTMatchingLevel;
 import saltr.game.SLTLevelPack;
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
@@ -83,10 +83,10 @@ public class SLTSaltrWeb {
         return _levelPacks;
     }
 
-    public function get allLevels():Vector.<SLTLevel> {
-        var allLevels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+    public function get allLevels():Vector.<SLTMatchingLevel> {
+        var allLevels:Vector.<SLTMatchingLevel> = new Vector.<SLTMatchingLevel>();
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
-            var levels:Vector.<SLTLevel> = _levelPacks[i].levels;
+            var levels:Vector.<SLTMatchingLevel> = _levelPacks[i].levels;
             for (var j:int = 0, len2:int = levels.length; j < len2; ++j) {
                 allLevels.push(levels[j]);
             }
@@ -104,7 +104,7 @@ public class SLTSaltrWeb {
         return count;
     }
 
-    public function getLevelByGlobalIndex(index:int):SLTLevel {
+    public function getLevelByGlobalIndex(index:int):SLTMatchingLevel {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
@@ -162,7 +162,7 @@ public class SLTSaltrWeb {
         return null;
     }
 
-    public function importLevelContentFromJSON(json:String, sltLevel:SLTLevel):void {
+    public function importLevelContentFromJSON(json:String, sltLevel:SLTMatchingLevel):void {
         var content:Object = JSON.parse(json);
         sltLevel.updateContent(content);
     }
@@ -220,7 +220,7 @@ public class SLTSaltrWeb {
         resource.load();
     }
 
-    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
+    public function loadLevelContent(sltLevel:SLTMatchingLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         loadLevelContentFromSaltr(sltLevel);
@@ -283,7 +283,7 @@ public class SLTSaltrWeb {
         trace("[Saltr] Dev feature Sync has failed.");
     }
 
-    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
+    protected function loadLevelContentFromSaltr(sltLevel:SLTMatchingLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
         var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
@@ -306,7 +306,7 @@ public class SLTSaltrWeb {
         }
     }
 
-    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
+    protected function levelContentLoadSuccessHandler(sltLevel:SLTMatchingLevel, content:Object):void {
         sltLevel.updateContent(content);
         _levelContentLoadSuccessCallback();
     }

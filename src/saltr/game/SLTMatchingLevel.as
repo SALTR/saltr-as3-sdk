@@ -6,7 +6,7 @@ package saltr.game {
 
 import flash.utils.Dictionary;
 
-public class SLTLevel {
+public class SLTMatchingLevel {
     private var _id:String;
     private var _contentUrl:String;
     private var _index:int;
@@ -20,7 +20,7 @@ public class SLTLevel {
 
 
     //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
-    public function SLTLevel(id:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
+    public function SLTMatchingLevel(id:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
         _index = index;
         _localIndex = localIndex;
@@ -59,7 +59,7 @@ public class SLTLevel {
         return _packIndex;
     }
 
-    public function getBoard(id:String):SLTMatchBoard {
+    public function getBoard(id:String):SLTMatchingBoard {
         return _boards[id];
     }
 
@@ -92,14 +92,14 @@ public class SLTLevel {
     }
 
     public function regenerateAllBoards():void {
-        for each (var board:SLTMatchBoard in _boards) {
+        for each (var board:SLTMatchingBoard in _boards) {
             board.regenerateChunks();
         }
     }
 
     public function regenerateBoard(boardId:String):void {
         if (_boards != null && _boards[boardId] != null) {
-            var board:SLTMatchBoard = _boards[boardId];
+            var board:SLTMatchingBoard = _boards[boardId];
             board.regenerateChunks();
         }
     }

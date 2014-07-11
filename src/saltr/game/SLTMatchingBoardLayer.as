@@ -3,12 +3,12 @@
  */
 
 package saltr.game {
-internal class SLTMatchBoardLayer extends SLTBoardLayer {
+internal class SLTMatchingBoardLayer extends SLTBoardLayer {
 
     private var _chunks:Vector.<SLTChunk>;
 
     //TODO @GSAR: assign existing chunk objects here so you can regenerate chunks without parsing again!
-    public function SLTMatchBoardLayer(layerId:String, layerIndex:int) {
+    public function SLTMatchingBoardLayer(layerId:String, layerIndex:int) {
         super(layerId, layerIndex);
         _chunks = new Vector.<SLTChunk>()
     }

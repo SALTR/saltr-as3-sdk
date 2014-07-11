@@ -3,12 +3,12 @@
  */
 
 package saltr.game {
-public class SLTCellMatrixIterator {
-    private var _cells:SLTCellMatrix;
+public class SLTCellsIterator {
+    private var _cells:SLTCells;
     private var _vectorLength:uint;
     private var _currentPosition:int;
 
-    public function SLTCellMatrixIterator(cells:SLTCellMatrix) {
+    public function SLTCellsIterator(cells:SLTCells) {
         _cells = cells;
         reset();
     }

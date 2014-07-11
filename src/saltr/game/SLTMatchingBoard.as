@@ -4,19 +4,19 @@
 
 package saltr.game {
 
-public class SLTMatchBoard extends SLTBoard {
-    private var _cells:SLTCellMatrix;
+public class SLTMatchingBoard extends SLTBoard {
+    private var _cells:SLTCells;
     private var _rows:int;
     private var _cols:int;
 
-    public function SLTMatchBoard(cells:SLTCellMatrix, layers:Vector.<SLTBoardLayer>, properties:Object) {
+    public function SLTMatchingBoard(cells:SLTCells, layers:Vector.<SLTBoardLayer>, properties:Object) {
         super(layers, properties);
         _cells = cells;
         _cols = cells.width;
         _rows = cells.height;
     }
 
-    public function get cells():SLTCellMatrix {
+    public function get cells():SLTCells {
         return _cells;
     }
 
@@ -30,7 +30,7 @@ public class SLTMatchBoard extends SLTBoard {
 
     public function regenerateChunks():void {
         for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
-            var layer:SLTMatchBoardLayer = _layers[i] as SLTMatchBoardLayer;
+            var layer:SLTMatchingBoardLayer = _layers[i] as SLTMatchingBoardLayer;
             layer.regenerateChunks();
         }
     }

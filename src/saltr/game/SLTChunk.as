@@ -8,7 +8,7 @@ import saltr.parser.game.*;
 import flash.utils.Dictionary;
 
 internal class SLTChunk {
-    private var _layer:SLTMatchBoardLayer;
+    private var _layer:SLTMatchingBoardLayer;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
@@ -18,7 +18,7 @@ internal class SLTChunk {
         return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
     }
 
-    public function SLTChunk(layer:SLTMatchBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
+    public function SLTChunk(layer:SLTMatchingBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
         _layer = layer;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
