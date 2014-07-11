@@ -6,7 +6,9 @@ package saltr {
 
 import flash.utils.Dictionary;
 
+import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
+import saltr.game.canvas2d.SLT2DLevel;
 import saltr.game.matching.SLTMatchingLevel;
 
 internal class SLTDeserializer {
@@ -23,9 +25,9 @@ internal class SLTDeserializer {
                 var experimentNode:Object = experimentNodes[i];
                 var token:String = experimentNode.token;
                 var partition:String = experimentNode.partition;
-                var type:String = experimentNode.type;
+                var experimentType:String = experimentNode.type;
                 var customEvents:Array = experimentNode.customEventList as Array;
-                experiments.push(new SLTExperiment(token, partition, type, customEvents));
+                experiments.push(new SLTExperiment(token, partition, experimentType, customEvents));
             }
         }
         return experiments;
@@ -33,6 +35,12 @@ internal class SLTDeserializer {
 
     public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
         var levelPackNodes:Array = rootNode.levelPacks;
+        var levelType:String = SLTLevel.LEVEL_TYPE_MATCHING;
+
+        if (rootNode.hasOwnProperty("levelType")) {
+            levelType = rootNode.levelType;
+        }
+
         var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
         var index:int = -1;
         if (levelPackNodes != null) {
@@ -46,13 +54,13 @@ internal class SLTDeserializer {
                 //TODO @GSAR: remove this sort when SALTR confirms correct ordering
                 levelNodes.sort(sortByIndex);
 
-                var levels:Vector.<SLTMatchingLevel> = new <SLTMatchingLevel>[];
+                var levels:Vector.<SLTLevel> = new <SLTLevel>[];
                 var packIndex:int = levelPackNode.index;
                 for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
                     ++index;
                     var levelNode:Object = levelNodes[j];
                     var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
-                    levels.push(new SLTMatchingLevel(levelNode.id, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
+                    levels.push(createLevel(levelType, levelNode.id, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
                 }
                 levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
             }
@@ -71,5 +79,18 @@ internal class SLTDeserializer {
         }
         return features;
     }
+
+    private static function createLevel(levelType:String, id:String, index:int, localIndex:int, packIndex:int, url:String, properties:Object, version:String):SLTLevel {
+        switch (levelType) {
+            case SLTLevel.LEVEL_TYPE_MATCHING:
+                return new SLTMatchingLevel(id, index, localIndex, packIndex, url, properties, version);
+                break;
+            case SLTLevel.LEVEL_TYPE_2DCANVAS:
+                return new SLT2DLevel(id, index, localIndex, packIndex, url, properties, version);
+                break;
+        }
+        return null;
+    }
+
 }
 }

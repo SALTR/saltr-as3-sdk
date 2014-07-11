@@ -29,12 +29,5 @@ public class SLTMatchingBoard extends SLTBoard {
     public function get cols():int {
         return _cols;
     }
-
-    public function regenerateChunks():void {
-        for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
-            var layer:SLTMatchingBoardLayer = _layers[i] as SLTMatchingBoardLayer;
-            layer.regenerateChunks();
-        }
-    }
 }
 }

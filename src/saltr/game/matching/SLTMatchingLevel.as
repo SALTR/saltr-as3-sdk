@@ -1,112 +1,22 @@
-/*
- * Copyright (c) 2014 Plexonic Ltd
+/**
+ * Created by GSAR on 7/10/14.
  */
-
 package saltr.game.matching {
-import flash.utils.Dictionary;
-
+import saltr.game.SLTLevel;
 import saltr.game.SLTLevelParser;
 
-public class SLTMatchingLevel {
-    private var _id:String;
-    private var _contentUrl:String;
-    private var _index:int;
-    private var _properties:Object;
-    private var _boards:Dictionary;
-    private var _contentReady:Boolean;
-    private var _version:String;
-    private var _packIndex:int;
-    private var _localIndex:int;
-    private var _assetMap:Dictionary;
-
-
-    //TODO @GSAR: rename this class to SLT2DBoardLevel and move the core part into base SLTLevel.
+public class SLTMatchingLevel extends SLTLevel {
     public function SLTMatchingLevel(id:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
-        _id = id;
-        _index = index;
-        _localIndex = localIndex;
-        _packIndex = packIndex;
-        _contentUrl = contentUrl;
-        _properties = properties;
-        _version = version;
-        _contentReady = false;
-    }
-
-    public function get index():int {
-        return _index;
-    }
-
-    public function get properties():Object {
-        return _properties;
-    }
-
-    public function get contentUrl():String {
-        return _contentUrl;
-    }
-
-    public function get contentReady():Boolean {
-        return _contentReady;
-    }
-
-    public function get version():String {
-        return _version;
-    }
-
-    public function get localIndex():int {
-        return _localIndex;
-    }
-
-    public function get packIndex():int {
-        return _packIndex;
+        super(id, index, localIndex, packIndex, contentUrl, properties, version);
     }
 
     public function getBoard(id:String):SLTMatchingBoard {
         return _boards[id];
     }
 
-    public function updateContent(rootNode:Object):void {
-        var boardsNode:Object;
-        if (rootNode.hasOwnProperty("boards")) {
-            boardsNode = rootNode["boards"];
-        } else {
-            throw new Error("[SALTR: ERROR] Level content's 'boards' node can not be found.");
-        }
-
-        _properties = rootNode["properties"];
-
-        try {
-            _assetMap = SLTLevelParser.parseLevelAssets(rootNode);
-        }
-        catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
-        }
-
-        try {
-            _boards = SLTLevelParser.parseLevelContent(boardsNode, _assetMap);
-        }
-        catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
-        }
-
-        regenerateAllBoards();
-        _contentReady = true;
-    }
-
-    public function regenerateAllBoards():void {
-        for each (var board:SLTMatchingBoard in _boards) {
-            board.regenerateChunks();
-        }
-    }
-
-    public function regenerateBoard(boardId:String):void {
-        if (_boards != null && _boards[boardId] != null) {
-            var board:SLTMatchingBoard = _boards[boardId];
-            board.regenerateChunks();
-        }
-    }
-
-    internal function dispose():void {
-        //TODO @GSAR: implement
+    override protected function getParser():SLTLevelParser {
+        //TODO @GSAR: make parsers singleton!
+        return new SLTMatchingLevelParser();
     }
 }
 }

@@ -7,8 +7,8 @@ import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
+import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
-import saltr.game.matching.SLTMatchingLevel;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTDummyRepository;
 import saltr.repository.SLTMobileRepository;
@@ -50,7 +50,16 @@ public class SLTSaltrMobile {
     private var _started:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
+    private var _levelType:String;
 
+    private static function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
+        ticket.method = URLRequestMethod.POST;
+        if (timeout > 0) {
+            ticket.idleTimeout = timeout;
+        }
+        return ticket;
+    }
 
     //TODO @GSAR: add Properties class to handle correct feature properties assignment
     public function SLTSaltrMobile(clientKey:String, deviceId:String, useCache:Boolean = true) {
@@ -61,6 +70,7 @@ public class SLTSaltrMobile {
         _saltrUserId = null;
         _useNoLevels = false;
         _useNoFeatures = false;
+        _levelType = null;
 
         _devMode = false;
         _started = false;
@@ -98,10 +108,10 @@ public class SLTSaltrMobile {
         return _levelPacks;
     }
 
-    public function get allLevels():Vector.<SLTMatchingLevel> {
-        var allLevels:Vector.<SLTMatchingLevel> = new Vector.<SLTMatchingLevel>();
+    public function get allLevels():Vector.<SLTLevel> {
+        var allLevels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
-            var levels:Vector.<SLTMatchingLevel> = _levelPacks[i].levels;
+            var levels:Vector.<SLTLevel> = _levelPacks[i].levels;
             for (var j:int = 0, len2:int = levels.length; j < len2; ++j) {
                 allLevels.push(levels[j]);
             }
@@ -119,7 +129,15 @@ public class SLTSaltrMobile {
         return count;
     }
 
-    public function getLevelByGlobalIndex(index:int):SLTMatchingLevel {
+    public function get experiments():Vector.<SLTExperiment> {
+        return _experiments;
+    }
+
+    public function set socialId(socialId:String):void {
+        _socialId = socialId;
+    }
+
+    public function getLevelByGlobalIndex(index:int):SLTLevel {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
@@ -146,14 +164,6 @@ public class SLTSaltrMobile {
         return null;
     }
 
-    public function get experiments():Vector.<SLTExperiment> {
-        return _experiments;
-    }
-
-    public function set socialId(socialId:String):void {
-        _socialId = socialId;
-    }
-
     public function getActiveFeatureTokens():Vector.<String> {
         var tokens:Vector.<String> = new Vector.<String>();
         for each(var feature:SLTFeature in _activeFeatures) {
@@ -178,6 +188,10 @@ public class SLTSaltrMobile {
     }
 
     public function importLevels(path:String = null):void {
+        if (_useNoLevels) {
+            return;
+        }
+
         if (_started == false) {
             path = path == null ? SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL : path;
             var applicationData:Object = _repository.getObjectFromApplication(path);
@@ -191,6 +205,10 @@ public class SLTSaltrMobile {
      * If you want to have a feature synced with SALTR you should call define before getAppData call.
      */
     public function defineFeature(token:String, properties:Object, required:Boolean = false):void {
+        if (_useNoFeatures) {
+            return;
+        }
+
         if (_started == false) {
             _developerFeatures[token] = new SLTFeature(token, properties, required);
         } else {
@@ -237,7 +255,7 @@ public class SLTSaltrMobile {
         resource.load();
     }
 
-    public function loadLevelContent(sltLevel:SLTMatchingLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         var content:Object = null;
@@ -319,7 +337,7 @@ public class SLTSaltrMobile {
         trace("[Saltr] Dev feature Sync has failed.");
     }
 
-    protected function loadLevelContentFromSaltr(sltLevel:SLTMatchingLevel):void {
+    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
         var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
@@ -350,7 +368,7 @@ public class SLTSaltrMobile {
         }
     }
 
-    protected function levelContentLoadSuccessHandler(sltLevel:SLTMatchingLevel, content:Object):void {
+    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
         sltLevel.updateContent(content);
         _levelContentLoadSuccessCallback();
     }
@@ -393,6 +411,7 @@ public class SLTSaltrMobile {
                 return v;
             }
         });
+
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
         return new SLTResource("saltAppConfig", ticket, loadSuccessCallback, loadFailCallback);
     }
@@ -408,6 +427,7 @@ public class SLTSaltrMobile {
 
         var status:String = data.status;
         var response:Object = data.responseData;
+        _levelType = response.levelType;
         _isLoading = false;
         if (_devMode) {
             syncDeveloperFeatures();
@@ -429,11 +449,15 @@ public class SLTSaltrMobile {
                 return;
             }
 
-            try {
-                _levelPacks = SLTDeserializer.decodeLevels(response);
-            } catch (e:Error) {
-                _connectFailCallback(new SLTStatusLevelsParseError());
-                return;
+            // if developer didn't announce use without levels, and levelType in returned JSON is not "noLevels",
+            // then parse levels
+            if (!_useNoLevels && _levelType != SLTLevel.LEVEL_TYPE_NONE) {
+                try {
+                    _levelPacks = SLTDeserializer.decodeLevels(response);
+                } catch (e:Error) {
+                    _connectFailCallback(new SLTStatusLevelsParseError());
+                    return;
+                }
             }
 
             _saltrUserId = response.saltrUserId;
@@ -496,17 +520,17 @@ public class SLTSaltrMobile {
         resource.load();
     }
 
-    private function getCachedLevelVersion(sltLevel:SLTMatchingLevel):String {
+    private function getCachedLevelVersion(sltLevel:SLTLevel):String {
         var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectVersion(cachedFileName);
     }
 
-    private function cacheLevelContent(sltLevel:SLTMatchingLevel, content:Object):void {
+    private function cacheLevelContent(sltLevel:SLTLevel, content:Object):void {
         var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
     }
 
-    private function loadLevelContentInternally(sltLevel:SLTMatchingLevel):Object {
+    private function loadLevelContentInternally(sltLevel:SLTLevel):Object {
         var content:Object = loadLevelContentFromCache(sltLevel);
         if (content == null) {
             content = loadLevelContentFromDisk(sltLevel);
@@ -514,23 +538,14 @@ public class SLTSaltrMobile {
         return content;
     }
 
-    private function loadLevelContentFromCache(sltLevel:SLTMatchingLevel):Object {
+    private function loadLevelContentFromCache(sltLevel:SLTLevel):Object {
         var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromCache(url);
     }
 
-    private function loadLevelContentFromDisk(sltLevel:SLTMatchingLevel):Object {
+    private function loadLevelContentFromDisk(sltLevel:SLTLevel):Object {
         var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromApplication(url);
-    }
-
-    private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
-        ticket.method = URLRequestMethod.POST;
-        if (timeout > 0) {
-            ticket.idleTimeout = timeout;
-        }
-        return ticket;
     }
 }
 }

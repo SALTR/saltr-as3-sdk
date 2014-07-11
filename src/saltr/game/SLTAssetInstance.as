@@ -3,8 +3,6 @@
  */
 
 package saltr.game {
-import saltr.parser.game.*;
-
 public class SLTAssetInstance {
     protected var _token:String;
     protected var _states:Vector.<SLTAssetState>;

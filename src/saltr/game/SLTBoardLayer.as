@@ -20,5 +20,8 @@ public class SLTBoardLayer {
         return _layerIndex;
     }
 
+    public function regenerate():void {
+        //override
+    }
 }
 }

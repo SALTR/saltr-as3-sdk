@@ -7,8 +7,8 @@ import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.utils.Dictionary;
 
+import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
-import saltr.game.matching.SLTMatchingLevel;
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
 import saltr.status.SLTStatus;
@@ -44,6 +44,16 @@ public class SLTSaltrWeb {
     private var _started:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
+    private var _levelType:String;
+
+    private static function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
+        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
+        ticket.method = URLRequestMethod.POST;
+        if (timeout > 0) {
+            ticket.idleTimeout = timeout;
+        }
+        return ticket;
+    }
 
     public function SLTSaltrWeb(clientKey:String) {
         _clientKey = clientKey;
@@ -83,10 +93,10 @@ public class SLTSaltrWeb {
         return _levelPacks;
     }
 
-    public function get allLevels():Vector.<SLTMatchingLevel> {
-        var allLevels:Vector.<SLTMatchingLevel> = new Vector.<SLTMatchingLevel>();
+    public function get allLevels():Vector.<SLTLevel> {
+        var allLevels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
-            var levels:Vector.<SLTMatchingLevel> = _levelPacks[i].levels;
+            var levels:Vector.<SLTLevel> = _levelPacks[i].levels;
             for (var j:int = 0, len2:int = levels.length; j < len2; ++j) {
                 allLevels.push(levels[j]);
             }
@@ -104,7 +114,15 @@ public class SLTSaltrWeb {
         return count;
     }
 
-    public function getLevelByGlobalIndex(index:int):SLTMatchingLevel {
+    public function get experiments():Vector.<SLTExperiment> {
+        return _experiments;
+    }
+
+    public function set socialId(socialId:String):void {
+        _socialId = socialId;
+    }
+
+    public function getLevelByGlobalIndex(index:int):SLTLevel {
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
@@ -131,14 +149,6 @@ public class SLTSaltrWeb {
         return null;
     }
 
-    public function get experiments():Vector.<SLTExperiment> {
-        return _experiments;
-    }
-
-    public function set socialId(socialId:String):void {
-        _socialId = socialId;
-    }
-
     public function getActiveFeatureTokens():Vector.<String> {
         var tokens:Vector.<String> = new Vector.<String>();
         for each(var feature:SLTFeature in _activeFeatures) {
@@ -162,17 +172,29 @@ public class SLTSaltrWeb {
         return null;
     }
 
-    public function importLevelContentFromJSON(json:String, sltLevel:SLTMatchingLevel):void {
+    public function importLevelContentFromJSON(json:String, sltLevel:SLTLevel):void {
+        if (_useNoLevels) {
+            return;
+        }
+
         var content:Object = JSON.parse(json);
         sltLevel.updateContent(content);
     }
 
     public function importLevelsFromJSON(json:String):void {
+        if (_useNoLevels) {
+            return;
+        }
+
         var applicationData:Object = JSON.parse(json);
         _levelPacks = SLTDeserializer.decodeLevels(applicationData);
     }
 
     public function importDeveloperFeaturesFromJSON(json:String):void {
+        if (_useNoFeatures) {
+            return;
+        }
+
         var featuresJSON:Object = JSON.parse(json);
         _developerFeatures = SLTDeserializer.decodeFeatures(featuresJSON);
     }
@@ -220,7 +242,7 @@ public class SLTSaltrWeb {
         resource.load();
     }
 
-    public function loadLevelContent(sltLevel:SLTMatchingLevel, successCallback:Function, failCallback:Function):void {
+    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         loadLevelContentFromSaltr(sltLevel);
@@ -283,7 +305,7 @@ public class SLTSaltrWeb {
         trace("[Saltr] Dev feature Sync has failed.");
     }
 
-    protected function loadLevelContentFromSaltr(sltLevel:SLTMatchingLevel):void {
+    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
         var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
         var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
@@ -306,7 +328,7 @@ public class SLTSaltrWeb {
         }
     }
 
-    protected function levelContentLoadSuccessHandler(sltLevel:SLTMatchingLevel, content:Object):void {
+    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
         sltLevel.updateContent(content);
         _levelContentLoadSuccessCallback();
     }
@@ -361,6 +383,7 @@ public class SLTSaltrWeb {
 
         var status:String = data.status;
         var response:Object = data.responseData;
+        _levelType = response.levelType;
         _isLoading = false;
         if (_devMode) {
             syncDeveloperFeatures();
@@ -382,11 +405,15 @@ public class SLTSaltrWeb {
                 return;
             }
 
-            try {
-                _levelPacks = SLTDeserializer.decodeLevels(response);
-            } catch (e:Error) {
-                _connectFailCallback(new SLTStatusLevelsParseError());
-                return;
+            // if developer didn't announce use without levels, and levelType in returned JSON is not "noLevels",
+            // then parse levels
+            if (!_useNoLevels && _levelType != SLTLevel.LEVEL_TYPE_NONE) {
+                try {
+                    _levelPacks = SLTDeserializer.decodeLevels(response);
+                } catch (e:Error) {
+                    _connectFailCallback(new SLTStatusLevelsParseError());
+                    return;
+                }
             }
 
             _saltrUserId = response.saltrUserId;
@@ -442,15 +469,6 @@ public class SLTSaltrWeb {
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
-    }
-
-    private function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
-        var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
-        ticket.method = URLRequestMethod.POST;
-        if (timeout > 0) {
-            ticket.idleTimeout = timeout;
-        }
-        return ticket;
     }
 }
 }

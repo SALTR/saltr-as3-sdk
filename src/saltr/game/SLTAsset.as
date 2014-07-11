@@ -3,7 +3,6 @@
  */
 
 package saltr.game {
-
 import flash.utils.Dictionary;
 
 public class SLTAsset {

@@ -21,5 +21,11 @@ public class SLTBoard {
         return _layers;
     }
 
+    public function regenerate():void {
+        for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
+            var layer:SLTBoardLayer = _layers[i] as SLTBoardLayer;
+            layer.regenerate();
+        }
+    }
 }
 }
