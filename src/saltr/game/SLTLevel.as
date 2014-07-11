@@ -3,7 +3,6 @@
  */
 
 package saltr.game {
-import saltr.parser.game.*;
 
 import flash.utils.Dictionary;
 
