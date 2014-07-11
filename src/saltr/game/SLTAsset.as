@@ -3,11 +3,10 @@
  */
 
 package saltr.game {
-import saltr.parser.game.*;
 
 import flash.utils.Dictionary;
 
-internal class SLTAsset {
+public class SLTAsset {
     protected var _properties:Object;
     protected var _stateMap:Dictionary;
     protected var _token:String;
@@ -18,11 +17,11 @@ internal class SLTAsset {
         _properties = properties;
     }
 
-    internal function get token():String {
+    public function get token():String {
         return _token;
     }
 
-    internal function get properties():Object {
+    public function get properties():Object {
         return _properties;
     }
 
@@ -30,7 +29,7 @@ internal class SLTAsset {
         return "[Asset] token: " + _token + ", " + " properties: " + _properties;
     }
 
-    internal function getInstance(stateIds:Array):SLTAssetInstance {
+    public function getInstance(stateIds:Array):SLTAssetInstance {
         return new SLTAssetInstance(_token, getInstanceStates(stateIds), properties);
     }
 

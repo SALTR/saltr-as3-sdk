@@ -2,9 +2,10 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
-
+package saltr.game.matching {
 import flash.utils.Dictionary;
+
+import saltr.game.SLTLevelParser;
 
 public class SLTMatchingLevel {
     private var _id:String;

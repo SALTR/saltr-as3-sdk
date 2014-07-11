@@ -6,8 +6,8 @@ package saltr {
 
 import flash.utils.Dictionary;
 
-import saltr.game.SLTMatchingLevel;
 import saltr.game.SLTLevelPack;
+import saltr.game.matching.SLTMatchingLevel;
 
 internal class SLTDeserializer {
 

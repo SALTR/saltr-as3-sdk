@@ -2,8 +2,11 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
+package saltr.game.matching {
+
 import flash.utils.Dictionary;
+
+import saltr.game.SLTAssetInstance;
 
 public class SLTCell {
     private var _col:int;

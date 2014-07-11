@@ -2,8 +2,10 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
-internal class SLTMatchingBoardLayer extends SLTBoardLayer {
+package saltr.game.matching {
+import saltr.game.SLTBoardLayer;
+
+public class SLTMatchingBoardLayer extends SLTBoardLayer {
 
     private var _chunks:Vector.<SLTChunk>;
 

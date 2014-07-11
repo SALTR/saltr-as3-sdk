@@ -2,7 +2,10 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
+package saltr.game.matching {
+import saltr.game.SLTAssetInstance;
+import saltr.game.SLTAssetState;
+
 public class SLTCompositeInstance extends SLTAssetInstance {
     private var _cells:Array;
 

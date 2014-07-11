@@ -2,7 +2,8 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
+package saltr.game.matching {
+
 public class SLTCellsIterator {
     private var _cells:SLTCells;
     private var _vectorLength:uint;

@@ -2,12 +2,12 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
-import saltr.parser.game.*;
-
+package saltr.game.matching {
 import flash.utils.Dictionary;
 
-internal class SLTChunk {
+import saltr.game.SLTAsset;
+
+public class SLTChunk {
     private var _layer:SLTMatchingBoardLayer;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
     private var _chunkCells:Vector.<SLTCell>;

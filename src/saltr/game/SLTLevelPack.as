@@ -3,6 +3,8 @@
  */
 
 package saltr.game {
+import saltr.game.matching.SLTMatchingLevel;
+
 public class SLTLevelPack {
     private var _token:String;
     private var _levels:Vector.<SLTMatchingLevel>;

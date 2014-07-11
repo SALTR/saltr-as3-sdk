@@ -2,8 +2,8 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
-internal class SLTChunkAssetRule {
+package saltr.game.matching {
+public class SLTChunkAssetRule {
 
     private var _assetId:String;
     private var _stateIds:Array;

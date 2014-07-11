@@ -2,7 +2,7 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
+package saltr.game.matching {
 
 public class SLTCells {
     private var _width:int;

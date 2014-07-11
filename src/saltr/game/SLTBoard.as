@@ -2,9 +2,8 @@
  * Created by GSAR on 7/6/14.
  */
 package saltr.game {
-import saltr.parser.game.*;
 
-internal class SLTBoard {
+public class SLTBoard {
 
     protected var _properties:Object;
     protected var _layers:Vector.<SLTBoardLayer>;

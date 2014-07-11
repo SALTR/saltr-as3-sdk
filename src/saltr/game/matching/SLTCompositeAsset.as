@@ -2,10 +2,12 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
-import saltr.parser.game.*;
+package saltr.game.matching {
 
 import flash.utils.Dictionary;
+
+import saltr.game.SLTAsset;
+import saltr.game.SLTAssetInstance;
 
 internal class SLTCompositeAsset extends SLTAsset {
 
@@ -20,7 +22,7 @@ internal class SLTCompositeAsset extends SLTAsset {
         return _cellInfos;
     }
 
-    override internal function getInstance(stateIds:Array):SLTAssetInstance {
+    override public function getInstance(stateIds:Array):SLTAssetInstance {
         return new SLTCompositeInstance(_token, getInstanceStates(stateIds), properties, _cellInfos);
     }
 

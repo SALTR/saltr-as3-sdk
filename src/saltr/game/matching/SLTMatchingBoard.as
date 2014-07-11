@@ -2,7 +2,9 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.game {
+package saltr.game.matching {
+import saltr.game.SLTBoard;
+import saltr.game.SLTBoardLayer;
 
 public class SLTMatchingBoard extends SLTBoard {
     private var _cells:SLTCells;

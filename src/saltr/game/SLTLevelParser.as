@@ -5,7 +5,14 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
-internal class SLTLevelParser {
+import saltr.game.matching.SLTCell;
+import saltr.game.matching.SLTCells;
+import saltr.game.matching.SLTChunk;
+import saltr.game.matching.SLTChunkAssetRule;
+import saltr.game.matching.SLTMatchingBoard;
+import saltr.game.matching.SLTMatchingBoardLayer;
+
+public class SLTLevelParser {
 
     public static function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
