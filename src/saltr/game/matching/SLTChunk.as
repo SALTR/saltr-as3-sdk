@@ -25,10 +25,6 @@ public class SLTChunk {
         _assetMap = assetMap;
     }
 
-    public function dispose():void {
-        //TODO @GSAR: implement!
-    }
-
     public function toString():String {
         return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
     }

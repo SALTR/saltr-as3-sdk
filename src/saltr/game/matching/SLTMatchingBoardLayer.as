@@ -24,11 +24,5 @@ public class SLTMatchingBoardLayer extends SLTBoardLayer {
         _chunks.push(chunk);
     }
 
-    public function purgeChunks():void {
-        for (var i:int = 0, len:int = _chunks.length; i < len; ++i) {
-            _chunks[i].dispose();
-        }
-        _chunks.length = 0;
-    }
 }
 }

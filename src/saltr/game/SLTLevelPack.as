@@ -30,5 +30,12 @@ public class SLTLevelPack {
         return _token;
     }
 
+    public function dispose():void {
+        // We are NOT disposing levels here as they still can be used by the app (references!).
+        // We let levels to be garbage collected later if not used.
+        _levels.length = 0;
+        _levels = null;
+    }
+
 }
 }

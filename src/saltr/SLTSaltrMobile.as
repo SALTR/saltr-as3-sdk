@@ -289,16 +289,19 @@ public class SLTSaltrMobile {
 
         args.clientKey = _clientKey;
 
+        //required for Mobile
         if (_deviceId != null) {
             args.deviceId = _deviceId;
         } else {
             throw new Error("Field 'deviceId' is a required.")
         }
 
+        //optional for Mobile
         if (_socialId != null) {
             args.socialId = _socialId;
         }
 
+        //optional
         if (_saltrUserId != null) {
             args.saltrUserId = _saltrUserId;
         }
@@ -386,16 +389,19 @@ public class SLTSaltrMobile {
 
         args.clientKey = _clientKey;
 
+        //required for Mobile
         if (_deviceId != null) {
             args.deviceId = _deviceId;
         } else {
             throw new Error("Field 'deviceId' is a required.")
         }
 
+        //optional for Mobile
         if (_socialId != null) {
             args.socialId = _socialId;
         }
 
+        //optional
         if (_saltrUserId != null) {
             args.saltrUserId = _saltrUserId;
         }
@@ -452,13 +458,20 @@ public class SLTSaltrMobile {
             }
 
             // if developer didn't announce use without levels, and levelType in returned JSON is not "noLevels",
-            // then parse levels
+            // then - parse levels
             if (!_useNoLevels && _levelType != SLTLevel.LEVEL_TYPE_NONE) {
+                var newLevelPacks:Vector.<SLTLevelPack>;
                 try {
-                    _levelPacks = SLTDeserializer.decodeLevels(response);
+                    newLevelPacks = SLTDeserializer.decodeLevels(response);
                 } catch (e:Error) {
                     _connectFailCallback(new SLTStatusLevelsParseError());
                     return;
+                }
+
+                // if new levels are received and parsed, then only dispose old ones and assign new ones.
+                if (newLevelPacks != null) {
+                    disposeLevelPacks();
+                    _levelPacks = newLevelPacks;
                 }
             }
 
@@ -485,22 +498,32 @@ public class SLTSaltrMobile {
         _connectFailCallback(new SLTStatusAppDataLoadFail());
     }
 
+    private function disposeLevelPacks():void {
+        for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
+            _levelPacks[i].dispose();
+        }
+        _levelPacks.length = 0;
+    }
+
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
         args.clientKey = _clientKey;
 
+        //required for Mobile
         if (_deviceId != null) {
             args.deviceId = _deviceId;
         } else {
             throw new Error("Field 'deviceId' is a required.")
         }
 
+        //optional for Mobile
         if (_socialId != null) {
             args.socialId = _socialId;
         }
 
+        //optional
         if (_saltrUserId != null) {
             args.saltrUserId = _saltrUserId;
         }
