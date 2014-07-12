@@ -28,11 +28,7 @@ public class SLTAsset {
         return "[Asset] token: " + _token + ", " + " properties: " + _properties;
     }
 
-    public function getInstance(stateIds:Array):SLTAssetInstance {
-        return new SLTAssetInstance(_token, getInstanceStates(stateIds), properties);
-    }
-
-    protected function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
+    public function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
         var states:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
         for (var i:int = 0, len:int = stateIds.length; i < len; ++i) {
             var state:SLTAssetState = _stateMap[stateIds[i]] as SLTAssetState;

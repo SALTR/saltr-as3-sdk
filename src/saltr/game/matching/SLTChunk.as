@@ -6,6 +6,7 @@ package saltr.game.matching {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
+import saltr.game.SLTAssetInstance;
 
 public class SLTChunk {
     private var _layer:SLTMatchingBoardLayer;
@@ -136,7 +137,7 @@ public class SLTChunk {
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = Math.random() * _availableCells.length;
             var randCell:SLTCell = _availableCells[randCellIndex];
-            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, asset.getInstance(stateIds));
+            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
             _availableCells.splice(randCellIndex, 1);
             if (_availableCells.length == 0) {
                 return;

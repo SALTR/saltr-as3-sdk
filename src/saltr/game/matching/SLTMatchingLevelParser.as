@@ -5,6 +5,7 @@ package saltr.game.matching {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
+import saltr.game.SLTAssetInstance;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 
@@ -116,7 +117,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
                 var position:Array = cellPositions[j];
                 var cell:SLTCell = cells.retrieve(position[0], position[1]);
-                cell.setAssetInstance(layer.layerId, layer.layerIndex, asset.getInstance(stateIds))
+                cell.setAssetInstance(layer.layerId, layer.layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
             }
         }
     }
