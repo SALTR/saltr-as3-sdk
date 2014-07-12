@@ -105,9 +105,5 @@ public class SLTLevel {
     protected function getParser():SLTLevelParser {
         throw new PureVirtualFunctionError();
     }
-
-    internal function dispose():void {
-        //TODO @GSAR: implement
-    }
 }
 }

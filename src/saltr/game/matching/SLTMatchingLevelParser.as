@@ -5,11 +5,19 @@ package saltr.game.matching {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
-import saltr.game.SLTBoard;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 
 public class SLTMatchingLevelParser extends SLTLevelParser {
+
+    private static var INSTANCE:SLTMatchingLevelParser;
+
+    public static function getInstance():SLTMatchingLevelParser {
+        if (!INSTANCE) {
+            INSTANCE = new SLTMatchingLevelParser(new Singleton());
+        }
+        return INSTANCE;
+    }
 
     private static function initializeCells(cells:SLTCells, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
@@ -43,7 +51,10 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
         }
     }
 
-    public function SLTMatchingLevelParser() {
+    public function SLTMatchingLevelParser(singleton:Singleton) {
+        if (singleton == null) {
+            throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
+        }
     }
 
     override public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
@@ -120,4 +131,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
     }
 
 }
+}
+
+class Singleton {
 }

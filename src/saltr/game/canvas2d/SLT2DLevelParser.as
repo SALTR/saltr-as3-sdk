@@ -5,13 +5,25 @@ package saltr.game.canvas2d {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
-
 import saltr.game.SLTAssetState;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 
 public class SLT2DLevelParser extends SLTLevelParser {
-    public function SLT2DLevelParser() {
+
+    private static var INSTANCE:SLT2DLevelParser;
+
+    public static function getInstance():SLT2DLevelParser {
+        if (!INSTANCE) {
+            INSTANCE = new SLT2DLevelParser(new Singleton());
+        }
+        return INSTANCE;
+    }
+
+    public function SLT2DLevelParser(singleton:Singleton) {
+        if (singleton == null) {
+            throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
+        }
     }
 
     override public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
@@ -78,4 +90,7 @@ public class SLT2DLevelParser extends SLTLevelParser {
         return new SLTAssetState(token, properties);
     }
 }
+}
+
+class Singleton {
 }

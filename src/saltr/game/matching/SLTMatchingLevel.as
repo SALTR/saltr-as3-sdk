@@ -15,8 +15,7 @@ public class SLTMatchingLevel extends SLTLevel {
     }
 
     override protected function getParser():SLTLevelParser {
-        //TODO @GSAR: make parsers singleton!
-        return new SLTMatchingLevelParser();
+        return SLTMatchingLevelParser.getInstance();
     }
 }
 }

@@ -15,7 +15,7 @@ public class SLT2DLevel extends SLTLevel {
     }
 
     override protected function getParser():SLTLevelParser {
-        return new SLT2DLevelParser();
+        return SLT2DLevelParser.getInstance();
     }
 }
 }
