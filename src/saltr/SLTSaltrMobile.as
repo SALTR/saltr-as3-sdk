@@ -27,25 +27,27 @@ import saltr.utils.Utils;
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrMobile {
 
-    protected var _socialId:String;
-    protected var _deviceId:String;
-    protected var _connected:Boolean;
-    protected var _clientKey:String;
-    protected var _saltrUserId:String;
-    protected var _isLoading:Boolean;
+    public static const API_VERSION:String = "1.0.1";
 
-    protected var _repository:ISLTRepository;
+    private var _socialId:String;
+    private var _deviceId:String;
+    private var _connected:Boolean;
+    private var _clientKey:String;
+    private var _saltrUserId:String;
+    private var _isLoading:Boolean;
 
-    protected var _activeFeatures:Dictionary;
-    protected var _developerFeatures:Dictionary;
+    private var _repository:ISLTRepository;
 
-    protected var _experiments:Vector.<SLTExperiment>;
-    protected var _levelPacks:Vector.<SLTLevelPack>;
+    private var _activeFeatures:Dictionary;
+    private var _developerFeatures:Dictionary;
 
-    protected var _connectSuccessCallback:Function;
-    protected var _connectFailCallback:Function;
-    protected var _levelContentLoadSuccessCallback:Function;
-    protected var _levelContentLoadFailCallback:Function;
+    private var _experiments:Vector.<SLTExperiment>;
+    private var _levelPacks:Vector.<SLTLevelPack>;
+
+    private var _connectSuccessCallback:Function;
+    private var _connectFailCallback:Function;
+    private var _levelContentLoadSuccessCallback:Function;
+    private var _levelContentLoadFailCallback:Function;
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
@@ -63,7 +65,6 @@ public class SLTSaltrMobile {
         return ticket;
     }
 
-    //TODO @GSAR: add Properties class to handle correct feature properties assignment
     public function SLTSaltrMobile(clientKey:String, deviceId:String, useCache:Boolean = true) {
         _clientKey = clientKey;
         _deviceId = deviceId;
@@ -285,8 +286,10 @@ public class SLTSaltrMobile {
 
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
-        urlVars.cmd = SLTConfig.CMD_ADD_PROPERTIES;
+        urlVars.cmd = SLTConfig.ACTION_ADD_PROPERTIES; //TODO @GSAR: remove later
+        urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
 
+        args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
 
         //required for Mobile
@@ -306,10 +309,12 @@ public class SLTSaltrMobile {
             args.saltrUserId = _saltrUserId;
         }
 
+        //optional
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
         }
 
+        //optional
         if (customProperties != null) {
             args.customProperties = customProperties;
         }
@@ -384,9 +389,12 @@ public class SLTSaltrMobile {
 
     private function createAppDataResource(loadSuccessCallback:Function, loadFailCallback:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.cmd = SLTConfig.CMD_APP_DATA;
+        urlVars.cmd = SLTConfig.ACTION_GET_APP_DATA; //TODO @GSAR: remove later
+        urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
+
         var args:Object = {};
 
+        args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
 
         //required for Mobile
@@ -433,15 +441,27 @@ public class SLTSaltrMobile {
             return;
         }
 
-        var status:String = data.status;
-        var response:Object = data.responseData;
-        _levelType = response.levelType;
-        _isLoading = false;
-        if (_devMode) {
-            syncDeveloperFeatures();
+        var success:Boolean = false;
+        var response:Object;
+
+        if (data.hasOwnProperty("response")) {
+            response = data.response[0];
+            success = response.success;
+        } else {
+            //TODO @GSAR: remove later when  API is versioned!
+            response = data.responseData;
+            success = data.status == SLTConfig.RESULT_SUCCEED;
         }
 
-        if (status == SLTConfig.RESULT_SUCCEED) {
+        _isLoading = false;
+
+        if (success) {
+
+            if (_devMode) {
+                syncDeveloperFeatures();
+            }
+
+            _levelType = response.levelType;
             var saltrFeatures:Dictionary;
             try {
                 saltrFeatures = SLTDeserializer.decodeFeatures(response);
@@ -508,7 +528,10 @@ public class SLTSaltrMobile {
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
-        urlVars.cmd = SLTConfig.CMD_DEV_SYNC_FEATURES;
+        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_FEATURES; //TODO @GSAR: remove later
+        urlVars.action = SLTConfig.ACTION_DEV_SYNC_FEATURES;
+
+        args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
 
         //required for Mobile
