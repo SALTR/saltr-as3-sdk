@@ -448,7 +448,7 @@ public class SLTSaltrMobile {
             response = data.response[0];
             success = response.success;
         } else {
-            //TODO @GSAR: remove later when  API is versioned!
+            //TODO @GSAR: remove later when API is versioned!
             response = data.responseData;
             success = data.status == SLTConfig.RESULT_SUCCEED;
         }

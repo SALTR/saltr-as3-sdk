@@ -18,7 +18,7 @@ public class SLTLevel {
 
     public static const LEVEL_TYPE_NONE:String = "noLevels";
     public static const LEVEL_TYPE_MATCHING:String = "matching";
-    public static const LEVEL_TYPE_2DCANVAS:String = "2DCanvas";
+    public static const LEVEL_TYPE_2DCANVAS:String = "canvas2D";
 
     public function SLTLevel(id:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
