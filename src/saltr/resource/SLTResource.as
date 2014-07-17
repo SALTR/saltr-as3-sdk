@@ -12,26 +12,25 @@ import flash.events.SecurityErrorEvent;
 import flash.events.TimerEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
-import flash.net.URLRequestHeader;
 import flash.utils.Timer;
 
 import saltr.utils.HTTPStatus;
 
+//TODO @GSAR: review optimize this class!
 public class SLTResource {
 
-    protected var _id:String;
-    protected var _isLoaded:Boolean;
-    protected var _ticket:SLTResourceURLTicket;
-    protected var _fails:int;
-    protected var _maxAttempts:int;
-    protected var _dropTimeout:int;
-    protected var _httpStatus:int;
-    protected var _timeoutTimer:Timer;
-    protected var _responseHeaders:Vector.<URLRequestHeader>;
-    protected var _urlLoader:URLLoader;
-    protected var _onSuccess:Function;
-    protected var _onFail:Function;
-    protected var _onProgress:Function;
+    private var _id:String;
+    private var _isLoaded:Boolean;
+    private var _ticket:SLTResourceURLTicket;
+    private var _fails:int;
+    private var _maxAttempts:int;
+    private var _dropTimeout:int;
+    private var _httpStatus:int;
+    private var _timeoutTimer:Timer;
+    private var _urlLoader:URLLoader;
+    private var _onSuccess:Function;
+    private var _onFail:Function;
+    private var _onProgress:Function;
 
     /**
      *
@@ -42,7 +41,6 @@ public class SLTResource {
      * @param onProgress callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int)
      */
     public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
-        //
         _id = id;
         _ticket = ticket;
         _onSuccess = onSuccess;
@@ -52,7 +50,6 @@ public class SLTResource {
         _fails = 0;
         _dropTimeout = _ticket.dropTimeout;
         _httpStatus = -1;
-        //
         initLoader();
     }
 
@@ -68,35 +65,15 @@ public class SLTResource {
         return Math.round((bytesLoaded / bytesTotal) * 100);
     }
 
-    public function get id():String {
-        return _id;
-    }
-
-    public function get data():Object {
-        return _urlLoader.data;
-    }
-
     public function get jsonData():Object {
         var json:Object = null;
         try {
-            json = JSON.parse(String(data));
+            json = JSON.parse(String(_urlLoader.data));
         }
         catch (e:Error) {
-            trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + data);
+            trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
         }
         return json;
-    }
-
-    public function get ticket():SLTResourceURLTicket {
-        return _ticket;
-    }
-
-    public function get isLoaded():Boolean {
-        return _isLoaded;
-    }
-
-    public function get responseHeaders():Vector.<URLRequestHeader> {
-        return _responseHeaders;
     }
 
     public function load():void {
@@ -187,13 +164,13 @@ public class SLTResource {
         stopDropTimeoutTimer();
         var dispatcher:EventDispatcher = event.target as EventDispatcher;
         removeLoaderListeners(dispatcher);
-        if (HTTPStatus.isInErrorCodes(_httpStatus)) {
-            _onFail(this);
-            trace("[ERROR] Asset with path '" + _ticket.url + "' cannot be found.");
-        }
-        else {
+        if (HTTPStatus.isInSuccessCodes(_httpStatus)) {
             _isLoaded = true;
             _onSuccess(this);
+        }
+        else {
+            _onFail(this);
+            trace("[ERROR] Asset with path '" + _ticket.url + "' cannot be found.");
         }
     }
 
@@ -224,7 +201,6 @@ public class SLTResource {
     private function httpResponseStatusHandler(event:HTTPStatusEvent):void {
         var dispatcher:EventDispatcher = event.target as EventDispatcher;
         dispatcher.removeEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, httpResponseStatusHandler);
-        _responseHeaders = Vector.<URLRequestHeader>(event.responseHeaders);
         _httpStatus = event.status;
     }
 }

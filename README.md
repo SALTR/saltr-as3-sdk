@@ -1,4 +1,4 @@
-SALTR Action Script 3 SDK
+SALTR Flash/AS3 SDK
 =============
 
 

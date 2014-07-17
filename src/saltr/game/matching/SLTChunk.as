@@ -2,34 +2,41 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
+package saltr.game.matching {
 import flash.utils.Dictionary;
 
-internal class SLTChunk {
-    private var _layer:SLTLevelBoardLayer;
+import saltr.game.SLTAsset;
+import saltr.game.SLTAssetInstance;
+
+public class SLTChunk {
+    private var _layer:SLTMatchingBoardLayer;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
-    private var _stateMap:Dictionary;
 
-    public function SLTChunk(layer:SLTLevelBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, levelSettings:SLTLevelSettings) {
+    private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {
+        return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
+    }
+
+    public function SLTChunk(layer:SLTMatchingBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
         _layer = layer;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
-
-        _availableCells = new <SLTCell>[];
-        _assetMap = levelSettings.assetMap;
-        _stateMap = levelSettings.stateMap;
-        generateCellContent();
+        _assetMap = assetMap;
     }
 
     public function toString():String {
         return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
     }
 
-    private function generateCellContent():void {
+    public function generateContent():void {
+        //resetting chunk cells, as when chunk can contain empty cells, previous generation can leave assigned values to cells
+        resetChunkCells();
+
+        //availableCells are being always overwritten here, so no need to initialize
         _availableCells = _chunkCells.concat();
+
         var countChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
         var ratioChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
         var randomChunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
@@ -49,8 +56,6 @@ internal class SLTChunk {
             }
         }
 
-        trace(" ");
-        trace(_availableCells.length);
         if (countChunkAssetRules.length > 0) {
             generateAssetInstancesByCount(countChunkAssetRules);
         }
@@ -60,31 +65,19 @@ internal class SLTChunk {
         else if (randomChunkAssetRules.length > 0) {
             generateAssetInstancesRandomly(randomChunkAssetRules);
         }
+        _availableCells.length = 0;
     }
 
-    private function generateAssetInstances(count:uint, assetId:String, stateId:String):void {
-        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
-        var state:String = _stateMap[stateId] as String;
-
-        trace("assetID:" + assetId + " count:" + count);
-        var randCell:SLTCell;
-        var randCellIndex:int;
-
-        for (var i:int = 0; i < count; ++i) {
-            randCellIndex = int(Math.random() * _availableCells.length);
-            randCell = _availableCells[randCellIndex];
-            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, new SLTAssetInstance(asset.token, state, asset.properties));
-            _availableCells.splice(randCellIndex, 1);
-            if (_availableCells.length == 0) {
-                return;
-            }
+    private function resetChunkCells():void {
+        for (var i:int = 0, len:int = _chunkCells.length; i < len; ++i) {
+            _chunkCells[i].removeAssetInstance(_layer.layerId, _layer.layerIndex);
         }
     }
 
     private function generateAssetInstancesByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
         for (var i:int = 0, len:int = countChunkAssetRules.length; i < len; ++i) {
             var assetRule:SLTChunkAssetRule = countChunkAssetRules[i];
-            generateAssetInstances(assetRule.distributionValue, assetRule.assetId, assetRule.stateId);
+            generateAssetInstances(assetRule.distributionValue, assetRule.assetId, assetRule.stateIds);
         }
     }
 
@@ -107,14 +100,14 @@ internal class SLTChunk {
                 proportion = assetRule.distributionValue / ratioSum * availableCellsNum;
                 count = proportion; //assigning number to int to floor the value;
                 fractionAssets.push({fraction: proportion - count, assetRule: assetRule});
-                generateAssetInstances(count, assetRule.assetId, assetRule.stateId);
+                generateAssetInstances(count, assetRule.assetId, assetRule.stateIds);
             }
 
             fractionAssets.sortOn("fraction", Array.DESCENDING);
             availableCellsNum = _availableCells.length;
 
             for (var k:int = 0; k < availableCellsNum; ++k) {
-                generateAssetInstances(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateId);
+                generateAssetInstances(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds);
             }
         }
     }
@@ -133,13 +126,23 @@ internal class SLTChunk {
             for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
                 chunkAssetRule = randomChunkAssetRules[i];
                 count = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
-                generateAssetInstances(count, chunkAssetRule.assetId, chunkAssetRule.stateId);
+                generateAssetInstances(count, chunkAssetRule.assetId, chunkAssetRule.stateIds);
             }
         }
     }
 
-    private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {
-        return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
+    private function generateAssetInstances(count:uint, assetId:String, stateIds:Array):void {
+        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
+
+        for (var i:int = 0; i < count; ++i) {
+            var randCellIndex:int = Math.random() * _availableCells.length;
+            var randCell:SLTCell = _availableCells[randCellIndex];
+            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+            _availableCells.splice(randCellIndex, 1);
+            if (_availableCells.length == 0) {
+                return;
+            }
+        }
     }
 }
 }

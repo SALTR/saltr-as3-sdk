@@ -2,20 +2,20 @@
  * Copyright (c) 2014 Plexonic Ltd
  */
 
-package saltr.parser.game {
-internal class SLTChunkAssetRule {
+package saltr.game.matching {
+public class SLTChunkAssetRule {
 
     private var _assetId:String;
-    private var _stateId:String;
+    private var _stateIds:Array;
     private var _distributionType:String;
     private var _distributionValue:uint;
 
-    public function SLTChunkAssetRule(assetId:String, distributionType:String,  distributionValue:uint, stateId:String) {
+    public function SLTChunkAssetRule(assetId:String, distributionType:String, distributionValue:uint, stateIds:Array) {
 
         _assetId = assetId;
         _distributionType = distributionType;
         _distributionValue = distributionValue;
-        _stateId = stateId;
+        _stateIds = stateIds;
     }
 
     public function get assetId():String {
@@ -30,8 +30,8 @@ internal class SLTChunkAssetRule {
         return _distributionType;
     }
 
-    public function get stateId():String {
-        return _stateId;
+    public function get stateIds():Array {
+        return _stateIds;
     }
 }
 }

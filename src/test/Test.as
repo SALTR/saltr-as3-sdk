@@ -7,9 +7,9 @@ import flash.display.Sprite;
 
 import saltr.status.SLTStatus;
 import saltr.SLTSaltrMobile;
-import saltr.parser.game.SLTCellMatrix;
-import saltr.parser.game.SLTCellMatrixIterator;
-import saltr.parser.game.SLTLevel;
+import saltr.game.matching.SLTCells;
+import saltr.game.matching.SLTCellsIterator;
+import saltr.game.SLTLevel;
 
 public class Test extends Sprite {
 
@@ -986,7 +986,7 @@ public class Test extends Sprite {
                     [8, 0],
                     [9, 0]
                 ]}
-            ], "blockedCells": [], "rows": 1, "cols": 10, "cellSize": [30, 30], "orientation": "TOP_LEFT", "position": [0, 0], "properties": {"board": {}}}}, "keySets": {"COLOR": {"3": "red", "4": "green", "5": "blue", "7": "purple", "12": "orange"}}, "assetStates": {"491": "radialbomb", "492": "linebomb", "493": "colorbomb", "467": "cobweb", "367": "jumping"}, "assets": {"1859": {"keys": {}, "states": [], "type_key": "dragoninbox"}, "1858": {"keys": {}, "states": [], "type_key": "dragon"}, "1857": {"keys": {}, "states": [], "type_key": "blocked"}, "1860": {"keys": {}, "states": [], "type_key": "jelly"}, "1918": {"keys": {}, "states": [], "type_key": "doublejelly"}, "996": {"keys": {"COLOR": 4}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "997": {"keys": {"COLOR": 5}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "995": {"keys": {"COLOR": 3}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "1724": {"keys": {}, "states": [], "type_key": "virus"}, "1919": {"keys": {}, "states": [], "type_key": "doublewax"}, "1977": {"keys": {}, "states": [], "type_key": "explosiveink"}, "1723": {"keys": {}, "states": [], "type_key": "wax"}, "1978": {"cells": [
+            ], "blockedCells": [], "rows": 1, "cols": 10, "cellSize": [30, 30], "orientation": "TOP_LEFT", "position": [0, 0], "properties": {"board": {}}}}, "keySets": {"COLOR": {"3": "red", "4": "green", "5": "blue", "7": "purple", "12": "orange"}}, "assetStates": {"491": "radialbomb", "492": "linebomb", "493": "colorbomb", "467": "cobweb", "367": "jumping"}, "assets": {"1859": {"keys": {}, "states": [], "type_key": "dragoninbox"}, "1858": {"keys": {}, "states": [], "type_key": "dragon"}, "1857": {"keys": {}, "states": [], "type_key": "blocked"}, "1860": {"keys": {}, "states": [], "type_key": "jelly"}, "1918": {"keys": {}, "states": [], "type_key": "doublejelly"}, "996": {"keys": {"COLOR": 4}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "997": {"keys": {"COLOR": 5}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "995": {"keys": {"COLOR": 3}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "1724": {"keys": {}, "states": [], "type_key": "virus"}, "1919": {"keys": {}, "states": [], "type_key": "doublewax"}, "1977": {"keys": {}, "states": [], "type_key": "spider"}, "1723": {"keys": {}, "states": [], "type_key": "wax"}, "1978": {"cells": [
             [0, 0],
             [1, 0]
         ], "keys": {}, "states": [], "type_key": "bigitem"}, "998": {"keys": {"COLOR": 12}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}, "999": {"keys": {"COLOR": 7}, "states": [367, 491, 493, 467, 492], "type_key": "normal"}}, "properties": {"levelType": "dragonDropping", "movesCount": "32", "boost_hammer": "true", "boost_extra_moves": "true"}};
@@ -1009,8 +1009,8 @@ public class Test extends Sprite {
     }
 
 
-    private function traceCellMatrix(cells:SLTCellMatrix):void {
-        var iterator:SLTCellMatrixIterator = cells.iterator;
+    private function traceCellMatrix(cells:SLTCells):void {
+        var iterator:SLTCellsIterator = cells.iterator;
         var result:String = "";
         while (iterator.hasNext()) {
 //            result += iterator.next().assetInstance.properties.COLOR + "  ";
