@@ -41,9 +41,9 @@ The recommended IDE's for Flash/ActionScript projects are Adobe Flash Builder or
 The entry point classes in SDK are different if the project is mobile or web based application.
 For mobile apps: SLTSaltrMobile.as is the main class.
 For web apps: SLTSaltrWeb.as is the main class.
-
 Each have some differences of initialization and usage.
 
+Note: All classes in the package start with "SLT" prefix.
 
 3. DIRECTORY STRUCTURE
 ======================
