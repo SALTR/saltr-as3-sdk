@@ -3,11 +3,19 @@ SALTR ActionScript3 SDK
 
 This is the README file of the SALTR ActionScript3 iOS SDK.
 
+To check out the project from GitHub:
+<a href="https://github.com/plexonic/saltr-ios-sdk.git">https://github.com/plexonic/saltr-ios-sdk.git</a>
+
+To download the latest ZIP:
+<a href="https://github.com/plexonic/saltr-as3-sdk/archive/master.zip">https://github.com/plexonic/saltr-as3-sdk/archive/master.zip</a>
+
+
+
 CONTENTS
 ========
 1. INTRODUCTION
 2. USAGE
-3. DIRECTORY STRUCTURE
+3. PACKAGES
 4. DOCUMENTATION
 
 ----
@@ -45,26 +53,21 @@ Each have some differences of initialization and usage.
 
 Note: All classes in the package start with "SLT" prefix.
 
-3. DIRECTORY STRUCTURE
+3. PACKAGES
 ======================
 
-Library and test app source code is available on github with the following URL:
+The SDK's library classes have the following packages:
 
-https://github.com/plexonic/saltr-ios-sdk.git
+- saltr - main and root package for the library;
+- saltr.game - the game related classes contained here;
+- saltr.game.cavas2d - classes related to 2D games;
+- saltr.game.matching - classes related to matching or board based games;
+- saltr.game.repository - local data repository classes (implementation widely varies with the platform);
+- saltr.game.status - status classes representing warnings and error statuses withing library code;
+- saltr.game.utils - helper or utility classes;
 
-The sdk has the following directory structure:
-
-- Saltr.xcodeproj - xcode main project configuration file
-- Saltr - the sources of the sdk
-- SaltrResource - the bundle of the sdk resources
-- SaltrTests - sdk unit tests built with XCTestFramework
-- SaltrTestApp - a sample app which uses the sdk
-- SaltrTestAppTests - an empty test project for the sample app
-- testdata - test data samples
 
 4. DOCUMENTATION
 ================
 
-The ChangeLog and ReleaseNotes of the project are available within the sources.
-
-The detailed SDK documentation is generated with doxygen after building the project.
+Detailed documentation for all public classes and methods is coming soon.
