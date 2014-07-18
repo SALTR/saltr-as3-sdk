@@ -1,27 +1,44 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
-import plexonic.error.PureVirtualFunctionError;
+import saltr.game.canvas2d.SLT2DLevelParser;
+import saltr.game.matching.SLTMatchingLevelParser;
+import saltr.status.SLTStatusLevelsParserMissing;
 
 public class SLTLevel {
     protected var _boards:Dictionary;
 
     private var _id:String;
-    private var _contentUrl:String;
+    private var _levelType:String;
     private var _index:int;
-    private var _properties:Object;
-    private var _contentReady:Boolean;
-    private var _version:String;
-    private var _packIndex:int;
     private var _localIndex:int;
+    private var _packIndex:int;
+    private var _contentUrl:String;
+    private var _properties:Object;
+    private var _version:String;
+
+    private var _contentReady:Boolean;
     private var _assetMap:Dictionary;
 
     public static const LEVEL_TYPE_NONE:String = "noLevels";
     public static const LEVEL_TYPE_MATCHING:String = "matching";
     public static const LEVEL_TYPE_2DCANVAS:String = "canvas2D";
 
-    public function SLTLevel(id:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
+    public static function getParser(levelType:String):SLTLevelParser {
+        switch (levelType) {
+            case LEVEL_TYPE_MATCHING:
+                return SLTMatchingLevelParser.getInstance();
+                break;
+            case LEVEL_TYPE_2DCANVAS:
+                return SLT2DLevelParser.getInstance();
+                break;
+        }
+        return null;
+    }
+
+    public function SLTLevel(id:String, levelType:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
+        _levelType = levelType;
         _index = index;
         _localIndex = localIndex;
         _packIndex = packIndex;
@@ -59,6 +76,10 @@ public class SLTLevel {
         return _packIndex;
     }
 
+    public function getBoard(id:String):SLTBoard {
+        return _boards[id];
+    }
+
     public function updateContent(rootNode:Object):void {
         var boardsNode:Object;
         if (rootNode.hasOwnProperty("boards")) {
@@ -67,26 +88,33 @@ public class SLTLevel {
             throw new Error("[SALTR: ERROR] Level content's 'boards' node can not be found.");
         }
 
-        var parser:SLTLevelParser = getParser();
-
         _properties = rootNode["properties"];
 
-        try {
-            _assetMap = parser.parseLevelAssets(rootNode);
-        }
-        catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
+        var parser:SLTLevelParser = getParser(_levelType);
+        if (parser != null) {
+            try {
+                _assetMap = parser.parseLevelAssets(rootNode);
+            }
+            catch (e:Error) {
+                throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
+            }
+
+            try {
+                _boards = parser.parseLevelContent(boardsNode, _assetMap);
+            }
+            catch (e:Error) {
+                throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
+            }
+
+            if (_boards != null) {
+                regenerateAllBoards();
+                _contentReady = true;
+            }
+        } else {
+            // no parser was found for current level type
+            new SLTStatusLevelsParserMissing();
         }
 
-        try {
-            _boards = parser.parseLevelContent(boardsNode, _assetMap);
-        }
-        catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
-        }
-
-        regenerateAllBoards();
-        _contentReady = true;
     }
 
     public function regenerateAllBoards():void {
@@ -102,8 +130,5 @@ public class SLTLevel {
         }
     }
 
-    protected function getParser():SLTLevelParser {
-        throw new PureVirtualFunctionError();
-    }
 }
 }
