@@ -67,7 +67,7 @@ The SDK has the following directory structure:
 - /src - root folder of the library;
 - saltr - main package of library;
 - saltr.game - package contains game related classes;
-- saltr.game.cavas2d - classes related to 2D games;
+- saltr.game.canvas2d - classes related to 2D games;
 - saltr.game.matching - classes related to matching or board based games;
 - saltr.game.repository - local data repository classes (implementation widely varies through platforms);
 - saltr.game.status - status classes representing warnings and error statuses used within library code;
