@@ -102,7 +102,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
                 chunkAssetRules.push(new SLTChunkAssetRule(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.states));
             }
 
-            layer.addChunk(new SLTChunk(layer, chunkCells, chunkAssetRules, assetMap));
+            layer.addChunk(new SLTChunk(layer.token, layer.index, chunkCells, chunkAssetRules, assetMap));
         }
     }
 
@@ -117,7 +117,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
                 var position:Array = cellPositions[j];
                 var cell:SLTCell = cells.retrieve(position[0], position[1]);
-                cell.setAssetInstance(layer.layerId, layer.layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
             }
         }
     }

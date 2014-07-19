@@ -27,6 +27,7 @@ import saltr.utils.Utils;
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrMobile {
 
+    public static const CLIENT:String = "AS3-Mobile";
     public static const API_VERSION:String = "1.0.1";
 
     private var _socialId:String;
@@ -291,6 +292,7 @@ public class SLTSaltrMobile {
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
+        args.client = CLIENT;
 
         //required for Mobile
         if (_deviceId != null) {
@@ -396,6 +398,7 @@ public class SLTSaltrMobile {
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
+        args.client = CLIENT;
 
         //required for Mobile
         if (_deviceId != null) {
@@ -533,6 +536,7 @@ public class SLTSaltrMobile {
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
+        args.client = CLIENT;
 
         //required for Mobile
         if (_deviceId != null) {

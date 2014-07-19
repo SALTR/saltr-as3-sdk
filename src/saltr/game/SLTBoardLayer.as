@@ -4,20 +4,20 @@
 package saltr.game {
 public class SLTBoardLayer {
 
-    private var _layerId:String;
-    private var _layerIndex:int;
+    private var _token:String;
+    private var _index:int;
 
-    public function SLTBoardLayer(layerId:String, layerIndex:int) {
-        _layerId = layerId;
-        _layerIndex = layerIndex;
+    public function SLTBoardLayer(token:String, layerIndex:int) {
+        _token = token;
+        _index = layerIndex;
     }
 
-    public function get layerId():String {
-        return _layerId;
+    public function get token():String {
+        return _token;
     }
 
-    public function get layerIndex():int {
-        return _layerIndex;
+    public function get index():int {
+        return _index;
     }
 
     public function regenerate():void {

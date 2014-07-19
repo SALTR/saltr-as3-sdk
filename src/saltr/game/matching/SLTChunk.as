@@ -9,7 +9,8 @@ import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
 
 public class SLTChunk {
-    private var _layer:SLTMatchingBoardLayer;
+    private var _layerToken:String;
+    private var _layerIndex:int;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
@@ -19,8 +20,9 @@ public class SLTChunk {
         return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
     }
 
-    public function SLTChunk(layer:SLTMatchingBoardLayer, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
-        _layer = layer;
+    public function SLTChunk(layerToken:String, layerIndex:int, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
+        _layerToken = layerToken;
+        _layerIndex = layerIndex;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
         _assetMap = assetMap;
@@ -70,7 +72,7 @@ public class SLTChunk {
 
     private function resetChunkCells():void {
         for (var i:int = 0, len:int = _chunkCells.length; i < len; ++i) {
-            _chunkCells[i].removeAssetInstance(_layer.layerId, _layer.layerIndex);
+            _chunkCells[i].removeAssetInstance(_layerToken, _layerIndex);
         }
     }
 
@@ -137,7 +139,7 @@ public class SLTChunk {
         for (var i:int = 0; i < count; ++i) {
             var randCellIndex:int = Math.random() * _availableCells.length;
             var randCell:SLTCell = _availableCells[randCellIndex];
-            randCell.setAssetInstance(_layer.layerId, _layer.layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+            randCell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
             _availableCells.splice(randCellIndex, 1);
             if (_availableCells.length == 0) {
                 return;

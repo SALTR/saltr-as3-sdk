@@ -8,8 +8,6 @@ import flash.utils.Dictionary;
 
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
-import saltr.game.canvas2d.SLT2DLevel;
-import saltr.game.matching.SLTMatchingLevel;
 
 internal class SLTDeserializer {
 
@@ -67,7 +65,7 @@ internal class SLTDeserializer {
 
                     //TODO @GSAR: later, leave localIndex only!
                     var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
-                    levels.push(createLevel(levelType, levelNode.id, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
+                    levels.push(new SLTLevel(levelNode.id, levelType, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
                 }
                 levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
             }
@@ -94,18 +92,5 @@ internal class SLTDeserializer {
         }
         return features;
     }
-
-    private static function createLevel(levelType:String, id:String, index:int, localIndex:int, packIndex:int, url:String, properties:Object, version:String):SLTLevel {
-        switch (levelType) {
-            case SLTLevel.LEVEL_TYPE_MATCHING:
-                return new SLTMatchingLevel(id, index, localIndex, packIndex, url, properties, version);
-                break;
-            case SLTLevel.LEVEL_TYPE_2DCANVAS:
-                return new SLT2DLevel(id, index, localIndex, packIndex, url, properties, version);
-                break;
-        }
-        return null;
-    }
-
 }
 }

@@ -22,6 +22,7 @@ import saltr.utils.Utils;
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrWeb {
 
+    public static const CLIENT:String = "AS3-Web";
     public static const API_VERSION:String = "1.0.1";
 
     private var _socialId:String;
@@ -267,6 +268,7 @@ public class SLTSaltrWeb {
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
+        args.client = CLIENT;
 
         //required for Web
         if (_socialId != null) {
@@ -359,6 +361,7 @@ public class SLTSaltrWeb {
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
+        args.client = CLIENT;
 
         //required for Web
         if (_socialId != null) {
@@ -490,6 +493,7 @@ public class SLTSaltrWeb {
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
+        args.client = CLIENT;
 
         //required for Web
         if (_socialId != null) {
