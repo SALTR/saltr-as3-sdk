@@ -23,19 +23,19 @@ CONTENTS
 1. INTRODUCTION
 ===============
 
-Saltr ActionScript3 SDK is a library of classes which will help you to develop mobile/web 
-games that are integrated with SALTR platform.
+SALTR Flash/AS3 SDK is a library of classes which help to develop mobile and web
+games that are to be integrated with SALTR platform.
 
 SDK performs all necessary and possible action with SALTR REST API to connect, update, set 
-and download data related to application's or game's  features or levels.
+and download data related to game's  features or levels.
 
-All data received from SALTR REST API is parsed and represented through set of classes, 
-each carrying specific object and its properties.
+All data received from SALTR REST API is parsed and represented through set of instances of classes,
+each carrying specific objects and their properties.
 
-Basically SDK, as the REST API, has few simple actions. The most important one is to connecting, 
+Basically SDK, as the REST API, has few simple actions. The most important one is connecting (getAppData),
 which loads the app data objects containing features, experiments and level headers.
 
-This and other actions will be descibed in the sections below.
+This and other actions will be described in the sections below.
 
 
 2. USAGE
@@ -44,11 +44,13 @@ This and other actions will be descibed in the sections below.
 To use the SDK you need to download/checkout SDK repository, and then import files to your
 project.
 
-The recommended IDE's for Flash/ActionScript projects are Adobe Flash Builder or IntelliJ Idea.
+The recommended IDE's for Flash/AS3 are <a href="http://www.adobe.com/products/flash-builder.html">Adobe Flash Builder</a> or <a href="http://www.jetbrains.com/idea/">IntelliJ Idea</a>.
 
-The entry point classes in SDK are different if the project is mobile or web based application.
-For mobile apps: SLTSaltrMobile.as is the main class.
-For web apps: SLTSaltrWeb.as is the main class.
+The entry point classes in SDK are different if the project is mobile or web based application:
+
+- For Mobile Apps <code>SLTSaltrMobile</code> is the main class.
+- Fow Web Apps <code>SLTSaltrWeb</code> is the main class.
+
 Each have some differences of initialization and usage.
 
 Note: All classes in the package start with "SLT" prefix.
@@ -60,11 +62,13 @@ The SDK's library classes have the following packages:
 
 - saltr - main and root package for the library;
 - saltr.game - the game related classes contained here;
-- saltr.game.cavas2d - classes related to 2D games;
+- saltr.game.canvas2d - classes related to 2D games;
 - saltr.game.matching - classes related to matching or board based games;
 - saltr.game.repository - local data repository classes (implementation widely varies with the platform);
 - saltr.game.status - status classes representing warnings and error statuses withing library code;
 - saltr.game.utils - helper or utility classes;
+
+New packages supporting new gameplays and genres will be be added to saltr.game package.
 
 
 4. DOCUMENTATION
