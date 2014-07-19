@@ -10,12 +10,11 @@ To download the latest ZIP:
 <a href="https://github.com/plexonic/saltr-as3-sdk/archive/master.zip">https://github.com/plexonic/saltr-as3-sdk/archive/master.zip</a>
 
 
-
 CONTENTS
 ========
 1. INTRODUCTION
 2. USAGE
-3. PACKAGES
+3. DIRECTORY STRUCTURE
 4. DOCUMENTATION
 
 ----
@@ -55,12 +54,13 @@ Each have some differences of initialization and usage.
 
 Note: All classes in the package start with "SLT" prefix.
 
-3. PACKAGES
+3. DIRECTORY STRUCTURE
 ======================
 
 The SDK's library classes have the following packages:
 
-- saltr - main and root package for the library;
+- /src - root folder of the library;
+- saltr - main package of library;
 - saltr.game - the game related classes contained here;
 - saltr.game.canvas2d - classes related to 2D games;
 - saltr.game.matching - classes related to matching or board based games;
@@ -68,7 +68,7 @@ The SDK's library classes have the following packages:
 - saltr.game.status - status classes representing warnings and error statuses withing library code;
 - saltr.game.utils - helper or utility classes;
 
-New packages supporting new gameplays and genres will be be added to saltr.game package.
+New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
 
 
 4. DOCUMENTATION
