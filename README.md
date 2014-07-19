@@ -1,4 +1,4 @@
-SALTR ActionScript3 SDK
+SALTR Flash/AS3 SDK
 =============
 
 This is the README file of the SALTR ActionScript3 iOS SDK.
