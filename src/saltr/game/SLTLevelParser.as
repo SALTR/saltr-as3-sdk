@@ -5,15 +5,13 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
-import plexonic.error.PureVirtualFunctionError;
-
 public class SLTLevelParser {
 
     public function SLTLevelParser() {
     }
 
     public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
-        throw new PureVirtualFunctionError();
+        throw new Error("parseLevelContent is virtual method");
     }
 
 
