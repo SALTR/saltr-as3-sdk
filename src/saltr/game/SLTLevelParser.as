@@ -11,7 +11,7 @@ public class SLTLevelParser {
     }
 
     public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
-        throw new Error("parseLevelContent is virtual method");
+        throw new Error("[SALTR: ERROR] parseLevelContent() is virtual method.");
     }
 
 
