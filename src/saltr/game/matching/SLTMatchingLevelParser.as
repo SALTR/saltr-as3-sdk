@@ -123,9 +123,10 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
     }
 
 
-    private function parseLayer(layerNode:Object, layerIndex:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
-        var layerId:String = layerNode.layerId;
-        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(layerId, layerIndex);
+    private function parseLayer(layerNode:Object, index:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
+        //temporarily checking for 2 names until "layerId" is removed!
+        var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
+        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(token, index);
         parseFixedAssets(layer, layerNode.fixedAssets as Array, cells, assetMap);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;
