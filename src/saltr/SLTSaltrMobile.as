@@ -196,7 +196,7 @@ public class SLTSaltrMobile {
             return;
         }
 
-        if (_started == false) {
+        if (!_started) {
             path = path == null ? SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL : path;
             var applicationData:Object = _repository.getObjectFromApplication(path);
             _levelPacks = SLTDeserializer.decodeLevels(applicationData);
@@ -301,14 +301,12 @@ public class SLTSaltrMobile {
             throw new Error("Field 'deviceId' is a required.")
         }
 
-        //optional for Mobile
-        if (_socialId != null) {
-            args.socialId = _socialId;
-        }
-
-        //optional
+        //required for Mobile
         if (_saltrUserId != null) {
             args.saltrUserId = _saltrUserId;
+        }
+        else {
+            throw new Error("Field saltrUserId is required.");
         }
 
         //optional
