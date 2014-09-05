@@ -22,7 +22,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private static function initializeCells(cells:SLTCells, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
-        var cellProperties:Array = boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("cell") ? boardNode.properties.cell : [];
+        var cellProperties:Array = boardNode.hasOwnProperty("cellProperties")  ? boardNode.cellProperties : [];
         var cols:int = cells.width;
         var rows:int = cells.height;
 
@@ -69,8 +69,8 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchingBoard {
         var boardProperties:Object = {};
-        if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
-            boardProperties = boardNode.properties.board;
+        if (boardNode.hasOwnProperty("properties")) {
+            boardProperties = boardNode.properties;
         }
 
         var cells:SLTCells = new SLTCells(boardNode.cols, boardNode.rows);

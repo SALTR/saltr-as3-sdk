@@ -37,8 +37,8 @@ public class SLT2DLevelParser extends SLTLevelParser {
 
     private function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLT2DBoard {
         var boardProperties:Object = {};
-        if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
-            boardProperties = boardNode.properties.board;
+        if (boardNode.hasOwnProperty("properties")) {
+            boardProperties = boardNode.properties;
         }
 
         var layers:Vector.<SLTBoardLayer> = new Vector.<SLTBoardLayer>();
