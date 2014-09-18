@@ -3,7 +3,7 @@
  */
 package saltr {
 public dynamic class SLTBasicProperties extends Object {
-    private var _age:uint;
+    private var _age:String;
     private var _gender:String;         //Gender "F", "M", "female", "male"
 
     private var _appVersion:String;     // Version of the client app, e.g. 4.1.1
@@ -34,11 +34,11 @@ public dynamic class SLTBasicProperties extends Object {
     public function SLTBasicProperties() {
     }
 
-    public function get age():uint {
+    public function get age():String {
         return _age;
     }
 
-    public function set age(value:uint):void {
+    public function set age(value:String):void {
         _age = value;
     }
 
