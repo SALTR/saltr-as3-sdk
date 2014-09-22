@@ -28,7 +28,6 @@ public class SLTSaltrWeb {
     private var _socialId:String;
     private var _connected:Boolean;
     private var _clientKey:String;
-    private var _saltrUserId:String;
     private var _isLoading:Boolean;
 
     private var _activeFeatures:Dictionary;
@@ -62,7 +61,6 @@ public class SLTSaltrWeb {
         _clientKey = clientKey;
         _isLoading = false;
         _connected = false;
-        _saltrUserId = null;
         _useNoLevels = false;
         _useNoFeatures = false;
         _levelType = null;
@@ -257,7 +255,7 @@ public class SLTSaltrWeb {
     }
 
     public function addProperties(basicProperties:Object = null, customProperties:Object = null):void {
-        if (!basicProperties && !customProperties || !_saltrUserId) {
+        if (!basicProperties && !customProperties) {
             return;
         }
 
@@ -275,11 +273,6 @@ public class SLTSaltrWeb {
             args.socialId = _socialId;
         } else {
             throw new Error("Field 'socialId' is required.")
-        }
-
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
         }
 
         //optional
@@ -370,11 +363,6 @@ public class SLTSaltrWeb {
             throw new Error("Field 'socialId' is required.")
         }
 
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
-        }
-
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
         }
@@ -456,7 +444,6 @@ public class SLTSaltrWeb {
                 }
             }
 
-            _saltrUserId = response.saltrUserId;
             _connected = true;
 
             _activeFeatures = saltrFeatures;
@@ -500,11 +487,6 @@ public class SLTSaltrWeb {
             args.socialId = _socialId;
         } else {
             throw new Error("Field 'socialId' is required.")
-        }
-
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
         }
 
         var featureList:Array = [];

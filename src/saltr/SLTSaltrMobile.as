@@ -34,7 +34,6 @@ public class SLTSaltrMobile {
     private var _deviceId:String;
     private var _connected:Boolean;
     private var _clientKey:String;
-    private var _saltrUserId:String;
     private var _isLoading:Boolean;
 
     private var _repository:ISLTRepository;
@@ -71,7 +70,6 @@ public class SLTSaltrMobile {
         _deviceId = deviceId;
         _isLoading = false;
         _connected = false;
-        _saltrUserId = null;
         _useNoLevels = false;
         _useNoFeatures = false;
         _levelType = null;
@@ -241,7 +239,6 @@ public class SLTSaltrMobile {
         } else {
             _activeFeatures = SLTDeserializer.decodeFeatures(cachedData);
             _experiments = SLTDeserializer.decodeExperiments(cachedData);
-            _saltrUserId = cachedData.saltrUserId;
         }
 
         _started = true;
@@ -281,7 +278,7 @@ public class SLTSaltrMobile {
     }
 
     public function addProperties(basicProperties:Object = null, customProperties:Object = null):void {
-        if (!basicProperties && !customProperties || !_saltrUserId) {
+        if (!basicProperties && !customProperties) {
             return;
         }
 
@@ -301,12 +298,9 @@ public class SLTSaltrMobile {
             throw new Error("Field 'deviceId' is a required.")
         }
 
-        //required for Mobile
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
-        }
-        else {
-            throw new Error("Field saltrUserId is required.");
+        //optional for Mobile
+        if(_socialId != null) {
+            args.socialId = _socialId;
         }
 
         //optional
@@ -410,11 +404,6 @@ public class SLTSaltrMobile {
             args.socialId = _socialId;
         }
 
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
-        }
-
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
         }
@@ -496,7 +485,6 @@ public class SLTSaltrMobile {
                 }
             }
 
-            _saltrUserId = response.saltrUserId;
             _connected = true;
             _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", response);
 
@@ -546,11 +534,6 @@ public class SLTSaltrMobile {
         //optional for Mobile
         if (_socialId != null) {
             args.socialId = _socialId;
-        }
-
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
         }
 
         var featureList:Array = [];
