@@ -20,6 +20,7 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
+import saltr.utils.NativeDialogs;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -449,6 +450,9 @@ public class SLTSaltrMobile {
 
             if (_devMode) {
                 syncDeveloperFeatures();
+                if (response.hasOwnProperty("isRegistrationNeeded") && !response.isRegistrationNeeded) {
+                    NativeDialogs.getInstance().openRegisterDialog(_deviceId, addDeviceToSALTR);
+                }
             }
 
             _levelType = response.levelType;
@@ -499,6 +503,50 @@ public class SLTSaltrMobile {
         }
 
         resource.dispose();
+    }
+
+    protected function addDeviceSuccessHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev adding new device is complete.");
+    }
+
+    protected function addDeviceFailHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev adding new device has failed.");
+    }
+
+    private function addDeviceToSALTR(deviceName:String, email:String):void {
+        var urlVars:URLVariables = new URLVariables();
+        var args:Object = {};
+        urlVars.cmd = SLTConfig.ACTION_DEV_ADD_DEVICE; //TODO @GSAR: remove later
+        urlVars.action = SLTConfig.ACTION_DEV_ADD_DEVICE;
+
+        //required for Mobile
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
+        } else {
+            throw new Error("Field 'deviceId' is a required.")
+        }
+
+        if (deviceName != null && deviceName != "") {
+            args.deviceName = deviceName;
+        } else {
+            throw new Error("Field 'deviceName' is a required.")
+        }
+
+        if (email != null && email != "") {
+            args.email = email;
+        } else {
+            throw new Error("Field 'email' is a required.")
+        }
+
+        urlVars.args = JSON.stringify(args, function (k, v) {
+            if (v != null && v != "null" && v != "") {
+                return v;
+            }
+        });
+
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
+        var resource:SLTResource = new SLTResource("addDevice", ticket, addDeviceSuccessHandler, addDeviceFailHandler);
+        resource.load();
     }
 
     private function appDataLoadFailCallback(resource:SLTResource):void {
