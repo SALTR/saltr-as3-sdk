@@ -19,7 +19,6 @@ public class NativeDialogs {
     private static const DLG_BUTTON_SUBMIT:String = "Submit";
     private static const DLG_BUTTON_CANCEL:String = "Cancel";
     private static const DLG_DESCRIPTION:String = "Please insert your E-mail and device name";
-    private static const DLG_DEVICE_ID:String = "Device ID: ";
     private static const DLG_PROMPT_EMAIL:String = "Valid E-mail";
     private static const DLG_PROMPT_DEVICE_NAME:String = "Device name";
     private static const DLG_TITLE:String = "Add Device";
@@ -69,13 +68,6 @@ public class NativeDialogs {
         dlgTextFieldDescription.text = DLG_DESCRIPTION;
         dlgTextFieldDescription.editable = false;
 
-
-        //creates a deviceId for the dialog [text-field]
-        var dlgTextFieldDeviceID:NativeTextField = new NativeTextField(null);
-        dlgTextFieldDeviceID.text = DLG_DEVICE_ID + deviceId;
-        dlgTextFieldDeviceID.editable = false;
-
-
         //creates a text-input for email dialog [text-field]
         var dlgTextFieldEmail:NativeTextField = new NativeTextField("dlgTextFieldEmail");
         dlgTextFieldEmail.prompText = DLG_PROMPT_EMAIL;
@@ -89,7 +81,6 @@ public class NativeDialogs {
 
 
         dlgTextFields.push(dlgTextFieldDescription);
-        dlgTextFields.push(dlgTextFieldDeviceID);
         dlgTextFields.push(dlgTextFieldDeviceName);
         dlgTextFields.push(dlgTextFieldEmail);
 
@@ -104,9 +95,11 @@ public class NativeDialogs {
 
 
         if (dlgReg.buttons[btnPressedIndex] == DLG_BUTTON_SUBMIT) {
-            var dlgDeviceNameText:String = dlgReg.textInputs[1].text;
-            var dlgEmailText:String = dlgReg.textInputs[2].text;
+            var dlgDeviceNameText:String = dlgReg.getTextInputByName("dlgTextFieldDeviceName").text;
+            var dlgEmailText:String = dlgReg.getTextInputByName("dlgTextFieldEmail").text;
             var isValidName:Boolean = (dlgDeviceNameText != null && dlgDeviceNameText != "") ? true : false;
+            var isValidEmail:Boolean = checkEmailValidation(dlgEmailText);
+
             if (isValidName && isValidEmail) {
                 Toast.show(DLG_SUBMIT_SUCCESSFUL, DLG_TIMER);
                 if (_onSubmit != null && _onSubmit.length == 2) {
@@ -127,7 +120,6 @@ public class NativeDialogs {
                 Toast.show(notificationText, TOAST_TIMER);
                 return;
             }
-            var isValidEmail:Boolean = checkEmailValidation(dlgEmailText);
         }
         dlgReg.removeEventListener(NativeDialogEvent.CLOSED, onCloseDialog);
         dlgReg.dispose();
