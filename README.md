@@ -3,7 +3,7 @@ SALTR Flash/AS3 SDK
 
 This is the README file of the SALTR ActionScript3 iOS SDK.
 
-To check out the project from GitHub:
+To clone the project from GitHub:
 <a href="https://github.com/plexonic/saltr-ios-sdk.git">https://github.com/plexonic/saltr-ios-sdk.git</a>
 
 To download the latest ZIP:
@@ -48,7 +48,6 @@ To clone Git repository via command line:
 $ git clone https://github.com/plexonic/saltr-as3-sdk.git
 ```
 
-
 The recommended IDE's for Flash/AS3 are <a href="http://www.adobe.com/products/flash-builder.html">Adobe Flash Builder</a> or <a href="http://www.jetbrains.com/idea/">IntelliJ Idea</a>.
 
 The entry point classes in SDK are different if the project is mobile or web based application:
@@ -63,15 +62,15 @@ Note: All classes in the package start with "SLT" prefix.
 3. DIRECTORY STRUCTURE
 ======================
 
-The SDK's library classes have the following packages:
+The SDK has the following directory structure:
 
 - /src - root folder of the library;
 - saltr - main package of library;
-- saltr.game - the game related classes contained here;
+- saltr.game - package contains game related classes;
 - saltr.game.canvas2d - classes related to 2D games;
 - saltr.game.matching - classes related to matching or board based games;
-- saltr.game.repository - local data repository classes (implementation widely varies with the platform);
-- saltr.game.status - status classes representing warnings and error statuses withing library code;
+- saltr.game.repository - local data repository classes (implementation widely varies through platforms);
+- saltr.game.status - status classes representing warnings and error statuses used within library code;
 - saltr.game.utils - helper or utility classes;
 
 New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
