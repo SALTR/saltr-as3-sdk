@@ -5,6 +5,7 @@
 package saltr {
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
+import flash.system.Capabilities;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTLevel;
@@ -400,6 +401,8 @@ public class SLTSaltrMobile {
             throw new Error("Field 'deviceId' is a required.")
         }
 
+        args.devMode = _devMode;
+
         //optional for Mobile
         if (_socialId != null) {
             args.socialId = _socialId;
@@ -447,11 +450,12 @@ public class SLTSaltrMobile {
         _isLoading = false;
 
         if (success) {
-
             if (_devMode) {
-                syncDeveloperFeatures();
-                if (response.hasOwnProperty("isRegistrationNeeded") && !response.isRegistrationNeeded) {
+                if (response.hasOwnProperty("registrationRequired") && response.registrationRequired) {
                     NativeDialogs.getInstance().openRegisterDialog(_deviceId, addDeviceToSALTR);
+                }
+                else {
+                    syncDeveloperFeatures();
                 }
             }
 
@@ -507,6 +511,7 @@ public class SLTSaltrMobile {
 
     protected function addDeviceSuccessHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device is complete.");
+        syncDeveloperFeatures();
     }
 
     protected function addDeviceFailHandler(resource:SLTResource):void {
@@ -515,9 +520,9 @@ public class SLTSaltrMobile {
 
     private function addDeviceToSALTR(deviceName:String, email:String):void {
         var urlVars:URLVariables = new URLVariables();
+        var type:String;
         var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_DEV_ADD_DEVICE; //TODO @GSAR: remove later
-        urlVars.action = SLTConfig.ACTION_DEV_ADD_DEVICE;
+        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_IDENTITY;
 
         //required for Mobile
         if (_deviceId != null) {
@@ -526,10 +531,32 @@ public class SLTSaltrMobile {
             throw new Error("Field 'deviceId' is a required.")
         }
 
+
+        //set device type
+        type = Capabilities.os.toLocaleLowerCase();
+        switch (true) {
+            case type.indexOf("ipad") != -1 :
+                type = SLTConfig.DEVICE_TYPE_IPAD;
+                break;
+            case type.indexOf("iphone") != -1 :
+                type = SLTConfig.DEVICE_TYPE_IPHONE;
+                break;
+            case type.indexOf("ipod") != -1 :
+                type = SLTConfig.DEVICE_TYPE_IPOD;
+                break;
+            case type.indexOf("android") != -1 :
+                type = SLTConfig.DEVICE_TYPE_ANDROID;
+                break;
+            default :
+                throw new Error("Field 'device type' is a required.");
+        }
+        args.type = type;
+
+
         if (deviceName != null && deviceName != "") {
             args.deviceName = deviceName;
         } else {
-            throw new Error("Field 'deviceName' is a required.")
+            throw new Error("Field 'deviceName' is a required.");
         }
 
         if (email != null && email != "") {
