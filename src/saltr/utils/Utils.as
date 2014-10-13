@@ -7,9 +7,7 @@ import flash.utils.Dictionary;
 
 public class Utils {
     public function Utils() {
-
     }
-
 
     /** Formats a String in .Net-style, with curly braces ("{0}"). Does not support any
      *  number formatting options yet. */
