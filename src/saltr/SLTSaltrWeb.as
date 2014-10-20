@@ -285,11 +285,7 @@ public class SLTSaltrWeb {
             args.customProperties = customProperties;
         }
 
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
 
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
         var resource:SLTResource = new SLTResource("property", ticket,
@@ -371,11 +367,7 @@ public class SLTSaltrWeb {
             args.customProperties = customProperties;
         }
 
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
 
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
         return new SLTResource("saltAppConfig", ticket, loadSuccessCallback, loadFailCallback);
@@ -495,15 +487,18 @@ public class SLTSaltrWeb {
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
         args.developerFeatures = featureList;
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
 
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
+    }
+
+    private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
+        if (v != null && v != "null" && v != "") {
+            return v;
+        }
+        return undefined;
     }
 }
 }

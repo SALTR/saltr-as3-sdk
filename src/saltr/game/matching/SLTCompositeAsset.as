@@ -22,7 +22,7 @@ internal class SLTCompositeAsset extends SLTAsset {
         return _cellInfos;
     }
 
-    override public function getInstance(stateIds:Array):SLTAssetInstance {
+    public function getInstance(stateIds:Array):SLTAssetInstance {
         return new SLTCompositeInstance(_token, getInstanceStates(stateIds), properties, _cellInfos);
     }
 
