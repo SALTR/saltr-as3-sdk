@@ -12,7 +12,7 @@ apply plugin: 'gradlefx'
 srcDirs = ['../src']
 
 
-//flexHome='/Users/daal/Projects/dev/as/flash-sdk/mac/flex_sdk_4.6'
+flexHome='/Users/daal/Projects/dev/as/flash-sdk/mac/flex_sdk_4.6'
 
 output='../../bin/saltr-sdk.v.1.1.2'
 
