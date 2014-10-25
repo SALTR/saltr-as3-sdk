@@ -336,6 +336,16 @@ public class SLTSaltrMobile {
     }
 
     protected function syncSuccessHandler(resource:SLTResource):void {
+        var data:Object = resource.jsonData;
+
+        if (data == null) {
+            trace("[Saltr] Dev feature Sync's response.jsonData is null.");
+            return;
+        }
+
+        if (data.hasOwnProperty("registrationRequired") && data.registrationRequired ) {
+            NativeDialogs.getInstance().openRegisterDialog(_deviceId, addDeviceToSALTR);
+        }
         trace("[Saltr] Dev feature Sync is complete.");
     }
 
@@ -451,12 +461,7 @@ public class SLTSaltrMobile {
 
         if (success) {
             if (_devMode) {
-                if (response.hasOwnProperty("registrationRequired") && response.registrationRequired) {
-                    NativeDialogs.getInstance().openRegisterDialog(_deviceId, addDeviceToSALTR);
-                }
-                else {
-                    syncDeveloperFeatures();
-                }
+                syncDeveloperFeatures();
             }
 
             _levelType = response.levelType;
@@ -511,7 +516,6 @@ public class SLTSaltrMobile {
 
     protected function addDeviceSuccessHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device is complete.");
-        syncDeveloperFeatures();
     }
 
     protected function addDeviceFailHandler(resource:SLTResource):void {
@@ -521,14 +525,17 @@ public class SLTSaltrMobile {
     private function addDeviceToSALTR(deviceName:String, email:String):void {
         var urlVars:URLVariables = new URLVariables();
         var type:String;
+        var platform:String;
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_IDENTITY;
+        urlVars.clientKey = _clientKey;
+        args.devMode = _devMode;
 
         //required for Mobile
         if (_deviceId != null) {
-            args.deviceId = _deviceId;
+            args.id = _deviceId;
         } else {
-            throw new Error("Field 'deviceId' is a required.")
+            throw new Error("Field 'deviceId' is a required.");
         }
 
 
@@ -537,24 +544,29 @@ public class SLTSaltrMobile {
         switch (true) {
             case type.indexOf("ipad") != -1 :
                 type = SLTConfig.DEVICE_TYPE_IPAD;
+                platform = SLTConfig.DEVICE_PLATFORM_IOS;
                 break;
             case type.indexOf("iphone") != -1 :
                 type = SLTConfig.DEVICE_TYPE_IPHONE;
+                platform = SLTConfig.DEVICE_PLATFORM_IOS;
                 break;
             case type.indexOf("ipod") != -1 :
                 type = SLTConfig.DEVICE_TYPE_IPOD;
+                platform = SLTConfig.DEVICE_PLATFORM_IOS;
                 break;
             case type.indexOf("android") != -1 :
                 type = SLTConfig.DEVICE_TYPE_ANDROID;
+                platform = SLTConfig.DEVICE_PLATFORM_ANDROID;
                 break;
             default :
                 throw new Error("Field 'device type' is a required.");
         }
         args.type = type;
+        args.platform = platform ;
 
 
         if (deviceName != null && deviceName != "") {
-            args.deviceName = deviceName;
+            args.name = deviceName;
         } else {
             throw new Error("Field 'deviceName' is a required.");
         }
@@ -598,10 +610,13 @@ public class SLTSaltrMobile {
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
         args.client = CLIENT;
+        args.devMode = _devMode;
+        urlVars.devMode = _devMode;
 
         //required for Mobile
         if (_deviceId != null) {
             args.deviceId = _deviceId;
+            urlVars.deviceId = _deviceId;
         } else {
             throw new Error("Field 'deviceId' is a required.")
         }
