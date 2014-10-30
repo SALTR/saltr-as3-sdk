@@ -32,64 +32,64 @@ public class NativeDialogs {
 
     private static var _instance:NativeDialogs;
     private var _dlgReg:NativeTextInputDialog;
-    private var _onSubmit:Function;
+    private var _submitCallback:Function;
 
     public function NativeDialogs() {
-        if (_instance) {
-            throw new Error("Singleton... use getInstance()");
-        }
-        _instance = this;
     }
 
     public static function getInstance():NativeDialogs {
         if (!_instance) {
-            new NativeDialogs();
+            _instance = new NativeDialogs();
         }
         return _instance;
     }
 
     // Add new user device management functions
-    public function openRegisterDialog(deviceId:String, onSubmit:Function):void {
-        _onSubmit = onSubmit;
+    public function openRegisterDialog(submitCallback:Function):void {
+        _submitCallback = submitCallback;
 
-        var dlgButtons:Vector.<String> = new Vector.<String>();
-        dlgButtons.push(DLG_BUTTON_CANCEL);
-        dlgButtons.push(DLG_BUTTON_SUBMIT);
-
-        _dlgReg = new NativeTextInputDialog();
-        _dlgReg.addEventListener(NativeDialogEvent.CLOSED, onCloseDialog);
-        _dlgReg.buttons = dlgButtons;
-        _dlgReg.title = DLG_TITLE;
-
-        var dlgTextFields:Vector.<NativeTextField> = new Vector.<NativeTextField>();
-
-        //creates a description for the dialog [text-field]
-        var dlgTextFieldDescription:NativeTextField = new NativeTextField(null);
-        dlgTextFieldDescription.text = DLG_DESCRIPTION;
-        dlgTextFieldDescription.editable = false;
-
-        //creates a text-input for email dialog [text-field]
-        var dlgTextFieldEmail:NativeTextField = new NativeTextField("dlgTextFieldEmail");
-        dlgTextFieldEmail.prompText = DLG_PROMPT_EMAIL;
-        dlgTextFieldEmail.softKeyboardType = SoftKeyboardType.EMAIL;
-
-
-        //creates a text-input for device name on dialog [text-field]
-        var dlgTextFieldDeviceName:NativeTextField = new NativeTextField("dlgTextFieldDeviceName");
-        dlgTextFieldDeviceName.prompText = DLG_PROMPT_DEVICE_NAME;
-        dlgTextFieldDeviceName.softKeyboardType = SoftKeyboardType.DEFAULT;
-
-
-        dlgTextFields.push(dlgTextFieldDescription);
-        dlgTextFields.push(dlgTextFieldDeviceName);
-        dlgTextFields.push(dlgTextFieldEmail);
-
-        _dlgReg.textInputs = dlgTextFields;
+        _dlgReg = buildRegistrationDialog();
         _dlgReg.show();
     }
 
+    private function buildRegistrationDialog() : NativeTextInputDialog {
+        var dialog : NativeTextInputDialog =  new NativeTextInputDialog();
 
-    private function onCloseDialog(event:NativeDialogEvent):void {
+        dialog.buttons = new <String>[DLG_BUTTON_SUBMIT, DLG_BUTTON_CANCEL];
+        dialog.title = DLG_TITLE;
+
+        dialog.textInputs = new <NativeTextField>[
+            buildDescriptionTextField(),
+            buildEmailTextField(),
+            buildDeviceNameTextField()
+        ];
+
+        return dialog;
+    }
+
+    private function buildDeviceNameTextField() : NativeTextField {
+        var textField:NativeTextField = new NativeTextField("dlgTextFieldDeviceName");
+        textField.prompText = DLG_PROMPT_DEVICE_NAME;
+        textField.softKeyboardType = SoftKeyboardType.DEFAULT;
+        return textField;
+    }
+
+    private function buildEmailTextField() : NativeTextField {
+        var textField:NativeTextField = new NativeTextField("dlgTextFieldEmail");
+        textField.prompText = DLG_PROMPT_EMAIL;
+        textField.softKeyboardType = SoftKeyboardType.EMAIL;
+        return textField;
+    }
+
+    private function buildDescriptionTextField() : NativeTextField {
+        var textField : NativeTextField = new NativeTextField(null);
+        textField.text = DLG_DESCRIPTION;
+        textField.editable = false;
+        return textField;
+    }
+
+
+    private function dialogClosedHandler(event:NativeDialogEvent):void {
         var dlgReg:NativeTextInputDialog = NativeTextInputDialog(event.target);
         var btnPressedIndex:String = event.index;
 
@@ -98,12 +98,12 @@ public class NativeDialogs {
             var dlgDeviceNameText:String = dlgReg.getTextInputByName("dlgTextFieldDeviceName").text;
             var dlgEmailText:String = dlgReg.getTextInputByName("dlgTextFieldEmail").text;
             var isValidName:Boolean = (dlgDeviceNameText != null && dlgDeviceNameText != "") ? true : false;
-            var isValidEmail:Boolean = checkEmailValidation(dlgEmailText);
+            var isValidEmail:Boolean = Utils.checkEmailValidation(dlgEmailText);
 
             if (isValidName && isValidEmail) {
                 Toast.show(DLG_SUBMIT_SUCCESSFUL, DLG_TIMER);
-                if (_onSubmit != null && _onSubmit.length == 2) {
-                    _onSubmit(dlgDeviceNameText, dlgEmailText);
+                if (_submitCallback != null && _submitCallback.length == 2) {
+                    _submitCallback(dlgDeviceNameText, dlgEmailText);
                 } else {
                     throw new Error(DLG_ERROR_SUBMIT_FUNC);
                 }
@@ -121,13 +121,8 @@ public class NativeDialogs {
                 return;
             }
         }
-        dlgReg.removeEventListener(NativeDialogEvent.CLOSED, onCloseDialog);
+        dlgReg.removeEventListener(NativeDialogEvent.CLOSED, dialogClosedHandler);
         dlgReg.dispose();
-    }
-
-    private function checkEmailValidation(email:String):Boolean {
-        var emailExpression:RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
-        return emailExpression.test(email);
     }
 }
 }
