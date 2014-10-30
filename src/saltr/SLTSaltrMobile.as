@@ -347,7 +347,7 @@ public class SLTSaltrMobile {
         }
 
         if (data.hasOwnProperty("registrationRequired") && data.registrationRequired ) {
-            NativeDialogs.getInstance().openRegisterDialog(_deviceId, addDeviceToSALTR);
+            NativeDialogs.getInstance().openRegisterDialog(addDeviceToSALTR);
         }
         trace("[Saltr] Dev feature Sync is complete.");
     }
