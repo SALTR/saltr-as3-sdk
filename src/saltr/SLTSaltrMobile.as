@@ -359,18 +359,21 @@ public class SLTSaltrMobile {
                 content = loadLevelContentInternally(sltLevel);
             }
 
+            loadInternally(content);
+        }
+
+        function loadFromSaltrFailCallback():void {
+            var content:Object = loadLevelContentInternally(sltLevel);
+            loadInternally(content);
+        }
+
+        function loadInternally(content:Object):void {
             if (content != null) {
                 levelContentLoadSuccessHandler(sltLevel, content);
             }
             else {
                 levelContentLoadFailHandler();
             }
-            resource.dispose();
-        }
-
-        function loadFromSaltrFailCallback():void {
-            var content:Object = loadLevelContentInternally(sltLevel);
-            levelContentLoadSuccessHandler(sltLevel, content);
             resource.dispose();
         }
     }
