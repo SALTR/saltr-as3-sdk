@@ -15,6 +15,7 @@ import saltr.repository.SLTMobileRepository;
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
 import saltr.status.SLTStatus;
+import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
@@ -245,9 +246,14 @@ public class SLTSaltrMobile {
     }
 
     public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
-        if (_isLoading || !_started) {
-            return;
+        if(!_started) {
+            throw new Error("Method 'connect()' should be called after 'start()' only.");
         }
+
+        if (_isLoading) {
+            failCallback(new SLTStatusAppDataConcurrentLoadRefused());
+        }
+
         _connectSuccessCallback = successCallback;
         _connectFailCallback = failCallback;
 

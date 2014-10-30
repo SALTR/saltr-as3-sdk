@@ -16,6 +16,7 @@ public class SLTStatus {
 
     public static const CLIENT_APP_DATA_LOAD_FAIL:int = 2040;
     public static const CLIENT_LEVEL_CONTENT_LOAD_FAIL:int = 2041;
+    public static const CLIENT_APP_DATA_CONCURRENT_LOAD_REFUSED:int = 2042;
 
     public static const CLIENT_FEATURES_PARSE_ERROR:int = 2050;
     public static const CLIENT_EXPERIMENTS_PARSE_ERROR:int = 2051;
