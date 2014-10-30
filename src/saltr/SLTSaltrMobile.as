@@ -252,6 +252,7 @@ public class SLTSaltrMobile {
 
         if (_isLoading) {
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
+            return;
         }
 
         _connectSuccessCallback = successCallback;
