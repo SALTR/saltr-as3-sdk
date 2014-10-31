@@ -46,10 +46,17 @@ public class NativeDialogs {
 
     // Add new user device management functions
     public function openRegisterDialog(submitCallback:Function):void {
+        if(!validateSubmitCallback(submitCallback)) {
+            throw new Error(DLG_ERROR_SUBMIT_FUNC);
+        }
         _submitCallback = submitCallback;
 
         _dlgReg = buildRegistrationDialog();
         _dlgReg.show();
+    }
+
+    private function validateSubmitCallback(callback:Function) : Boolean {
+        return callback != null && callback.length == 2;
     }
 
     private function buildRegistrationDialog() : NativeTextInputDialog {
@@ -88,41 +95,54 @@ public class NativeDialogs {
         return textField;
     }
 
-
     private function dialogClosedHandler(event:NativeDialogEvent):void {
         var dlgReg:NativeTextInputDialog = NativeTextInputDialog(event.target);
-        var btnPressedIndex:String = event.index;
+        var pressedButtonName : String = dlgReg.buttons[event.index];
 
+        if (pressedButtonName == DLG_BUTTON_SUBMIT) {
+            var submittedDeviceName:String = dlgReg.getTextInputByName("dlgTextFieldDeviceName").text;
+            var submittedEmailText:String = dlgReg.getTextInputByName("dlgTextFieldEmail").text;
 
-        if (dlgReg.buttons[btnPressedIndex] == DLG_BUTTON_SUBMIT) {
-            var dlgDeviceNameText:String = dlgReg.getTextInputByName("dlgTextFieldDeviceName").text;
-            var dlgEmailText:String = dlgReg.getTextInputByName("dlgTextFieldEmail").text;
-            var isValidName:Boolean = (dlgDeviceNameText != null && dlgDeviceNameText != "") ? true : false;
-            var isValidEmail:Boolean = Utils.checkEmailValidation(dlgEmailText);
-
-            if (isValidName && isValidEmail) {
+            var validationResult : Object = getSubmittedValuesValidationResults(submittedDeviceName, submittedEmailText);
+            if(validationResult.isValid) {
                 Toast.show(DLG_SUBMIT_SUCCESSFUL, DLG_TIMER);
-                if (_submitCallback != null && _submitCallback.length == 2) {
-                    _submitCallback(dlgDeviceNameText, dlgEmailText);
-                } else {
-                    throw new Error(DLG_ERROR_SUBMIT_FUNC);
-                }
-            } else {
-                var notificationText:String = (isValidEmail) ? DLG_NAME_NOT_VALID : DLG_EMAIL_NOT_VALID;
-                notificationText = (!isValidEmail && !isValidName) ? DLG_BOTH_NOT_VALID : notificationText;
-
-                var timer:Timer = new Timer(DLG_TIMER, 1);
-                timer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent) {
-                    event.currentTarget.removeEventListener(TimerEvent.TIMER, arguments.callee);
-                    dlgReg.show();
-                });
-                timer.start();
-                Toast.show(notificationText, TOAST_TIMER);
-                return;
+                _submitCallback(submittedDeviceName, submittedEmailText);
+            }
+            else {
+                showDialogAfterDelay(dlgReg);
+                Toast.show(validationResult.notificationText, TOAST_TIMER);
+                return
             }
         }
         dlgReg.removeEventListener(NativeDialogEvent.CLOSED, dialogClosedHandler);
         dlgReg.dispose();
+    }
+
+    private function showDialogAfterDelay(dlgReg:NativeTextInputDialog):void {
+        var timer:Timer = new Timer(DLG_TIMER, 1);
+        timer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent) {
+            event.target.removeEventListener(TimerEvent.TIMER, arguments.callee);
+            dlgReg.show();
+        });
+        timer.start();
+    }
+
+    private function getSubmittedValuesValidationResults(deviceName:String, email : String) : Object {
+        var isDeviceNameValid:Boolean = deviceName != null && deviceName != "";
+        var isEmailValid:Boolean = Utils.checkEmailValidation(email);
+
+        var notificationText : String = "";
+        if(!isDeviceNameValid || !isEmailValid) {
+            notificationText = isEmailValid ? DLG_NAME_NOT_VALID : DLG_EMAIL_NOT_VALID;
+            notificationText = !isEmailValid && !isDeviceNameValid ? DLG_BOTH_NOT_VALID : notificationText;
+        }
+
+        return {
+            isValid : isDeviceNameValid && isEmailValid,
+            isDeviceNameValid : isDeviceNameValid,
+            isEmailValid : isEmailValid,
+            notificationText : notificationText
+        }
     }
 }
 }
