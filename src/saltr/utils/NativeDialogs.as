@@ -4,9 +4,6 @@
  * Time: 05:34
  */
 package saltr.utils {
-import flash.events.TimerEvent;
-import flash.text.SoftKeyboardType;
-import flash.utils.Timer;
 
 import pl.mateuszmackowiak.nativeANE.dialogs.NativeTextInputDialog;
 import pl.mateuszmackowiak.nativeANE.dialogs.support.NativeTextField;
@@ -15,24 +12,9 @@ import pl.mateuszmackowiak.nativeANE.notifications.Toast;
 
 public class NativeDialogs {
 
-    // Set default vales for dialog management
-    private static const DLG_BUTTON_SUBMIT:String = "Submit";
-    private static const DLG_BUTTON_CANCEL:String = "Cancel";
-    private static const DLG_DESCRIPTION:String = "Please insert your E-mail and device name";
-    private static const DLG_PROMPT_EMAIL:String = "Valid E-mail";
-    private static const DLG_PROMPT_DEVICE_NAME:String = "Device name";
-    private static const DLG_TITLE:String = "Add Device";
-    private static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
-    private static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
-    private static const DLG_NAME_NOT_VALID:String = "Please insert device name.";
-    private static const DLG_BOTH_NOT_VALID:String = "Please insert device name and valid Email.";
-    private static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have two parameters - device name and email.";
-    private static const DLG_TIMER:int = 2000;
-    private static const TOAST_TIMER:int = 3;
-
     private static var _instance:NativeDialogs;
-    private var _dlgReg:NativeTextInputDialog;
-    private var _submitCallback:Function;
+    private var _dlgDeviceReg:NativeTextInputDialog;
+    private var _submitDeviceRegCallback:Function;
 
     public function NativeDialogs() {
     }
@@ -45,96 +27,67 @@ public class NativeDialogs {
     }
 
     // Add new user device management functions
-    public function openRegisterDialog(submitCallback:Function):void {
-        if(!validateSubmitCallback(submitCallback)) {
-            throw new Error(DLG_ERROR_SUBMIT_FUNC);
+    public function openDeviceRegisterDialog(submitCallback:Function):void {
+        if(!validateDeviceRegistrationSubmitCallback(submitCallback)) {
+            throw new Error(NativeDialogUtils.DLG_ERROR_SUBMIT_FUNC);
         }
-        _submitCallback = submitCallback;
+        _submitDeviceRegCallback = submitCallback;
 
-        _dlgReg = buildRegistrationDialog();
-        _dlgReg.show();
+        _dlgDeviceReg = buildDeviceRegistrationDialog();
+        _dlgDeviceReg.show();
     }
 
-    private function validateSubmitCallback(callback:Function) : Boolean {
+    private function validateDeviceRegistrationSubmitCallback(callback:Function) : Boolean {
         return callback != null && callback.length == 2;
     }
 
-    private function buildRegistrationDialog() : NativeTextInputDialog {
+    private function buildDeviceRegistrationDialog() : NativeTextInputDialog {
         var dialog : NativeTextInputDialog =  new NativeTextInputDialog();
 
-        dialog.buttons = new <String>[DLG_BUTTON_SUBMIT, DLG_BUTTON_CANCEL];
-        dialog.title = DLG_TITLE;
+        dialog.buttons = new <String>[NativeDialogUtils.DLG_BUTTON_SUBMIT, NativeDialogUtils.DLG_BUTTON_CANCEL];
+        dialog.title = NativeDialogUtils.DLG_TITLE;
 
         dialog.textInputs = new <NativeTextField>[
-            buildDescriptionTextField(),
-            buildEmailTextField(),
-            buildDeviceNameTextField()
+            NativeDialogUtils.buildDescriptionTextField(NativeDialogUtils.DLG_DEVICE_REGISTRATION_DESCRIPTION),
+            NativeDialogUtils.buildEmailTextField(),
+            NativeDialogUtils.buildDeviceNameTextField()
         ];
 
         return dialog;
     }
 
-    private function buildDeviceNameTextField() : NativeTextField {
-        var textField:NativeTextField = new NativeTextField("dlgTextFieldDeviceName");
-        textField.prompText = DLG_PROMPT_DEVICE_NAME;
-        textField.softKeyboardType = SoftKeyboardType.DEFAULT;
-        return textField;
-    }
-
-    private function buildEmailTextField() : NativeTextField {
-        var textField:NativeTextField = new NativeTextField("dlgTextFieldEmail");
-        textField.prompText = DLG_PROMPT_EMAIL;
-        textField.softKeyboardType = SoftKeyboardType.EMAIL;
-        return textField;
-    }
-
-    private function buildDescriptionTextField() : NativeTextField {
-        var textField : NativeTextField = new NativeTextField(null);
-        textField.text = DLG_DESCRIPTION;
-        textField.editable = false;
-        return textField;
-    }
-
-    private function dialogClosedHandler(event:NativeDialogEvent):void {
+    /// TODO: @tigr verify this function usage
+    private function dialogDeviceRegistrationClosedHandler(event:NativeDialogEvent):void {
         var dlgReg:NativeTextInputDialog = NativeTextInputDialog(event.target);
         var pressedButtonName : String = dlgReg.buttons[event.index];
 
-        if (pressedButtonName == DLG_BUTTON_SUBMIT) {
+        if (pressedButtonName == NativeDialogUtils.DLG_BUTTON_SUBMIT) {
             var submittedDeviceName:String = dlgReg.getTextInputByName("dlgTextFieldDeviceName").text;
             var submittedEmailText:String = dlgReg.getTextInputByName("dlgTextFieldEmail").text;
 
-            var validationResult : Object = getSubmittedValuesValidationResults(submittedDeviceName, submittedEmailText);
+            var validationResult : Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedDeviceName, submittedEmailText);
             if(validationResult.isValid) {
-                Toast.show(DLG_SUBMIT_SUCCESSFUL, DLG_TIMER);
-                _submitCallback(submittedDeviceName, submittedEmailText);
+                Toast.show(NativeDialogUtils.DLG_SUBMIT_SUCCESSFUL, NativeDialogUtils.DLG_TIMER);
+                _submitDeviceRegCallback(submittedDeviceName, submittedEmailText);
             }
             else {
-                showDialogAfterDelay(dlgReg);
-                Toast.show(validationResult.notificationText, TOAST_TIMER);
+                NativeDialogUtils.showDialogAfterDelay(dlgReg);
+                Toast.show(validationResult.notificationText, NativeDialogUtils.TOAST_TIMER);
                 return
             }
         }
-        dlgReg.removeEventListener(NativeDialogEvent.CLOSED, dialogClosedHandler);
+        dlgReg.removeEventListener(NativeDialogEvent.CLOSED, dialogDeviceRegistrationClosedHandler);
         dlgReg.dispose();
     }
 
-    private function showDialogAfterDelay(dlgReg:NativeTextInputDialog):void {
-        var timer:Timer = new Timer(DLG_TIMER, 1);
-        timer.addEventListener(TimerEvent.TIMER, function (event:TimerEvent) {
-            event.target.removeEventListener(TimerEvent.TIMER, arguments.callee);
-            dlgReg.show();
-        });
-        timer.start();
-    }
-
-    private function getSubmittedValuesValidationResults(deviceName:String, email : String) : Object {
+    private function getDeviceRegistrationSubmittedValuesValidationResults(deviceName:String, email : String) : Object {
         var isDeviceNameValid:Boolean = deviceName != null && deviceName != "";
-        var isEmailValid:Boolean = Utils.checkEmailValidation(email);
+        var isEmailValid:Boolean = NativeDialogUtils.checkEmailValidation(email);
 
         var notificationText : String = "";
         if(!isDeviceNameValid || !isEmailValid) {
-            notificationText = isEmailValid ? DLG_NAME_NOT_VALID : DLG_EMAIL_NOT_VALID;
-            notificationText = !isEmailValid && !isDeviceNameValid ? DLG_BOTH_NOT_VALID : notificationText;
+            notificationText = isEmailValid ? NativeDialogUtils.DLG_NAME_NOT_VALID : NativeDialogUtils.DLG_EMAIL_NOT_VALID;
+            notificationText = !isEmailValid && !isDeviceNameValid ? NativeDialogUtils.DLG_BOTH_NOT_VALID : notificationText;
         }
 
         return {
