@@ -5,6 +5,7 @@
 package saltr {
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
+import flash.system.Capabilities;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTLevel;
@@ -21,6 +22,7 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
+import saltr.utils.NativeDialogs;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -344,6 +346,16 @@ public class SLTSaltrMobile {
     }
 
     protected function syncSuccessHandler(resource:SLTResource):void {
+        var data:Object = resource.jsonData;
+
+        if (data == null) {
+            trace("[Saltr] Dev feature Sync's response.jsonData is null.");
+            return;
+        }
+
+        if (data.hasOwnProperty("registrationRequired") && data.registrationRequired ) {
+            NativeDialogs.getInstance().openDeviceRegisterDialog(addDeviceToSALTR);
+        }
         trace("[Saltr] Dev feature Sync is complete.");
     }
 
@@ -412,6 +424,8 @@ public class SLTSaltrMobile {
             throw new Error("Field 'deviceId' is a required.")
         }
 
+        args.devMode = _devMode;
+
         //optional for Mobile
         if (_socialId != null) {
             args.socialId = _socialId;
@@ -455,7 +469,6 @@ public class SLTSaltrMobile {
         _isLoading = false;
 
         if (success) {
-
             if (_devMode) {
                 syncDeveloperFeatures();
             }
@@ -510,6 +523,80 @@ public class SLTSaltrMobile {
         resource.dispose();
     }
 
+    protected function addDeviceSuccessHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev adding new device is complete.");
+    }
+
+    protected function addDeviceFailHandler(resource:SLTResource):void {
+        trace("[Saltr] Dev adding new device has failed.");
+    }
+
+    private function addDeviceToSALTR(deviceName:String, email:String):void {
+        var urlVars:URLVariables = new URLVariables();
+        var type:String;
+        var platform:String;
+        var args:Object = {};
+        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_IDENTITY;
+        urlVars.clientKey = _clientKey;
+        args.devMode = _devMode;
+
+        //required for Mobile
+        if (_deviceId != null) {
+            args.id = _deviceId;
+        } else {
+            throw new Error("Field 'deviceId' is a required.");
+        }
+
+
+        //set device type
+        type = Capabilities.os.toLocaleLowerCase();
+        switch (true) {
+            case type.indexOf("ipad") != -1 :
+                type = SLTConfig.DEVICE_TYPE_IPAD;
+                platform = SLTConfig.DEVICE_PLATFORM_IOS;
+                break;
+            case type.indexOf("iphone") != -1 :
+                type = SLTConfig.DEVICE_TYPE_IPHONE;
+                platform = SLTConfig.DEVICE_PLATFORM_IOS;
+                break;
+            case type.indexOf("ipod") != -1 :
+                type = SLTConfig.DEVICE_TYPE_IPOD;
+                platform = SLTConfig.DEVICE_PLATFORM_IOS;
+                break;
+            case type.indexOf("android") != -1 :
+                type = SLTConfig.DEVICE_TYPE_ANDROID;
+                platform = SLTConfig.DEVICE_PLATFORM_ANDROID;
+                break;
+            default :
+                throw new Error("Field 'device type' is a required.");
+        }
+        args.type = type;
+        args.platform = platform ;
+
+
+        if (deviceName != null && deviceName != "") {
+            args.name = deviceName;
+        } else {
+            throw new Error("Field 'deviceName' is a required.");
+        }
+
+        if (email != null && email != "") {
+            args.email = email;
+        } else {
+            throw new Error("Field 'email' is a required.")
+        }
+
+        urlVars.args = JSON.stringify(args, function (k, v) {
+            if (v != null && v != "null" && v != "") {
+                return v;
+            }
+        });
+
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
+        var resource:SLTResource = new SLTResource("addDevice", ticket, addDeviceSuccessHandler, addDeviceFailHandler);
+        resource.load();
+    }
+
     private function appDataLoadFailCallback(resource:SLTResource):void {
         resource.dispose();
         _isLoading = false;
@@ -532,10 +619,13 @@ public class SLTSaltrMobile {
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
         args.client = CLIENT;
+        args.devMode = _devMode;
+        urlVars.devMode = _devMode;
 
         //required for Mobile
         if (_deviceId != null) {
             args.deviceId = _deviceId;
+            urlVars.deviceId = _deviceId;
         } else {
             throw new Error("Field 'deviceId' is a required.")
         }
