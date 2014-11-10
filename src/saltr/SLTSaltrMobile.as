@@ -347,13 +347,15 @@ public class SLTSaltrMobile {
 
     protected function syncSuccessHandler(resource:SLTResource):void {
         var data:Object = resource.jsonData;
+        var response:Array;
 
         if (data == null) {
             trace("[Saltr] Dev feature Sync's response.jsonData is null.");
             return;
         }
 
-        if (data.hasOwnProperty("registrationRequired") && data.registrationRequired ) {
+        response = data.response as Array;
+        if (response.length > 0 && response[0].registrationRequired) {
             NativeDialogs.getInstance().openDeviceRegisterDialog(addDeviceToSALTR);
         }
         trace("[Saltr] Dev feature Sync is complete.");
@@ -539,6 +541,7 @@ public class SLTSaltrMobile {
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_IDENTITY;
         urlVars.clientKey = _clientKey;
         args.devMode = _devMode;
+        args.apiVersion = API_VERSION;
 
         //required for Mobile
         if (_deviceId != null) {
