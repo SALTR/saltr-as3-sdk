@@ -9,8 +9,8 @@ internal class SLTConfig {
     public static const ACTION_ADD_PROPERTIES:String = "addProperties";
     public static const ACTION_DEV_SYNC_FEATURES:String = "syncFeatures";
     public static const ACTION_DEV_REGISTER_IDENTITY:String = "registerIdentity";
-    public static const SALTR_API_URL:String = "http://saltapi.includiv.com/call";
-    public static const SALTR_DEVAPI_URL:String = "http://saltapp.includiv.com/call";
+    public static const SALTR_API_URL:String = "https://api.saltr.com/call";
+    public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";
 
     //used to
     public static const APP_DATA_URL_CACHE:String = "app_data_cache.json";

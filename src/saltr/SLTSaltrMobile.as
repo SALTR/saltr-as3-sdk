@@ -355,7 +355,7 @@ public class SLTSaltrMobile {
         }
 
         response = data.response as Array;
-        if (response.length > 0 && response[0].registrationRequired) {
+        if (response != null && response.length > 0 && response[0].registrationRequired) {
             NativeDialogs.getInstance().openDeviceRegisterDialog(addDeviceToSALTR);
         }
         trace("[Saltr] Dev feature Sync is complete.");
