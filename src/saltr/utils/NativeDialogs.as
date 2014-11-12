@@ -34,6 +34,7 @@ public class NativeDialogs {
         _submitDeviceRegCallback = submitCallback;
 
         _dlgDeviceReg = buildDeviceRegistrationDialog();
+        _dlgDeviceReg.addEventListener(NativeDialogEvent.CLOSED, dialogDeviceRegistrationClosedHandler);
         _dlgDeviceReg.show();
     }
 
@@ -56,7 +57,6 @@ public class NativeDialogs {
         return dialog;
     }
 
-    /// TODO: @tigr verify this function usage
     private function dialogDeviceRegistrationClosedHandler(event:NativeDialogEvent):void {
         var dlgReg:NativeTextInputDialog = NativeTextInputDialog(event.target);
         var pressedButtonName : String = dlgReg.buttons[event.index];
