@@ -3,6 +3,7 @@
  */
 
 package saltr {
+import flash.display.Stage;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.system.Capabilities;
@@ -22,7 +23,7 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.NativeDialogs;
+import saltr.utils.dialog.Dialogs;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -32,6 +33,8 @@ public class SLTSaltrMobile {
 
     public static const CLIENT:String = "AS3-Mobile";
     public static const API_VERSION:String = "1.0.1";
+
+    public static var flStage:Stage;
 
     private var _socialId:String;
     private var _deviceId:String;
@@ -68,7 +71,8 @@ public class SLTSaltrMobile {
         return ticket;
     }
 
-    public function SLTSaltrMobile(clientKey:String, deviceId:String, useCache:Boolean = true) {
+    public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String, useCache:Boolean = true) {
+        flStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
         _isLoading = false;
@@ -356,7 +360,7 @@ public class SLTSaltrMobile {
 
         response = data.response as Array;
         if (response != null && response.length > 0 && response[0].registrationRequired) {
-            NativeDialogs.getInstance().openDeviceRegisterDialog(addDeviceToSALTR);
+            Dialogs.getInstance().openDeviceRegisterDialog(addDeviceToSALTR);
         }
         trace("[Saltr] Dev feature Sync is complete.");
     }
