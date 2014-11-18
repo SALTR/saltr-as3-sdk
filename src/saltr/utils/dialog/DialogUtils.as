@@ -8,6 +8,8 @@ import flash.display.Sprite;
 import flash.events.TimerEvent;
 import flash.text.TextField;
 import flash.text.TextFieldType;
+import flash.text.TextFormat;
+import flash.text.TextFormatAlign;
 import flash.utils.Timer;
 
 public class DialogUtils {
@@ -28,42 +30,6 @@ public class DialogUtils {
     public static const DLG_PROMPT_DEVICE_NAME:String = "Device name";
 
     public function DialogUtils() {
-    }
-
-    public static function buildInputTextField(defaultText:String):TextField {
-        var textField:TextField = new TextField();
-        textField.type = TextFieldType.INPUT;
-        textField.text = defaultText;
-        return textField;
-    }
-
-    public static function buildTextField(defaultText:String):TextField {
-        var textField:TextField = new TextField();
-        textField.text = defaultText;
-        return textField;
-    }
-
-    public static function buildButton(text:String, width:Number, height:Number):SimpleButton {
-        var button:SimpleButton = new SimpleButton();
-
-        var stateSprite:Sprite = new Sprite();
-        stateSprite.graphics.lineStyle(1, 0x555555);
-        stateSprite.graphics.beginFill(0xff000, 1);
-        stateSprite.graphics.drawRect(0, 0, width, height);
-        var label:TextField = buildTextField(text);
-        stateSprite.addChild(label);
-        stateSprite.graphics.endFill();
-
-        var hitArea:Sprite = new Sprite();
-        hitArea.graphics.lineStyle(1, 0x555555);
-        hitArea.graphics.beginFill(0xff000, 1);
-        hitArea.graphics.drawRect(0, 0, width, height);
-        hitArea.graphics.endFill();
-
-        button.overState = button.downState = button.upState = stateSprite;
-        button.hitTestState = hitArea;
-
-        return button;
     }
 
     public static function showDialogAfterDelay(dlgReg:IDialog):void {

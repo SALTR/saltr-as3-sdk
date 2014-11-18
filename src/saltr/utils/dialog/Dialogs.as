@@ -42,14 +42,14 @@ public class Dialogs {
 
     private function dialogDeviceRegistrationClosedHandler(event:Event):void {
         var dlgReg:DeviceRegistrationDialog = DeviceRegistrationDialog(event.target);
-        //var pressedButtonName : String = dlgReg.buttons[event.index];
 
-        //if (pressedButtonName == NativeDialogUtils.DLG_BUTTON_SUBMIT) {
+        if (!dlgReg.isCancelled) {
         var submittedDeviceName:String = dlgReg.getTextInputByName(DeviceRegistrationDialog.INPUT_FIELD_DEVICE_NAME);
         var submittedEmailText:String = dlgReg.getTextInputByName(DeviceRegistrationDialog.INPUT_FIELD_EMAIL);
 
         var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedDeviceName, submittedEmailText);
         if (validationResult.isValid) {
+            //TODO @tigr: implement input feedback
             //Toast.show(NativeDialogUtils.DLG_SUBMIT_SUCCESSFUL, NativeDialogUtils.DLG_TIMER);
             _submitDeviceRegCallback(submittedDeviceName, submittedEmailText);
         }
@@ -58,7 +58,7 @@ public class Dialogs {
             //Toast.show(validationResult.notificationText, NativeDialogUtils.TOAST_TIMER);
             return
         }
-        //}
+        }
         dlgReg.removeEventListener(DialogUtils.DIALOG_EVENT_CLOSED, dialogDeviceRegistrationClosedHandler);
         dlgReg.dispose();
     }
