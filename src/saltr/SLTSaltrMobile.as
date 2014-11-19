@@ -23,7 +23,7 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.dialog.Dialogs;
+import saltr.utils.dialog.DeviceRegistrationDialog;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -61,6 +61,7 @@ public class SLTSaltrMobile {
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
     private var _levelType:String;
+    private var _deviceRegistrationDialog:DeviceRegistrationDialog;
 
     private static function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
@@ -360,7 +361,8 @@ public class SLTSaltrMobile {
 
         response = data.response as Array;
         if (response != null && response.length > 0 && response[0].registrationRequired) {
-            Dialogs.getInstance().openDeviceRegisterDialog(addDeviceToSALTR);
+            _deviceRegistrationDialog = new DeviceRegistrationDialog(addDeviceToSALTR);
+            _deviceRegistrationDialog.show();
         }
         trace("[Saltr] Dev feature Sync is complete.");
     }
@@ -531,10 +533,12 @@ public class SLTSaltrMobile {
 
     protected function addDeviceSuccessHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device is complete.");
+        _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_SUCCESSFUL);
     }
 
     protected function addDeviceFailHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device has failed.");
+        _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
     }
 
     private function addDeviceToSALTR(deviceName:String, email:String):void {

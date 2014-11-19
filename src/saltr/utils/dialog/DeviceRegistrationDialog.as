@@ -3,54 +3,72 @@
  */
 
 package saltr.utils.dialog {
-import de.polygonal.ds.HashMap;
-
 import flash.display.SimpleButton;
 import flash.display.Sprite;
-import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
-
 import saltr.SLTSaltrMobile;
 
 public class DeviceRegistrationDialog extends Sprite implements IDialog {
-    public static const INPUT_FIELD_EMAIL:String = "InputFieldEmail";
-    public static const INPUT_FIELD_DEVICE_NAME:String = "InputFieldDeviceName";
+    public static const DLG_BUTTON_SUBMIT:String = "Submit";
+    public static const DLG_BUTTON_CLOSE:String = "Close";
+    public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Please insert your E-mail and device name";
+    public static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
+    public static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
+    public static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";
+    public static const DLG_SUBMIT_IN_PROCESS:String = "Your data submitting in progress.";
+    public static const DLG_NAME_NOT_VALID:String = "Please insert device name.";
+    public static const DLG_BOTH_NOT_VALID:String = "Please insert device name and valid Email.";
+    public static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have two parameters - device name and email.";
+
+    public static const DLG_PROMPT_EMAIL:String = "Valid E-mail";
+    public static const DLG_PROMPT_DEVICE_NAME:String = "Device name";
 
     private static const DESIGNED_SCREEN_WIDTH:Number = 1536;
     private static const DIALOG_WIDTH:Number = 600.0;
     private static const DIALOG_HEIGHT:Number = 400.0;
 
-    private var _inputFields:HashMap;
-    private var _isCancelled:Boolean;
+    private var _submitDeviceRegCallback:Function;
+    private var _emailTextField:TextField;
+    private var _deviceNameTextField:TextField;
+    private var _statusTextField:TextField;
+    private var _isShown:Boolean;
 
-    public function DeviceRegistrationDialog() {
-        _inputFields = new HashMap();
-    }
-
-    public function get isCancelled():Boolean {
-        return _isCancelled;
+    public function DeviceRegistrationDialog(submitCallback:Function) {
+        if (!validateDeviceRegistrationSubmitCallback(submitCallback)) {
+            throw new Error(DLG_ERROR_SUBMIT_FUNC);
+        }
+        _submitDeviceRegCallback = submitCallback;
     }
 
     public function show():void {
-        init();
-        buildView();
+        if(!_isShown) {
+            buildView();
+            SLTSaltrMobile.flStage.addChild(this);
+            _isShown = true;
+        }
     }
 
     public function dispose():void {
-        //TODO @tigr: implement
+        SLTSaltrMobile.flStage.removeChild(this);
+        this.removeChildren();
+        _emailTextField = null;
+        _deviceNameTextField = null;
+        _statusTextField = null;
+        _isShown = false;
     }
 
-    public function getTextInputByName(inputName:String):String {
-        return TextField(_inputFields.get(inputName)).text;
+    public function setStatus(text:String):void {
+        if(_isShown) {
+            _statusTextField.text = text;
+        }
     }
 
-    private function init():void {
-        _inputFields.clear(true);
-        _isCancelled = false;
+    private function validateDeviceRegistrationSubmitCallback(callback:Function):Boolean {
+        return callback != null && callback.length == 2;
     }
 
     private function buildView():void {
@@ -63,56 +81,82 @@ public class DeviceRegistrationDialog extends Sprite implements IDialog {
         var dialogX:Number = (screenWidth - dialogWidth * scaleCoef) / 2;
         var dialogY:Number = (screenHeight - dialogHeight * scaleCoef) / 2;
 
-        var emailTextField:TextField = buildInputTextField(DialogUtils.DLG_PROMPT_EMAIL);
-        emailTextField.x = 20.0;
-        emailTextField.y = 40.0;
-        var deviceNameTextField:TextField = buildInputTextField(DialogUtils.DLG_PROMPT_DEVICE_NAME);
-        deviceNameTextField.x = 20.0;
-        deviceNameTextField.y = 120.0;
+        var descriptionLabel:TextField = buildDescriptionLabel(DLG_DEVICE_REGISTRATION_DESCRIPTION);
+        descriptionLabel.x = 25.0;
+        descriptionLabel.y = 20;
 
-        _inputFields.set(INPUT_FIELD_EMAIL, emailTextField);
-        _inputFields.set(INPUT_FIELD_DEVICE_NAME, deviceNameTextField);
+        _emailTextField = buildInputTextField(DLG_PROMPT_EMAIL);
+        _emailTextField.x = 20.0;
+        _emailTextField.y = 80.0;
+        _deviceNameTextField = buildInputTextField(DLG_PROMPT_DEVICE_NAME);
+        _deviceNameTextField.x = 20.0;
+        _deviceNameTextField.y = 160.0;
 
-        var btnSubmit:SimpleButton = buildButton(DialogUtils.DLG_BUTTON_SUBMIT);
-        var btnCancel:SimpleButton = buildButton(DialogUtils.DLG_BUTTON_CANCEL);
+        _statusTextField = buildStatusTextField();
+        _statusTextField.x = 25.0;
+        _statusTextField.y = 230;
+
+        var btnSubmit:SimpleButton = buildButton(DLG_BUTTON_SUBMIT);
+        var btnClose:SimpleButton = buildButton(DLG_BUTTON_CLOSE);
 
         btnSubmit.addEventListener(MouseEvent.CLICK, btnSubmitHandler);
         btnSubmit.x = 40;
-        btnSubmit.y = 240;
+        btnSubmit.y = 300;
 
-        btnCancel.addEventListener(MouseEvent.CLICK, btnCancelHandler);
-        btnCancel.x = 350;
-        btnCancel.y = 240;
+        btnClose.addEventListener(MouseEvent.CLICK, btnCloseHandler);
+        btnClose.x = 350;
+        btnClose.y = 300;
 
         this.graphics.beginFill(0xFF6600, 1);
         this.graphics.drawRect(0, 0, dialogWidth, dialogHeight);
-        this.addChild(emailTextField);
-        this.addChild(deviceNameTextField);
+        this.addChild(descriptionLabel);
+        this.addChild(_emailTextField);
+        this.addChild(_deviceNameTextField);
+        this.addChild(_statusTextField);
         this.addChild(btnSubmit);
-        this.addChild(btnCancel);
+        this.addChild(btnClose);
         this.graphics.endFill();
 
         this.x = dialogX;
         this.y = dialogY;
 
         this.scaleX = this.scaleY = scaleCoef;
-        SLTSaltrMobile.flStage.addChild(this);
     }
 
     private function btnSubmitHandler(event:MouseEvent):void {
-        removeContent();
-        dispatchEvent(new Event(DialogUtils.DIALOG_EVENT_CLOSED));
+        var submittedDeviceName:String = _deviceNameTextField.text;
+        var submittedEmailText:String = _emailTextField.text;
+
+        var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedDeviceName, submittedEmailText);
+        if (validationResult.isValid) {
+            setStatus(DLG_SUBMIT_IN_PROCESS);
+            _submitDeviceRegCallback(submittedDeviceName, submittedEmailText);
+        }
+        else {
+            setStatus(validationResult.notificationText);
+        }
     }
 
-    private function btnCancelHandler(event:MouseEvent):void {
-        removeContent();
-        _isCancelled = true;
-        dispatchEvent(new Event(DialogUtils.DIALOG_EVENT_CLOSED));
+    private function btnCloseHandler(event:MouseEvent):void {
+        dispose();
     }
 
-    private function removeContent():void {
-        SLTSaltrMobile.flStage.removeChild(this);
-        this.removeChildren();
+    private function getDeviceRegistrationSubmittedValuesValidationResults(deviceName:String, email:String):Object {
+        var isDeviceNameValid:Boolean = deviceName != null && deviceName != "" && deviceName != DLG_PROMPT_DEVICE_NAME;
+        var isEmailValid:Boolean = DialogUtils.checkEmailValidation(email);
+
+        var notificationText:String = "";
+        if (!isDeviceNameValid || !isEmailValid) {
+            notificationText = isEmailValid ? DLG_NAME_NOT_VALID : DLG_EMAIL_NOT_VALID;
+            notificationText = !isEmailValid && !isDeviceNameValid ? DLG_BOTH_NOT_VALID : notificationText;
+        }
+
+        return {
+            isValid: isDeviceNameValid && isEmailValid,
+            isDeviceNameValid: isDeviceNameValid,
+            isEmailValid: isEmailValid,
+            notificationText: notificationText
+        }
     }
 
     private function getScaleCoef():Number {
@@ -133,10 +177,34 @@ public class DeviceRegistrationDialog extends Sprite implements IDialog {
         return textField;
     }
 
+    private function buildStatusTextField():TextField {
+        var textField:TextField = new TextField();
+        textField.border = false;
+        var format:TextFormat = new TextFormat();
+        format.size = 32;
+        format.align = TextFormatAlign.CENTER;
+        textField.defaultTextFormat = format;
+        textField.width = 550.0;
+        textField.height = 40.0;
+        return textField;
+    }
+
+    private function buildDescriptionLabel(defaultText:String):TextField {
+        var textField:TextField = new TextField();
+        textField.border = false;
+        var format:TextFormat = new TextFormat();
+        format.size = 32;
+        format.align = TextFormatAlign.CENTER;
+        textField.defaultTextFormat = format;
+        textField.text = defaultText;
+        textField.width = 550.0;
+        textField.height = 40.0;
+        return textField;
+    }
+
     private function buildButtonLabel(defaultText:String):TextField {
         var textField:TextField = new TextField();
         textField.border = false;
-        textField.type = TextFieldType.INPUT;
         var format:TextFormat = new TextFormat();
         format.size = 40;
         format.align = TextFormatAlign.CENTER;
