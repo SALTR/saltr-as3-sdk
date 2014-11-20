@@ -7,7 +7,7 @@ internal class SLTConfig {
 
     public static const ACTION_GET_APP_DATA:String = "getAppData";
     public static const ACTION_ADD_PROPERTIES:String = "addProperties";
-    public static const ACTION_DEV_SYNC_FEATURES:String = "syncFeatures";
+    public static const ACTION_DEV_SYNC_DATA:String = "sync";
     public static const ACTION_DEV_REGISTER_IDENTITY:String = "registerIdentity";
     public static const SALTR_API_URL:String = "https://api.saltr.com/call";
     public static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";
