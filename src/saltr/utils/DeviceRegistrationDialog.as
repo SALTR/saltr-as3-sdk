@@ -2,17 +2,19 @@
  * Created by TIGR on 11/13/14.
  */
 
-package saltr.utils.dialog {
+package saltr.utils {
 import flash.display.SimpleButton;
 import flash.display.Sprite;
+import flash.display.Stage;
 import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 import saltr.SLTSaltrMobile;
+import saltr.utils.Utils;
 
-public class DeviceRegistrationDialog extends Sprite implements IDialog {
+public class DeviceRegistrationDialog extends Sprite {
     public static const DLG_BUTTON_SUBMIT:String = "Submit";
     public static const DLG_BUTTON_CLOSE:String = "Close";
     public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Please insert your E-mail and device name";
@@ -31,29 +33,31 @@ public class DeviceRegistrationDialog extends Sprite implements IDialog {
     private static const DIALOG_WIDTH:Number = 600.0;
     private static const DIALOG_HEIGHT:Number = 400.0;
 
+    private var _flashStage:Stage;
     private var _submitDeviceRegCallback:Function;
     private var _emailTextField:TextField;
     private var _deviceNameTextField:TextField;
     private var _statusTextField:TextField;
     private var _isShown:Boolean;
 
-    public function DeviceRegistrationDialog(submitCallback:Function) {
+    public function DeviceRegistrationDialog(flashStage:Stage, submitCallback:Function) {
         if (!validateDeviceRegistrationSubmitCallback(submitCallback)) {
             throw new Error(DLG_ERROR_SUBMIT_FUNC);
         }
+        _flashStage = flashStage;
         _submitDeviceRegCallback = submitCallback;
     }
 
     public function show():void {
         if(!_isShown) {
             buildView();
-            SLTSaltrMobile.flStage.addChild(this);
+            _flashStage.addChild(this);
             _isShown = true;
         }
     }
 
     public function dispose():void {
-        SLTSaltrMobile.flStage.removeChild(this);
+        _flashStage.removeChild(this);
         this.removeChildren();
         _emailTextField = null;
         _deviceNameTextField = null;
@@ -72,11 +76,11 @@ public class DeviceRegistrationDialog extends Sprite implements IDialog {
     }
 
     private function buildView():void {
-        var screenWidth:uint = SLTSaltrMobile.flStage.fullScreenWidth;
-        var screenHeight:uint = SLTSaltrMobile.flStage.fullScreenHeight;
+        var screenWidth:uint = _flashStage.fullScreenWidth;
+        var screenHeight:uint = _flashStage.fullScreenHeight;
         var dialogWidth:Number = DIALOG_WIDTH;
         var dialogHeight:Number = DIALOG_HEIGHT;
-        var scaleCoef:Number = getScaleCoef();
+        var scaleCoef:Number = getScaleFactor();
 
         var dialogX:Number = (screenWidth - dialogWidth * scaleCoef) / 2;
         var dialogY:Number = (screenHeight - dialogHeight * scaleCoef) / 2;
@@ -143,7 +147,7 @@ public class DeviceRegistrationDialog extends Sprite implements IDialog {
 
     private function getDeviceRegistrationSubmittedValuesValidationResults(deviceName:String, email:String):Object {
         var isDeviceNameValid:Boolean = deviceName != null && deviceName != "" && deviceName != DLG_PROMPT_DEVICE_NAME;
-        var isEmailValid:Boolean = DialogUtils.checkEmailValidation(email);
+        var isEmailValid:Boolean = Utils.checkEmailValidation(email);
 
         var notificationText:String = "";
         if (!isDeviceNameValid || !isEmailValid) {
@@ -159,8 +163,8 @@ public class DeviceRegistrationDialog extends Sprite implements IDialog {
         }
     }
 
-    private function getScaleCoef():Number {
-        return SLTSaltrMobile.flStage.fullScreenWidth / DESIGNED_SCREEN_WIDTH;
+    private function getScaleFactor():Number {
+        return _flashStage.fullScreenWidth / DESIGNED_SCREEN_WIDTH;
     }
 
     private function buildInputTextField(defaultText:String):TextField {

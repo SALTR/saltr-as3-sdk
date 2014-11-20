@@ -23,7 +23,7 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.dialog.DeviceRegistrationDialog;
+import saltr.utils.DeviceRegistrationDialog;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -34,8 +34,7 @@ public class SLTSaltrMobile {
     public static const CLIENT:String = "AS3-Mobile";
     public static const API_VERSION:String = "1.0.1";
 
-    public static var flStage:Stage;
-
+    private var _flashStage:Stage;
     private var _socialId:String;
     private var _deviceId:String;
     private var _connected:Boolean;
@@ -73,7 +72,7 @@ public class SLTSaltrMobile {
     }
 
     public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String, useCache:Boolean = true) {
-        flStage = flashStage;
+        _flashStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
         _isLoading = false;
@@ -361,7 +360,7 @@ public class SLTSaltrMobile {
 
         response = data.response as Array;
         if (response != null && response.length > 0 && response[0].registrationRequired) {
-            _deviceRegistrationDialog = new DeviceRegistrationDialog(addDeviceToSALTR);
+            _deviceRegistrationDialog = new DeviceRegistrationDialog(_flashStage, addDeviceToSALTR);
             _deviceRegistrationDialog.show();
         }
         trace("[Saltr] Dev feature Sync is complete.");
