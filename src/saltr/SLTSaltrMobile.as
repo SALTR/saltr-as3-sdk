@@ -532,7 +532,21 @@ public class SLTSaltrMobile {
 
     protected function addDeviceSuccessHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device is complete.");
-        _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_SUCCESSFUL);
+        var jsonData:Object = resource.jsonData;
+        var success:Boolean = false;
+        var response:Object;
+        if (jsonData.hasOwnProperty("response")) {
+            response = jsonData.response[0];
+            success = response.success;
+            if(success) {
+                _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_SUCCESSFUL);
+            } else {
+                _deviceRegistrationDialog.setStatus(response.error.message);
+            }
+        }
+        else {
+            _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+        }
     }
 
     protected function addDeviceFailHandler(resource:SLTResource):void {
