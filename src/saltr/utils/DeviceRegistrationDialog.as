@@ -11,8 +11,6 @@ import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
-import saltr.SLTSaltrMobile;
-import saltr.utils.Utils;
 
 public class DeviceRegistrationDialog extends Sprite {
     public static const DLG_BUTTON_SUBMIT:String = "Submit";
@@ -111,7 +109,7 @@ public class DeviceRegistrationDialog extends Sprite {
         btnClose.x = 350;
         btnClose.y = 300;
 
-        this.graphics.beginFill(0xFF6600, 1);
+        this.graphics.beginFill(0xcccccc, 1);
         this.graphics.drawRect(0, 0, dialogWidth, dialogHeight);
         this.addChild(descriptionLabel);
         this.addChild(_emailTextField);
@@ -186,6 +184,7 @@ public class DeviceRegistrationDialog extends Sprite {
         textField.border = false;
         var format:TextFormat = new TextFormat();
         format.size = 32;
+        format.color = 0xff0000;
         format.align = TextFormatAlign.CENTER;
         textField.defaultTextFormat = format;
         textField.width = 550.0;
@@ -224,14 +223,23 @@ public class DeviceRegistrationDialog extends Sprite {
         var height:Number = 80;
         var button:SimpleButton = new SimpleButton();
 
-        var stateSprite:Sprite = new Sprite();
-        stateSprite.graphics.lineStyle(1, 0x555555);
-        stateSprite.graphics.beginFill(0xff000, 1);
-        stateSprite.graphics.drawRect(0, 0, width, height);
-        var label:TextField = buildButtonLabel(text);
-        stateSprite.addChild(label);
-        label.y = 15;
-        stateSprite.graphics.endFill();
+        var stateUpSprite:Sprite = new Sprite();
+        stateUpSprite.graphics.lineStyle(1, 0x555555);
+        stateUpSprite.graphics.beginFill(0x666666, 1);
+        stateUpSprite.graphics.drawRect(0, 0, width, height);
+        var upLabel:TextField = buildButtonLabel(text);
+        stateUpSprite.addChild(upLabel);
+        upLabel.y = 15;
+        stateUpSprite.graphics.endFill();
+
+        var stateDownSprite:Sprite = new Sprite();
+        stateDownSprite.graphics.lineStyle(1, 0x555555);
+        stateDownSprite.graphics.beginFill(0x333333, 1);
+        stateDownSprite.graphics.drawRect(0, 0, width, height);
+        var downLabel:TextField = buildButtonLabel(text);
+        stateDownSprite.addChild(downLabel);
+        downLabel.y = 15;
+        stateDownSprite.graphics.endFill();
 
         var hitArea:Sprite = new Sprite();
         hitArea.graphics.lineStyle(1, 0x555555);
@@ -239,7 +247,8 @@ public class DeviceRegistrationDialog extends Sprite {
         hitArea.graphics.drawRect(0, 0, width, height);
         hitArea.graphics.endFill();
 
-        button.overState = button.downState = button.upState = stateSprite;
+        button.overState = button.upState = stateUpSprite;
+        button.downState = stateDownSprite;
         button.hitTestState = hitArea;
 
         return button;
