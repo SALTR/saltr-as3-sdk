@@ -467,8 +467,8 @@ public class SLTSaltrWeb {
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_FEATURES; //TODO @GSAR: remove later
-        urlVars.action = SLTConfig.ACTION_DEV_SYNC_FEATURES;
+        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later
+        urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
