@@ -14,7 +14,6 @@ import flash.text.SoftKeyboardType;
 import flash.text.StageText;
 import flash.text.StageTextInitOptions;
 import flash.text.TextField;
-import flash.text.TextFieldType;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
@@ -41,21 +40,22 @@ public class DeviceRegistrationDialog extends Sprite {
     private static const DIALOG_COLOR_BUTTON:Object = 0x549ef4;
 
     private var _flashStage:Stage;
-    private var _submitDeviceRegCallback:Function;
+    private var _submitSuccessCallback:Function;
+    private var _submitFailCallback:Function;
     private var _emailTextField:StageText;
     private var _statusTextField:TextField;
     private var _isShown:Boolean;
 
-    public function DeviceRegistrationDialog(flashStage:Stage, submitCallback:Function) {
-        if (!validateDeviceRegistrationSubmitCallback(submitCallback)) {
-            throw new Error(DLG_ERROR_SUBMIT_FUNC);
-        }
+    public function DeviceRegistrationDialog(flashStage:Stage) {
         _flashStage = flashStage;
-        _submitDeviceRegCallback = submitCallback;
     }
 
-    public function show():void {
-        if(!_isShown) {
+    public function show(submitSucessCallback:Function, submitFailCallback:Function):void {
+        if (!_isShown) {
+            if (!validateDeviceRegistrationSubmitCallback(submitSucessCallback)) {
+                throw new Error(DLG_ERROR_SUBMIT_FUNC);
+            }
+            _submitSuccessCallback = submitSucessCallback;
             buildView();
             _flashStage.addChild(this);
             _emailTextField.stage = _flashStage;
@@ -73,7 +73,7 @@ public class DeviceRegistrationDialog extends Sprite {
     }
 
     public function setStatus(text:String):void {
-        if(_isShown) {
+        if (_isShown) {
             _statusTextField.text = text;
         }
     }
@@ -144,7 +144,7 @@ public class DeviceRegistrationDialog extends Sprite {
         var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedEmailText);
         if (validationResult.isValid) {
             setStatus(DLG_SUBMIT_IN_PROCESS);
-            _submitDeviceRegCallback(submittedDeviceName, submittedEmailText);
+            _submitSuccessCallback(submittedDeviceName, submittedEmailText);
         }
         else {
             setStatus(validationResult.notificationText);

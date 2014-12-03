@@ -24,6 +24,7 @@ import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.DeviceRegistrationDialog;
+import saltr.utils.DialogController;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -60,7 +61,7 @@ public class SLTSaltrMobile {
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
     private var _levelType:String;
-    private var _deviceRegistrationDialog:DeviceRegistrationDialog;
+    private var _dialogController:DialogController;
 
     private static function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
@@ -91,6 +92,7 @@ public class SLTSaltrMobile {
         _levelPacks = new <SLTLevelPack>[];
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
+        _dialogController = new DialogController(_flashStage);
     }
 
     public function set repository(value:ISLTRepository):void {
@@ -360,8 +362,7 @@ public class SLTSaltrMobile {
 
         response = data.response as Array;
         if (response != null && response.length > 0 && response[0].registrationRequired) {
-            _deviceRegistrationDialog = new DeviceRegistrationDialog(_flashStage, addDeviceToSALTR);
-            _deviceRegistrationDialog.show();
+            _dialogController.showDeviceRegistrationDialog(addDeviceToSALTR);
         }
         trace("[Saltr] Dev feature Sync is complete.");
     }
@@ -539,19 +540,19 @@ public class SLTSaltrMobile {
             response = jsonData.response[0];
             success = response.success;
             if(success) {
-                _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_SUCCESSFUL);
+                _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_SUCCESSFUL);
             } else {
-                _deviceRegistrationDialog.setStatus(response.error.message);
+                _dialogController.showDeviceRegistrationStatus(response.error.message);
             }
         }
         else {
-            _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+            _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
         }
     }
 
     protected function addDeviceFailHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device has failed.");
-        _deviceRegistrationDialog.setStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+        _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
     }
 
     private function addDeviceToSALTR(deviceName:String, email:String):void {
