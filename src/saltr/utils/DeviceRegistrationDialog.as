@@ -14,27 +14,29 @@ import flash.text.TextFormatAlign;
 
 public class DeviceRegistrationDialog extends Sprite {
     public static const DLG_BUTTON_SUBMIT:String = "Submit";
-    public static const DLG_BUTTON_CLOSE:String = "Close";
-    public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Please insert your E-mail and device name";
+    public static const DLG_BUTTON_CANCEL:String = "Cancel";
+    public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Register Device with SALTR";
     public static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
     public static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
     public static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";
     public static const DLG_SUBMIT_IN_PROCESS:String = "Your data submitting in progress.";
-    public static const DLG_NAME_NOT_VALID:String = "Please insert device name.";
-    public static const DLG_BOTH_NOT_VALID:String = "Please insert device name and valid Email.";
     public static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have two parameters - device name and email.";
 
-    public static const DLG_PROMPT_EMAIL:String = "Valid E-mail";
-    public static const DLG_PROMPT_DEVICE_NAME:String = "Device name";
+    public static const DLG_PROMPT_EMAIL:String = "example@mail.com";
+    public static const DLG_DEFAULT_STATUS:String = "#status text here#";
 
-    private static const DESIGNED_SCREEN_WIDTH:Number = 1536;
-    private static const DIALOG_WIDTH:Number = 600.0;
-    private static const DIALOG_HEIGHT:Number = 400.0;
+    private static const DESIGNED_SCREEN_WIDTH:Number = 750;
+    private static const DIALOG_WIDTH:Number = 649.0;
+    private static const DIALOG_HEIGHT:Number = 355.0;
+
+    private static const DIALOG_COLOR_BACKGROUND:uint = 0xe7e7e7;
+    private static const DIALOG_TEXT_FONT_NAME:String = "Helvetica Neue";
+    private static const DIALOG_COLOR_INPUT_TEXT:uint = 0x999999;
+    private static const DIALOG_COLOR_BUTTON:Object = 0x549ef4;
 
     private var _flashStage:Stage;
     private var _submitDeviceRegCallback:Function;
     private var _emailTextField:TextField;
-    private var _deviceNameTextField:TextField;
     private var _statusTextField:TextField;
     private var _isShown:Boolean;
 
@@ -58,7 +60,6 @@ public class DeviceRegistrationDialog extends Sprite {
         _flashStage.removeChild(this);
         this.removeChildren();
         _emailTextField = null;
-        _deviceNameTextField = null;
         _statusTextField = null;
         _isShown = false;
     }
@@ -78,58 +79,64 @@ public class DeviceRegistrationDialog extends Sprite {
         var screenHeight:uint = _flashStage.fullScreenHeight;
         var dialogWidth:Number = DIALOG_WIDTH;
         var dialogHeight:Number = DIALOG_HEIGHT;
-        var scaleCoef:Number = getScaleFactor();
+        var scaleFactor:Number = getScaleFactor();
 
-        var dialogX:Number = (screenWidth - dialogWidth * scaleCoef) / 2;
-        var dialogY:Number = (screenHeight - dialogHeight * scaleCoef) / 2;
+        var dialogX:Number = (screenWidth - dialogWidth * scaleFactor) / 2;
+        var dialogY:Number = (screenHeight - dialogHeight * scaleFactor) / 2;
 
         var descriptionLabel:TextField = buildDescriptionLabel(DLG_DEVICE_REGISTRATION_DESCRIPTION);
-        descriptionLabel.x = 25.0;
-        descriptionLabel.y = 20;
+        descriptionLabel.x = 36.0;
+        descriptionLabel.y = 38.0;
+
+        var emailBackground:Sprite = buildEmailBackground();
+        emailBackground.x = 42.0;
+        emailBackground.y = 107.0;
 
         _emailTextField = buildInputTextField(DLG_PROMPT_EMAIL);
-        _emailTextField.x = 20.0;
-        _emailTextField.y = 80.0;
-        _deviceNameTextField = buildInputTextField(DLG_PROMPT_DEVICE_NAME);
-        _deviceNameTextField.x = 20.0;
-        _deviceNameTextField.y = 160.0;
+        _emailTextField.x = 42.0;
+        _emailTextField.y = 117.0;
 
         _statusTextField = buildStatusTextField();
-        _statusTextField.x = 25.0;
-        _statusTextField.y = 230;
+        _statusTextField.x = 42.0;
+        _statusTextField.y = 197;
 
-        var btnSubmit:SimpleButton = buildButton(DLG_BUTTON_SUBMIT);
-        var btnClose:SimpleButton = buildButton(DLG_BUTTON_CLOSE);
+        var buttonsBackground:Sprite = buildButtonsBackground();
+        buttonsBackground.x = 0.0;
+        buttonsBackground.y = 267.0;
+
+        var btnCancel:SimpleButton = buildButton(DLG_BUTTON_CANCEL, false);
+        var btnSubmit:SimpleButton = buildButton(DLG_BUTTON_SUBMIT, true);
+
+        btnCancel.addEventListener(MouseEvent.CLICK, btnCancelHandler);
+        btnCancel.x = 47;
+        btnCancel.y = 268;
 
         btnSubmit.addEventListener(MouseEvent.CLICK, btnSubmitHandler);
-        btnSubmit.x = 40;
-        btnSubmit.y = 300;
+        btnSubmit.x = 375;
+        btnSubmit.y = 268;
 
-        btnClose.addEventListener(MouseEvent.CLICK, btnCloseHandler);
-        btnClose.x = 350;
-        btnClose.y = 300;
-
-        this.graphics.beginFill(0xcccccc, 1);
+        this.graphics.beginFill(DIALOG_COLOR_BACKGROUND, 1);
         this.graphics.drawRect(0, 0, dialogWidth, dialogHeight);
         this.addChild(descriptionLabel);
+        this.addChild(emailBackground);
         this.addChild(_emailTextField);
-        this.addChild(_deviceNameTextField);
         this.addChild(_statusTextField);
+        this.addChild(buttonsBackground);
+        this.addChild(btnCancel);
         this.addChild(btnSubmit);
-        this.addChild(btnClose);
         this.graphics.endFill();
 
         this.x = dialogX;
         this.y = dialogY;
 
-        this.scaleX = this.scaleY = scaleCoef;
+        this.scaleX = this.scaleY = scaleFactor;
     }
 
     private function btnSubmitHandler(event:MouseEvent):void {
-        var submittedDeviceName:String = _deviceNameTextField.text;
+        var submittedDeviceName:String = "DummyDeviceNameToRemove";
         var submittedEmailText:String = _emailTextField.text;
 
-        var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedDeviceName, submittedEmailText);
+        var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedEmailText);
         if (validationResult.isValid) {
             setStatus(DLG_SUBMIT_IN_PROCESS);
             _submitDeviceRegCallback(submittedDeviceName, submittedEmailText);
@@ -139,43 +146,51 @@ public class DeviceRegistrationDialog extends Sprite {
         }
     }
 
-    private function btnCloseHandler(event:MouseEvent):void {
+    private function btnCancelHandler(event:MouseEvent):void {
         dispose();
     }
 
-    private function getDeviceRegistrationSubmittedValuesValidationResults(deviceName:String, email:String):Object {
-        var isDeviceNameValid:Boolean = deviceName != null && deviceName != "" && deviceName != DLG_PROMPT_DEVICE_NAME;
-        var isEmailValid:Boolean = Utils.checkEmailValidation(email);
+    private function getDeviceRegistrationSubmittedValuesValidationResults(email:String):Object {
+        var isEmailValid:Boolean = (email != DLG_PROMPT_EMAIL) && Utils.checkEmailValidation(email);
 
         var notificationText:String = "";
-        if (!isDeviceNameValid || !isEmailValid) {
-            notificationText = isEmailValid ? DLG_NAME_NOT_VALID : DLG_EMAIL_NOT_VALID;
-            notificationText = !isEmailValid && !isDeviceNameValid ? DLG_BOTH_NOT_VALID : notificationText;
+        if (!isEmailValid) {
+            notificationText = DLG_EMAIL_NOT_VALID;
         }
 
         return {
-            isValid: isDeviceNameValid && isEmailValid,
-            isDeviceNameValid: isDeviceNameValid,
-            isEmailValid: isEmailValid,
+            isValid: isEmailValid,
             notificationText: notificationText
         }
     }
 
     private function getScaleFactor():Number {
-        return _flashStage.fullScreenWidth / DESIGNED_SCREEN_WIDTH;
+        return Math.min(_flashStage.fullScreenWidth / DESIGNED_SCREEN_WIDTH, 1.0);
+    }
+
+    private function buildEmailBackground():Sprite {
+        var sprite:Sprite = new Sprite();
+        sprite.graphics.lineStyle(1, DIALOG_COLOR_INPUT_TEXT);
+        sprite.graphics.beginFill(0xFFFFFF, 1);
+        sprite.graphics.drawRect(0, 0, 567.0, 73.0);
+        sprite.graphics.endFill();
+        return sprite;
     }
 
     private function buildInputTextField(defaultText:String):TextField {
         var textField:TextField = new TextField();
-        textField.border = true;
+        textField.border = false;
         textField.type = TextFieldType.INPUT;
         var format:TextFormat = new TextFormat();
-        format.size = 40;
+        format.size = 35;
+        format.leftMargin = 19;
+        format.font = DIALOG_TEXT_FONT_NAME;
+        format.color = DIALOG_COLOR_INPUT_TEXT;
         format.align = TextFormatAlign.LEFT;
         textField.defaultTextFormat = format;
         textField.text = defaultText;
-        textField.width = 560.0;
-        textField.height = 50.0;
+        textField.width = 567.0;
+        textField.height = 73.0;
         return textField;
     }
 
@@ -183,12 +198,15 @@ public class DeviceRegistrationDialog extends Sprite {
         var textField:TextField = new TextField();
         textField.border = false;
         var format:TextFormat = new TextFormat();
-        format.size = 32;
-        format.color = 0xff0000;
-        format.align = TextFormatAlign.CENTER;
+        format.size = 35;
+        format.leftMargin = 19;
+        format.font = DIALOG_TEXT_FONT_NAME;
+        format.color = DIALOG_COLOR_INPUT_TEXT;
+        format.align = TextFormatAlign.LEFT;
         textField.defaultTextFormat = format;
-        textField.width = 550.0;
-        textField.height = 40.0;
+        textField.width = 567.0;
+        textField.height = 50.0;
+        textField.text = DLG_DEFAULT_STATUS;
         return textField;
     }
 
@@ -196,49 +214,62 @@ public class DeviceRegistrationDialog extends Sprite {
         var textField:TextField = new TextField();
         textField.border = false;
         var format:TextFormat = new TextFormat();
-        format.size = 32;
-        format.align = TextFormatAlign.CENTER;
-        textField.defaultTextFormat = format;
-        textField.text = defaultText;
-        textField.width = 550.0;
-        textField.height = 40.0;
-        return textField;
-    }
-
-    private function buildButtonLabel(defaultText:String):TextField {
-        var textField:TextField = new TextField();
-        textField.border = false;
-        var format:TextFormat = new TextFormat();
         format.size = 40;
-        format.align = TextFormatAlign.CENTER;
+        format.font = DIALOG_TEXT_FONT_NAME;
+        format.align = TextFormatAlign.LEFT;
         textField.defaultTextFormat = format;
         textField.text = defaultText;
-        textField.width = 200.0;
+        textField.width = 510.0;
         textField.height = 50.0;
         return textField;
     }
 
-    private function buildButton(text:String):SimpleButton {
-        var width:Number = 200;
-        var height:Number = 80;
+    private function buildButtonsBackground():Sprite {
+        var sprite:Sprite = new Sprite();
+        sprite.graphics.lineStyle(1, DIALOG_COLOR_INPUT_TEXT);
+        sprite.graphics.lineTo(DIALOG_WIDTH, 0.0);
+        sprite.graphics.moveTo(DIALOG_WIDTH / 2, 0.0);
+        sprite.graphics.lineTo(DIALOG_WIDTH / 2, 89.0);
+        return sprite;
+    }
+
+    private function buildButtonLabel(defaultText:String, isBold:Boolean):TextField {
+        var textField:TextField = new TextField();
+        textField.border = false;
+        var format:TextFormat = new TextFormat();
+        format.size = 35;
+        format.font = DIALOG_TEXT_FONT_NAME;
+        format.bold = isBold;
+        format.color = DIALOG_COLOR_BUTTON;
+        format.align = TextFormatAlign.CENTER;
+        textField.defaultTextFormat = format;
+        textField.text = defaultText;
+        textField.width = 230.0;
+        textField.height = 50.0;
+        return textField;
+    }
+
+    private function buildButton(text:String, isBold:Boolean):SimpleButton {
+        var width:Number = 230;
+        var height:Number = 87;
         var button:SimpleButton = new SimpleButton();
 
         var stateUpSprite:Sprite = new Sprite();
-        stateUpSprite.graphics.lineStyle(1, 0x555555);
-        stateUpSprite.graphics.beginFill(0x666666, 1);
+        stateUpSprite.graphics.lineStyle(1, DIALOG_COLOR_INPUT_TEXT, 0.0);
+        stateUpSprite.graphics.beginFill(DIALOG_COLOR_BACKGROUND, 1);
         stateUpSprite.graphics.drawRect(0, 0, width, height);
-        var upLabel:TextField = buildButtonLabel(text);
+        var upLabel:TextField = buildButtonLabel(text, isBold);
         stateUpSprite.addChild(upLabel);
-        upLabel.y = 15;
+        upLabel.y = 20;
         stateUpSprite.graphics.endFill();
 
         var stateDownSprite:Sprite = new Sprite();
-        stateDownSprite.graphics.lineStyle(1, 0x555555);
-        stateDownSprite.graphics.beginFill(0x333333, 1);
+        stateDownSprite.graphics.lineStyle(1, DIALOG_COLOR_INPUT_TEXT, 0.0);
+        stateDownSprite.graphics.beginFill(DIALOG_COLOR_BACKGROUND, 1);
         stateDownSprite.graphics.drawRect(0, 0, width, height);
-        var downLabel:TextField = buildButtonLabel(text);
+        var downLabel:TextField = buildButtonLabel(text, isBold);
         stateDownSprite.addChild(downLabel);
-        downLabel.y = 15;
+        downLabel.y = 20;
         stateDownSprite.graphics.endFill();
 
         var hitArea:Sprite = new Sprite();
