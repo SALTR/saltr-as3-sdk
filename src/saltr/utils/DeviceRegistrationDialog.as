@@ -194,8 +194,8 @@ public class DeviceRegistrationDialog extends Sprite {
     }
 
     private function buildEmailInputTextField(defaultText:String):StageText {
-        var stageTextInitOptions = new StageTextInitOptions(false);
-        var stageText = new StageText(stageTextInitOptions);
+        var stageTextInitOptions:StageTextInitOptions = new StageTextInitOptions(false);
+        var stageText:StageText = new StageText(stageTextInitOptions);
         stageText.softKeyboardType = SoftKeyboardType.DEFAULT;
         stageText.returnKeyLabel = ReturnKeyLabel.DONE;
         stageText.autoCorrect = true;
