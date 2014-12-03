@@ -7,6 +7,12 @@ import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.display.Stage;
 import flash.events.MouseEvent;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import flash.text.ReturnKeyLabel;
+import flash.text.SoftKeyboardType;
+import flash.text.StageText;
+import flash.text.StageTextInitOptions;
 import flash.text.TextField;
 import flash.text.TextFieldType;
 import flash.text.TextFormat;
@@ -36,7 +42,7 @@ public class DeviceRegistrationDialog extends Sprite {
 
     private var _flashStage:Stage;
     private var _submitDeviceRegCallback:Function;
-    private var _emailTextField:TextField;
+    private var _emailTextField:StageText;
     private var _statusTextField:TextField;
     private var _isShown:Boolean;
 
@@ -52,6 +58,7 @@ public class DeviceRegistrationDialog extends Sprite {
         if(!_isShown) {
             buildView();
             _flashStage.addChild(this);
+            _emailTextField.stage = _flashStage;
             _isShown = true;
         }
     }
@@ -59,6 +66,7 @@ public class DeviceRegistrationDialog extends Sprite {
     public function dispose():void {
         _flashStage.removeChild(this);
         this.removeChildren();
+        _emailTextField.dispose();
         _emailTextField = null;
         _statusTextField = null;
         _isShown = false;
@@ -92,9 +100,7 @@ public class DeviceRegistrationDialog extends Sprite {
         emailBackground.x = 42.0;
         emailBackground.y = 107.0;
 
-        _emailTextField = buildInputTextField(DLG_PROMPT_EMAIL);
-        _emailTextField.x = 42.0;
-        _emailTextField.y = 117.0;
+        _emailTextField = buildEmailInputTextField(DLG_PROMPT_EMAIL);
 
         _statusTextField = buildStatusTextField();
         _statusTextField.x = 42.0;
@@ -119,7 +125,6 @@ public class DeviceRegistrationDialog extends Sprite {
         this.graphics.drawRect(0, 0, dialogWidth, dialogHeight);
         this.addChild(descriptionLabel);
         this.addChild(emailBackground);
-        this.addChild(_emailTextField);
         this.addChild(_statusTextField);
         this.addChild(buttonsBackground);
         this.addChild(btnCancel);
@@ -151,7 +156,7 @@ public class DeviceRegistrationDialog extends Sprite {
     }
 
     private function getDeviceRegistrationSubmittedValuesValidationResults(email:String):Object {
-        var isEmailValid:Boolean = (email != DLG_PROMPT_EMAIL) && Utils.checkEmailValidation(email);
+        var isEmailValid:Boolean = (email.indexOf(DLG_PROMPT_EMAIL) == -1) && Utils.checkEmailValidation(email);
 
         var notificationText:String = "";
         if (!isEmailValid) {
@@ -177,21 +182,36 @@ public class DeviceRegistrationDialog extends Sprite {
         return sprite;
     }
 
-    private function buildInputTextField(defaultText:String):TextField {
-        var textField:TextField = new TextField();
-        textField.border = false;
-        textField.type = TextFieldType.INPUT;
-        var format:TextFormat = new TextFormat();
-        format.size = 35;
-        format.leftMargin = 19;
-        format.font = DIALOG_TEXT_FONT_NAME;
-        format.color = DIALOG_COLOR_INPUT_TEXT;
-        format.align = TextFormatAlign.LEFT;
-        textField.defaultTextFormat = format;
-        textField.text = defaultText;
-        textField.width = 567.0;
-        textField.height = 73.0;
-        return textField;
+    private function getDialogPosition():Point {
+        var screenWidth:uint = _flashStage.fullScreenWidth;
+        var screenHeight:uint = _flashStage.fullScreenHeight;
+        var dialogWidth:Number = DIALOG_WIDTH;
+        var dialogHeight:Number = DIALOG_HEIGHT;
+        var scaleFactor:Number = getScaleFactor();
+        var dialogX:Number = (screenWidth - dialogWidth * scaleFactor) / 2;
+        var dialogY:Number = (screenHeight - dialogHeight * scaleFactor) / 2;
+        return new Point(dialogX, dialogY);
+    }
+
+    private function buildEmailInputTextField(defaultText:String):StageText {
+        var stageTextInitOptions = new StageTextInitOptions(false);
+        var stageText = new StageText(stageTextInitOptions);
+        stageText.softKeyboardType = SoftKeyboardType.DEFAULT;
+        stageText.returnKeyLabel = ReturnKeyLabel.DONE;
+        stageText.autoCorrect = true;
+        stageText.fontFamily = DIALOG_TEXT_FONT_NAME;
+        stageText.fontSize = 35;
+        stageText.color = DIALOG_COLOR_INPUT_TEXT;
+
+        var dialogPosition:Point = getDialogPosition();
+        var scaleFactor:Number = getScaleFactor();
+        var xValue:Number = dialogPosition.x + (42.0 + 19.0) * scaleFactor;
+        var yValue:Number = dialogPosition.y + 117.0 * scaleFactor;
+        var widthValue:Number = (567.0 - 19.0) * scaleFactor;
+        var heightValue:Number = 73.0 * scaleFactor;
+        stageText.viewPort = new Rectangle(xValue, yValue, widthValue, heightValue);
+        stageText.text = defaultText;
+        return stageText;
     }
 
     private function buildStatusTextField():TextField {
