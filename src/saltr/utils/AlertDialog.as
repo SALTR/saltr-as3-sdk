@@ -13,7 +13,7 @@ import flash.text.TextFormatAlign;
 public class AlertDialog extends Sprite {
     public static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration with SALTR";
 
-    private static const DLG_BUTTON_CLOSE:String = "Close";
+    private static const DLG_BUTTON_CLOSE:String = "OK";
 
     private static const DIALOG_TEXT_FONT_NAME:String = "Helvetica Neue";
     private static const DIALOG_COLOR_BACKGROUND:uint = 0xe7e7e7;
@@ -33,7 +33,7 @@ public class AlertDialog extends Sprite {
         _flashStage = flashStage;
     }
 
-    public function show(title:String, message:String, buttonOkCallback:Function):void {
+    public function show(title:String, message:String, buttonOkCallback:Function = null):void {
         if (!_isShown) {
             _buttonOkCallback = buttonOkCallback;
             buildView(title, message);
@@ -188,7 +188,9 @@ public class AlertDialog extends Sprite {
 
     private function btnCloseHandler(event:MouseEvent):void {
         dispose();
-        _buttonOkCallback();
+        if(null != _buttonOkCallback) {
+            _buttonOkCallback();
+        }
     }
 }
 }

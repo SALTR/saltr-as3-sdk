@@ -24,11 +24,9 @@ public class DeviceRegistrationDialog extends Sprite {
     public static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
     public static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
     public static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";
-    public static const DLG_SUBMIT_IN_PROCESS:String = "Your data submitting in progress.";
     public static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have two parameters - device name and email.";
 
     public static const DLG_PROMPT_EMAIL:String = "example@mail.com";
-    public static const DLG_DEFAULT_STATUS:String = "#status text here#";
 
     private static const DESIGNED_SCREEN_WIDTH:Number = 750;
     private static const DIALOG_WIDTH:Number = 649.0;
@@ -41,7 +39,6 @@ public class DeviceRegistrationDialog extends Sprite {
 
     private var _flashStage:Stage;
     private var _submitSuccessCallback:Function;
-    private var _submitFailCallback:Function;
     private var _emailTextField:StageText;
     private var _statusTextField:TextField;
     private var _isShown:Boolean;
@@ -50,7 +47,7 @@ public class DeviceRegistrationDialog extends Sprite {
         _flashStage = flashStage;
     }
 
-    public function show(submitSucessCallback:Function, submitFailCallback:Function):void {
+    public function show(submitSucessCallback:Function):void {
         if (!_isShown) {
             if (!validateDeviceRegistrationSubmitCallback(submitSucessCallback)) {
                 throw new Error(DLG_ERROR_SUBMIT_FUNC);
@@ -72,7 +69,7 @@ public class DeviceRegistrationDialog extends Sprite {
         _isShown = false;
     }
 
-    public function setStatus(text:String):void {
+    private function setStatus(text:String):void {
         if (_isShown) {
             _statusTextField.text = text;
         }
@@ -143,7 +140,7 @@ public class DeviceRegistrationDialog extends Sprite {
 
         var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedEmailText);
         if (validationResult.isValid) {
-            setStatus(DLG_SUBMIT_IN_PROCESS);
+            dispose();
             _submitSuccessCallback(submittedDeviceName, submittedEmailText);
         }
         else {
@@ -226,7 +223,6 @@ public class DeviceRegistrationDialog extends Sprite {
         textField.defaultTextFormat = format;
         textField.width = 567.0;
         textField.height = 50.0;
-        textField.text = DLG_DEFAULT_STATUS;
         return textField;
     }
 
