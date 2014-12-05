@@ -65,7 +65,7 @@ internal class SLTDeserializer {
 
                     //TODO @GSAR: later, leave localIndex only!
                     var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
-                    levels.push(new SLTLevel(levelNode.id, levelType, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
+                    levels.push(new SLTLevel(levelNode.id, levelNode.variationId, levelType, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
                 }
                 levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
             }

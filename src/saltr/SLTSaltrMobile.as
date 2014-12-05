@@ -345,7 +345,7 @@ public class SLTSaltrMobile {
     }
 
     private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
-        if (v != null && v != "null" && v != "") {
+        if (v != null && v != "null" && v !== "") {
             return v;
         }
         return undefined;
@@ -560,7 +560,7 @@ public class SLTSaltrMobile {
         var type:String;
         var platform:String;
         var args:Object = {};
-        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_IDENTITY;
+        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;
         urlVars.clientKey = _clientKey;
         args.devMode = _devMode;
         args.apiVersion = API_VERSION;
@@ -633,6 +633,65 @@ public class SLTSaltrMobile {
             _levelPacks[i].dispose();
         }
         _levelPacks.length = 0;
+    }
+
+    private function addLevelEndEventProperties(eventProps:Object, numericArray:Array, textArray:Array) : Object {
+        for(var i:int =0; i < numericArray.length; i++) {
+            var key:String = "cD" + (i+1);
+            eventProps[key] = numericArray[i];
+        }
+        for(var i:int =0; i < textArray.length; i++) {
+            var key:String = "cT" + (i+1);
+            eventProps[key] = textArray[i];
+        }
+        return eventProps;
+    }
+
+
+    public function sendLevelEndEvent(variationId:String, endStatus:String, endReason:String, score:int, customTextProperties:Array, customNumbericProperties:Array):void {
+        var urlVars : URLVariables = new URLVariables();
+        urlVars.action = SLTConfig.ACTION_DEV_ADD_LEVELEND_EVENT;
+
+        var args:Object = {
+            clientKey : _clientKey,
+            client : CLIENT,
+            devMode : _devMode,
+            variationId : variationId
+        }
+
+        //required for Mobile
+        if (_deviceId != null) {
+            args.deviceId = _deviceId;
+            urlVars.deviceId = _deviceId;
+        } else {
+            throw new Error("Field 'deviceId' is a required.")
+        }
+
+        //optional for Mobile
+        if (_socialId != null) {
+            args.socialId = _socialId;
+        }
+
+        var eventProps : Object = {};
+        args.eventProps = eventProps;
+        eventProps.endReason = endReason;
+        eventProps.endStatus = endStatus;
+        eventProps.score = score;
+        addLevelEndEventProperties(eventProps,customNumbericProperties, customTextProperties);
+
+
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
+
+        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
+        var resource:SLTResource = new SLTResource("syncFeatures", ticket, sendLevelEndSuccessHandler, sendLevelEndFailHandler);
+        resource.load();
+
+        function sendLevelEndSuccessHandler(resource:SLTResource):void {
+            trace("sendLevelEndSuccessHandler");
+        }
+        function sendLevelEndFailHandler(resource:SLTResource):void {
+            trace("sendLevelEndFailHandler");
+        }
     }
 
     private function syncData():void {
