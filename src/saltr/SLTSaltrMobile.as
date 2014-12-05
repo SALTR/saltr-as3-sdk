@@ -343,7 +343,7 @@ public class SLTSaltrMobile {
     }
 
     private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
-        if (v != null && v != "null" && v != "") {
+        if (v != null && v != "null" && v !== "") {
             return v;
         }
         return undefined;
