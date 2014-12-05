@@ -559,7 +559,7 @@ public class SLTSaltrMobile {
         var type:String;
         var platform:String;
         var args:Object = {};
-        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_IDENTITY;
+        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;
         urlVars.clientKey = _clientKey;
         args.devMode = _devMode;
         args.apiVersion = API_VERSION;
