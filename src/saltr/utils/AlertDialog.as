@@ -11,7 +11,7 @@ import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
 public class AlertDialog extends Sprite {
-    public static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration with SALTR";
+    public static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration";
 
     private static const DLG_BUTTON_CLOSE:String = "OK";
 
@@ -65,7 +65,7 @@ public class AlertDialog extends Sprite {
 
         _alertTextField = buildAlertTextField(message);
         _alertTextField.x = 42.0;
-        _alertTextField.y = 197;
+        _alertTextField.y = 107.0;
 
         var buttonBackground:Sprite = buildButtonBackground();
         buttonBackground.x = 0.0;
@@ -74,7 +74,7 @@ public class AlertDialog extends Sprite {
         var btnClose:SimpleButton = buildButton(DLG_BUTTON_CLOSE, true);
 
         btnClose.addEventListener(MouseEvent.CLICK, btnCloseHandler);
-        btnClose.x = 47;
+        btnClose.x = (DIALOG_WIDTH / 2) - (230 / 2);
         btnClose.y = 268;
 
         this.graphics.beginFill(DIALOG_COLOR_BACKGROUND, 1);
@@ -119,8 +119,10 @@ public class AlertDialog extends Sprite {
         format.color = DIALOG_COLOR_INPUT_TEXT;
         format.align = TextFormatAlign.LEFT;
         textField.defaultTextFormat = format;
+        textField.multiline = true;
+        textField.wordWrap = true;
         textField.width = 567.0;
-        textField.height = 50.0;
+        textField.height = 140.0;
         textField.text = text;
         return textField;
     }
@@ -129,8 +131,6 @@ public class AlertDialog extends Sprite {
         var sprite:Sprite = new Sprite();
         sprite.graphics.lineStyle(1, DIALOG_COLOR_INPUT_TEXT);
         sprite.graphics.lineTo(DIALOG_WIDTH, 0.0);
-        sprite.graphics.moveTo(DIALOG_WIDTH / 2, 0.0);
-        sprite.graphics.lineTo(DIALOG_WIDTH / 2, 89.0);
         return sprite;
     }
 
