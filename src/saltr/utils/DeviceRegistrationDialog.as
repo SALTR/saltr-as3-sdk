@@ -76,7 +76,7 @@ public class DeviceRegistrationDialog extends Sprite {
     }
 
     private function validateDeviceRegistrationSubmitCallback(callback:Function):Boolean {
-        return callback != null && callback.length == 2;
+        return callback != null && callback.length == 1;
     }
 
     private function buildView():void {
@@ -135,13 +135,12 @@ public class DeviceRegistrationDialog extends Sprite {
     }
 
     private function btnSubmitHandler(event:MouseEvent):void {
-        var submittedDeviceName:String = "DummyDeviceNameToRemove";
         var submittedEmailText:String = _emailTextField.text;
 
         var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedEmailText);
         if (validationResult.isValid) {
             dispose();
-            _submitSuccessCallback(submittedDeviceName, submittedEmailText);
+            _submitSuccessCallback(submittedEmailText);
         }
         else {
             setStatus(validationResult.notificationText);

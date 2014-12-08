@@ -25,6 +25,7 @@ import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.DeviceRegistrationDialog;
 import saltr.utils.DialogController;
+import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
@@ -555,10 +556,8 @@ public class SLTSaltrMobile {
         _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
     }
 
-    private function addDeviceToSALTR(deviceName:String, email:String):void {
+    private function addDeviceToSALTR(email:String):void {
         var urlVars:URLVariables = new URLVariables();
-        var type:String;
-        var platform:String;
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;
         urlVars.clientKey = _clientKey;
@@ -572,38 +571,9 @@ public class SLTSaltrMobile {
             throw new Error("Field 'deviceId' is a required.");
         }
 
-
-        //set device type
-        type = Capabilities.os.toLocaleLowerCase();
-        switch (true) {
-            case type.indexOf("ipad") != -1 :
-                type = SLTConfig.DEVICE_TYPE_IPAD;
-                platform = SLTConfig.DEVICE_PLATFORM_IOS;
-                break;
-            case type.indexOf("iphone") != -1 :
-                type = SLTConfig.DEVICE_TYPE_IPHONE;
-                platform = SLTConfig.DEVICE_PLATFORM_IOS;
-                break;
-            case type.indexOf("ipod") != -1 :
-                type = SLTConfig.DEVICE_TYPE_IPOD;
-                platform = SLTConfig.DEVICE_PLATFORM_IOS;
-                break;
-            case type.indexOf("android") != -1 :
-                type = SLTConfig.DEVICE_TYPE_ANDROID;
-                platform = SLTConfig.DEVICE_PLATFORM_ANDROID;
-                break;
-            default :
-                throw new Error("Field 'device type' is a required.");
-        }
-        args.type = type;
-        args.platform = platform ;
-
-
-        if (deviceName != null && deviceName != "") {
-            args.name = deviceName;
-        } else {
-            throw new Error("Field 'deviceName' is a required.");
-        }
+        var deviceInfo:Object = MobileDeviceInfo.getDeviceInfo();
+        args.source = deviceInfo.device;
+        args.os = deviceInfo.os;
 
         if (email != null && email != "") {
             args.email = email;
