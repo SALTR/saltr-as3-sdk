@@ -6,6 +6,7 @@ package saltr.utils {
 import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.display.Stage;
+import flash.events.FocusEvent;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 import flash.geom.Rectangle;
@@ -63,6 +64,7 @@ public class DeviceRegistrationDialog extends Sprite {
     public function dispose():void {
         _flashStage.removeChild(this);
         this.removeChildren();
+        _emailTextField.removeEventListener(flash.events.FocusEvent.FOCUS_IN, emailFocusInHandler);
         _emailTextField.dispose();
         _emailTextField = null;
         _statusTextField = null;
@@ -98,6 +100,7 @@ public class DeviceRegistrationDialog extends Sprite {
         emailBackground.y = 107.0;
 
         _emailTextField = buildEmailInputTextField(DLG_PROMPT_EMAIL);
+        _emailTextField.addEventListener(flash.events.FocusEvent.FOCUS_IN, emailFocusInHandler);
 
         _statusTextField = buildStatusTextField();
         _statusTextField.x = 42.0;
@@ -134,11 +137,16 @@ public class DeviceRegistrationDialog extends Sprite {
         this.scaleX = this.scaleY = scaleFactor;
     }
 
+    private function emailFocusInHandler(event:FocusEvent):void {
+        _emailTextField.text = "";
+    }
+
     private function btnSubmitHandler(event:MouseEvent):void {
         var submittedEmailText:String = _emailTextField.text;
 
         var validationResult:Object = getDeviceRegistrationSubmittedValuesValidationResults(submittedEmailText);
         if (validationResult.isValid) {
+            event.target.removeEventListener(MouseEvent.CLICK, btnSubmitHandler);
             dispose();
             _submitSuccessCallback(submittedEmailText);
         }
@@ -148,6 +156,7 @@ public class DeviceRegistrationDialog extends Sprite {
     }
 
     private function btnCancelHandler(event:MouseEvent):void {
+        event.target.removeEventListener(MouseEvent.CLICK, btnCancelHandler);
         dispose();
     }
 

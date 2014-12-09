@@ -187,6 +187,7 @@ public class AlertDialog extends Sprite {
     }
 
     private function btnCloseHandler(event:MouseEvent):void {
+        event.target.removeEventListener(MouseEvent.CLICK, btnCloseHandler);
         dispose();
         if(null != _buttonOkCallback) {
             _buttonOkCallback();
