@@ -488,6 +488,7 @@ public class SLTSaltrMobile {
         if (success) {
             if (_autoSyncEnabled && !_isDataSynced) {
                 syncData();
+                _isDataSynced = true;
             }
 
             _levelType = response.levelType;
@@ -674,7 +675,6 @@ public class SLTSaltrMobile {
         if(!_devMode) {
             return;
         }
-        _isDataSynced = true;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later
