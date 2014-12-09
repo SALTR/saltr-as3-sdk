@@ -58,6 +58,8 @@ public class SLTSaltrMobile {
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
+    private var _autoSyncEnabled:Boolean;
+    private var _isDataSynced:Boolean;
     private var _started:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
@@ -84,6 +86,8 @@ public class SLTSaltrMobile {
         _levelType = null;
 
         _devMode = false;
+        _autoSyncEnabled = true;
+        _isDataSynced = false;
         _started = false;
         _requestIdleTimeout = 0;
 
@@ -110,6 +114,10 @@ public class SLTSaltrMobile {
 
     public function set devMode(value:Boolean):void {
         _devMode = value;
+    }
+
+    public function set autoSyncEnabled(value:Boolean):void {
+        _autoSyncEnabled = value;
     }
 
     public function set requestIdleTimeout(value:int):void {
@@ -478,7 +486,7 @@ public class SLTSaltrMobile {
         _isLoading = false;
 
         if (success) {
-            if (_devMode) {
+            if (_autoSyncEnabled && !_isDataSynced) {
                 syncData();
             }
 
@@ -662,7 +670,11 @@ public class SLTSaltrMobile {
         }
     }
 
-    private function syncData():void {
+    public function syncData():void {
+        if(!_devMode) {
+            return;
+        }
+        _isDataSynced = true;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later
