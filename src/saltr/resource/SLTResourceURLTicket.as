@@ -37,7 +37,7 @@ public class SLTResourceURLTicket {
         _manageCookies = true;
         _useCache = true;
         //
-        _idleTimeout = 0;
+        _idleTimeout = 3000;
         _userAgent = null;
         //
         _url = url;
