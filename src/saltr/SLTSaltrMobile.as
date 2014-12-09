@@ -93,7 +93,7 @@ public class SLTSaltrMobile {
         _levelPacks = new <SLTLevelPack>[];
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
-        _dialogController = new DialogController(_flashStage);
+        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
     }
 
     public function set repository(value:ISLTRepository):void {
@@ -363,7 +363,7 @@ public class SLTSaltrMobile {
 
         response = data.response as Array;
         if (response != null && response.length > 0 && response[0].registrationRequired) {
-            _dialogController.showDeviceRegistrationDialog(addDeviceToSALTR);
+            _dialogController.showDeviceRegistrationDialog();
         }
         trace("[Saltr] Dev feature Sync is complete.");
     }
@@ -540,20 +540,18 @@ public class SLTSaltrMobile {
         if (jsonData.hasOwnProperty("response")) {
             response = jsonData.response[0];
             success = response.success;
-            if(success) {
-                _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_SUCCESSFUL);
-            } else {
-                _dialogController.showDeviceRegistrationStatus(response.error.message);
+            if(!success) {
+                _dialogController.showDeviceRegistrationFailStatus(response.error.message);
             }
         }
         else {
-            _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+            _dialogController.showDeviceRegistrationFailStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
         }
     }
 
     protected function addDeviceFailHandler(resource:SLTResource):void {
         trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showDeviceRegistrationStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+        _dialogController.showDeviceRegistrationFailStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
     }
 
     private function addDeviceToSALTR(email:String):void {

@@ -7,20 +7,22 @@ import flash.display.Stage;
 public class DialogController {
     private var _flashStage:Stage;
     private var _deviceRegistrationDialog:DeviceRegistrationDialog;
+    private var _deviceRegistrationCallback:Function;
     private var _alertDialog:AlertDialog;
 
-    public function DialogController(flashStage:Stage) {
+    public function DialogController(flashStage:Stage, deviceRegistrationCallback:Function) {
         _flashStage = flashStage;
         _deviceRegistrationDialog = new DeviceRegistrationDialog(_flashStage);
+        _deviceRegistrationCallback = deviceRegistrationCallback;
         _alertDialog = new AlertDialog(_flashStage);
     }
 
-    public function showDeviceRegistrationDialog(submitCallback:Function):void {
-        _deviceRegistrationDialog.show(submitCallback);
+    public function showDeviceRegistrationDialog():void {
+        _deviceRegistrationDialog.show(_deviceRegistrationCallback);
     }
 
-    public function showDeviceRegistrationStatus(status:String):void {
-        showAlertDialog(AlertDialog.DLG_DEVICE_REGISTRATION_TITLE, status);
+    public function showDeviceRegistrationFailStatus(status:String):void {
+        showAlertDialog(AlertDialog.DLG_DEVICE_REGISTRATION_TITLE, status, showDeviceRegistrationDialog);
     }
 
     public function showAlertDialog(title:String, message:String, okCallback:Function = null):void {
