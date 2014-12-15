@@ -58,8 +58,11 @@ public class SLTSaltrMobile {
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
-    private var _isDeviceRegistrationEnabled:Boolean;
+    private var _autoRegisterDevice:Boolean;
+    private var _isDeviceRegistered:Boolean;
+    private var _deviceRegisteredEmail:String;
     private var _started:Boolean;
+    private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
     private var _levelType:String;
@@ -85,8 +88,9 @@ public class SLTSaltrMobile {
         _levelType = null;
 
         _devMode = false;
-        _isDeviceRegistrationEnabled = true;
+        _autoRegisterDevice = true;
         _started = false;
+        _isSynced = false;
         _requestIdleTimeout = 0;
 
         _activeFeatures = new Dictionary();
@@ -114,8 +118,8 @@ public class SLTSaltrMobile {
         _devMode = value;
     }
 
-    public function set deviceRegistrationEnabled(value:Boolean):void {
-        _isDeviceRegistrationEnabled = value;
+    public function set autoRegisterDevice(value:Boolean):void {
+        _autoRegisterDevice = value;
     }
 
     public function set requestIdleTimeout(value:int):void {
@@ -351,8 +355,15 @@ public class SLTSaltrMobile {
         resource.load();
     }
 
-    public function showDeviceRegistrationDialog() {
-        _dialogController.showDeviceRegistrationDialog();
+    public function registerDevice() {
+        if(!_started) {
+            throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
+        }
+        if(_isDeviceRegistered) {
+            _dialogController.showAlertDialog("", DeviceRegistrationDialog.DLG_DEVICE_ALREADY_REGISTERED + _deviceRegisteredEmail);
+        } else {
+            _dialogController.showDeviceRegistrationDialog();
+        }
     }
 
     private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
@@ -372,10 +383,11 @@ public class SLTSaltrMobile {
         }
 
         response = data.response as Array;
-        if (_isDeviceRegistrationEnabled && response != null && response.length > 0 && response[0].registrationRequired) {
-            showDeviceRegistrationDialog();
+        if (_autoRegisterDevice && response != null && response.length > 0 && response[0].registrationRequired) {
+            registerDevice();
         }
         trace("[Saltr] Dev feature Sync is complete.");
+        _isSynced = true;
     }
 
     protected function syncFailHandler(resource:SLTResource):void {
@@ -488,8 +500,8 @@ public class SLTSaltrMobile {
         _isLoading = false;
 
         if (success) {
-            if (_devMode) {
-                syncData();
+            if (_devMode && !_isSynced) {
+                sync();
             }
 
             _levelType = response.levelType;
@@ -550,7 +562,9 @@ public class SLTSaltrMobile {
         if (jsonData.hasOwnProperty("response")) {
             response = jsonData.response[0];
             success = response.success;
-            if(!success) {
+            if(success) {
+                sync();
+            } else {
                 _dialogController.showDeviceRegistrationFailStatus(response.error.message);
             }
         }
@@ -672,7 +686,7 @@ public class SLTSaltrMobile {
         }
     }
 
-    private function syncData():void {
+    private function sync():void {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later

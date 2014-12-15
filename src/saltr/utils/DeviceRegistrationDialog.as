@@ -22,10 +22,11 @@ public class DeviceRegistrationDialog extends Sprite {
     public static const DLG_BUTTON_SUBMIT:String = "Submit";
     public static const DLG_BUTTON_CANCEL:String = "Cancel";
     public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Register Device with SALTR";
+    public static const DLG_DEVICE_ALREADY_REGISTERED:String = "Your device is already registered with SALTR for ";
     public static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
     public static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
     public static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";
-    public static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have two parameters - device name and email.";
+    public static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have email parameter.";
 
     public static const DLG_PROMPT_EMAIL:String = "example@mail.com";
 
