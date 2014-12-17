@@ -385,7 +385,7 @@ public class SLTSaltrMobile {
             return;
         }
 
-        if(response[0].sucess == false) {
+        if(response[0].success == false) {
            var error:Object = response[0].error;
             if(error.code == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
                 registerDevice();
