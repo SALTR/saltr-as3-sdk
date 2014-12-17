@@ -8,9 +8,11 @@ public class SLTStatus {
     public static const AUTHORIZATION_ERROR:int = 1001;
     public static const VALIDATION_ERROR:int = 1002;
     public static const API_ERROR:int = 1003;
+    public static const PARSE_ERROR:int = 1004;
 
 
-    public static const GENERAL_ERROR_CODE:int = 2001;
+    public static const REGISTRATION_REQUIRED_ERROR_CODE:int = 2001;
+
     public static const CLIENT_ERROR_CODE:int = 2002;
 
 

@@ -22,7 +22,6 @@ public class DeviceRegistrationDialog extends Sprite {
     public static const DLG_BUTTON_SUBMIT:String = "Submit";
     public static const DLG_BUTTON_CANCEL:String = "Cancel";
     public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Register Device with SALTR";
-    public static const DLG_DEVICE_ALREADY_REGISTERED:String = "Your device is already registered with SALTR for ";
     public static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
     public static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
     public static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";

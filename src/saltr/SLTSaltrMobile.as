@@ -34,7 +34,7 @@ import saltr.utils.Utils;
 public class SLTSaltrMobile {
 
     public static const CLIENT:String = "AS3-Mobile";
-    public static const API_VERSION:String = "1.0.1";
+    public static const API_VERSION:String = "1.0.0";
 
     private var _flashStage:Stage;
     private var _socialId:String;
@@ -59,8 +59,6 @@ public class SLTSaltrMobile {
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
     private var _autoRegisterDevice:Boolean;
-    private var _isDeviceRegistered:Boolean;
-    private var _deviceRegisteredEmail:String;
     private var _started:Boolean;
     private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
@@ -359,11 +357,7 @@ public class SLTSaltrMobile {
         if(!_started) {
             throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
         }
-        if(_isDeviceRegistered) {
-            _dialogController.showAlertDialog("", DeviceRegistrationDialog.DLG_DEVICE_ALREADY_REGISTERED + _deviceRegisteredEmail);
-        } else {
-            _dialogController.showDeviceRegistrationDialog();
-        }
+        _dialogController.showDeviceRegistrationDialog();
     }
 
     private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
@@ -381,13 +375,25 @@ public class SLTSaltrMobile {
             trace("[Saltr] Dev feature Sync's response.jsonData is null.");
             return;
         }
-
         response = data.response as Array;
-        if (_autoRegisterDevice && response != null && response.length > 0 && response[0].registrationRequired) {
-            registerDevice();
+        if(response == null) {
+            trace("[Saltr] Dev feature Sync's response is null.");
+            return;
         }
-        trace("[Saltr] Dev feature Sync is complete.");
-        _isSynced = true;
+        if(response.length <= 0) {
+            trace("[Saltr] Dev feature Sync response's length is <= 0.");
+            return;
+        }
+
+        if(response[0].sucess == false) {
+           var error:Object = response[0].error;
+            if(error.code == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
+                registerDevice();
+            }
+        } else {
+            trace("[Saltr] Dev feature Sync is complete.");
+            _isSynced = true;
+        }
     }
 
     protected function syncFailHandler(resource:SLTResource):void {
