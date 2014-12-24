@@ -9,6 +9,7 @@ public class SLTLevel {
     protected var _boards:Dictionary;
 
     private var _id:String;
+    private var _variationId:String;
     private var _levelType:String;
     private var _index:int;
     private var _localIndex:int;
@@ -36,8 +37,9 @@ public class SLTLevel {
         return null;
     }
 
-    public function SLTLevel(id:String, levelType:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
+    public function SLTLevel(id:String, variationId:String, levelType:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
+        _variationId = variationId;
         _levelType = levelType;
         _index = index;
         _localIndex = localIndex;
@@ -46,6 +48,10 @@ public class SLTLevel {
         _properties = properties;
         _version = version;
         _contentReady = false;
+    }
+
+    public function get variationId():String {
+        return _variationId;
     }
 
     public function get index():int {

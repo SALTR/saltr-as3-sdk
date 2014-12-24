@@ -22,7 +22,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private static function initializeCells(cells:SLTCells, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
-        var cellProperties:Array = boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("cell") ? boardNode.properties.cell : [];
+        var cellProperties:Array = boardNode.hasOwnProperty("cellProperties")  ? boardNode.cellProperties : [];
         var cols:int = cells.width;
         var rows:int = cells.height;
 
@@ -69,8 +69,8 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchingBoard {
         var boardProperties:Object = {};
-        if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
-            boardProperties = boardNode.properties.board;
+        if (boardNode.hasOwnProperty("properties")) {
+            boardProperties = boardNode.properties;
         }
 
         var cells:SLTCells = new SLTCells(boardNode.cols, boardNode.rows);
@@ -123,9 +123,10 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
     }
 
 
-    private function parseLayer(layerNode:Object, layerIndex:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
-        var layerId:String = layerNode.layerId;
-        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(layerId, layerIndex);
+    private function parseLayer(layerNode:Object, index:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
+        //temporarily checking for 2 names until "layerId" is removed!
+        var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
+        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(token, index);
         parseFixedAssets(layer, layerNode.fixedAssets as Array, cells, assetMap);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;

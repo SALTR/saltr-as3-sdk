@@ -8,14 +8,17 @@ public class SLTStatus {
     public static const AUTHORIZATION_ERROR:int = 1001;
     public static const VALIDATION_ERROR:int = 1002;
     public static const API_ERROR:int = 1003;
+    public static const PARSE_ERROR:int = 1004;
 
 
-    public static const GENERAL_ERROR_CODE:int = 2001;
+    public static const REGISTRATION_REQUIRED_ERROR_CODE:int = 2001;
+
     public static const CLIENT_ERROR_CODE:int = 2002;
 
 
     public static const CLIENT_APP_DATA_LOAD_FAIL:int = 2040;
     public static const CLIENT_LEVEL_CONTENT_LOAD_FAIL:int = 2041;
+    public static const CLIENT_APP_DATA_CONCURRENT_LOAD_REFUSED:int = 2042;
 
     public static const CLIENT_FEATURES_PARSE_ERROR:int = 2050;
     public static const CLIENT_EXPERIMENTS_PARSE_ERROR:int = 2051;

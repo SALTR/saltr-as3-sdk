@@ -28,7 +28,6 @@ public class SLTSaltrWeb {
     private var _socialId:String;
     private var _connected:Boolean;
     private var _clientKey:String;
-    private var _saltrUserId:String;
     private var _isLoading:Boolean;
 
     private var _activeFeatures:Dictionary;
@@ -62,7 +61,6 @@ public class SLTSaltrWeb {
         _clientKey = clientKey;
         _isLoading = false;
         _connected = false;
-        _saltrUserId = null;
         _useNoLevels = false;
         _useNoFeatures = false;
         _levelType = null;
@@ -257,7 +255,7 @@ public class SLTSaltrWeb {
     }
 
     public function addProperties(basicProperties:Object = null, customProperties:Object = null):void {
-        if (!basicProperties && !customProperties || !_saltrUserId) {
+        if (!basicProperties && !customProperties) {
             return;
         }
 
@@ -278,11 +276,6 @@ public class SLTSaltrWeb {
         }
 
         //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
-        }
-
-        //optional
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
         }
@@ -292,11 +285,7 @@ public class SLTSaltrWeb {
             args.customProperties = customProperties;
         }
 
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
 
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
         var resource:SLTResource = new SLTResource("property", ticket,
@@ -370,11 +359,6 @@ public class SLTSaltrWeb {
             throw new Error("Field 'socialId' is required.")
         }
 
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
-        }
-
         if (basicProperties != null) {
             args.basicProperties = basicProperties;
         }
@@ -383,11 +367,7 @@ public class SLTSaltrWeb {
             args.customProperties = customProperties;
         }
 
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
 
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
         return new SLTResource("saltAppConfig", ticket, loadSuccessCallback, loadFailCallback);
@@ -456,7 +436,6 @@ public class SLTSaltrWeb {
                 }
             }
 
-            _saltrUserId = response.saltrUserId;
             _connected = true;
 
             _activeFeatures = saltrFeatures;
@@ -488,8 +467,8 @@ public class SLTSaltrWeb {
     private function syncDeveloperFeatures():void {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_FEATURES; //TODO @GSAR: remove later
-        urlVars.action = SLTConfig.ACTION_DEV_SYNC_FEATURES;
+        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later
+        urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
         args.apiVersion = API_VERSION;
         args.clientKey = _clientKey;
@@ -502,26 +481,24 @@ public class SLTSaltrWeb {
             throw new Error("Field 'socialId' is required.")
         }
 
-        //optional
-        if (_saltrUserId != null) {
-            args.saltrUserId = _saltrUserId;
-        }
-
         var featureList:Array = [];
         for (var i:String in _developerFeatures) {
             var feature:SLTFeature = _developerFeatures[i];
             featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
         }
         args.developerFeatures = featureList;
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
+        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
 
         var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
         var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
         resource.load();
+    }
+
+    private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
+        if (v != null && v != "null" && v != "") {
+            return v;
+        }
+        return undefined;
     }
 }
 }

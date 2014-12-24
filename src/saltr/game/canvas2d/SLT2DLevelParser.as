@@ -37,8 +37,8 @@ public class SLT2DLevelParser extends SLTLevelParser {
 
     private function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLT2DBoard {
         var boardProperties:Object = {};
-        if (boardNode.hasOwnProperty("properties") && boardNode.properties.hasOwnProperty("board")) {
-            boardProperties = boardNode.properties.board;
+        if (boardNode.hasOwnProperty("properties")) {
+            boardProperties = boardNode.properties;
         }
 
         var layers:Vector.<SLTBoardLayer> = new Vector.<SLTBoardLayer>();
@@ -55,9 +55,10 @@ public class SLT2DLevelParser extends SLTLevelParser {
         return new SLT2DBoard(width, height, layers, boardProperties);
     }
 
-    private function parseLayer(layerNode:Object, layerIndex:int, assetMap:Dictionary):SLT2DBoardLayer {
-        var layerId:String = layerNode.layerId;
-        var layer:SLT2DBoardLayer = new SLT2DBoardLayer(layerId, layerIndex);
+    private function parseLayer(layerNode:Object, index:int, assetMap:Dictionary):SLT2DBoardLayer {
+        //temporarily checking for 2 names until "layerId" is removed!
+        var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
+        var layer:SLT2DBoardLayer = new SLT2DBoardLayer(token, index);
         parseAssetInstances(layer, layerNode.assets as Array, assetMap);
         return layer;
     }

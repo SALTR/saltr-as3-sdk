@@ -27,5 +27,9 @@ public class Utils {
         return count;
     }
 
+    public static function checkEmailValidation(email:String):Boolean {
+        var emailExpression:RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
+        return emailExpression.test(email);
+    }
 }
 }
