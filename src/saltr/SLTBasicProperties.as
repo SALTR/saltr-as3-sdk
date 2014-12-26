@@ -36,6 +36,9 @@ public dynamic class SLTBasicProperties extends Object {
     private var _location:String;       //The location (latitude/longitude) of the user. E.g. 37.775,-122.4183.
                                         //Set to (locate) to detect the location based on the IP address of the caller.
 
+    /**
+     * Class constructor.
+     */
     public function SLTBasicProperties() {
     }
 
