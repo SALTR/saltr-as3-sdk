@@ -5,7 +5,7 @@
 package saltr.game {
 
 /**
- * The SLTAssetState class provides the asset's particular properties.
+ * The SLTAssetState class represents the asset state and provides the state related properties.
  */
 public class SLTAssetState {
 
