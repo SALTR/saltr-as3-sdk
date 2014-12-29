@@ -5,7 +5,7 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
-public class SLTAsset {
+internal class SLTAsset {
     protected var _properties:Object;
     protected var _stateMap:Dictionary;
     protected var _token:String;
