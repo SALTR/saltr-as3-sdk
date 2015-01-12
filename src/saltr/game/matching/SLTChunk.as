@@ -8,6 +8,9 @@ import flash.utils.Dictionary;
 import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
 
+/**
+ * The SLTChunk class represents a collection of cells on matching board that is populated with assets according to certain rules.
+ */
 public class SLTChunk {
     private var _layerToken:String;
     private var _layerIndex:int;
@@ -20,6 +23,14 @@ public class SLTChunk {
         return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
     }
 
+    /**
+     * Class constructor.
+     * @param layerToken The layer identifier.
+     * @param layerIndex The layer index.
+     * @param chunkCells The cells of chunk.
+     * @param chunkAssetRules The asset rules.
+     * @param assetMap The assets.
+     */
     public function SLTChunk(layerToken:String, layerIndex:int, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
         _layerToken = layerToken;
         _layerIndex = layerIndex;
@@ -28,10 +39,16 @@ public class SLTChunk {
         _assetMap = assetMap;
     }
 
+    /**
+     * Returns the available cells count plus chunk asset rules count as string.
+     */
     public function toString():String {
         return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
     }
 
+    /**
+     * Generates the content.
+     */
     public function generateContent():void {
         //resetting chunk cells, as when chunk can contain empty cells, previous generation can leave assigned values to cells
         resetChunkCells();
