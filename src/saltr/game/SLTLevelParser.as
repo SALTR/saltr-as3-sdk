@@ -5,16 +5,28 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
+/**
+ * The SLTLevelParser class represents the level parser.
+ */
 public class SLTLevelParser {
 
+    /**
+     * Class constructor.
+     */
     public function SLTLevelParser() {
     }
 
+    /**
+     * Parses the level content.
+     */
     public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         throw new Error("[SALTR: ERROR] parseLevelContent() is virtual method.");
     }
 
 
+    /**
+     * Parses the level assets.
+     */
     public function parseLevelAssets(rootNode:Object):Dictionary {
         var assetNodes:Object = rootNode["assets"];
         var assetMap:Dictionary = new Dictionary();
