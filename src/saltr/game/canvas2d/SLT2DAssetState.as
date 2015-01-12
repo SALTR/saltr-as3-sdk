@@ -14,10 +14,10 @@ public class SLT2DAssetState extends SLTAssetState {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the state.
-     * @param properties - The current state related properties.
-     * @param pivotX - The X coordinate of the pivot relative to the top left corner, in pixels.
-     * @param pivotY - The Y coordinate of the pivot relative to the top left corner, in pixels.
+     * @param token The unique identifier of the state.
+     * @param properties The current state related properties.
+     * @param pivotX The X coordinate of the pivot relative to the top left corner, in pixels.
+     * @param pivotY The Y coordinate of the pivot relative to the top left corner, in pixels.
      */
     public function SLT2DAssetState(token:String, properties:Object, pivotX:Number, pivotY:Number) {
         super(token, properties);

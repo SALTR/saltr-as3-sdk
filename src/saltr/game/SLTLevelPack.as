@@ -14,9 +14,9 @@ public class SLTLevelPack {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the level pack.
-     * @param index - The index of the level pack.
-     * @param levels - The levels of the pack.
+     * @param token The unique identifier of the level pack.
+     * @param index The index of the level pack.
+     * @param levels The levels of the pack.
      */
     public function SLTLevelPack(token:String, index:int, levels:Vector.<SLTLevel>) {
         _token = token;

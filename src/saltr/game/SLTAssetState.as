@@ -14,8 +14,8 @@ public class SLTAssetState {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the state.
-     * @param properties - The current state related properties.
+     * @param token The unique identifier of the state.
+     * @param properties The current state related properties.
      */
     public function SLTAssetState(token:String, properties:Object) {
         _token = token;

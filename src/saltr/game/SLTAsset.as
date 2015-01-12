@@ -15,9 +15,9 @@ public class SLTAsset {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the asset.
-     * @param stateMap - The states.
-     * @param properties - The properties.
+     * @param token The unique identifier of the asset.
+     * @param stateMap The states.
+     * @param properties The properties.
      */
     public function SLTAsset(token:String, stateMap:Dictionary, properties:Object) {
         _token = token;

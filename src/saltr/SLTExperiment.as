@@ -27,10 +27,10 @@ public class SLTExperiment {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the experiment.
-     * @param partition - The letter of the partition in which the user included in (A, B, C, etc.).
-     * @param type - The type of the experiment (Feature or LevelPack).
-     * @param customEvents - The array of comma separated event names for which A/B test data should be send.
+     * @param token The unique identifier of the experiment.
+     * @param partition The letter of the partition in which the user included in (A, B, C, etc.).
+     * @param type The type of the experiment (Feature or LevelPack).
+     * @param customEvents The array of comma separated event names for which A/B test data should be send.
      */
     public function SLTExperiment(token:String, partition:String, type:String, customEvents:Array) {
         _token = token;

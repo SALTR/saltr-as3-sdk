@@ -13,8 +13,8 @@ public class SLT2DBoardLayer extends SLTBoardLayer {
 
     /**
      * Class constructor.
-     * @param layerId - The layer's identifier.
-     * @param layerIndex - The layer's ordering index.
+     * @param layerId The layer's identifier.
+     * @param layerIndex The layer's ordering index.
      */
     public function SLT2DBoardLayer(layerId:String, layerIndex:int) {
         super(layerId, layerIndex);
@@ -30,7 +30,7 @@ public class SLT2DBoardLayer extends SLTBoardLayer {
 
     /**
      * Adds an asset instance.
-     * @param instance - An asset instance to add.
+     * @param instance An asset instance to add.
      */
     public function addAssetInstance(instance:SLT2DAssetInstance):void {
         _assetInstances.push(instance);

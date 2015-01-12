@@ -41,7 +41,7 @@ public class SLTLevel {
 
     /**
      * Provides the level parser for the given level type.
-     * @param levelType - The type of the level.
+     * @param levelType The type of the level.
      * @return The level type corresponding level parser.
      */
     public static function getParser(levelType:String):SLTLevelParser {
@@ -58,15 +58,15 @@ public class SLTLevel {
 
     /**
      * Class constructor.
-     * @param id - The identifier of the level.
-     * @param variationId - The variation identifier of the level.
-     * @param levelType - The type of the level.
-     * @param index - The global index of the level.
-     * @param localIndex - The local index of the level in the pack.
-     * @param packIndex - The index of the pack the level is in.
-     * @param contentUrl - The content URL of the level.
-     * @param properties - The properties of the level.
-     * @param version - The current version of the level.
+     * @param id The identifier of the level.
+     * @param variationId The variation identifier of the level.
+     * @param levelType The type of the level.
+     * @param index The global index of the level.
+     * @param localIndex The local index of the level in the pack.
+     * @param packIndex The index of the pack the level is in.
+     * @param contentUrl The content URL of the level.
+     * @param properties The properties of the level.
+     * @param version The current version of the level.
      */
     public function SLTLevel(id:String, variationId:String, levelType:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
         _id = id;
@@ -97,7 +97,6 @@ public class SLTLevel {
 
     /**
      * The properties of the level.
-     * @return The object with key-value pairs of the level properties.
      */
     public function get properties():Object {
         return _properties;
@@ -140,7 +139,8 @@ public class SLTLevel {
 
     /**
      * Gets the board by identifier.
-     * @param id - The board identifier.
+     * @param id The board identifier.
+     * @return The board with provided identifier.
      */
     public function getBoard(id:String):SLTBoard {
         return _boards[id];
@@ -197,7 +197,7 @@ public class SLTLevel {
 
     /**
      * Regenerates content of the board by identifier.
-     * @param boardId - The board identifier.
+     * @param boardId The board identifier.
      */
     public function regenerateBoard(boardId:String):void {
         if (_boards != null && _boards[boardId] != null) {

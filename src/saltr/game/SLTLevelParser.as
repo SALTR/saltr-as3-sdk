@@ -18,8 +18,9 @@ public class SLTLevelParser {
 
     /**
      * Parses the level content.
-     * @param boardNodes - The board nodes.
-     * @param assetMap - The asset map.
+     * @param boardNodes The board nodes.
+     * @param assetMap The asset map.
+     * @return The parsed boards.
      */
     public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         throw new Error("[SALTR: ERROR] parseLevelContent() is virtual method.");
@@ -28,6 +29,7 @@ public class SLTLevelParser {
 
     /**
      * Parses the level assets.
+     * @return The parsed assets.
      */
     public function parseLevelAssets(rootNode:Object):Dictionary {
         var assetNodes:Object = rootNode["assets"];

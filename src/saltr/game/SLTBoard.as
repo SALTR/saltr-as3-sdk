@@ -13,8 +13,8 @@ public class SLTBoard {
 
     /**
      * Class constructor.
-     * @param layers - The layers of the board.
-     * @param properties - The board associated properties.
+     * @param layers The layers of the board.
+     * @param properties The board associated properties.
      */
     public function SLTBoard(layers:Vector.<SLTBoardLayer>, properties:Object) {
         _properties = properties;

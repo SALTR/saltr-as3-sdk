@@ -15,9 +15,9 @@ public class SLTAssetInstance {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the asset.
-     * @param states - The current instance states.
-     * @param properties - The current instance properties.
+     * @param token The unique identifier of the asset.
+     * @param states The current instance states.
+     * @param properties The current instance properties.
      */
     public function SLTAssetInstance(token:String, states:Vector.<SLTAssetState>, properties:Object) {
         _token = token;

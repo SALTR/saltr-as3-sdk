@@ -16,12 +16,12 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the asset.
-     * @param states - The current instance states.
-     * @param properties - The current instance properties.
-     * @param x - The current instance x coordinate.
-     * @param y - The current instance y coordinate.
-     * @param rotation - The current instance rotation.
+     * @param token The unique identifier of the asset.
+     * @param states The current instance states.
+     * @param properties The current instance properties.
+     * @param x The current instance x coordinate.
+     * @param y The current instance y coordinate.
+     * @param rotation The current instance rotation.
      */
     public function SLT2DAssetInstance(token:String, states:Vector.<SLTAssetState>, properties:Object, x:Number, y:Number, rotation:Number) {
         super(token, states, properties);

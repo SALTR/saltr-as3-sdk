@@ -15,10 +15,10 @@ public class SLT2DBoard extends SLTBoard {
 
     /**
      * Class constructor.
-     * @param width - The width of the board in pixels as is in Saltr level editor.
-     * @param height - The height of the board in pixels as is in Saltr level editor.
-     * @param layers - The layers of the board.
-     * @param properties - The board associated properties.
+     * @param width The width of the board in pixels as is in Saltr level editor.
+     * @param height The height of the board in pixels as is in Saltr level editor.
+     * @param layers The layers of the board.
+     * @param properties The board associated properties.
      */
     public function SLT2DBoard(width:Number, height:Number, layers:Vector.<SLTBoardLayer>, properties:Object) {
         super(layers, properties);

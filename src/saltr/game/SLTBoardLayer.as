@@ -13,8 +13,8 @@ public class SLTBoardLayer {
 
     /**
      * Class constructor.
-     * @param token - The unique identifier of the layer.
-     * @param layerIndex - The layer's ordering index.
+     * @param token The unique identifier of the layer.
+     * @param layerIndex The layer's ordering index.
      */
     public function SLTBoardLayer(token:String, layerIndex:int) {
         _token = token;
