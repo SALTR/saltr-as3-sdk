@@ -5,7 +5,7 @@ package saltr.game.canvas2d {
 import saltr.game.SLTAssetState;
 
 /**
- * The SLTAssetState class represents the 2D asset state and provides the state related properties.
+ * The SLT2DAssetState class represents the 2D asset state and provides the state related properties.
  */
 public class SLT2DAssetState extends SLTAssetState {
 

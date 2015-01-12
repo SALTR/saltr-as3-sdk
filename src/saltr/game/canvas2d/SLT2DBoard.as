@@ -6,7 +6,7 @@ import saltr.game.SLTBoard;
 import saltr.game.SLTBoardLayer;
 
 /**
- * The SLTBoard class represents the 2D game board.
+ * The SLT2DBoard class represents the 2D game board.
  */
 public class SLT2DBoard extends SLTBoard {
 
