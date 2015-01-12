@@ -10,6 +10,9 @@ import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
 
+/**
+ * The AlertDialog class represents the alert dialog.
+ */
 public class AlertDialog extends Sprite {
     public static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration";
 
@@ -29,10 +32,20 @@ public class AlertDialog extends Sprite {
     private var _buttonOkCallback:Function;
     private var _alertTextField:TextField;
 
+    /**
+     * Class constructor.
+     * @param flashStage The flash stage.
+     */
     public function AlertDialog(flashStage:Stage) {
         _flashStage = flashStage;
     }
 
+    /**
+     * Show the dialog.
+     * @param title The dialog's title.
+     * @param message The dialog's message.
+     * @param buttonOkCallback The OK button press callback function.
+     */
     public function show(title:String, message:String, buttonOkCallback:Function = null):void {
         if (!_isShown) {
             _buttonOkCallback = buttonOkCallback;
@@ -42,6 +55,9 @@ public class AlertDialog extends Sprite {
         }
     }
 
+    /**
+     * Disposes the dialog.
+     */
     public function dispose():void {
         _flashStage.removeChild(this);
         this.removeChildren();
