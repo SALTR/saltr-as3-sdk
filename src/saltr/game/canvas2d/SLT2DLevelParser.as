@@ -9,10 +9,16 @@ import saltr.game.SLTAssetState;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 
+/**
+ * The SLT2DLevelParser class represents the 2D level parser.
+ */
 public class SLT2DLevelParser extends SLTLevelParser {
 
     private static var INSTANCE:SLT2DLevelParser;
 
+    /**
+     * Returns an instance of SLT2DLevelParser class.
+     */
     public static function getInstance():SLT2DLevelParser {
         if (!INSTANCE) {
             INSTANCE = new SLT2DLevelParser(new Singleton());
@@ -20,12 +26,20 @@ public class SLT2DLevelParser extends SLTLevelParser {
         return INSTANCE;
     }
 
+    /**
+     * Class constructor.
+     */
     public function SLT2DLevelParser(singleton:Singleton) {
         if (singleton == null) {
             throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
         }
     }
 
+    /**
+     * Parses the level content.
+     * @param boardNodes - The board nodes.
+     * @param assetMap - The asset map.
+     */
     override public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
