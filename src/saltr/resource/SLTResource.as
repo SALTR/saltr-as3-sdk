@@ -16,6 +16,9 @@ import flash.utils.Timer;
 
 import saltr.utils.HTTPStatus;
 
+/**
+ * The SLTResource class represents the resource.
+ */
 //TODO @GSAR: review optimize this class!
 public class SLTResource {
 
@@ -32,13 +35,13 @@ public class SLTResource {
     private var _onFail:Function;
     private var _onProgress:Function;
 
-    /**
-     *
-     * @param id the id of asset
-     * @param ticket ticket for loading the asset
-     * @param onSuccess callback function if loading succeed, function signature is function(asset:Asset)
-     * @param onFail callback function if loading fail, function signature is function(asset:Asset)
-     * @param onProgress callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int)
+     /**
+     * Class constructor.
+     * @param id The id of asset.
+     * @param ticket The ticket for loading the asset.
+     * @param onSuccess The callback function if loading succeed, function signature is function(asset:Asset).
+     * @param onFail The callback function if loading fail, function signature is function(asset:Asset).
+     * @param onProgress The callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int).
      */
     public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
         _id = id;
@@ -53,18 +56,30 @@ public class SLTResource {
         initLoader();
     }
 
+    /**
+     * The loaded bytes.
+     */
     public function get bytesLoaded():int {
         return _urlLoader.bytesLoaded;
     }
 
+    /**
+     * The total bytes.
+     */
     public function get bytesTotal():int {
         return _urlLoader.bytesTotal;
     }
 
+    /**
+     * The loaded percent.
+     */
     public function get percentLoaded():int {
         return Math.round((bytesLoaded / bytesTotal) * 100);
     }
 
+    /**
+     * The JSON data.
+     */
     public function get jsonData():Object {
         var json:Object = null;
         try {
@@ -76,6 +91,9 @@ public class SLTResource {
         return json;
     }
 
+    /**
+     * Starts load.
+     */
     public function load():void {
         ++_fails;
         initLoaderListeners(_urlLoader);
@@ -83,6 +101,9 @@ public class SLTResource {
         startDropTimeoutTimer();
     }
 
+    /**
+     * Stops load.
+     */
     public function stop():void {
         try {
             _urlLoader.close();
@@ -90,6 +111,9 @@ public class SLTResource {
         }
     }
 
+    /**
+     * Dispose function.
+     */
     public function dispose():void {
         _urlLoader = null;
         _onSuccess = null;
