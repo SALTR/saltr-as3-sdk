@@ -48,7 +48,7 @@ public class SLTAsset {
 
     /**
      * Returns instance states by provided state identifiers.
-     * @param stateIds - The state identifiers.
+     * @param stateIds The state identifiers.
      */
     public function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
         var states:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
