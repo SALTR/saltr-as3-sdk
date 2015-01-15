@@ -9,6 +9,7 @@ use namespace saltr_internal;
 
 /**
  * The DialogController class represents the dialog controller.
+ * @private
  */
 public class DialogController {
     private var _flashStage:Stage;

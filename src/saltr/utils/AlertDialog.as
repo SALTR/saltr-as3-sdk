@@ -15,6 +15,7 @@ use namespace saltr_internal;
 
 /**
  * The AlertDialog class represents the alert dialog.
+ * @private
  */
 public class AlertDialog extends Sprite {
     saltr_internal static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration";

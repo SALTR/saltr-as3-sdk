@@ -12,6 +12,7 @@ use namespace saltr_internal;
 
 /**
  * The MobileDeviceInfo class provides mobile device information.
+ * @private
  */
 public class MobileDeviceInfo {
     private static const IPHONE_VERSIONS:Object = {"iPhone1,1": "1", "iPhone1,2": "3G", "iPhone2,1": "3GS", "iPhone3,1": "4", "iPhone3,2": "4", "iPhone3,3": "4", "iPhone4,1": "4S", "iPhone5,1": "5", "iPhone5,2": "5","iPhone5,3": "5C", "iPhone5,4": "5C",  "iPhone6,1": "5S",  "iPhone6,2": "5S", "iPhone7,2": "6", "iPhone7,1": "6+" }

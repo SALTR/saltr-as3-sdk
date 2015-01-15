@@ -23,6 +23,7 @@ use namespace saltr_internal;
 
 /**
  * The DeviceRegistrationDialog class represents the device registration dialog.
+ * @private
  */
 public class DeviceRegistrationDialog extends Sprite {
 

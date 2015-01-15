@@ -9,6 +9,7 @@ use namespace saltr_internal;
 
 /**
  * The HTTPStatus class holds HTTP status codes.
+ * @private
  */
 public class HTTPStatus {
 

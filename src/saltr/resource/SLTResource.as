@@ -13,6 +13,9 @@ import flash.events.TimerEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.utils.Timer;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 import saltr.utils.HTTPStatus;
 

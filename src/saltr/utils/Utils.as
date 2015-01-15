@@ -10,6 +10,7 @@ use namespace saltr_internal;
 
 /**
  * The Utils class provides utility functions.
+ * @private
  */
 public class Utils {
 
