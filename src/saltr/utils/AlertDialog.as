@@ -37,15 +37,9 @@ public class AlertDialog extends Sprite {
 
     /**
      * Class constructor.
-     */
-    public function AlertDialog() {
-    }
-
-    /**
-     * Initialization function.
      * @param flashStage The flash stage.
      */
-    saltr_internal function init(flashStage:Stage) {
+    public function AlertDialog(flashStage:Stage) {
         _flashStage = flashStage;
     }
 

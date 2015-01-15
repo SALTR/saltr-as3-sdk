@@ -18,22 +18,14 @@ public class DialogController {
 
     /**
      * Class constructor.
-     */
-    public function DialogController() {
-    }
-
-    /**
-     * Initialization function.
      * @param flashStage The flash stage.
      * @param deviceRegistrationCallback The device registration callback function.
      */
-    saltr_internal function init(flashStage:Stage, deviceRegistrationCallback:Function):void {
+    public function DialogController(flashStage:Stage, deviceRegistrationCallback:Function) {
         _flashStage = flashStage;
-        _deviceRegistrationDialog = new DeviceRegistrationDialog();
-        _deviceRegistrationDialog.init(_flashStage);
+        _deviceRegistrationDialog = new DeviceRegistrationDialog(_flashStage);
         _deviceRegistrationCallback = deviceRegistrationCallback;
-        _alertDialog = new AlertDialog();
-        _alertDialog.init(_flashStage);
+        _alertDialog = new AlertDialog(_flashStage);
     }
 
     /**

@@ -83,15 +83,9 @@ public class DeviceRegistrationDialog extends Sprite {
 
     /**
      * Class constructor.
-     */
-    public function DeviceRegistrationDialog() {
-    }
-
-    /**
-     * Initialization function.
      * @param flashStage The flash stage.
      */
-    saltr_internal function init(flashStage:Stage) {
+    public function DeviceRegistrationDialog(flashStage:Stage) {
         _flashStage = flashStage;
     }
 

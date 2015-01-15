@@ -100,7 +100,7 @@ public class SLTSaltrMobile {
         _levelPacks = new <SLTLevelPack>[];
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
-        _dialogController.init(_flashStage, addDeviceToSALTR);
+        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
     }
 
     public function set repository(value:ISLTRepository):void {
