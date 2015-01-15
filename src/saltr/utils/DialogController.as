@@ -3,6 +3,9 @@
  */
 package saltr.utils {
 import flash.display.Stage;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The DialogController class represents the dialog controller.
@@ -15,27 +18,35 @@ public class DialogController {
 
     /**
      * Class constructor.
+     */
+    public function DialogController() {
+    }
+
+    /**
+     * Initialization function.
      * @param flashStage The flash stage.
      * @param deviceRegistrationCallback The device registration callback function.
      */
-    public function DialogController(flashStage:Stage, deviceRegistrationCallback:Function) {
+    saltr_internal function init(flashStage:Stage, deviceRegistrationCallback:Function):void {
         _flashStage = flashStage;
-        _deviceRegistrationDialog = new DeviceRegistrationDialog(_flashStage);
+        _deviceRegistrationDialog = new DeviceRegistrationDialog();
+        _deviceRegistrationDialog.init(_flashStage);
         _deviceRegistrationCallback = deviceRegistrationCallback;
-        _alertDialog = new AlertDialog(_flashStage);
+        _alertDialog = new AlertDialog();
+        _alertDialog.init(_flashStage);
     }
 
     /**
      * Show the device registration dialog.
      */
-    public function showDeviceRegistrationDialog():void {
+    saltr_internal function showDeviceRegistrationDialog():void {
         _deviceRegistrationDialog.show(_deviceRegistrationCallback);
     }
 
     /**
      * Show the alert dialog with device registration failed status message.
      */
-    public function showDeviceRegistrationFailStatus(status:String):void {
+    saltr_internal function showDeviceRegistrationFailStatus(status:String):void {
         showAlertDialog(AlertDialog.DLG_DEVICE_REGISTRATION_TITLE, status, showDeviceRegistrationDialog);
     }
 
@@ -45,7 +56,7 @@ public class DialogController {
      * @param message The message.
      * @param okCallback The callback function for OK button press event.
      */
-    public function showAlertDialog(title:String, message:String, okCallback:Function = null):void {
+    saltr_internal function showAlertDialog(title:String, message:String, okCallback:Function = null):void {
         _alertDialog.show(title, message, okCallback);
     }
 }

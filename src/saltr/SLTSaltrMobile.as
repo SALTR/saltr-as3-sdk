@@ -27,6 +27,9 @@ import saltr.utils.DeviceRegistrationDialog;
 import saltr.utils.DialogController;
 import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
 
@@ -97,7 +100,7 @@ public class SLTSaltrMobile {
         _levelPacks = new <SLTLevelPack>[];
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
-        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
+        _dialogController.init(_flashStage, addDeviceToSALTR);
     }
 
     public function set repository(value:ISLTRepository):void {

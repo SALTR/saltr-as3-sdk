@@ -4,6 +4,9 @@
 
 package saltr.utils {
 import flash.utils.Dictionary;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The Utils class provides utility functions.
@@ -22,7 +25,7 @@ public class Utils {
      * @param format The string to format.
      * @return Formatted string.
      */
-      public static function formatString(format:String, ...args):String {
+      saltr_internal static function formatString(format:String, ...args):String {
         for (var i:int = 0; i < args.length; ++i)
             format = format.replace(new RegExp("\\{" + i + "\\}", "g"), args[i]);
 
@@ -34,7 +37,7 @@ public class Utils {
      * @param dictionary The dictionary which size needs to calculate.
      * @return The size of dictionary.
      */
-    public static function getDictionarySize(dictionary:Dictionary):int {
+    saltr_internal static function getDictionarySize(dictionary:Dictionary):int {
         var count:int = 0;
         for (var i:String in dictionary) {
             ++count;
@@ -48,7 +51,7 @@ public class Utils {
      * @param email The email to check.
      * @return <code>true</code> if valid.
      */
-    public static function checkEmailValidation(email:String):Boolean {
+    saltr_internal static function checkEmailValidation(email:String):Boolean {
         var emailExpression:RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
         return emailExpression.test(email);
     }

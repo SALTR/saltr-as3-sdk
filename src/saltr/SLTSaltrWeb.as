@@ -18,6 +18,9 @@ import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.Utils;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 //TODO:: @daal add some flushCache method.
 public class SLTSaltrWeb {

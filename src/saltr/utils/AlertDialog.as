@@ -9,12 +9,15 @@ import flash.events.MouseEvent;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The AlertDialog class represents the alert dialog.
  */
 public class AlertDialog extends Sprite {
-    public static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration";
+    saltr_internal static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration";
 
     private static const DLG_BUTTON_CLOSE:String = "OK";
 
@@ -34,9 +37,15 @@ public class AlertDialog extends Sprite {
 
     /**
      * Class constructor.
+     */
+    public function AlertDialog() {
+    }
+
+    /**
+     * Initialization function.
      * @param flashStage The flash stage.
      */
-    public function AlertDialog(flashStage:Stage) {
+    saltr_internal function init(flashStage:Stage) {
         _flashStage = flashStage;
     }
 
@@ -46,7 +55,7 @@ public class AlertDialog extends Sprite {
      * @param message The dialog's message.
      * @param buttonOkCallback The OK button press callback function.
      */
-    public function show(title:String, message:String, buttonOkCallback:Function = null):void {
+    saltr_internal function show(title:String, message:String, buttonOkCallback:Function = null):void {
         if (!_isShown) {
             _buttonOkCallback = buttonOkCallback;
             buildView(title, message);
@@ -58,7 +67,7 @@ public class AlertDialog extends Sprite {
     /**
      * Disposes the dialog.
      */
-    public function dispose():void {
+    saltr_internal function dispose():void {
         _flashStage.removeChild(this);
         this.removeChildren();
         _alertTextField = null;

@@ -6,6 +6,9 @@ import flash.system.Capabilities;
 
 import nl.funkymonkey.android.deviceinfo.NativeDeviceInfo;
 import nl.funkymonkey.android.deviceinfo.NativeDeviceProperties;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The MobileDeviceInfo class provides mobile device information.
@@ -27,7 +30,7 @@ public class MobileDeviceInfo {
      * Provides device information.
      * @return An object with fields(os, device).
      */
-    public static function getDeviceInfo():Object {
+    saltr_internal static function getDeviceInfo():Object {
         var deviceInfo:Object = {};
         var os:String = Capabilities.os;
         var devArr:Array;

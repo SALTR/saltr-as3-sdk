@@ -17,6 +17,9 @@ import flash.text.StageTextInitOptions;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The DeviceRegistrationDialog class represents the device registration dialog.
@@ -26,42 +29,42 @@ public class DeviceRegistrationDialog extends Sprite {
     /**
      * Specifies the submit button's text.
      */
-    public static const DLG_BUTTON_SUBMIT:String = "Submit";
+    saltr_internal static const DLG_BUTTON_SUBMIT:String = "Submit";
 
     /**
      * Specifies the cancel button's text.
      */
-    public static const DLG_BUTTON_CANCEL:String = "Cancel";
+    saltr_internal static const DLG_BUTTON_CANCEL:String = "Cancel";
 
     /**
      * Specifies the device registration dialog description text.
      */
-    public static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Register Device with SALTR";
+    saltr_internal static const DLG_DEVICE_REGISTRATION_DESCRIPTION:String = "Register Device with SALTR";
 
     /**
      * Specifies the wrong email text.
      */
-    public static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
+    saltr_internal static const DLG_EMAIL_NOT_VALID:String = "Please insert valid Email.";
 
     /**
      * Specifies the successful transmission text.
      */
-    public static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
+    saltr_internal static const DLG_SUBMIT_SUCCESSFUL:String = "Your data has been successfully submitted.";
 
     /**
      * Specifies the failed transmission text.
      */
-    public static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";
+    saltr_internal static const DLG_SUBMIT_FAILED:String = "Your data has not been submitted.";
 
     /**
      * Specifies the wrong submit callback function text.
      */
-    public static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have email parameter.";
+    saltr_internal static const DLG_ERROR_SUBMIT_FUNC:String = "Submit function should have email parameter.";
 
     /**
      * Specifies the email prompting text.
      */
-    public static const DLG_PROMPT_EMAIL:String = "example@mail.com";
+    saltr_internal static const DLG_PROMPT_EMAIL:String = "example@mail.com";
 
     private static const DESIGNED_SCREEN_WIDTH:Number = 750;
     private static const DIALOG_WIDTH:Number = 649.0;
@@ -80,9 +83,15 @@ public class DeviceRegistrationDialog extends Sprite {
 
     /**
      * Class constructor.
+     */
+    public function DeviceRegistrationDialog() {
+    }
+
+    /**
+     * Initialization function.
      * @param flashStage The flash stage.
      */
-    public function DeviceRegistrationDialog(flashStage:Stage) {
+    saltr_internal function init(flashStage:Stage) {
         _flashStage = flashStage;
     }
 
@@ -90,7 +99,7 @@ public class DeviceRegistrationDialog extends Sprite {
      * Show the dialog.
      * @param submitSuccessCallback The submitting callback function.
      */
-    public function show(submitSuccessCallback:Function):void {
+    saltr_internal function show(submitSuccessCallback:Function):void {
         if (!_isShown) {
             if (!validateDeviceRegistrationSubmitCallback(submitSuccessCallback)) {
                 throw new Error(DLG_ERROR_SUBMIT_FUNC);
@@ -106,7 +115,7 @@ public class DeviceRegistrationDialog extends Sprite {
     /**
      * Disposes the dialog.
      */
-    public function dispose():void {
+    saltr_internal function dispose():void {
         _flashStage.removeChild(this);
         this.removeChildren();
         _emailTextField.removeEventListener(flash.events.FocusEvent.FOCUS_IN, emailFocusInHandler);
