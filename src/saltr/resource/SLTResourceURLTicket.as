@@ -6,9 +6,13 @@ package saltr.resource {
 import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTResourceURLTicket class represents the URL ticket for resource.
+ * @private
  */
 public class SLTResourceURLTicket {
 
@@ -62,7 +66,7 @@ public class SLTResourceURLTicket {
      * Provides the URL request.
      * @return The URL request.
      */
-    public function getURLRequest():URLRequest {
+    saltr_internal function getURLRequest():URLRequest {
         var request:URLRequest = new URLRequest(_url);
         if (request.hasOwnProperty("authenticate")) {
             request["authenticate"] = _authenticate;
@@ -97,7 +101,7 @@ public class SLTResourceURLTicket {
      * @param name The name of the header.
      * @param value The value of the header.
      */
-    public function addHeader(name:String, value:String):void {
+    saltr_internal function addHeader(name:String, value:String):void {
         _requestHeaders.push(new URLRequestHeader(name, value));
     }
 
@@ -106,7 +110,7 @@ public class SLTResourceURLTicket {
      * @param name The name of the header.
      * @return The value of the header, <code>null</code> if there is no existing header with provided name.
      */
-    public function getHeaderValue(name:String):String {
+    saltr_internal function getHeaderValue(name:String):String {
         for each(var header:URLRequestHeader in _requestHeaders) {
             if (header.name == name) {
                 return header.value;
@@ -118,224 +122,224 @@ public class SLTResourceURLTicket {
     /**
      * Authentication.
      */
-    public function get authenticate():Boolean {
+    saltr_internal function get authenticate():Boolean {
         return _authenticate;
     }
 
     /**
      * @private
      */
-    public function set authenticate(value:Boolean):void {
+    saltr_internal function set authenticate(value:Boolean):void {
         _authenticate = value;
     }
 
     /**
      * Response caching.
      */
-    public function get cacheResponse():Boolean {
+    saltr_internal function get cacheResponse():Boolean {
         return _cacheResponse;
     }
 
     /**
      * @private
      */
-    public function set cacheResponse(value:Boolean):void {
+    saltr_internal function set cacheResponse(value:Boolean):void {
         _cacheResponse = value;
     }
 
     /**
      * The type of content.
      */
-    public function get contentType():String {
+    saltr_internal function get contentType():String {
         return _contentType;
     }
 
     /**
      * @private
      */
-    public function set contentType(value:String):void {
+    saltr_internal function set contentType(value:String):void {
         _contentType = value;
     }
 
     /**
      * URL variables.
      */
-    public function get variables():Object {
+    saltr_internal function get variables():Object {
         return _variables;
     }
 
     /**
      * @private
      */
-    public function set variables(value:Object):void {
+    saltr_internal function set variables(value:Object):void {
         _variables = value;
     }
 
     /**
      * Follow redirects.
      */
-    public function get followRedirects():Boolean {
+    saltr_internal function get followRedirects():Boolean {
         return _followRedirects;
     }
 
     /**
      * @private
      */
-    public function set followRedirects(value:Boolean):void {
+    saltr_internal function set followRedirects(value:Boolean):void {
         _followRedirects = value;
     }
 
     /**
      * Idle timeout.
      */
-    public function get idleTimeout():Number {
+    saltr_internal function get idleTimeout():Number {
         return _idleTimeout;
     }
 
     /**
      * @private
      */
-    public function set idleTimeout(value:Number):void {
+    saltr_internal function set idleTimeout(value:Number):void {
         _idleTimeout = value;
     }
 
     /**
      * Manage cookies.
      */
-    public function get manageCookies():Boolean {
+    saltr_internal function get manageCookies():Boolean {
         return _manageCookies;
     }
 
     /**
      * @private
      */
-    public function set manageCookies(value:Boolean):void {
+    saltr_internal function set manageCookies(value:Boolean):void {
         _manageCookies = value;
     }
 
     /**
      * Method.
      */
-    public function get method():String {
+    saltr_internal function get method():String {
         return _method;
     }
 
     /**
      * @private
      */
-    public function set method(value:String):void {
+    saltr_internal function set method(value:String):void {
         _method = value;
     }
 
     /**
      * Request headers.
      */
-    public function get requestHeaders():Array {
+    saltr_internal function get requestHeaders():Array {
         return _requestHeaders;
     }
 
     /**
      * @private
      */
-    public function set requestHeaders(value:Array):void {
+    saltr_internal function set requestHeaders(value:Array):void {
         _requestHeaders = value;
     }
 
     /**
      * URL.
      */
-    public function get url():String {
+    saltr_internal function get url():String {
         return _url;
     }
 
     /**
      * @private
      */
-    public function set url(value:String):void {
+    saltr_internal function set url(value:String):void {
         _url = value;
     }
 
     /**
      * Use cache.
      */
-    public function get useCache():Boolean {
+    saltr_internal function get useCache():Boolean {
         return _useCache;
     }
 
     /**
      * @private
      */
-    public function set useCache(value:Boolean):void {
+    saltr_internal function set useCache(value:Boolean):void {
         _useCache = value;
     }
 
     /**
      * User agent.
      */
-    public function get userAgent():String {
+    saltr_internal function get userAgent():String {
         return _userAgent;
     }
 
     /**
      * @private
      */
-    public function set userAgent(value:String):void {
+    saltr_internal function set userAgent(value:String):void {
         _userAgent = value;
     }
 
     /**
      * Maximum attempts.
      */
-    public function get maxAttempts():int {
+    saltr_internal function get maxAttempts():int {
         return _maxAttempts;
     }
 
     /**
      * @private
      */
-    public function set maxAttempts(value:int):void {
+    saltr_internal function set maxAttempts(value:int):void {
         _maxAttempts = value;
     }
 
     /**
      * Policy checking.
      */
-    public function get checkPolicy():Boolean {
+    saltr_internal function get checkPolicy():Boolean {
         return _checkPolicy;
     }
 
     /**
      * @private
      */
-    public function set checkPolicy(value:Boolean):void {
+    saltr_internal function set checkPolicy(value:Boolean):void {
         _checkPolicy = value;
     }
 
     /**
      * Use same domain.
      */
-    public function get useSameDomain():Boolean {
+    saltr_internal function get useSameDomain():Boolean {
         return _useSameDomain;
     }
 
     /**
      * @private
      */
-    public function set useSameDomain(value:Boolean):void {
+    saltr_internal function set useSameDomain(value:Boolean):void {
         _useSameDomain = value;
     }
 
     /**
      * Dropping timeout.
      */
-    public function get dropTimeout():int {
+    saltr_internal function get dropTimeout():int {
         return _dropTimeout;
     }
 
     /**
      * @private
      */
-    public function set dropTimeout(value:int):void {
+    saltr_internal function set dropTimeout(value:int):void {
         _dropTimeout = value;
     }
 }

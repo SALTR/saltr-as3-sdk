@@ -21,6 +21,7 @@ import saltr.utils.HTTPStatus;
 
 /**
  * The SLTResource class represents the resource.
+ * @private
  */
 //TODO @GSAR: review optimize this class!
 public class SLTResource {
@@ -62,28 +63,28 @@ public class SLTResource {
     /**
      * The loaded bytes.
      */
-    public function get bytesLoaded():int {
+    saltr_internal function get bytesLoaded():int {
         return _urlLoader.bytesLoaded;
     }
 
     /**
      * The total bytes.
      */
-    public function get bytesTotal():int {
+    saltr_internal function get bytesTotal():int {
         return _urlLoader.bytesTotal;
     }
 
     /**
      * The loaded percent.
      */
-    public function get percentLoaded():int {
+    saltr_internal function get percentLoaded():int {
         return Math.round((bytesLoaded / bytesTotal) * 100);
     }
 
     /**
      * The JSON data.
      */
-    public function get jsonData():Object {
+    saltr_internal function get jsonData():Object {
         var json:Object = null;
         try {
             json = JSON.parse(String(_urlLoader.data));
@@ -97,7 +98,7 @@ public class SLTResource {
     /**
      * Starts load.
      */
-    public function load():void {
+    saltr_internal function load():void {
         ++_fails;
         initLoaderListeners(_urlLoader);
         _urlLoader.load(_ticket.getURLRequest());
@@ -107,7 +108,7 @@ public class SLTResource {
     /**
      * Stops load.
      */
-    public function stop():void {
+    saltr_internal function stop():void {
         try {
             _urlLoader.close();
         } catch (e:Error) {
@@ -117,7 +118,7 @@ public class SLTResource {
     /**
      * Dispose function.
      */
-    public function dispose():void {
+    saltr_internal function dispose():void {
         _urlLoader = null;
         _onSuccess = null;
         _onFail = null;
