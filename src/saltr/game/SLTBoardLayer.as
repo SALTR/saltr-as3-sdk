@@ -8,7 +8,6 @@ use namespace saltr_internal;
 
 /**
  * The SLTBoardLayer class represents the game board's layer.
- * @private
  */
 public class SLTBoardLayer {
 
@@ -28,19 +27,20 @@ public class SLTBoardLayer {
     /**
      * The unique identifier of the layer.
      */
-    saltr_internal function get token():String {
+    public function get token():String {
         return _token;
     }
 
     /**
      * The layer's ordering index.
      */
-    saltr_internal function get index():int {
+    public function get index():int {
         return _index;
     }
 
     /**
      * Regenerates the content of the layer.
+     * @private
      */
     saltr_internal function regenerate():void {
         //override

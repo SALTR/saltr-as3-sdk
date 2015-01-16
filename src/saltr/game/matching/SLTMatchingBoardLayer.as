@@ -10,7 +10,6 @@ use namespace saltr_internal;
 
 /**
  * The SLTMatchingBoardLayer class represents the matching board.
- * @private
  */
 public class SLTMatchingBoardLayer extends SLTBoardLayer {
 
@@ -28,6 +27,7 @@ public class SLTMatchingBoardLayer extends SLTBoardLayer {
 
     /**
      * Regenerates the content of the layer.
+     * @private
      */
     override saltr_internal function regenerate():void {
         for (var i:int = 0, len:int = _chunks.length; i < len; ++i) {
@@ -38,6 +38,7 @@ public class SLTMatchingBoardLayer extends SLTBoardLayer {
     /**
      * Adds a chunk.
      * @param chunk The chunk to add.
+     * @private
      */
     saltr_internal function addChunk(chunk:SLTChunk):void {
         _chunks.push(chunk);

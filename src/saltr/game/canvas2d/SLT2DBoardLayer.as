@@ -9,7 +9,6 @@ use namespace saltr_internal;
 
 /**
  * The SLT2DBoardLayer class represents the game 2D board's layer.
- * @private
  */
 public class SLT2DBoardLayer extends SLTBoardLayer {
 
@@ -28,13 +27,14 @@ public class SLT2DBoardLayer extends SLTBoardLayer {
     /**
      * The asset instances of the layer.
      */
-    saltr_internal function get assetInstances():Vector.<SLT2DAssetInstance> {
+    public function get assetInstances():Vector.<SLT2DAssetInstance> {
         return _assetInstances;
     }
 
     /**
      * Adds an asset instance.
      * @param instance An asset instance to add.
+     * @private
      */
     saltr_internal function addAssetInstance(instance:SLT2DAssetInstance):void {
         _assetInstances.push(instance);
