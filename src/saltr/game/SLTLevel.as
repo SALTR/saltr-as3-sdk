@@ -47,7 +47,7 @@ public class SLTLevel {
      * @param levelType The type of the level.
      * @return The level type corresponding level parser.
      */
-    public static function getParser(levelType:String):SLTLevelParser {
+    private static function getParser(levelType:String):SLTLevelParser {
         switch (levelType) {
             case LEVEL_TYPE_MATCHING:
                 return SLTMatchingLevelParser.getInstance();

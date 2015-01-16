@@ -90,7 +90,7 @@ public class SLTCell {
     }
 
     /**
-     * Gets the asset instance by layer identifier.
+     * Returns the asset instance by layer identifier.
      * @param layerId The layer identifier.
      * @return SLTAssetInstance The asset instance that is positioned in the cell in the layer specified by layerId.
      */
@@ -99,7 +99,7 @@ public class SLTCell {
     }
 
     /**
-     * Gets the asset instance by layer index.
+     * Returns the asset instance by layer index.
      * @param layerIndex The layer index.
      * @return SLTAssetInstance The asset instance that is positioned in the cell in the layer specified by layerIndex.
      */
