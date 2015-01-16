@@ -8,6 +8,7 @@ import saltr.game.SLTAssetState;
 
 /**
  * The SLTCompositeInstance class represents the cells composition to single instance.
+ * @private
  */
 public class SLTCompositeInstance extends SLTAssetInstance {
     private var _cells:Array;
