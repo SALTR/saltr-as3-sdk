@@ -2,6 +2,9 @@
  * Created by GSAR on 7/6/14.
  */
 package saltr.game {
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTBoard class represents the game board.
