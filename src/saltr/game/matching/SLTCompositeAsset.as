@@ -8,6 +8,9 @@ import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 internal class SLTCompositeAsset extends SLTAsset {
 

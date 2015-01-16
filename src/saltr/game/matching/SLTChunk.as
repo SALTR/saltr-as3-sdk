@@ -7,6 +7,9 @@ import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTChunk class represents a collection of cells on matching board that is populated with assets according to certain rules.

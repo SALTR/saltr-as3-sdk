@@ -4,9 +4,13 @@
 
 package saltr.game {
 import flash.utils.Dictionary;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTAsset class represents the game asset.
+ * @private
  */
 public class SLTAsset {
     protected var _properties:Object;
@@ -28,21 +32,21 @@ public class SLTAsset {
     /**
      * The unique identifier of the asset.
      */
-    public function get token():String {
+    saltr_internal function get token():String {
         return _token;
     }
 
     /**
      * The properties.
      */
-    public function get properties():Object {
+    saltr_internal function get properties():Object {
         return _properties;
     }
 
     /**
      * Returns token plus properties string.
      */
-    public function toString():String {
+    saltr_internal function toString():String {
         return "[Asset] token: " + _token + ", " + " properties: " + _properties;
     }
 
@@ -50,7 +54,7 @@ public class SLTAsset {
      * Returns instance states by provided state identifiers.
      * @param stateIds The state identifiers.
      */
-    public function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
+    saltr_internal function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
         var states:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
         for (var i:int = 0, len:int = stateIds.length; i < len; ++i) {
             var state:SLTAssetState = _stateMap[stateIds[i]] as SLTAssetState;
