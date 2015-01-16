@@ -8,9 +8,13 @@ import saltr.game.SLTAsset;
 import saltr.game.SLTAssetState;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLT2DLevelParser class represents the 2D level parser.
+ * @private
  */
 public class SLT2DLevelParser extends SLTLevelParser {
 
@@ -19,7 +23,7 @@ public class SLT2DLevelParser extends SLTLevelParser {
     /**
      * Returns an instance of SLT2DLevelParser class.
      */
-    public static function getInstance():SLT2DLevelParser {
+    saltr_internal static function getInstance():SLT2DLevelParser {
         if (!INSTANCE) {
             INSTANCE = new SLT2DLevelParser(new Singleton());
         }
@@ -41,7 +45,7 @@ public class SLT2DLevelParser extends SLTLevelParser {
      * @param assetMap The asset map.
      * @return The parsed boards.
      */
-    override public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    override saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
             var boardNode:Object = boardNodes[boardId];

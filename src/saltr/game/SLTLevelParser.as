@@ -4,9 +4,13 @@
 
 package saltr.game {
 import flash.utils.Dictionary;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTLevelParser class represents the level parser.
+ * @private
  */
 public class SLTLevelParser {
 
@@ -22,7 +26,7 @@ public class SLTLevelParser {
      * @param assetMap The asset map.
      * @return The parsed boards.
      */
-    public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         throw new Error("[SALTR: ERROR] parseLevelContent() is virtual method.");
     }
 
@@ -31,7 +35,7 @@ public class SLTLevelParser {
      * Parses the level assets.
      * @return The parsed assets.
      */
-    public function parseLevelAssets(rootNode:Object):Dictionary {
+    saltr_internal function parseLevelAssets(rootNode:Object):Dictionary {
         var assetNodes:Object = rootNode["assets"];
         var assetMap:Dictionary = new Dictionary();
         for (var assetId:Object in assetNodes) {

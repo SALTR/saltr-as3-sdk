@@ -4,6 +4,9 @@ import flash.utils.Dictionary;
 import saltr.game.canvas2d.SLT2DLevelParser;
 import saltr.game.matching.SLTMatchingLevelParser;
 import saltr.status.SLTStatusLevelsParserMissing;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTLevel class represents the game's level.
