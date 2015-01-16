@@ -13,9 +13,16 @@ import flash.events.TimerEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.utils.Timer;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 import saltr.utils.HTTPStatus;
 
+/**
+ * The SLTResource class represents the resource.
+ * @private
+ */
 //TODO @GSAR: review optimize this class!
 public class SLTResource {
 
@@ -32,13 +39,13 @@ public class SLTResource {
     private var _onFail:Function;
     private var _onProgress:Function;
 
-    /**
-     *
-     * @param id the id of asset
-     * @param ticket ticket for loading the asset
-     * @param onSuccess callback function if loading succeed, function signature is function(asset:Asset)
-     * @param onFail callback function if loading fail, function signature is function(asset:Asset)
-     * @param onProgress callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int)
+     /**
+     * Class constructor.
+     * @param id The id of asset.
+     * @param ticket The ticket for loading the asset.
+     * @param onSuccess The callback function if loading succeed, function signature is function(asset:Asset).
+     * @param onFail The callback function if loading fail, function signature is function(asset:Asset).
+     * @param onProgress The callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int).
      */
     public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
         _id = id;
@@ -53,19 +60,31 @@ public class SLTResource {
         initLoader();
     }
 
-    public function get bytesLoaded():int {
+    /**
+     * The loaded bytes.
+     */
+    saltr_internal function get bytesLoaded():int {
         return _urlLoader.bytesLoaded;
     }
 
-    public function get bytesTotal():int {
+    /**
+     * The total bytes.
+     */
+    saltr_internal function get bytesTotal():int {
         return _urlLoader.bytesTotal;
     }
 
-    public function get percentLoaded():int {
+    /**
+     * The loaded percent.
+     */
+    saltr_internal function get percentLoaded():int {
         return Math.round((bytesLoaded / bytesTotal) * 100);
     }
 
-    public function get jsonData():Object {
+    /**
+     * The JSON data.
+     */
+    saltr_internal function get jsonData():Object {
         var json:Object = null;
         try {
             json = JSON.parse(String(_urlLoader.data));
@@ -76,21 +95,30 @@ public class SLTResource {
         return json;
     }
 
-    public function load():void {
+    /**
+     * Starts load.
+     */
+    saltr_internal function load():void {
         ++_fails;
         initLoaderListeners(_urlLoader);
         _urlLoader.load(_ticket.getURLRequest());
         startDropTimeoutTimer();
     }
 
-    public function stop():void {
+    /**
+     * Stops load.
+     */
+    saltr_internal function stop():void {
         try {
             _urlLoader.close();
         } catch (e:Error) {
         }
     }
 
-    public function dispose():void {
+    /**
+     * Dispose function.
+     */
+    saltr_internal function dispose():void {
         _urlLoader = null;
         _onSuccess = null;
         _onFail = null;

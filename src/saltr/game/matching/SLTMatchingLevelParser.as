@@ -8,12 +8,23 @@ import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
+import saltr.saltr_internal;
 
+use namespace saltr_internal;
+
+/**
+ * The SLTMatchingLevelParser class represents the matching level parser.
+ * @private
+ */
 public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private static var INSTANCE:SLTMatchingLevelParser;
 
-    public static function getInstance():SLTMatchingLevelParser {
+    /**
+     * Returns the instance of SLTMatchingLevelParser class.
+     * @return The  instance of SLTMatchingLevelParser class.
+     */
+    saltr_internal static function getInstance():SLTMatchingLevelParser {
         if (!INSTANCE) {
             INSTANCE = new SLTMatchingLevelParser(new Singleton());
         }
@@ -52,13 +63,23 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
         }
     }
 
+    /**
+     * Class constructor.
+     * @param singleton The Singleton class instance.
+     */
     public function SLTMatchingLevelParser(singleton:Singleton) {
         if (singleton == null) {
             throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
         }
     }
 
-    override public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    /**
+     * Parses the level content.
+     * @param boardNodes The board nodes.
+     * @param assetMap The asset map.
+     * @return The parsed boards.
+     */
+    override saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
             var boardNode:Object = boardNodes[boardId];

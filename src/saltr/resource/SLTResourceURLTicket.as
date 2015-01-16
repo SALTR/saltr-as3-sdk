@@ -6,7 +6,14 @@ package saltr.resource {
 import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
+import saltr.saltr_internal;
 
+use namespace saltr_internal;
+
+/**
+ * The SLTResourceURLTicket class represents the URL ticket for resource.
+ * @private
+ */
 public class SLTResourceURLTicket {
 
     //URLRequest variables
@@ -30,6 +37,11 @@ public class SLTResourceURLTicket {
     private var _dropTimeout:int;
 
 
+    /**
+     * Class constructor.
+     * @param url The URL.
+     * @param variables The URL variables.
+     */
     public function SLTResourceURLTicket(url:String, variables:Object = null) {
         _authenticate = true;
         _cacheResponse = true;
@@ -50,7 +62,11 @@ public class SLTResourceURLTicket {
         _dropTimeout = 0;
     }
 
-    public function getURLRequest():URLRequest {
+    /**
+     * Provides the URL request.
+     * @return The URL request.
+     */
+    saltr_internal function getURLRequest():URLRequest {
         var request:URLRequest = new URLRequest(_url);
         if (request.hasOwnProperty("authenticate")) {
             request["authenticate"] = _authenticate;
@@ -80,11 +96,21 @@ public class SLTResourceURLTicket {
         return request;
     }
 
-    public function addHeader(name:String, value:String):void {
+    /**
+     * Adds request header.
+     * @param name The name of the header.
+     * @param value The value of the header.
+     */
+    saltr_internal function addHeader(name:String, value:String):void {
         _requestHeaders.push(new URLRequestHeader(name, value));
     }
 
-    public function getHeaderValue(name:String):String {
+    /**
+     * Provides the value of the request header.
+     * @param name The name of the header.
+     * @return The value of the header, <code>null</code> if there is no existing header with provided name.
+     */
+    saltr_internal function getHeaderValue(name:String):String {
         for each(var header:URLRequestHeader in _requestHeaders) {
             if (header.name == name) {
                 return header.value;
@@ -93,131 +119,227 @@ public class SLTResourceURLTicket {
         return null;
     }
 
-    public function get authenticate():Boolean {
+    /**
+     * Authentication.
+     */
+    saltr_internal function get authenticate():Boolean {
         return _authenticate;
     }
 
-    public function set authenticate(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set authenticate(value:Boolean):void {
         _authenticate = value;
     }
 
-    public function get cacheResponse():Boolean {
+    /**
+     * Response caching.
+     */
+    saltr_internal function get cacheResponse():Boolean {
         return _cacheResponse;
     }
 
-    public function set cacheResponse(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set cacheResponse(value:Boolean):void {
         _cacheResponse = value;
     }
 
-    public function get contentType():String {
+    /**
+     * The type of content.
+     */
+    saltr_internal function get contentType():String {
         return _contentType;
     }
 
-    public function set contentType(value:String):void {
+    /**
+     * @private
+     */
+    saltr_internal function set contentType(value:String):void {
         _contentType = value;
     }
 
-    public function get variables():Object {
+    /**
+     * URL variables.
+     */
+    saltr_internal function get variables():Object {
         return _variables;
     }
 
-    public function set variables(value:Object):void {
+    /**
+     * @private
+     */
+    saltr_internal function set variables(value:Object):void {
         _variables = value;
     }
 
-    public function get followRedirects():Boolean {
+    /**
+     * Follow redirects.
+     */
+    saltr_internal function get followRedirects():Boolean {
         return _followRedirects;
     }
 
-    public function set followRedirects(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set followRedirects(value:Boolean):void {
         _followRedirects = value;
     }
 
-    public function get idleTimeout():Number {
+    /**
+     * Idle timeout.
+     */
+    saltr_internal function get idleTimeout():Number {
         return _idleTimeout;
     }
 
-    public function set idleTimeout(value:Number):void {
+    /**
+     * @private
+     */
+    saltr_internal function set idleTimeout(value:Number):void {
         _idleTimeout = value;
     }
 
-    public function get manageCookies():Boolean {
+    /**
+     * Manage cookies.
+     */
+    saltr_internal function get manageCookies():Boolean {
         return _manageCookies;
     }
 
-    public function set manageCookies(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set manageCookies(value:Boolean):void {
         _manageCookies = value;
     }
 
-    public function get method():String {
+    /**
+     * Method.
+     */
+    saltr_internal function get method():String {
         return _method;
     }
 
-    public function set method(value:String):void {
+    /**
+     * @private
+     */
+    saltr_internal function set method(value:String):void {
         _method = value;
     }
 
-    public function get requestHeaders():Array {
+    /**
+     * Request headers.
+     */
+    saltr_internal function get requestHeaders():Array {
         return _requestHeaders;
     }
 
-    public function set requestHeaders(value:Array):void {
+    /**
+     * @private
+     */
+    saltr_internal function set requestHeaders(value:Array):void {
         _requestHeaders = value;
     }
 
-    public function get url():String {
+    /**
+     * URL.
+     */
+    saltr_internal function get url():String {
         return _url;
     }
 
-    public function set url(value:String):void {
+    /**
+     * @private
+     */
+    saltr_internal function set url(value:String):void {
         _url = value;
     }
 
-    public function get useCache():Boolean {
+    /**
+     * Use cache.
+     */
+    saltr_internal function get useCache():Boolean {
         return _useCache;
     }
 
-    public function set useCache(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set useCache(value:Boolean):void {
         _useCache = value;
     }
 
-    public function get userAgent():String {
+    /**
+     * User agent.
+     */
+    saltr_internal function get userAgent():String {
         return _userAgent;
     }
 
-    public function set userAgent(value:String):void {
+    /**
+     * @private
+     */
+    saltr_internal function set userAgent(value:String):void {
         _userAgent = value;
     }
 
-    public function get maxAttempts():int {
+    /**
+     * Maximum attempts.
+     */
+    saltr_internal function get maxAttempts():int {
         return _maxAttempts;
     }
 
-    public function set maxAttempts(value:int):void {
+    /**
+     * @private
+     */
+    saltr_internal function set maxAttempts(value:int):void {
         _maxAttempts = value;
     }
 
-    public function get checkPolicy():Boolean {
+    /**
+     * Policy checking.
+     */
+    saltr_internal function get checkPolicy():Boolean {
         return _checkPolicy;
     }
 
-    public function set checkPolicy(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set checkPolicy(value:Boolean):void {
         _checkPolicy = value;
     }
 
-    public function get useSameDomain():Boolean {
+    /**
+     * Use same domain.
+     */
+    saltr_internal function get useSameDomain():Boolean {
         return _useSameDomain;
     }
 
-    public function set useSameDomain(value:Boolean):void {
+    /**
+     * @private
+     */
+    saltr_internal function set useSameDomain(value:Boolean):void {
         _useSameDomain = value;
     }
 
-    public function get dropTimeout():int {
+    /**
+     * Dropping timeout.
+     */
+    saltr_internal function get dropTimeout():int {
         return _dropTimeout;
     }
 
-    public function set dropTimeout(value:int):void {
+    /**
+     * @private
+     */
+    saltr_internal function set dropTimeout(value:int):void {
         _dropTimeout = value;
     }
 }

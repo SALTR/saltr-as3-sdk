@@ -27,6 +27,9 @@ import saltr.utils.DeviceRegistrationDialog;
 import saltr.utils.DialogController;
 import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 //TODO @GSAR: add namespaces in all packages to isolate functionality
 

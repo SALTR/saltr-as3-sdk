@@ -8,25 +8,44 @@ import saltr.game.SLTAsset;
 import saltr.game.SLTAssetState;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
+import saltr.saltr_internal;
 
+use namespace saltr_internal;
+
+/**
+ * The SLT2DLevelParser class represents the 2D level parser.
+ * @private
+ */
 public class SLT2DLevelParser extends SLTLevelParser {
 
     private static var INSTANCE:SLT2DLevelParser;
 
-    public static function getInstance():SLT2DLevelParser {
+    /**
+     * Returns an instance of SLT2DLevelParser class.
+     */
+    saltr_internal static function getInstance():SLT2DLevelParser {
         if (!INSTANCE) {
             INSTANCE = new SLT2DLevelParser(new Singleton());
         }
         return INSTANCE;
     }
 
+    /**
+     * Class constructor.
+     */
     public function SLT2DLevelParser(singleton:Singleton) {
         if (singleton == null) {
             throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
         }
     }
 
-    override public function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    /**
+     * Parses the level content.
+     * @param boardNodes The board nodes.
+     * @param assetMap The asset map.
+     * @return The parsed boards.
+     */
+    override saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
             var boardNode:Object = boardNodes[boardId];
