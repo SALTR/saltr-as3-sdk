@@ -104,7 +104,7 @@ internal class SLTChunk {
     }
 
     private function generateAssetInstancesByRatio(ratioChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
-        var ratioSum:uint = 0;
+        var ratioSum:Number = 0;
         var len:int = ratioChunkAssetRules.length;
         var assetRule:SLTChunkAssetRule;
         for (var i:int = 0; i < len; ++i) {
