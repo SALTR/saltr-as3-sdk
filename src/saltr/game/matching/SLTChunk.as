@@ -14,7 +14,7 @@ use namespace saltr_internal;
 /**
  * The SLTChunk class represents a collection of cells on matching board that is populated with assets according to certain rules.
  */
-public class SLTChunk {
+internal class SLTChunk {
     private var _layerToken:String;
     private var _layerIndex:int;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
