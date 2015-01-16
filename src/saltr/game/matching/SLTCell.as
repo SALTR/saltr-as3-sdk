@@ -112,8 +112,9 @@ public class SLTCell {
      * @param layerId The layer identifier.
      * @param layerIndex The layer index.
      * @param assetInstance The asset instance.
+     * @private
      */
-    public function setAssetInstance(layerId:String, layerIndex:int, assetInstance:SLTAssetInstance):void {
+    internal function setAssetInstance(layerId:String, layerIndex:int, assetInstance:SLTAssetInstance):void {
         if (_isBlocked == false) {
             _instancesByLayerId[layerId] = assetInstance;
             _instancesByLayerIndex[layerIndex] = assetInstance;
@@ -124,8 +125,9 @@ public class SLTCell {
      * Removes the asset instance with provided layer identifier and layer index.
      * @param layerId The layer identifier.
      * @param layerIndex The layer index.
+     * @private
      */
-    public function removeAssetInstance(layerId:String, layerIndex:int):void {
+    internal function removeAssetInstance(layerId:String, layerIndex:int):void {
         delete _instancesByLayerId[layerId];
         delete _instancesByLayerIndex[layerIndex];
     }
