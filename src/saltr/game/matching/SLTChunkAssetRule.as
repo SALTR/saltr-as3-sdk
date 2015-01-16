@@ -7,7 +7,7 @@ package saltr.game.matching {
 /**
  * The SLTChunkAssetRule class represents the asset's rule.
  */
-public class SLTChunkAssetRule {
+internal class SLTChunkAssetRule {
 
     private var _assetId:String;
     private var _stateIds:Array;
