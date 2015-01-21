@@ -42,6 +42,7 @@ public class SendLevelEndEventApiCall extends ApiCall {
 
 
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
+        return urlVars;
     }
 
     private function addLevelEndEventProperties(eventProps:Object, numericArray:Array, textArray:Array) : Object {
