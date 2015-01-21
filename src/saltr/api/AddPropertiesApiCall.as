@@ -13,7 +13,6 @@ public class AddPropertiesApiCall extends ApiCall {
     override protected function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_ADD_PROPERTIES; //TODO @GSAR: remove later
         urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
 
         args.apiVersion = SLTSaltrMobile.API_VERSION;

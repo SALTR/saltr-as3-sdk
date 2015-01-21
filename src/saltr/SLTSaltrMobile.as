@@ -397,7 +397,7 @@ public class SLTSaltrMobile {
         if(result.success) {
             appDataLoadSuccessCallback(result);
         } else {
-            appDataLoadFailCallback(result.errorCode, result.errorMessage);
+            appDataLoadFailCallback(result.status);
         }
     }
 
@@ -452,12 +452,12 @@ public class SLTSaltrMobile {
          //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
     }
 
-    private function appDataLoadFailCallback(errorCode:int, message:String):void {
+    private function appDataLoadFailCallback(status:SLTStatus):void {
         _isLoading = false;
-        if(-1 == errorCode) {
+        if(status.statusCode == SLTStatus.API_ERROR) {
             _connectFailCallback(new SLTStatusAppDataLoadFail());
         } else {
-            _connectFailCallback(new SLTStatus(errorCode, message));
+            _connectFailCallback(status);
         }
     }
 
@@ -466,9 +466,9 @@ public class SLTSaltrMobile {
         sync();
     }
 
-    protected function addDeviceFailHandler(message:String):void {
+    protected function addDeviceFailHandler(result:ApiCallResult):void {
         trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showDeviceRegistrationFailStatus(message);
+        _dialogController.showDeviceRegistrationFailStatus(result.status.statusMessage);
     }
 
     private function addDeviceToSALTR(email:String):void {
@@ -487,7 +487,7 @@ public class SLTSaltrMobile {
         if(result.success) {
             addDeviceSuccessHandler();
         } else {
-            addDeviceFailHandler(result.errorMessage);
+            addDeviceFailHandler(result);
         }
     }
 
@@ -549,11 +549,11 @@ public class SLTSaltrMobile {
     }
 
     protected function syncFailHandler(result:ApiCallResult):void {
-        if(result.errorCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
+        if(result.status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
             registerDevice();
         }
         else {
-            trace("[Saltr] Dev feature Sync has failed. " + result.errorMessage);
+            trace("[Saltr] Dev feature Sync has failed. " + result.status.statusMessage);
         }
     }
 

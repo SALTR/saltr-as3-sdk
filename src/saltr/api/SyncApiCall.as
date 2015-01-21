@@ -16,7 +16,6 @@ public class SyncApiCall extends ApiCall{
     override protected function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
         args.apiVersion = SLTSaltrMobile.API_VERSION;

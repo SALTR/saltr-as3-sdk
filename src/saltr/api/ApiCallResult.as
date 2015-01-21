@@ -1,9 +1,10 @@
 package saltr.api {
+import saltr.status.SLTStatus;
 
 public class ApiCallResult {
     private var _success:Boolean;
-    private var _errorMessage:String;
-    private var _errorCode:int;
+
+    private var _status:SLTStatus;
     private var _data:Object;
 
     public function ApiCallResult() {
@@ -17,14 +18,6 @@ public class ApiCallResult {
         _success = value;
     }
 
-    public function get errorMessage():String {
-        return _errorMessage;
-    }
-
-    public function set errorMessage(value:String):void {
-        _errorMessage = value;
-    }
-
     public function get data():Object {
         return _data;
     }
@@ -33,12 +26,12 @@ public class ApiCallResult {
         _data = value;
     }
 
-    public function get errorCode():int {
-        return _errorCode;
+    public function get status():SLTStatus {
+        return _status;
     }
 
-    public function set errorCode(value:int):void {
-        _errorCode = value;
+    public function set status(value:SLTStatus):void {
+        _status = value;
     }
 }
 }

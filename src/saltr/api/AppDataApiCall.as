@@ -12,7 +12,6 @@ public class AppDataApiCall extends ApiCall{
 
     override protected function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
-        urlVars.cmd = SLTConfig.ACTION_GET_APP_DATA; //TODO @GSAR: remove later
         urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
 
         var args:Object = {};

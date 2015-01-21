@@ -10,6 +10,8 @@ import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
 
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
+
 use namespace saltr_internal;
 
 public class ApiCall {
@@ -59,19 +61,14 @@ public class ApiCall {
             response = jsonData.response[0];
             success = response.success;
             if(success) {
-                //sync();
                 apiCallResult.data = response;
             } else {
-                //_dialogController.showDeviceRegistrationFailStatus(response.error.message);
-                apiCallResult.errorMessage = response.error.message;
-                apiCallResult.errorCode = response.error.code;
+                apiCallResult.status = new SLTStatus(response.error.code, response.error.message);
             }
         }
         else {
-            //_dialogController.showDeviceRegistrationFailStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
-            success = false;
-            apiCallResult.errorMessage = "response.error.message";//TODO: TIGR fix this
-            apiCallResult.errorCode = -1;//"response.error.code";//TODO: TIGR fix this
+            var status:SLTStatus = new SLTStatus(SLTStatus.API_ERROR, "unknown API error: 'response' node is missing");
+            apiCallResult.status = status;
         }
 
         apiCallResult.success = success;
