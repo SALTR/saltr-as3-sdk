@@ -9,6 +9,18 @@ import flash.net.URLVariables;
 import flash.system.Capabilities;
 import flash.utils.Dictionary;
 
+import saltr.api.AddPropertiesApiCall;
+
+import saltr.api.ApiCall;
+import saltr.api.ApiCallResult;
+import saltr.api.AppDataApiCall;
+import saltr.api.LevelContentApiCall;
+
+import saltr.api.RegisterDeviceApiCall;
+import saltr.api.SendLevelEndEventApiCall;
+import saltr.api.SyncApiCall;
+import saltr.game.SLTLevel;
+
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
@@ -279,8 +291,17 @@ public class SLTSaltrMobile {
         _connectFailCallback = failCallback;
 
         _isLoading = true;
-        var resource:SLTResource = createAppDataResource(appDataLoadSuccessCallback, appDataLoadFailCallback, basicProperties, customProperties);
-        resource.load();
+
+        var params:Object = {
+            clientKey:_clientKey,
+            deviceId:_deviceId,
+            devMode:_devMode,
+            socialId:_socialId,
+            basicProperties:basicProperties,
+            customProperties:customProperties
+        };
+        var appDataCall:AppDataApiCall = new AppDataApiCall(params);
+        appDataCall.call(appDataApiCallback, _requestIdleTimeout);
     }
 
     public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
@@ -309,51 +330,15 @@ public class SLTSaltrMobile {
             return;
         }
 
-        var urlVars:URLVariables = new URLVariables();
-        var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_ADD_PROPERTIES; //TODO @GSAR: remove later
-        urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
-
-        args.apiVersion = API_VERSION;
-        args.clientKey = _clientKey;
-        args.client = CLIENT;
-
-        //required for Mobile
-        if (_deviceId != null) {
-            args.deviceId = _deviceId;
-        } else {
-            throw new Error("Field 'deviceId' is a required.")
-        }
-
-        //optional for Mobile
-        if(_socialId != null) {
-            args.socialId = _socialId;
-        }
-
-        //optional
-        if (basicProperties != null) {
-            args.basicProperties = basicProperties;
-        }
-
-        //optional
-        if (customProperties != null) {
-            args.customProperties = customProperties;
-        }
-
-        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
-
-        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
-        var resource:SLTResource = new SLTResource("property", ticket,
-                function (resource:SLTResource):void {
-                    trace("success");
-                    var data:Object = resource.jsonData;
-                    resource.dispose();
-                },
-                function (resource:SLTResource):void {
-                    trace("error");
-                    resource.dispose();
-                });
-        resource.load();
+        var params:Object = {
+            clientKey:_clientKey,
+            deviceId:_deviceId,
+            socialId:_socialId,
+            basicProperties:basicProperties,
+            customProperties:customProperties
+        };
+        var addPropertiesApiCall:AddPropertiesApiCall = new AddPropertiesApiCall(params);
+        addPropertiesApiCall.call(addPropertiesApiCallback, _requestIdleTimeout);
     }
 
     public function registerDevice() {
@@ -363,6 +348,7 @@ public class SLTSaltrMobile {
         _dialogController.showDeviceRegistrationDialog();
     }
 
+    //anakonda
     private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
         if (v != null && v != "null" && v !== "") {
             return v;
@@ -370,70 +356,29 @@ public class SLTSaltrMobile {
         return undefined;
     }
 
-    protected function syncSuccessHandler(resource:SLTResource):void {
-        var data:Object = resource.jsonData;
-        var response:Array;
-
-        if (data == null) {
-            trace("[Saltr] Dev feature Sync's response.jsonData is null.");
-            return;
-        }
-        response = data.response as Array;
-        if(response == null) {
-            trace("[Saltr] Dev feature Sync's response is null.");
-            return;
-        }
-        if(response.length <= 0) {
-            trace("[Saltr] Dev feature Sync response's length is <= 0.");
-            return;
-        }
-
-        if(response[0].success == false) {
-           var error:Object = response[0].error;
-            if(error.code == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
-                registerDevice();
-            }
-        } else {
-            trace("[Saltr] Dev feature Sync is complete.");
-            _isSynced = true;
-        }
-    }
-
-    protected function syncFailHandler(resource:SLTResource):void {
-        trace("[Saltr] Dev feature Sync has failed.");
-    }
-
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
-        var url:String = sltLevel.contentUrl + "?_time_=" + new Date().getTime();
-        var ticket:SLTResourceURLTicket = getTicket(url, null, _requestIdleTimeout);
-        var resource:SLTResource = new SLTResource("saltr", ticket, loadFromSaltrSuccessCallback, loadFromSaltrFailCallback);
-        resource.load();
+        var params:Object = {
+            sltLevel:sltLevel
+        };
+        var levelContentApiCall:LevelContentApiCall = new LevelContentApiCall(params);
+        levelContentApiCall.call(levelContentApiCallback, _requestIdleTimeout);
+    }
 
-        function loadFromSaltrSuccessCallback():void {
-            var content:Object = resource.jsonData;
-            if (content != null) {
-                cacheLevelContent(sltLevel, content);
-            }
-            else {
-                content = loadLevelContentInternally(sltLevel);
-            }
-
-            loadInternally(content);
-        }
-
-        function loadFromSaltrFailCallback():void {
-            var content:Object = loadLevelContentInternally(sltLevel);
-            loadInternally(content);
-        }
-
-        function loadInternally(content:Object):void {
+    private function levelContentApiCallback(result:ApiCallResult):void {
+        function loadInternally(sltLevel:SLTLevel, content:Object):void {
             if (content != null) {
                 levelContentLoadSuccessHandler(sltLevel, content);
             }
             else {
                 levelContentLoadFailHandler();
             }
-            resource.dispose();
+        }
+
+        if(result.success) {
+            cacheLevelContent(result.data.sltLevel, result.data.content);
+        } else {
+            var content:Object = loadLevelContentInternally(result.data.sltLevel);
+            loadInternally(result.data.sltLevel, content);
         }
     }
 
@@ -446,187 +391,110 @@ public class SLTSaltrMobile {
         _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
     }
 
-    private function createAppDataResource(loadSuccessCallback:Function, loadFailCallback:Function, basicProperties:Object = null, customProperties:Object = null):SLTResource {
-        var urlVars:URLVariables = new URLVariables();
-        urlVars.cmd = SLTConfig.ACTION_GET_APP_DATA; //TODO @GSAR: remove later
-        urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
-
-        var args:Object = {};
-
-        args.apiVersion = API_VERSION;
-        args.clientKey = _clientKey;
-        args.client = CLIENT;
-
-        //required for Mobile
-        if (_deviceId != null) {
-            args.deviceId = _deviceId;
+    private function addPropertiesApiCallback(result:ApiCallResult):void {
+        if(result.success) {
+            trace("success");
         } else {
-            throw new Error("Field 'deviceId' is a required.")
+            trace("error");
         }
-
-        args.devMode = _devMode;
-
-        //optional for Mobile
-        if (_socialId != null) {
-            args.socialId = _socialId;
-        }
-
-        if (basicProperties != null) {
-            args.basicProperties = basicProperties;
-        }
-
-        if (customProperties != null) {
-            args.customProperties = customProperties;
-        }
-
-        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
-
-        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_API_URL, urlVars, _requestIdleTimeout);
-        return new SLTResource("saltAppConfig", ticket, loadSuccessCallback, loadFailCallback);
     }
 
-    private function appDataLoadSuccessCallback(resource:SLTResource):void {
-        var data:Object = resource.jsonData;
-
-        if (data == null) {
-            _connectFailCallback(new SLTStatusAppDataLoadFail());
-            resource.dispose();
-            return;
-        }
-
-        var success:Boolean = false;
-        var response:Object;
-
-        if (data.hasOwnProperty("response")) {
-            response = data.response[0];
-            success = response.success;
+    private function appDataApiCallback(result:ApiCallResult):void {
+        if(result.success) {
+            appDataLoadSuccessCallback(result);
         } else {
-            //TODO @GSAR: remove later when API is versioned!
-            response = data.responseData;
-            success = data.status == SLTConfig.RESULT_SUCCEED;
+            appDataLoadFailCallback(result.errorCode, result.errorMessage);
         }
+    }
 
+    private function appDataLoadSuccessCallback(result:ApiCallResult):void {
         _isLoading = false;
 
-        if (success) {
-            if (_devMode && !_isSynced) {
-                sync();
-            }
-
-            _levelType = response.levelType;
-            var saltrFeatures:Dictionary;
-            try {
-                saltrFeatures = SLTDeserializer.decodeFeatures(response);
-            } catch (e:Error) {
-                _connectFailCallback(new SLTStatusFeaturesParseError());
-                return;
-            }
-
-            try {
-                _experiments = SLTDeserializer.decodeExperiments(response);
-            } catch (e:Error) {
-                _connectFailCallback(new SLTStatusExperimentsParseError());
-                return;
-            }
-
-            // if developer didn't announce use without levels, and levelType in returned JSON is not "noLevels",
-            // then - parse levels
-            if (!_useNoLevels && _levelType != SLTLevel.LEVEL_TYPE_NONE) {
-                var newLevelPacks:Vector.<SLTLevelPack>;
-                try {
-                    newLevelPacks = SLTDeserializer.decodeLevels(response);
-                } catch (e:Error) {
-                    _connectFailCallback(new SLTStatusLevelsParseError());
-                    return;
-                }
-
-                // if new levels are received and parsed, then only dispose old ones and assign new ones.
-                if (newLevelPacks != null) {
-                    disposeLevelPacks();
-                    _levelPacks = newLevelPacks;
-                }
-            }
-
-            _connected = true;
-            _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", response);
-
-            _activeFeatures = saltrFeatures;
-            _connectSuccessCallback();
-
-            trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelPacks.length);
-            //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
-        }
-        else {
-            _connectFailCallback(new SLTStatus(response.errorCode, response.errorMessage));
+        if (_devMode && !_isSynced) {
+            sync();
         }
 
-        resource.dispose();
+        _levelType = result.data.levelType;
+         var saltrFeatures:Dictionary;
+         try {
+             saltrFeatures = SLTDeserializer.decodeFeatures(result.data);
+         } catch (e:Error) {
+            _connectFailCallback(new SLTStatusFeaturesParseError());
+            return;
+         }
+
+         try {
+             _experiments = SLTDeserializer.decodeExperiments(result.data);
+         } catch (e:Error) {
+             _connectFailCallback(new SLTStatusExperimentsParseError());
+             return;
+         }
+
+         // if developer didn't announce use without levels, and levelType in returned JSON is not "noLevels",
+         // then - parse levels
+         if (!_useNoLevels && _levelType != SLTLevel.LEVEL_TYPE_NONE) {
+             var newLevelPacks:Vector.<SLTLevelPack>;
+             try {
+                 newLevelPacks = SLTDeserializer.decodeLevels(result.data);
+             } catch (e:Error) {
+                 _connectFailCallback(new SLTStatusLevelsParseError());
+                 return;
+             }
+
+             // if new levels are received and parsed, then only dispose old ones and assign new ones.
+             if (newLevelPacks != null) {
+                 disposeLevelPacks();
+                 _levelPacks = newLevelPacks;
+             }
+         }
+
+         _connected = true;
+         _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", result.data);
+
+         _activeFeatures = saltrFeatures;
+         _connectSuccessCallback();
+
+         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelPacks.length);
+         //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
     }
 
-    protected function addDeviceSuccessHandler(resource:SLTResource):void {
-        trace("[Saltr] Dev adding new device is complete.");
-        var jsonData:Object = resource.jsonData;
-        var success:Boolean = false;
-        var response:Object;
-        if (jsonData.hasOwnProperty("response")) {
-            response = jsonData.response[0];
-            success = response.success;
-            if(success) {
-                sync();
-            } else {
-                _dialogController.showDeviceRegistrationFailStatus(response.error.message);
-            }
-        }
-        else {
-            _dialogController.showDeviceRegistrationFailStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+    private function appDataLoadFailCallback(errorCode:int, message:String):void {
+        _isLoading = false;
+        if(-1 == errorCode) {
+            _connectFailCallback(new SLTStatusAppDataLoadFail());
+        } else {
+            _connectFailCallback(new SLTStatus(errorCode, message));
         }
     }
 
-    protected function addDeviceFailHandler(resource:SLTResource):void {
+    protected function addDeviceSuccessHandler():void {
+        trace("[Saltr] Dev adding new device has succeed.");
+        sync();
+    }
+
+    protected function addDeviceFailHandler(message:String):void {
         trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showDeviceRegistrationFailStatus(DeviceRegistrationDialog.DLG_SUBMIT_FAILED);
+        _dialogController.showDeviceRegistrationFailStatus(message);
     }
 
     private function addDeviceToSALTR(email:String):void {
-        var urlVars:URLVariables = new URLVariables();
-        var args:Object = {};
-        urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;
-        urlVars.clientKey = _clientKey;
-        args.devMode = _devMode;
-        args.apiVersion = API_VERSION;
-
-        //required for Mobile
-        if (_deviceId != null) {
-            args.id = _deviceId;
-        } else {
-            throw new Error("Field 'deviceId' is a required.");
-        }
-
-        var deviceInfo:Object = MobileDeviceInfo.getDeviceInfo();
-        args.source = deviceInfo.device;
-        args.os = deviceInfo.os;
-
-        if (email != null && email != "") {
-            args.email = email;
-        } else {
-            throw new Error("Field 'email' is a required.")
-        }
-
-        urlVars.args = JSON.stringify(args, function (k, v) {
-            if (v != null && v != "null" && v != "") {
-                return v;
-            }
-        });
-
-        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
-        var resource:SLTResource = new SLTResource("addDevice", ticket, addDeviceSuccessHandler, addDeviceFailHandler);
-        resource.load();
+        var params:Object = {
+            email : email,
+            clientKey:_clientKey,
+            deviceId:_deviceId,
+            deviceInfo:MobileDeviceInfo.getDeviceInfo(),
+            devMode:_devMode
+        };
+        var apiCall:ApiCall = new RegisterDeviceApiCall(params);
+        apiCall.call(registerDeviceApiCallback);
     }
 
-    private function appDataLoadFailCallback(resource:SLTResource):void {
-        resource.dispose();
-        _isLoading = false;
-        _connectFailCallback(new SLTStatusAppDataLoadFail());
+    private function registerDeviceApiCallback(result:ApiCallResult):void {
+        if(result.success) {
+            addDeviceSuccessHandler();
+        } else {
+            addDeviceFailHandler(result.errorMessage);
+        }
     }
 
     private function disposeLevelPacks():void {
@@ -636,101 +504,63 @@ public class SLTSaltrMobile {
         _levelPacks.length = 0;
     }
 
-    private function addLevelEndEventProperties(eventProps:Object, numericArray:Array, textArray:Array) : Object {
-        for(var i:int =0; i < numericArray.length; i++) {
-            var key:String = "cD" + (i+1);
-            eventProps[key] = numericArray[i];
-        }
-        for(var i:int =0; i < textArray.length; i++) {
-            var key:String = "cT" + (i+1);
-            eventProps[key] = textArray[i];
-        }
-        return eventProps;
+    public function sendLevelEndEvent(variationId:String, endStatus:String, endReason:String, score:int, customTextProperties:Array, customNumbericProperties:Array):void {
+        var params:Object = {
+            clientKey:_clientKey,
+            devMode:_devMode,
+            variationId:variationId,
+            deviceId:_deviceId,
+            socialId:_socialId,
+            endReason:endReason,
+            endStatus:endStatus,
+            score:score,
+            customNumbericProperties:customNumbericProperties,
+            customTextProperties:customTextProperties
+        };
+
+        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params);
+        sendLevelEndEventApiCall.call(sendLevelEndApiCallback);
     }
 
-
-    public function sendLevelEndEvent(variationId:String, endStatus:String, endReason:String, score:int, customTextProperties:Array, customNumbericProperties:Array):void {
-        var urlVars : URLVariables = new URLVariables();
-        urlVars.action = SLTConfig.ACTION_DEV_ADD_LEVELEND_EVENT;
-
-        var args:Object = {
-            clientKey : _clientKey,
-            client : CLIENT,
-            devMode : _devMode,
-            variationId : variationId
-        }
-
-        //required for Mobile
-        if (_deviceId != null) {
-            args.deviceId = _deviceId;
-            urlVars.deviceId = _deviceId;
-        } else {
-            throw new Error("Field 'deviceId' is a required.")
-        }
-
-        //optional for Mobile
-        if (_socialId != null) {
-            args.socialId = _socialId;
-        }
-
-        var eventProps : Object = {};
-        args.eventProps = eventProps;
-        eventProps.endReason = endReason;
-        eventProps.endStatus = endStatus;
-        eventProps.score = score;
-        addLevelEndEventProperties(eventProps,customNumbericProperties, customTextProperties);
-
-
-        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
-
-        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
-        var resource:SLTResource = new SLTResource("syncFeatures", ticket, sendLevelEndSuccessHandler, sendLevelEndFailHandler);
-        resource.load();
-
-        function sendLevelEndSuccessHandler(resource:SLTResource):void {
+    private function sendLevelEndApiCallback(result:ApiCallResult):void {
+        if(result.success) {
             trace("sendLevelEndSuccessHandler");
-        }
-        function sendLevelEndFailHandler(resource:SLTResource):void {
+        } else {
             trace("sendLevelEndFailHandler");
         }
     }
 
     private function sync():void {
-        var urlVars:URLVariables = new URLVariables();
-        var args:Object = {};
-        urlVars.cmd = SLTConfig.ACTION_DEV_SYNC_DATA; //TODO @GSAR: remove later
-        urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
+        var params:Object = {
+            clientKey:_clientKey,
+            devMode:_devMode,
+            deviceId:_deviceId,
+            socialId:_socialId,
+            developerFeatures:_developerFeatures
+        };
+        var syncApiCall:SyncApiCall = new SyncApiCall(params);
+        syncApiCall.call(syncApiCallback);
+    }
 
-        args.apiVersion = API_VERSION;
-        args.clientKey = _clientKey;
-        args.client = CLIENT;
-        args.devMode = _devMode;
-        urlVars.devMode = _devMode;
-
-        //required for Mobile
-        if (_deviceId != null) {
-            args.deviceId = _deviceId;
-            urlVars.deviceId = _deviceId;
+    private function syncApiCallback(result:ApiCallResult):void {
+        if(result.success) {
+            syncSuccessHandler();
         } else {
-            throw new Error("Field 'deviceId' is a required.")
+            syncFailHandler(result);
         }
+    }
 
-        //optional for Mobile
-        if (_socialId != null) {
-            args.socialId = _socialId;
+    protected function syncSuccessHandler():void {
+        _isSynced = true;
+    }
+
+    protected function syncFailHandler(result:ApiCallResult):void {
+        if(result.errorCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
+            registerDevice();
         }
-
-        var featureList:Array = [];
-        for (var i:String in _developerFeatures) {
-            var feature:SLTFeature = _developerFeatures[i];
-            featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
+        else {
+            trace("[Saltr] Dev feature Sync has failed. " + result.errorMessage);
         }
-        args.developerFeatures = featureList;
-        urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
-
-        var ticket:SLTResourceURLTicket = getTicket(SLTConfig.SALTR_DEVAPI_URL, urlVars);
-        var resource:SLTResource = new SLTResource("syncFeatures", ticket, syncSuccessHandler, syncFailHandler);
-        resource.load();
     }
 
     private function getCachedLevelVersion(sltLevel:SLTLevel):String {

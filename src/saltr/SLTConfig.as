@@ -3,7 +3,7 @@
  */
 
 package saltr {
-internal class SLTConfig {
+public class SLTConfig {
 
     public static const ACTION_GET_APP_DATA:String = "getAppData";
     public static const ACTION_ADD_PROPERTIES:String = "addProperties";
