@@ -6,7 +6,6 @@ package saltr {
 import flash.display.Stage;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
-import flash.system.Capabilities;
 import flash.utils.Dictionary;
 
 import saltr.api.AddPropertiesApiCall;
@@ -15,18 +14,14 @@ import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
 import saltr.api.AppDataApiCall;
 import saltr.api.LevelContentApiCall;
-
 import saltr.api.RegisterDeviceApiCall;
 import saltr.api.SendLevelEndEventApiCall;
 import saltr.api.SyncApiCall;
-import saltr.game.SLTLevel;
-
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTDummyRepository;
 import saltr.repository.SLTMobileRepository;
-import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
@@ -35,11 +30,9 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.DeviceRegistrationDialog;
 import saltr.utils.DialogController;
 import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
-import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
@@ -358,13 +351,21 @@ public class SLTSaltrMobile {
 
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var params:Object = {
-            sltLevel:sltLevel
+            levelContentUrl:sltLevel.contentUrl + "?_time_=" + new Date().getTime()
         };
         var levelContentApiCall:LevelContentApiCall = new LevelContentApiCall(params);
         levelContentApiCall.call(levelContentApiCallback, _requestIdleTimeout);
-    }
 
-    private function levelContentApiCallback(result:ApiCallResult):void {
+        function levelContentApiCallback(result:ApiCallResult):void {
+
+            if(result.success) {
+                cacheLevelContent(sltLevel, result.data);
+            } else {
+                var content:Object = loadLevelContentInternally(sltLevel);
+                loadInternally(sltLevel, content);
+            }
+        }
+
         function loadInternally(sltLevel:SLTLevel, content:Object):void {
             if (content != null) {
                 levelContentLoadSuccessHandler(sltLevel, content);
@@ -372,13 +373,6 @@ public class SLTSaltrMobile {
             else {
                 levelContentLoadFailHandler();
             }
-        }
-
-        if(result.success) {
-            cacheLevelContent(result.data.sltLevel, result.data.content);
-        } else {
-            var content:Object = loadLevelContentInternally(result.data.sltLevel);
-            loadInternally(result.data.sltLevel, content);
         }
     }
 
@@ -393,9 +387,9 @@ public class SLTSaltrMobile {
 
     private function addPropertiesApiCallback(result:ApiCallResult):void {
         if(result.success) {
-            trace("success");
+            trace("[addPropertiesApiCallback] success");
         } else {
-            trace("error");
+            trace("[addPropertiesApiCallback] error");
         }
     }
 

@@ -3,7 +3,6 @@ import flash.net.URLVariables;
 
 import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
-import saltr.SLTSaltrMobile;
 
 public class AddPropertiesApiCall extends ApiCall {
     public function AddPropertiesApiCall(params:Object):void {
@@ -25,7 +24,7 @@ public class AddPropertiesApiCall extends ApiCall {
         if (_params.deviceId != null) {
             args.deviceId = _params.deviceId;
         } else {
-            throw new Error("Field 'deviceId' is a required.")
+            throw new Error("Field 'deviceId' is a required.");
         }
 
         //optional for Mobile

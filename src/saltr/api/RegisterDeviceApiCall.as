@@ -33,9 +33,6 @@ public class RegisterDeviceApiCall extends ApiCall{
             throw new Error("Field 'deviceId' is a required.");
         }
 
-//        var deviceInfo:Object = MobileDeviceInfo.getDeviceInfo();
-        //TODO: TIGR add this to _params!
-
         args.source = _params.deviceInfo.device;
         args.os = _params.deviceInfo.os;
 

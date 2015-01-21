@@ -47,7 +47,6 @@ public class ApiCall {
     private function doCall(urlVars:URLVariables, timeout:int):void {
         var ticket:SLTResourceURLTicket = ApiCall.getTicket(_url, urlVars, timeout);
         var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler);
-        //TODO: TIGR add resource disposing!
         resource.load();
     }
 
@@ -76,17 +75,18 @@ public class ApiCall {
         }
 
         apiCallResult.success = success;
+        resource.dispose();
         _callback(apiCallResult);
     }
 
     protected function callRequestFailHandler(resource:SLTResource):void {
-        //converts json result to ApiCallResult class...
+        resource.dispose();
         _callback(new ApiCallResult());
     }
 
 
     protected function buildCall():URLVariables {
-        throw new Error("I am abstract...");
+        throw new Error("abstract method call error");
     }
 }
 }

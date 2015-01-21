@@ -9,8 +9,7 @@ use namespace saltr_internal;
 public class LevelContentApiCall extends ApiCall{
     public function LevelContentApiCall(params:Object) {
         super(params);
-        //_url = SLTConfig.SALTR_API_URL;
-        _url = _params.sltLevel.contentUrl + "?_time_=" + new Date().getTime();
+        _url = _params.levelContentUrl;
     }
 
     override protected function buildCall():URLVariables {
@@ -19,18 +18,9 @@ public class LevelContentApiCall extends ApiCall{
 
     override protected function callRequestCompletedHandler(resource:SLTResource):void {
         var content:Object = resource.jsonData;
-        var success:Boolean = false;
         var apiCallResult:ApiCallResult = new ApiCallResult();
-        var data:Object = {
-            sltLevel:_params.sltLevel,
-            content:content
-        };
-        if (content != null) {
-            success = true;
-        }
-
-        apiCallResult.success = success;
-        apiCallResult.data = data;
+        apiCallResult.success = content != null;
+        apiCallResult.data = content;
         _callback(apiCallResult);
     }
 }
