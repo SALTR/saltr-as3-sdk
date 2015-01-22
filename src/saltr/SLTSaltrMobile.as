@@ -334,19 +334,11 @@ public class SLTSaltrMobile {
         addPropertiesApiCall.call(addPropertiesApiCallback, _requestIdleTimeout);
     }
 
-    public function registerDevice() {
+    public function registerDevice():void {
         if(!_started) {
             throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
         }
         _dialogController.showDeviceRegistrationDialog();
-    }
-
-    //anakonda
-    private static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
-        if (v != null && v != "null" && v !== "") {
-            return v;
-        }
-        return undefined;
     }
 
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
