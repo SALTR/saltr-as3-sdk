@@ -349,13 +349,13 @@ public class SLTSaltrMobile {
         levelContentApiCall.call(levelContentApiCallback, _requestIdleTimeout);
 
         function levelContentApiCallback(result:ApiCallResult):void {
-
+            var content:Object = result.data;
             if(result.success) {
-                cacheLevelContent(sltLevel, result.data);
+                cacheLevelContent(sltLevel, content);
             } else {
-                var content:Object = loadLevelContentInternally(sltLevel);
-                loadInternally(sltLevel, content);
+                content = loadLevelContentInternally(sltLevel);
             }
+            loadInternally(sltLevel, content);
         }
 
         function loadInternally(sltLevel:SLTLevel, content:Object):void {
