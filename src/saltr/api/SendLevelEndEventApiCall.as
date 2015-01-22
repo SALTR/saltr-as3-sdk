@@ -7,6 +7,7 @@ import saltr.SLTSaltrMobile;
 public class SendLevelEndEventApiCall extends ApiCall {
     public function SendLevelEndEventApiCall(params:Object):void {
         super(params);
+        _url = SLTConfig.SALTR_DEVAPI_URL;
     }
 
     override protected function buildCall():URLVariables {
