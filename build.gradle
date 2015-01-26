@@ -12,10 +12,10 @@ task ('generateSaltrDoc') {
     exec {
         executable = "D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
         args = ["-doc-sources",
-                "../../src",
-                "../../external/src/nl/funkymonkey/android/deviceinfo",
+                "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/src",
+                "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/external/src/nl/funkymonkey/android/deviceinfo",
                 "-output",
-                "../doc",
+                "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/doc",
                 "-library-path",
                 "D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0/frameworks/libs/air",
                 "-exclude-classes",
