@@ -7,6 +7,28 @@ buildscript {
     }
 }
 
+task ('generateSaltrDoc') {
+    println 'generating SALTR doc'
+    exec {
+        executable = "D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
+        args = ["-doc-sources",
+                "../../src",
+                "../../external/src/nl/funkymonkey/android/deviceinfo",
+                "-output",
+                "../doc",
+                "-library-path",
+                "D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0/frameworks/libs/air",
+                "-exclude-classes",
+                "nl.funkymonkey.android.deviceinfo.NativeDeviceInfo",
+                "nl.funkymonkey.android.deviceinfo.NativeDeviceInfoEvent",
+                "nl.funkymonkey.android.deviceinfo.NativeDeviceProperties",
+                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData"] }
+}
+
+dependencies {
+    generateSaltrDoc
+}
+
 apply plugin: 'gradlefx'
 
 srcDirs = ['src','external/src']
