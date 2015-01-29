@@ -5,9 +5,26 @@ import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
 
 public class AddPropertiesApiCall extends ApiCall {
-    public function AddPropertiesApiCall(params:Object):void {
-        super(params);
+
+    public function AddPropertiesApiCall(params:Object, isMobile:Boolean = true):void {
+        super(params,isMobile);
         _url = SLTConfig.SALTR_API_URL;
+    }
+
+    override protected function validateParams():Object {
+        if (_isMobile) {
+            return validateMobileParams();
+        }
+        else {
+            //TODO::@daal web case implement...
+        }
+    }
+
+    private function validateMobileParams():Boolean {
+        if (_params.deviceId == null) {
+            return {isValid: false, message: "Field deviceId is required"};
+        }
+        return {isValid: true};
     }
 
     override protected function buildCall():URLVariables {
@@ -18,25 +35,17 @@ public class AddPropertiesApiCall extends ApiCall {
         args.apiVersion = SLTSaltrMobile.API_VERSION;
         args.clientKey = _params.clientKey;
         args.client = SLTSaltrMobile.CLIENT;
-
-        //required for Mobile
-        if (_params.deviceId != null) {
-            args.deviceId = _params.deviceId;
-        } else {
-            throw new Error("Field 'deviceId' is a required.");
-        }
+        args.deviceId = _params.deviceId;
 
         //optional for Mobile
-        if(_params.socialId != null) {
+        if (_params.socialId != null) {
             args.socialId = _params.socialId;
         }
 
-        //optional
         if (_params.basicProperties != null) {
             args.basicProperties = _params.basicProperties;
         }
 
-        //optional
         if (_params.customProperties != null) {
             args.customProperties = _params.customProperties;
         }

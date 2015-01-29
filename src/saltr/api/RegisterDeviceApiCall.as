@@ -5,17 +5,34 @@ import flash.net.URLVariables;
 
 import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
-
 import saltr.saltr_internal;
-import saltr.utils.MobileDeviceInfo;
 
 use namespace saltr_internal;
 
-public class RegisterDeviceApiCall extends ApiCall{
+public class RegisterDeviceApiCall extends ApiCall {
 
-    public function RegisterDeviceApiCall(params:Object) {
-        super(params);
+    public function RegisterDeviceApiCall(params:Object, isMobile:Boolean = true) {
+        super(params, isMobile);
         _url = SLTConfig.SALTR_DEVAPI_URL;
+    }
+
+    override protected function validateParams():Object {
+        if (_isMobile) {
+            validateMobileParams();
+        }
+        else {
+            //TODO::@daal web case implement...
+        }
+    }
+
+    private function validateMobileParams():Boolean {
+        if (_params.deviceId == null) {
+            return {isValid: false, message: "Field deviceId is required"};
+        }
+        if (_params.email == null || _params.email == "") {
+            return {isValid: false, message: "Field email is required"};
+        }
+        return {isValid: true};
     }
 
     override protected function buildCall():URLVariables {
@@ -25,22 +42,11 @@ public class RegisterDeviceApiCall extends ApiCall{
         urlVars.clientKey = _params.clientKey;
         args.devMode = _params.devMode;
         args.apiVersion = SLTSaltrMobile.API_VERSION;
-
-        //required for Mobile
-        if (_params.deviceId != null) {
-            args.id = _params.deviceId;
-        } else {
-            throw new Error("Field 'deviceId' is a required.");
-        }
+        args.id = _params.deviceId;
 
         args.source = _params.deviceInfo.device;
         args.os = _params.deviceInfo.os;
-
-        if (_params.email != null && _params.email != "") {
-            args.email = _params.email;
-        } else {
-            throw new Error("Field 'email' is a required.")
-        }
+        args.email = _params.email;
 
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
         return urlVars;

@@ -8,9 +8,25 @@ import saltr.SLTSaltrMobile;
 
 public class SyncApiCall extends ApiCall{
 
-    public function SyncApiCall(params:Object) {
-        super(params);
+    public function SyncApiCall(params:Object, isMobile:Boolean = true) {
+        super(params, isMobile);
         _url = SLTConfig.SALTR_DEVAPI_URL;
+    }
+
+    override protected function validateParams():Object {
+        if (_isMobile) {
+            return validateMobileParams();
+        }
+        else {
+            //TODO::@daal web case implement...
+        }
+    }
+
+    private function validateMobileParams():Boolean {
+        if (_params.deviceId == null) {
+            return {isValid: false, message: "Field deviceId is required"};
+        }
+        return {isValid: true};
     }
 
     override protected function buildCall():URLVariables {
@@ -21,16 +37,11 @@ public class SyncApiCall extends ApiCall{
         args.apiVersion = SLTSaltrMobile.API_VERSION;
         args.clientKey = _params.clientKey;
         args.client = SLTSaltrMobile.CLIENT;
+        args.deviceId = _params.deviceId;
         args.devMode = _params.devMode;
-        urlVars.devMode = _params.devMode;
 
-        //required for Mobile
-        if (_params.deviceId != null) {
-            args.deviceId = _params.deviceId;
-            urlVars.deviceId = _params.deviceId;
-        } else {
-            throw new Error("Field 'deviceId' is a required.")
-        }
+        urlVars.devMode = _params.devMode;
+        urlVars.deviceId = _params.deviceId;
 
         //optional for Mobile
         if (_params.socialId != null) {

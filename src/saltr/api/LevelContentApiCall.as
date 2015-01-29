@@ -7,8 +7,8 @@ import saltr.saltr_internal;
 use namespace saltr_internal;
 
 public class LevelContentApiCall extends ApiCall{
-    public function LevelContentApiCall(params:Object) {
-        super(params);
+    public function LevelContentApiCall(params:Object, isMobile:Boolean = true) {
+        super(params, isMobile);
         _url = _params.levelContentUrl;
     }
 
