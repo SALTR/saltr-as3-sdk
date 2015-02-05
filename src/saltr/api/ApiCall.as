@@ -102,6 +102,20 @@ public class ApiCall {
 
     //TODO::daal. Now it is just an plain Object. Will be replaced with ValidationResult object...
     protected function validateParams():Object {
+        if (_isMobile) {
+            return validateMobileParams();
+        }
+        else {
+            //TODO::@daal web case implement...
+            return validateWebParams();
+        }
+    }
+
+    protected function validateMobileParams():Object {
+        throw new Error("abstract method call error");
+    }
+
+    protected function validateWebParams():Object {
         throw new Error("abstract method call error");
     }
 }

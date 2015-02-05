@@ -11,16 +11,7 @@ public class AppDataApiCall extends ApiCall {
         _url = SLTConfig.SALTR_API_URL;
     }
 
-    override protected function validateParams():Object {
-        if (_isMobile) {
-            return validateMobileParams();
-        }
-        else {
-            //TODO::@daal web case implement...
-        }
-    }
-
-    private function validateMobileParams():Boolean {
+    override protected function validateMobileParams():Object {
         if (_params.deviceId == null) {
             return {isValid: false, message: "Field deviceId is required"};
         }

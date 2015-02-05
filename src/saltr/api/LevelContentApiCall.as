@@ -23,5 +23,12 @@ public class LevelContentApiCall extends ApiCall{
         apiCallResult.data = content;
         _callback(apiCallResult);
     }
+
+    override protected function validateMobileParams():Object {
+        if (_params.levelContentUrl == null || _params.levelContentUrl == "") {
+            return {isValid: false, message: "Field levelContentUrl is required"};
+        }
+        return {isValid: true};
+    }
 }
 }

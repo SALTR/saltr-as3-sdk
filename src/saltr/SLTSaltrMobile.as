@@ -138,7 +138,7 @@ public class SLTSaltrMobile {
     }
 
     public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
-        _levelData.getPackByLevelGlobalIndex(index);
+        return _levelData.getPackByLevelGlobalIndex(index);
     }
 
     public function getActiveFeatureTokens():Vector.<String> {
