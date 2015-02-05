@@ -9,6 +9,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class RegisterDeviceApiCall extends ApiCall {
 
     public function RegisterDeviceApiCall(params:Object, isMobile:Boolean = true) {
@@ -16,7 +19,7 @@ public class RegisterDeviceApiCall extends ApiCall {
         _url = SLTConfig.SALTR_DEVAPI_URL;
     }
 
-    override protected function validateMobileParams():Object {
+    override saltr_internal function validateMobileParams():Object {
         if (_params.deviceId == null) {
             return {isValid: false, message: "Field deviceId is required"};
         }
@@ -26,7 +29,7 @@ public class RegisterDeviceApiCall extends ApiCall {
         return {isValid: true};
     }
 
-    override protected function buildCall():URLVariables {
+    override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;

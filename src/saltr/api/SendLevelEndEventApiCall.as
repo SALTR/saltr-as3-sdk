@@ -3,7 +3,13 @@ import flash.net.URLVariables;
 
 import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
+import saltr.saltr_internal;
 
+use namespace saltr_internal;
+
+/**
+ * @private
+ */
 public class SendLevelEndEventApiCall extends ApiCall {
 
     public function SendLevelEndEventApiCall(params:Object, isMobile:Boolean = true):void {
@@ -11,14 +17,14 @@ public class SendLevelEndEventApiCall extends ApiCall {
         _url = SLTConfig.SALTR_DEVAPI_URL;
     }
 
-    override protected function validateMobileParams():Object {
+    override saltr_internal function validateMobileParams():Object {
         if (_params.deviceId == null) {
             return {isValid: false, message: "Field deviceId is required"};
         }
         return {isValid: true};
     }
 
-    override protected function buildCall():URLVariables {
+    override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_DEV_ADD_LEVELEND_EVENT;
 
@@ -28,7 +34,7 @@ public class SendLevelEndEventApiCall extends ApiCall {
             devMode: _params.devMode,
             variationId: _params.variationId,
             apiVersion: SLTSaltrMobile.API_VERSION,
-            deviceId : _params.deviceId
+            deviceId: _params.deviceId
         }
 
 

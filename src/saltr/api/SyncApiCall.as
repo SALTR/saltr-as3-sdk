@@ -4,23 +4,28 @@ import flash.net.URLVariables;
 import saltr.SLTConfig;
 import saltr.SLTFeature;
 import saltr.SLTSaltrMobile;
-import saltr.SLTSaltrMobile;
+import saltr.saltr_internal;
 
-public class SyncApiCall extends ApiCall{
+use namespace saltr_internal;
+
+/**
+ * @private
+ */
+public class SyncApiCall extends ApiCall {
 
     public function SyncApiCall(params:Object, isMobile:Boolean = true) {
         super(params, isMobile);
         _url = SLTConfig.SALTR_DEVAPI_URL;
     }
 
-    override protected function validateMobileParams():Object {
+    override saltr_internal function validateMobileParams():Object {
         if (_params.deviceId == null) {
             return {isValid: false, message: "Field deviceId is required"};
         }
         return {isValid: true};
     }
 
-    override protected function buildCall():URLVariables {
+    override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;

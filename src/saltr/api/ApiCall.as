@@ -14,6 +14,9 @@ import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class ApiCall {
 
     protected var _url:String;
@@ -42,7 +45,7 @@ public class ApiCall {
         _isMobile = isMobile;
     }
 
-    public function call(callback:Function, timeout:int = 0):void {
+    saltr_internal function call(callback:Function, timeout:int = 0):void {
         _callback = callback;
         var validationResult : Object = validateParams();
         if(validationResult.isValid == false) {
@@ -66,7 +69,7 @@ public class ApiCall {
         resource.load();
     }
 
-    protected function callRequestCompletedHandler(resource:SLTResource):void {
+    saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
         var jsonData:Object = resource.jsonData;
         var success:Boolean = false;
         var apiCallResult:ApiCallResult = new ApiCallResult();
@@ -90,18 +93,18 @@ public class ApiCall {
         _callback(apiCallResult);
     }
 
-    protected function callRequestFailHandler(resource:SLTResource):void {
+    saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         resource.dispose();
         _callback(new ApiCallResult());
     }
 
 
-    protected function buildCall():URLVariables {
+    saltr_internal function buildCall():URLVariables {
         throw new Error("abstract method call error");
     }
 
     //TODO::daal. Now it is just an plain Object. Will be replaced with ValidationResult object...
-    protected function validateParams():Object {
+    saltr_internal function validateParams():Object {
         if (_isMobile) {
             return validateMobileParams();
         }
@@ -111,11 +114,11 @@ public class ApiCall {
         }
     }
 
-    protected function validateMobileParams():Object {
+    saltr_internal function validateMobileParams():Object {
         throw new Error("abstract method call error");
     }
 
-    protected function validateWebParams():Object {
+    saltr_internal function validateWebParams():Object {
         throw new Error("abstract method call error");
     }
 }

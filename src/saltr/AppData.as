@@ -4,6 +4,9 @@
 
 package saltr {
 import flash.utils.Dictionary;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 public class AppData {
 

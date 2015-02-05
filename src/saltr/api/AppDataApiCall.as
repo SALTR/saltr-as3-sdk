@@ -3,7 +3,13 @@ import flash.net.URLVariables;
 
 import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
+import saltr.saltr_internal;
 
+use namespace saltr_internal;
+
+/**
+ * @private
+ */
 public class AppDataApiCall extends ApiCall {
 
     public function AppDataApiCall(params:Object, isMobile:Boolean = true) {
@@ -11,14 +17,14 @@ public class AppDataApiCall extends ApiCall {
         _url = SLTConfig.SALTR_API_URL;
     }
 
-    override protected function validateMobileParams():Object {
+    override saltr_internal function validateMobileParams():Object {
         if (_params.deviceId == null) {
             return {isValid: false, message: "Field deviceId is required"};
         }
         return {isValid: true};
     }
 
-    override protected function buildCall():URLVariables {
+    override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
 

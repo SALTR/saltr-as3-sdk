@@ -6,17 +6,20 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-public class LevelContentApiCall extends ApiCall{
+/**
+ * @private
+ */
+public class LevelContentApiCall extends ApiCall {
     public function LevelContentApiCall(params:Object, isMobile:Boolean = true) {
         super(params, isMobile);
         _url = _params.levelContentUrl;
     }
 
-    override protected function buildCall():URLVariables {
+    override saltr_internal function buildCall():URLVariables {
         return null;
     }
 
-    override protected function callRequestCompletedHandler(resource:SLTResource):void {
+    override saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
         var content:Object = resource.jsonData;
         var apiCallResult:ApiCallResult = new ApiCallResult();
         apiCallResult.success = content != null;
@@ -24,7 +27,7 @@ public class LevelContentApiCall extends ApiCall{
         _callback(apiCallResult);
     }
 
-    override protected function validateMobileParams():Object {
+    override saltr_internal function validateMobileParams():Object {
         if (_params.levelContentUrl == null || _params.levelContentUrl == "") {
             return {isValid: false, message: "Field levelContentUrl is required"};
         }
