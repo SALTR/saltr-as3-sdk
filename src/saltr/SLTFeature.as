@@ -3,7 +3,7 @@
  */
 
 package saltr {
-internal class SLTFeature {
+public class SLTFeature {
     private var _token:String;
     private var _properties:Object;
     private var _required:Boolean;
