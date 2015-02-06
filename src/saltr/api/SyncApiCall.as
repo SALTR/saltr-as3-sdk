@@ -40,9 +40,7 @@ public class SyncApiCall extends ApiCall {
         urlVars.deviceId = _params.deviceId;
 
         //optional for Mobile
-        if (_params.socialId != null) {
-            args.socialId = _params.socialId;
-        }
+        args.socialId = _params.socialId;
 
         var featureList:Array = [];
         for (var i:String in _params.developerFeatures) {

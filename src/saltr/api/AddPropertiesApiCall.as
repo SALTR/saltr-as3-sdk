@@ -35,17 +35,10 @@ public class AddPropertiesApiCall extends ApiCall {
         args.deviceId = _params.deviceId;
 
         //optional for Mobile
-        if (_params.socialId != null) {
-            args.socialId = _params.socialId;
-        }
+        args.socialId = _params.socialId;
 
-        if (_params.basicProperties != null) {
-            args.basicProperties = _params.basicProperties;
-        }
-
-        if (_params.customProperties != null) {
-            args.customProperties = _params.customProperties;
-        }
+        args.basicProperties = _params.basicProperties;
+        args.customProperties = _params.customProperties;
 
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
         return urlVars;

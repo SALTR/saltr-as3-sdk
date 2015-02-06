@@ -41,9 +41,7 @@ public class SendLevelEndEventApiCall extends ApiCall {
         urlVars.deviceId = _params.deviceId;
 
         //optional for Mobile
-        if (_params.socialId != null) {
-            args.socialId = _params.socialId;
-        }
+        args.socialId = _params.socialId;
 
         var eventProps:Object = {};
         args.eventProps = eventProps;
