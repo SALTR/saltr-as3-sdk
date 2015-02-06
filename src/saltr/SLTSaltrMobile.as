@@ -4,8 +4,6 @@
 
 package saltr {
 import flash.display.Stage;
-import flash.net.URLRequestMethod;
-import flash.net.URLVariables;
 
 import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCall;
@@ -20,7 +18,6 @@ import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTDummyRepository;
 import saltr.repository.SLTMobileRepository;
-import saltr.resource.SLTResourceURLTicket;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
@@ -36,6 +33,10 @@ use namespace saltr_internal;
 //TODO @GSAR: add namespaces in all packages to isolate functionality
 
 //TODO:: @daal add some flushCache method.
+
+/**
+ * The SLTSaltrMobile class represents the mobile the entry point of mobile SDK.
+ */
 public class SLTSaltrMobile {
 
     public static const CLIENT:String = "AS3-Mobile";
@@ -67,6 +68,13 @@ public class SLTSaltrMobile {
     private var _appData:AppData;
     private var _levelData:LevelData;
 
+    /**
+     * Class constructor.
+     * @param flashStage The flash stage.
+     * @param clientKey The client key.
+     * @param deviceId The device unique identifier.
+     * @param useCache The cache enabled state.
+     */
     public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String, useCache:Boolean = true) {
         _flashStage = flashStage;
         _clientKey = clientKey;
@@ -89,66 +97,121 @@ public class SLTSaltrMobile {
         _levelData = new LevelData();
     }
 
+    /**
+     * The repository.
+     */
     public function set repository(value:ISLTRepository):void {
         _repository = value;
     }
 
+    /**
+     * The levels using state.
+     */
     public function set useNoLevels(value:Boolean):void {
         _useNoLevels = value;
     }
 
+    /**
+     * The feature using state.
+     */
     public function set useNoFeatures(value:Boolean):void {
         _useNoFeatures = value;
     }
 
+    /**
+     * The dev mode state.
+     */
     public function set devMode(value:Boolean):void {
         _devMode = value;
     }
 
+    /**
+     * The device automatically registration state.
+     */
     public function set autoRegisterDevice(value:Boolean):void {
         _autoRegisterDevice = value;
     }
 
+    /**
+     * The request idle timeout.
+     */
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
     }
 
+    /**
+     * The level packs.
+     */
     public function get levelPacks():Vector.<SLTLevelPack> {
         return _levelData.levelPacks;
     }
 
+    /**
+     * All levels.
+     */
     public function get allLevels():Vector.<SLTLevel> {
         return _levelData.allLevels;
     }
 
+    /**
+     * The total levels number.
+     */
     public function get allLevelsCount():uint {
         return _levelData.allLevelsCount;
     }
 
+    /**
+     * The experiments.
+     */
     public function get experiments():Vector.<SLTExperiment> {
         return _appData.experiments;
     }
 
+    /**
+     * The social identifier.
+     */
     public function set socialId(socialId:String):void {
         _socialId = socialId;
     }
 
+    /**
+     * Provides the level by provided global index.
+     * @param index The global index of the level.
+     * @return SLTLevel The level instance specified by index.
+     */
     public function getLevelByGlobalIndex(index:int):SLTLevel {
         return _levelData.getLevelByGlobalIndex(index);
     }
 
+    /**
+     * Provides the level pack by provided global index.
+     * @param index The global index of the level pack.
+     * @return SLTLevelPack The level pack instance specified by index.
+     */
     public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
         return _levelData.getPackByLevelGlobalIndex(index);
     }
 
+    /**
+     * Provides active feature tokens.
+     */
     public function getActiveFeatureTokens():Vector.<String> {
         return _appData.getActiveFeatureTokens();
     }
 
+    /**
+     * Provides the feature properties by provided token.
+     * @param token The unique identifier of the feature.
+     * @return Object The feature's properties.
+     */
     public function getFeatureProperties(token:String):Object {
         return _appData.getFeatureProperties(token);
     }
 
+    /**
+     * Imports level from provided path.
+     * @param path The path of the levels.
+     */
     public function importLevels(path:String = null):void {
         if (_useNoLevels) {
             return;
@@ -164,7 +227,10 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * If you want to have a feature synced with SALTR you should call define before getAppData call.
+     * Define feature.
+     * @param token The unique identifier of the feature.
+     * @param properties The properties of the feature.
+     * @param required The required state of the feature.
      */
     public function defineFeature(token:String, properties:Object, required:Boolean = false):void {
         if (_useNoFeatures) {
@@ -178,6 +244,9 @@ public class SLTSaltrMobile {
         }
     }
 
+    /**
+     * Starts the instance.
+     */
     public function start():void {
         if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
@@ -201,6 +270,9 @@ public class SLTSaltrMobile {
         _started = true;
     }
 
+    /**
+     * Establishes the connection to Saltr server.
+     */
     public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
         if (!_started) {
             throw new Error("Method 'connect()' should be called after 'start()' only.");
@@ -228,6 +300,13 @@ public class SLTSaltrMobile {
         appDataCall.call(appDataApiCallback, _requestIdleTimeout);
     }
 
+    /**
+     * Loads the level content.
+     * @param sltLevel The level.
+     * @param successCallback The success callback function.
+     * @param failCallback The fail callback function.
+     * @param useCache The cache enabled state.
+     */
     public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
@@ -249,6 +328,11 @@ public class SLTSaltrMobile {
         }
     }
 
+    /**
+     * Adds properties.
+     * @param basicProperties The basic properties.
+     * @param customProperties The custom properties.
+     */
     public function addProperties(basicProperties:Object = null, customProperties:Object = null):void {
         if (!basicProperties && !customProperties) {
             return;
@@ -265,6 +349,9 @@ public class SLTSaltrMobile {
         addPropertiesApiCall.call(addPropertiesApiCallback, _requestIdleTimeout);
     }
 
+    /**
+     * Opens device registration dialog.
+     */
     public function registerDevice():void {
         if (!_started) {
             throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
@@ -272,6 +359,37 @@ public class SLTSaltrMobile {
         _dialogController.showDeviceRegistrationDialog();
     }
 
+    /**
+     * Send "level end" event
+     * @param variationId The variation identifier.
+     * @param endStatus The end status.
+     * @param endReason The end reason.
+     * @param score The score.
+     * @param customTextProperties The custom text properties.
+     * @param customNumbericProperties The numberic properties.
+     */
+    public function sendLevelEndEvent(variationId:String, endStatus:String, endReason:String, score:int, customTextProperties:Array, customNumbericProperties:Array):void {
+        var params:Object = {
+            clientKey: _clientKey,
+            devMode: _devMode,
+            variationId: variationId,
+            deviceId: _deviceId,
+            socialId: _socialId,
+            endReason: endReason,
+            endStatus: endStatus,
+            score: score,
+            customNumbericProperties: customNumbericProperties,
+            customTextProperties: customTextProperties
+        };
+
+        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params);
+        sendLevelEndEventApiCall.call(sendLevelEndApiCallback);
+    }
+
+    /**
+     * Loads the level content.
+     * @param sltLevel The level.
+     */
     protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var params:Object = {
             levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
@@ -332,7 +450,7 @@ public class SLTSaltrMobile {
             sync();
         }
 
-        var levelType : String = result.data.levelType;
+        var levelType:String = result.data.levelType;
 
         try {
             _appData.initWithData(result.data);
@@ -396,24 +514,6 @@ public class SLTSaltrMobile {
         } else {
             addDeviceFailHandler(result);
         }
-    }
-
-    public function sendLevelEndEvent(variationId:String, endStatus:String, endReason:String, score:int, customTextProperties:Array, customNumbericProperties:Array):void {
-        var params:Object = {
-            clientKey: _clientKey,
-            devMode: _devMode,
-            variationId: variationId,
-            deviceId: _deviceId,
-            socialId: _socialId,
-            endReason: endReason,
-            endStatus: endStatus,
-            score: score,
-            customNumbericProperties: customNumbericProperties,
-            customTextProperties: customTextProperties
-        };
-
-        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params);
-        sendLevelEndEventApiCall.call(sendLevelEndApiCallback);
     }
 
     private function sendLevelEndApiCallback(result:ApiCallResult):void {
