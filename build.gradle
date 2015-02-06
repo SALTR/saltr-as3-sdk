@@ -17,7 +17,7 @@ buildscript {
 task ('generateSaltrDoc') {
     println 'generating SALTR doc'
     exec {
-        executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0//bin/aasdoc.bat"
+        executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
         args = ["-doc-sources",
                 workspace+"/src",
                 workspace+"/external/src/nl/funkymonkey/android/deviceinfo",
@@ -43,10 +43,10 @@ srcDirs = ['src','external/src']
 
 flexHome='C:/jenkins_tools/AIRSDK_Compiler_15.0/'
 
-output=outdir
+output="../"+outdir+"/"+"saltr-sdk"
 
 additionalCompilerOptions = [
-    "-load-config=air-config.xml"
+        "-load-config=air-config.xml"
 ]
 
 type = 'swc'

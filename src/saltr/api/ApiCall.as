@@ -3,8 +3,6 @@ import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 import flash.net.URLVariables;
 
-import saltr.SLTConfig;
-
 import saltr.resource.SLTResource;
 
 import saltr.resource.SLTResourceURLTicket;
