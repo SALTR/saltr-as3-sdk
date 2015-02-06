@@ -10,14 +10,14 @@ buildscript {
 task ('generateSaltrDoc') {
     println 'generating SALTR doc'
     exec {
-        executable = "D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
+        executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0//bin/aasdoc.bat"
         args = ["-doc-sources",
-                "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/src",
-                "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/external/src/nl/funkymonkey/android/deviceinfo",
+                workspace+"/src",
+                workspace+"external/src/nl/funkymonkey/android/deviceinfo",
                 "-output",
-                "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/doc",
+                workspace+"doc",
                 "-library-path",
-                "D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0/frameworks/libs/air",
+                "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
                 "-exclude-classes",
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceInfo",
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceInfoEvent",
@@ -34,7 +34,7 @@ apply plugin: 'gradlefx'
 srcDirs = ['src','external/src']
 
 
-flexHome='/Users/daal/Projects/dev/as/flash-sdk/mac/AIRSDK_Compiler_15.0'
+flexHome='C:/jenkins_tools/AIRSDK_Compiler_15.0/'
 
 output='bin/saltr-sdk.v.1.3.1'
 
