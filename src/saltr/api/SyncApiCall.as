@@ -23,9 +23,9 @@ public class SyncApiCall extends ApiCall {
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
-        args.apiVersion = SLTSaltrMobile.API_VERSION;
+        args.apiVersion = ApiCall.API_VERSION;
         args.clientKey = _params.clientKey;
-        args.client = SLTSaltrMobile.CLIENT;
+        args.client = _client;
         args.deviceId = _params.deviceId;
         args.devMode = _params.devMode;
 

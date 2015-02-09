@@ -22,9 +22,9 @@ public class AddPropertiesApiCall extends ApiCall {
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
 
-        args.apiVersion = SLTSaltrMobile.API_VERSION;
+        args.apiVersion = ApiCall.API_VERSION;
         args.clientKey = _params.clientKey;
-        args.client = SLTSaltrMobile.CLIENT;
+        args.client = _client;
         args.deviceId = _params.deviceId;
 
         //optional for Mobile

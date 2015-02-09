@@ -38,10 +38,6 @@ use namespace saltr_internal;
  * The SLTSaltrMobile class represents the mobile the entry point of mobile SDK.
  */
 public class SLTSaltrMobile {
-
-    public static const CLIENT:String = "AS3-Mobile";
-    public static const API_VERSION:String = "1.0.0";
-
     private var _flashStage:Stage;
     private var _socialId:String;
     private var _deviceId:String;

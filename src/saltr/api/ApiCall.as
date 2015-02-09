@@ -16,11 +16,15 @@ use namespace saltr_internal;
  * @private
  */
 public class ApiCall {
+    saltr_internal static const MOBILE_CLIENT:String = "AS3-Mobile";
+    saltr_internal static const WEB_CLIENT:String = "AS3-Web";
+    saltr_internal static const API_VERSION:String = "1.0.0";
 
     protected var _url:String;
     protected var _params:Object;
     protected var _callback:Function;
     protected var _isMobile:Boolean;
+    protected var _client:String;
 
     internal static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
         if (v != null && v != "null" && v !== "") {
@@ -41,6 +45,7 @@ public class ApiCall {
     public function ApiCall(params:Object, isMobile:Boolean = true) {
         _params = params;
         _isMobile = isMobile;
+        _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
     saltr_internal function call(callback:Function, timeout:int = 0):void {

@@ -23,10 +23,10 @@ public class SendLevelEndEventApiCall extends ApiCall {
 
         var args:Object = {
             clientKey: _params.clientKey,
-            client: SLTSaltrMobile.CLIENT,
+            client: _client,
             devMode: _params.devMode,
             variationId: _params.variationId,
-            apiVersion: SLTSaltrMobile.API_VERSION,
+            apiVersion: ApiCall.API_VERSION,
             deviceId: _params.deviceId
         }
 

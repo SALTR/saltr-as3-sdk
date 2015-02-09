@@ -49,7 +49,7 @@ public class RegisterDeviceApiCall extends ApiCall {
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;
         urlVars.clientKey = _params.clientKey;
         args.devMode = _params.devMode;
-        args.apiVersion = SLTSaltrMobile.API_VERSION;
+        args.apiVersion = ApiCall.API_VERSION;
         args.id = _params.deviceId;
 
         args.source = _params.deviceInfo.device;
