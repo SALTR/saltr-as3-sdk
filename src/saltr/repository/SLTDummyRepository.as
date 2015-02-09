@@ -73,24 +73,25 @@ public class SLTDummyRepository implements ISLTRepository {
      * @return The requested object.
      */
     public function getObjectFromApplication(fileName:String):Object {
-        var file:File = _applicationDirectory.resolvePath(fileName);
-        return getInternal(file);
-    }
-
-    private function getInternal(file:File):Object {
-        try {
-            if (!file.exists) {
-                return null;
-            }
-            _fileStream.open(file, FileMode.READ);
-            var stringData:String = _fileStream.readUTFBytes(_fileStream.bytesAvailable);
-            _fileStream.close();
-            return stringData ? JSON.parse(stringData) : null;
-        }
-        catch (error:Error) {
-            trace("[MobileStorageEngine] : error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
-        }
+//        var file:File = _applicationDirectory.resolvePath(fileName);
+//        return getInternal(file);
         return null;
     }
+
+//    private function getInternal(file:File):Object {
+//        try {
+//            if (!file.exists) {
+//                return null;
+//            }
+//            _fileStream.open(file, FileMode.READ);
+//            var stringData:String = _fileStream.readUTFBytes(_fileStream.bytesAvailable);
+//            _fileStream.close();
+//            return stringData ? JSON.parse(stringData) : null;
+//        }
+//        catch (error:Error) {
+//            trace("[MobileStorageEngine] : error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
+//        }
+//        return null;
+//    }
 }
 }
