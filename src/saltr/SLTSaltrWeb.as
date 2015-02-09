@@ -44,7 +44,6 @@ public class SLTSaltrWeb {
 
     private var _flashStage:Stage;
     private var _socialId:String;
-    private var _deviceId:String;
     private var _connected:Boolean;
     private var _clientKey:String;
     private var _isLoading:Boolean;
@@ -72,13 +71,13 @@ public class SLTSaltrWeb {
      * Class constructor.
      * @param flashStage The flash stage.
      * @param clientKey The client key.
-     * @param deviceId The device unique identifier.
+     * @param socialId The social identifier.
      * @param useCache The cache enabled state.
      */
-    public function SLTSaltrWeb(flashStage:Stage, clientKey:String, deviceId:String, useCache:Boolean = true) {
+    public function SLTSaltrWeb(flashStage:Stage, clientKey:String, socialId:String) {
         _flashStage = flashStage;
         _clientKey = clientKey;
-        _deviceId = deviceId;
+        _socialId = socialId;
         _isLoading = false;
         _connected = false;
         _useNoLevels = false;
@@ -90,18 +89,11 @@ public class SLTSaltrWeb {
         _isSynced = false;
         _requestIdleTimeout = 0;
 
-        _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
+        _repository = new SLTDummyRepository();
         _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
 
         _appData = new AppData();
         _levelData = new LevelData();
-    }
-
-    /**
-     * The repository.
-     */
-    public function set repository(value:ISLTRepository):void {
-        _repository = value;
     }
 
     /**
@@ -165,13 +157,6 @@ public class SLTSaltrWeb {
      */
     public function get experiments():Vector.<SLTExperiment> {
         return _appData.experiments;
-    }
-
-    /**
-     * The social identifier.
-     */
-    public function set socialId(socialId:String):void {
-        _socialId = socialId;
     }
 
     /**
@@ -248,8 +233,8 @@ public class SLTSaltrWeb {
      * Starts the instance.
      */
     public function start():void {
-        if (_deviceId == null) {
-            throw new Error("deviceId field is required and can't be null.");
+        if (_socialId == null) {
+            throw new Error("socialId field is required and can't be null.");
         }
 
         if (Utils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
@@ -290,13 +275,12 @@ public class SLTSaltrWeb {
 
         var params:Object = {
             clientKey: _clientKey,
-            deviceId: _deviceId,
             devMode: _devMode,
             socialId: _socialId,
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var appDataCall:AppDataApiCall = new AppDataApiCall(params);
+        var appDataCall:AppDataApiCall = new AppDataApiCall(params, false);
         appDataCall.call(appDataApiCallback, _requestIdleTimeout);
     }
 
@@ -340,12 +324,11 @@ public class SLTSaltrWeb {
 
         var params:Object = {
             clientKey: _clientKey,
-            deviceId: _deviceId,
             socialId: _socialId,
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:AddPropertiesApiCall = new AddPropertiesApiCall(params);
+        var addPropertiesApiCall:AddPropertiesApiCall = new AddPropertiesApiCall(params, false);
         addPropertiesApiCall.call(addPropertiesApiCallback, _requestIdleTimeout);
     }
 
@@ -373,7 +356,6 @@ public class SLTSaltrWeb {
             clientKey: _clientKey,
             devMode: _devMode,
             variationId: variationId,
-            deviceId: _deviceId,
             socialId: _socialId,
             endReason: endReason,
             endStatus: endStatus,
@@ -382,7 +364,7 @@ public class SLTSaltrWeb {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params);
+        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params, false);
         sendLevelEndEventApiCall.call(sendLevelEndApiCallback);
     }
 
@@ -394,7 +376,7 @@ public class SLTSaltrWeb {
         var params:Object = {
             levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
         };
-        var levelContentApiCall:LevelContentApiCall = new LevelContentApiCall(params);
+        var levelContentApiCall:LevelContentApiCall = new LevelContentApiCall(params, false);
         levelContentApiCall.call(levelContentApiCallback, _requestIdleTimeout);
 
         function levelContentApiCallback(result:ApiCallResult):void {
@@ -500,11 +482,10 @@ public class SLTSaltrWeb {
         var params:Object = {
             email: email,
             clientKey: _clientKey,
-            deviceId: _deviceId,
             deviceInfo: MobileDeviceInfo.getDeviceInfo(),
             devMode: _devMode
         };
-        var apiCall:ApiCall = new RegisterDeviceApiCall(params);
+        var apiCall:ApiCall = new RegisterDeviceApiCall(params, false);
         apiCall.call(registerDeviceApiCallback);
     }
 
@@ -528,11 +509,10 @@ public class SLTSaltrWeb {
         var params:Object = {
             clientKey: _clientKey,
             devMode: _devMode,
-            deviceId: _deviceId,
             socialId: _socialId,
             developerFeatures: _appData.developerFeatures
         };
-        var syncApiCall:SyncApiCall = new SyncApiCall(params);
+        var syncApiCall:SyncApiCall = new SyncApiCall(params, false);
         syncApiCall.call(syncApiCallback);
     }
 
