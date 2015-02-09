@@ -137,5 +137,15 @@ public class ApiCall {
         }
         return {isValid: true};
     }
+
+    saltr_internal function getMinimalArgs():Object {
+        var args:Object = {};
+        if(_isMobile) {
+            args.deviceId = _params.deviceId;
+        }
+        //optional for Mobile, required for Web
+        args.socialId = _params.socialId;
+        return args;
+    }
 }
 }

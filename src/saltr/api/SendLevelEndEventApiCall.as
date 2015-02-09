@@ -21,20 +21,12 @@ public class SendLevelEndEventApiCall extends ApiCall {
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_DEV_ADD_LEVELEND_EVENT;
 
-        var args:Object = {
-            clientKey: _params.clientKey,
-            client: _client,
-            devMode: _params.devMode,
-            variationId: _params.variationId,
-            apiVersion: ApiCall.API_VERSION,
-            deviceId: _params.deviceId
-        }
-
-
-        urlVars.deviceId = _params.deviceId;
-
-        //optional for Mobile
-        args.socialId = _params.socialId;
+        var args:Object = super.getMinimalArgs();
+        args.clientKey = _params.clientKey;
+        args.client = _client;
+        args.devMode = _params.devMode;
+        args.variationId = _params.variationId;
+        args.apiVersion = ApiCall.API_VERSION;
 
         var eventProps:Object = {};
         args.eventProps = eventProps;

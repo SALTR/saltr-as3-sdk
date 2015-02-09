@@ -20,20 +20,15 @@ public class SyncApiCall extends ApiCall {
 
     override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
-        var args:Object = {};
+        var args:Object = super.getMinimalArgs();
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
         args.apiVersion = ApiCall.API_VERSION;
         args.clientKey = _params.clientKey;
         args.client = _client;
-        args.deviceId = _params.deviceId;
         args.devMode = _params.devMode;
 
         urlVars.devMode = _params.devMode;
-        urlVars.deviceId = _params.deviceId;
-
-        //optional for Mobile
-        args.socialId = _params.socialId;
 
         var featureList:Array = [];
         for (var i:String in _params.developerFeatures) {

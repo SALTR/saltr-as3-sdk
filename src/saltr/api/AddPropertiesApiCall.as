@@ -19,16 +19,12 @@ public class AddPropertiesApiCall extends ApiCall {
 
     override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
-        var args:Object = {};
+        var args:Object = super.getMinimalArgs();
         urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
 
         args.apiVersion = ApiCall.API_VERSION;
         args.clientKey = _params.clientKey;
         args.client = _client;
-        args.deviceId = _params.deviceId;
-
-        //optional for Mobile
-        args.socialId = _params.socialId;
 
         args.basicProperties = _params.basicProperties;
         args.customProperties = _params.customProperties;

@@ -12,6 +12,7 @@ use namespace saltr_internal;
 /**
  * @private
  */
+    //TODO: @TIGR discuss this class for web (os, version, ets...)
 public class RegisterDeviceApiCall extends ApiCall {
 
     public function RegisterDeviceApiCall(params:Object, isMobile:Boolean = true) {
