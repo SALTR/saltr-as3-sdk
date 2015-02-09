@@ -15,6 +15,14 @@ public class LevelContentApiCall extends ApiCall {
         _url = _params.levelContentUrl;
     }
 
+    override saltr_internal function validateMobileParams():Object {
+        return validateLevelContentUrl();
+    }
+
+    override saltr_internal function validateWebParams():Object {
+        return validateLevelContentUrl();
+    }
+
     override saltr_internal function buildCall():URLVariables {
         return null;
     }
@@ -27,7 +35,7 @@ public class LevelContentApiCall extends ApiCall {
         _callback(apiCallResult);
     }
 
-    override saltr_internal function validateMobileParams():Object {
+    private function validateLevelContentUrl():Object {
         if (_params.levelContentUrl == null || _params.levelContentUrl == "") {
             return {isValid: false, message: "Field levelContentUrl is required"};
         }

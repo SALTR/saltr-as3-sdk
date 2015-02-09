@@ -17,13 +17,6 @@ public class AddPropertiesApiCall extends ApiCall {
         _url = SLTConfig.SALTR_API_URL;
     }
 
-    override saltr_internal function validateMobileParams():Object {
-        if (_params.deviceId == null) {
-            return {isValid: false, message: "Field deviceId is required"};
-        }
-        return {isValid: true};
-    }
-
     override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};

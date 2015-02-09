@@ -20,11 +20,25 @@ public class RegisterDeviceApiCall extends ApiCall {
     }
 
     override saltr_internal function validateMobileParams():Object {
-        if (_params.deviceId == null) {
-            return {isValid: false, message: "Field deviceId is required"};
+        var defaultParamsValidation:Object = super.validateDefaultMobileParams();
+        if(false == defaultParamsValidation.isValid) {
+            return defaultParamsValidation;
         }
-        if (_params.email == null || _params.email == "") {
-            return {isValid: false, message: "Field email is required"};
+        var emailParamsValidation:Object = validateEmailParams();
+        if (false == emailParamsValidation.isValid) {
+            return emailParamsValidation;
+        }
+        return {isValid: true};
+    }
+
+    override saltr_internal function validateWebParams():Object {
+        var defaultParamsValidation:Object = super.validateDefaultWebParams();
+        if(false == defaultParamsValidation.isValid) {
+            return defaultParamsValidation;
+        }
+        var emailParamsValidation:Object = validateEmailParams();
+        if (false == emailParamsValidation.isValid) {
+            return emailParamsValidation;
         }
         return {isValid: true};
     }
@@ -44,6 +58,13 @@ public class RegisterDeviceApiCall extends ApiCall {
 
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
         return urlVars;
+    }
+
+    private function validateEmailParams():Object {
+        if (_params.email == null || _params.email == "") {
+            return {isValid: false, message: "Field email is required"};
+        }
+        return {isValid: true};
     }
 }
 }

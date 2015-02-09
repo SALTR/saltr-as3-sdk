@@ -113,11 +113,25 @@ public class ApiCall {
     }
 
     saltr_internal function validateMobileParams():Object {
-        throw new Error("abstract method call error");
+        return validateDefaultMobileParams();
     }
 
     saltr_internal function validateWebParams():Object {
-        throw new Error("abstract method call error");
+        return validateDefaultWebParams();
+    }
+
+    saltr_internal function validateDefaultMobileParams():Object {
+        if (_params.deviceId == null) {
+            return {isValid: false, message: "Field deviceId is required"};
+        }
+        return {isValid: true};
+    }
+
+    saltr_internal function validateDefaultWebParams():Object {
+        if (_params.socialId == null) {
+            return {isValid: false, message: "Field socialId is required"};
+        }
+        return {isValid: true};
     }
 }
 }
