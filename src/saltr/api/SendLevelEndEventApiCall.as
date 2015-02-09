@@ -21,7 +21,7 @@ public class SendLevelEndEventApiCall extends ApiCall {
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_DEV_ADD_LEVELEND_EVENT;
 
-        var args:Object = super.getMinimalArgs();
+        var args:Object = buildDefaultArgs();
         args.clientKey = _params.clientKey;
         args.client = _client;
         args.devMode = _params.devMode;

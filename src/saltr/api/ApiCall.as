@@ -138,7 +138,7 @@ public class ApiCall {
         return {isValid: true};
     }
 
-    saltr_internal function getMinimalArgs():Object {
+    saltr_internal function buildDefaultArgs():Object {
         var args:Object = {};
         if(_isMobile) {
             args.deviceId = _params.deviceId;

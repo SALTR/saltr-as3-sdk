@@ -21,7 +21,7 @@ public class AppDataApiCall extends ApiCall {
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
 
-        var args:Object = super.getMinimalArgs();
+        var args:Object = buildDefaultArgs();
 
         args.apiVersion = ApiCall.API_VERSION;
         args.clientKey = _params.clientKey;

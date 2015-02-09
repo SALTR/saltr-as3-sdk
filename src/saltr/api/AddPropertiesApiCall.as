@@ -19,7 +19,7 @@ public class AddPropertiesApiCall extends ApiCall {
 
     override saltr_internal function buildCall():URLVariables {
         var urlVars:URLVariables = new URLVariables();
-        var args:Object = super.getMinimalArgs();
+        var args:Object = buildDefaultArgs();
         urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
 
         args.apiVersion = ApiCall.API_VERSION;

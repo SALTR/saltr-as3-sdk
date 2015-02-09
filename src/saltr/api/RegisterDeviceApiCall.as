@@ -12,7 +12,6 @@ use namespace saltr_internal;
 /**
  * @private
  */
-    //TODO: @TIGR discuss this class for web (os, version, ets...)
 public class RegisterDeviceApiCall extends ApiCall {
 
     public function RegisterDeviceApiCall(params:Object, isMobile:Boolean = true) {
@@ -21,7 +20,7 @@ public class RegisterDeviceApiCall extends ApiCall {
     }
 
     override saltr_internal function validateMobileParams():Object {
-        var defaultParamsValidation:Object = super.validateDefaultMobileParams();
+        var defaultParamsValidation:Object = validateDefaultMobileParams();
         if(false == defaultParamsValidation.isValid) {
             return defaultParamsValidation;
         }
@@ -33,15 +32,7 @@ public class RegisterDeviceApiCall extends ApiCall {
     }
 
     override saltr_internal function validateWebParams():Object {
-        var defaultParamsValidation:Object = super.validateDefaultWebParams();
-        if(false == defaultParamsValidation.isValid) {
-            return defaultParamsValidation;
-        }
-        var emailParamsValidation:Object = validateEmailParams();
-        if (false == emailParamsValidation.isValid) {
-            return emailParamsValidation;
-        }
-        return {isValid: true};
+        return validateMobileParams();
     }
 
     override saltr_internal function buildCall():URLVariables {
