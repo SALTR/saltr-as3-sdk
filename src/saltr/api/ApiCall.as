@@ -107,7 +107,6 @@ public class ApiCall {
             return validateMobileParams();
         }
         else {
-            //TODO::@daal web case implement...
             return validateWebParams();
         }
     }
