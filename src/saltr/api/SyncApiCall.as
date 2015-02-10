@@ -23,13 +23,6 @@ public class SyncApiCall extends ApiCall {
         var args:Object = buildDefaultArgs();
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
-        args.apiVersion = ApiCall.API_VERSION;
-        args.clientKey = _params.clientKey;
-        args.client = _client;
-        args.devMode = _params.devMode;
-
-        urlVars.devMode = _params.devMode;
-
         var featureList:Array = [];
         for (var i:String in _params.developerFeatures) {
             var feature:SLTFeature = _params.developerFeatures[i];

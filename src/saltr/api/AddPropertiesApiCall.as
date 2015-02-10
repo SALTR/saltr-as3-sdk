@@ -21,11 +21,6 @@ public class AddPropertiesApiCall extends ApiCall {
         var urlVars:URLVariables = new URLVariables();
         var args:Object = buildDefaultArgs();
         urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
-
-        args.apiVersion = ApiCall.API_VERSION;
-        args.clientKey = _params.clientKey;
-        args.client = _client;
-
         args.basicProperties = _params.basicProperties;
         args.customProperties = _params.customProperties;
 

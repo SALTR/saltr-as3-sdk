@@ -36,6 +36,7 @@ public class RegisterUserApiCall extends ApiCall {
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_USER;
         urlVars.clientKey = _params.clientKey;
+        urlVars.client = _client;
         args.devMode = _params.devMode;
         args.apiVersion = ApiCall.API_VERSION;
         args.id = _params.socialId;

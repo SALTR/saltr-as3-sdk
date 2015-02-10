@@ -143,8 +143,12 @@ public class ApiCall {
         if(_isMobile) {
             args.deviceId = _params.deviceId;
         }
-        //optional for Mobile, required for Web
+        //socialId optional for Mobile, required for Web
         args.socialId = _params.socialId;
+        args.apiVersion = ApiCall.API_VERSION;
+        args.clientKey = _params.clientKey;
+        args.client = _client;
+        args.devMode = _params.devMode;
         return args;
     }
 }
