@@ -3,7 +3,6 @@ import flash.net.URLVariables;
 
 import saltr.SLTConfig;
 import saltr.SLTFeature;
-import saltr.SLTSaltrMobile;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;

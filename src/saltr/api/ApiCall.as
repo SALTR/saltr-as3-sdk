@@ -1,12 +1,9 @@
 package saltr.api {
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
-import flash.net.URLVariables;
 
 import saltr.resource.SLTResource;
-
 import saltr.resource.SLTResourceURLTicket;
-
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 
@@ -50,8 +47,8 @@ public class ApiCall {
 
     saltr_internal function call(callback:Function, timeout:int = 0):void {
         _callback = callback;
-        var validationResult : Object = validateParams();
-        if(validationResult.isValid == false) {
+        var validationResult:Object = validateParams();
+        if (validationResult.isValid == false) {
             returnValidationFailedResult(validationResult.message);
             return;
         }
@@ -60,7 +57,7 @@ public class ApiCall {
     }
 
     private function returnValidationFailedResult(message:String):void {
-        var apiCallResult : ApiCallResult = new ApiCallResult();
+        var apiCallResult:ApiCallResult = new ApiCallResult();
         apiCallResult.success = false;
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, message);
         _callback(apiCallResult);
@@ -80,7 +77,7 @@ public class ApiCall {
         if (jsonData.hasOwnProperty("response")) {
             response = jsonData.response[0];
             success = response.success;
-            if(success) {
+            if (success) {
                 apiCallResult.data = response;
             } else {
                 apiCallResult.status = new SLTStatus(response.error.code, response.error.message);
@@ -140,7 +137,7 @@ public class ApiCall {
 
     saltr_internal function buildDefaultArgs():Object {
         var args:Object = {};
-        if(_isMobile) {
+        if (_isMobile) {
             args.deviceId = _params.deviceId;
         }
         //socialId optional for Mobile, required for Web

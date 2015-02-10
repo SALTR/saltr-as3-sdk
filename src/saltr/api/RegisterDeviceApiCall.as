@@ -4,7 +4,6 @@ package saltr.api {
 import flash.net.URLVariables;
 
 import saltr.SLTConfig;
-import saltr.SLTSaltrMobile;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -21,7 +20,7 @@ public class RegisterDeviceApiCall extends ApiCall {
 
     override saltr_internal function validateMobileParams():Object {
         var defaultParamsValidation:Object = validateDefaultMobileParams();
-        if(false == defaultParamsValidation.isValid) {
+        if (false == defaultParamsValidation.isValid) {
             return defaultParamsValidation;
         }
         var emailParamsValidation:Object = validateEmailParams();

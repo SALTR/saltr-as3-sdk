@@ -6,6 +6,7 @@ import saltr.SLTConfig;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
+
 /**
  * @private
  */
@@ -21,7 +22,7 @@ public class RegisterUserApiCall extends ApiCall {
 
     override saltr_internal function validateWebParams():Object {
         var defaultParamsValidation:Object = validateDefaultWebParams();
-        if(false == defaultParamsValidation.isValid) {
+        if (false == defaultParamsValidation.isValid) {
             return defaultParamsValidation;
         }
         var emailParamsValidation:Object = validateEmailParams();
