@@ -35,7 +35,7 @@ use namespace saltr_internal;
 //TODO:: @daal add some flushCache method.
 
 /**
- * The SLTSaltrMobile class represents the mobile the entry point of mobile SDK.
+ * The SLTSaltrWeb class represents the entry point of web SDK.
  */
 public class SLTSaltrWeb {
     private var _flashStage:Stage;
@@ -68,7 +68,6 @@ public class SLTSaltrWeb {
      * @param flashStage The flash stage.
      * @param clientKey The client key.
      * @param socialId The social identifier.
-     * @param useCache The cache enabled state.
      */
     public function SLTSaltrWeb(flashStage:Stage, clientKey:String, socialId:String) {
         _flashStage = flashStage;
@@ -191,16 +190,15 @@ public class SLTSaltrWeb {
 
     /**
      * Imports level from provided path.
-     * @param path The path of the levels.
+     * @param json The levels information containing JSON.
      */
-    public function importLevels(path:String = null):void {
+    public function importLevelsFromJSON(json:String):void {
         if (_useNoLevels) {
             return;
         }
 
         if (!_started) {
-            path = path == null ? SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL : path;
-            var applicationData:Object = _repository.getObjectFromApplication(path);
+            var applicationData:Object = JSON.parse(json);
             _levelData.initWithData(applicationData);
         } else {
             throw new Error("Method 'importLevels()' should be called before 'start()' only.");
@@ -232,22 +230,13 @@ public class SLTSaltrWeb {
         if (_socialId == null) {
             throw new Error("socialId field is required and can't be null.");
         }
-
         if (Utils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
             throw new Error("Features should be defined.");
         }
-
         if (_levelData.levelPacks.length == 0 && _useNoLevels == false) {
             throw new Error("Levels should be imported.");
         }
-
-        var cachedData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
-        if (cachedData == null) {
-            _appData.initEmpty();
-        } else {
-            _appData.initWithData(cachedData);
-        }
-
+        _appData.initEmpty();
         _started = true;
     }
 
@@ -285,27 +274,11 @@ public class SLTSaltrWeb {
      * @param sltLevel The level.
      * @param successCallback The success callback function.
      * @param failCallback The fail callback function.
-     * @param useCache The cache enabled state.
      */
-    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
-        var content:Object = null;
-        if (_connected == false) {
-            if (useCache == true) {
-                content = loadLevelContentInternally(sltLevel);
-            } else {
-                content = loadLevelContentFromDisk(sltLevel);
-            }
-            levelContentLoadSuccessHandler(sltLevel, content);
-        } else {
-            if (useCache == false || sltLevel.version != getCachedLevelVersion(sltLevel)) {
-                loadLevelContentFromSaltr(sltLevel);
-            } else {
-                content = loadLevelContentFromCache(sltLevel);
-                levelContentLoadSuccessHandler(sltLevel, content);
-            }
-        }
+        loadLevelContentFromSaltr(sltLevel);
     }
 
     /**
@@ -377,16 +350,7 @@ public class SLTSaltrWeb {
 
         function levelContentApiCallback(result:ApiCallResult):void {
             var content:Object = result.data;
-            if (result.success) {
-                cacheLevelContent(sltLevel, content);
-            } else {
-                content = loadLevelContentInternally(sltLevel);
-            }
-            loadInternally(sltLevel, content);
-        }
-
-        function loadInternally(sltLevel:SLTLevel, content:Object):void {
-            if (content != null) {
+            if (result.success && content != null) {
                 levelContentLoadSuccessHandler(sltLevel, content);
             }
             else {
@@ -448,10 +412,7 @@ public class SLTSaltrWeb {
         }
 
         _connected = true;
-        _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", result.data);
-
         _connectSuccessCallback();
-
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
     }
 
@@ -531,34 +492,6 @@ public class SLTSaltrWeb {
         else {
             trace("[Saltr] Dev feature Sync has failed. " + result.status.statusMessage);
         }
-    }
-
-    private function getCachedLevelVersion(sltLevel:SLTLevel):String {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectVersion(cachedFileName);
-    }
-
-    private function cacheLevelContent(sltLevel:SLTLevel, content:Object):void {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
-    }
-
-    private function loadLevelContentInternally(sltLevel:SLTLevel):Object {
-        var content:Object = loadLevelContentFromCache(sltLevel);
-        if (content == null) {
-            content = loadLevelContentFromDisk(sltLevel);
-        }
-        return content;
-    }
-
-    private function loadLevelContentFromCache(sltLevel:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectFromCache(url);
-    }
-
-    private function loadLevelContentFromDisk(sltLevel:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectFromApplication(url);
     }
 }
 }

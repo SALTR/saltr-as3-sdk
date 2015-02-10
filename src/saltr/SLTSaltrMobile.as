@@ -35,7 +35,7 @@ use namespace saltr_internal;
 //TODO:: @daal add some flushCache method.
 
 /**
- * The SLTSaltrMobile class represents the mobile the entry point of mobile SDK.
+ * The SLTSaltrMobile class represents the entry point of mobile SDK.
  */
 public class SLTSaltrMobile {
     private var _flashStage:Stage;
