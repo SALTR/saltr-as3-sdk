@@ -17,7 +17,7 @@ public class RegisterUserApiCall extends ApiCall {
     }
 
     override saltr_internal function validateMobileParams():Object {
-        return validateEmailParams();
+        return validateWebParams();
     }
 
     override saltr_internal function validateWebParams():Object {

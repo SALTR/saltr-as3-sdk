@@ -11,6 +11,7 @@ import saltr.api.ApiCallResult;
 import saltr.api.AppDataApiCall;
 import saltr.api.LevelContentApiCall;
 import saltr.api.RegisterDeviceApiCall;
+import saltr.api.RegisterUserApiCall;
 import saltr.api.SendLevelEndEventApiCall;
 import saltr.api.SyncApiCall;
 import saltr.game.SLTLevel;
@@ -24,8 +25,8 @@ import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.DialogController;
-import saltr.utils.MobileDeviceInfo;
+//import saltr.utils.DialogController;
+//import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
 
 use namespace saltr_internal;
@@ -58,7 +59,7 @@ public class SLTSaltrWeb {
     private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
-    private var _dialogController:DialogController;
+//    private var _dialogController:DialogController;
 
     private var _appData:AppData;
     private var _levelData:LevelData;
@@ -85,7 +86,7 @@ public class SLTSaltrWeb {
         _requestIdleTimeout = 0;
 
         _repository = new SLTDummyRepository();
-        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
+//        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
 
         _appData = new AppData();
         _levelData = new LevelData();
@@ -233,9 +234,9 @@ public class SLTSaltrWeb {
         if (Utils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
             throw new Error("Features should be defined.");
         }
-        if (_levelData.levelPacks.length == 0 && _useNoLevels == false) {
-            throw new Error("Levels should be imported.");
-        }
+//        if (_levelData.levelPacks.length == 0 && _useNoLevels == false) {
+//            throw new Error("Levels should be imported.");
+//        }
         _appData.initEmpty();
         _started = true;
     }
@@ -308,7 +309,7 @@ public class SLTSaltrWeb {
         if (!_started) {
             throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
         }
-        _dialogController.showDeviceRegistrationDialog();
+//        _dialogController.showDeviceRegistrationDialog();
     }
 
     /**
@@ -432,17 +433,18 @@ public class SLTSaltrWeb {
 
     protected function addDeviceFailHandler(result:ApiCallResult):void {
         trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showDeviceRegistrationFailStatus(result.status.statusMessage);
+//        _dialogController.showDeviceRegistrationFailStatus(result.status.statusMessage);
     }
 
     private function addDeviceToSALTR(email:String):void {
         var params:Object = {
             email: email,
             clientKey: _clientKey,
-            deviceInfo: MobileDeviceInfo.getDeviceInfo(),
+            socialId: _socialId,
+//            deviceInfo: MobileDeviceInfo.getDeviceInfo(),
             devMode: _devMode
         };
-        var apiCall:ApiCall = new RegisterDeviceApiCall(params, false);
+        var apiCall:ApiCall = new RegisterUserApiCall(params, false);
         apiCall.call(registerDeviceApiCallback);
     }
 

@@ -12,15 +12,15 @@ import flash.filesystem.FileStream;
  */
 public class SLTDummyRepository implements ISLTRepository {
 
-    private var _applicationDirectory:File;
-    private var _fileStream:FileStream;
+//    private var _applicationDirectory:File;
+//    private var _fileStream:FileStream;
 
     /**
      * Class constructor.
      */
     public function SLTDummyRepository() {
-        _applicationDirectory = File.applicationDirectory;
-        _fileStream = new FileStream();
+//        _applicationDirectory = File.applicationDirectory;
+//        _fileStream = new FileStream();
     }
 
     /**
