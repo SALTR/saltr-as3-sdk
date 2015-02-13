@@ -10,7 +10,6 @@ import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
 import saltr.api.AppDataApiCall;
 import saltr.api.LevelContentApiCall;
-import saltr.api.RegisterDeviceApiCall;
 import saltr.api.RegisterUserApiCall;
 import saltr.api.SendLevelEndEventApiCall;
 import saltr.api.SyncApiCall;
@@ -18,16 +17,14 @@ import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTDummyRepository;
-import saltr.repository.SLTMobileRepository;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-//import saltr.utils.DialogController;
-//import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
+import saltr.utils.dialog.WebDialogController;
 
 use namespace saltr_internal;
 
@@ -41,6 +38,7 @@ use namespace saltr_internal;
 public class SLTSaltrWeb {
     private var _flashStage:Stage;
     private var _socialId:String;
+    private var _platform:String;
     private var _connected:Boolean;
     private var _clientKey:String;
     private var _isLoading:Boolean;
@@ -59,7 +57,7 @@ public class SLTSaltrWeb {
     private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
-//    private var _dialogController:DialogController;
+    private var _dialogController:WebDialogController;
 
     private var _appData:AppData;
     private var _levelData:LevelData;
@@ -86,7 +84,7 @@ public class SLTSaltrWeb {
         _requestIdleTimeout = 0;
 
         _repository = new SLTDummyRepository();
-//        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
+        _dialogController = new WebDialogController(_flashStage, addUserToSALTR);
 
         _appData = new AppData();
         _levelData = new LevelData();
@@ -125,6 +123,13 @@ public class SLTSaltrWeb {
      */
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
+    }
+
+    /**
+     * The running platform.
+     */
+    public function set platform(value:String):void {
+        _platform = value;
     }
 
     /**
@@ -303,13 +308,13 @@ public class SLTSaltrWeb {
     }
 
     /**
-     * Opens device registration dialog.
+     * Opens user registration dialog.
      */
-    public function registerDevice():void {
+    public function registerUser():void {
         if (!_started) {
             throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
         }
-//        _dialogController.showDeviceRegistrationDialog();
+        _dialogController.showRegistrationDialog();
     }
 
     /**
@@ -426,33 +431,33 @@ public class SLTSaltrWeb {
         }
     }
 
-    protected function addDeviceSuccessHandler():void {
-        trace("[Saltr] Dev adding new device has succeed.");
+    protected function addUserSuccessHandler():void {
+        trace("[Saltr] Dev adding new user has succeed.");
         sync();
     }
 
-    protected function addDeviceFailHandler(result:ApiCallResult):void {
-        trace("[Saltr] Dev adding new device has failed.");
-//        _dialogController.showDeviceRegistrationFailStatus(result.status.statusMessage);
+    protected function addUserFailHandler(result:ApiCallResult):void {
+        trace("[Saltr] Dev adding new user has failed.");
+        _dialogController.showRegistrationFailStatus(result.status.statusMessage);
     }
 
-    private function addDeviceToSALTR(email:String):void {
+    private function addUserToSALTR(email:String):void {
         var params:Object = {
             email: email,
             clientKey: _clientKey,
             socialId: _socialId,
-//            deviceInfo: MobileDeviceInfo.getDeviceInfo(),
+            platform: _platform,
             devMode: _devMode
         };
         var apiCall:ApiCall = new RegisterUserApiCall(params, false);
-        apiCall.call(registerDeviceApiCallback);
+        apiCall.call(registerUserApiCallback);
     }
 
-    private function registerDeviceApiCallback(result:ApiCallResult):void {
+    private function registerUserApiCallback(result:ApiCallResult):void {
         if (result.success) {
-            addDeviceSuccessHandler();
+            addUserSuccessHandler();
         } else {
-            addDeviceFailHandler(result);
+            addUserFailHandler(result);
         }
     }
 
@@ -489,7 +494,7 @@ public class SLTSaltrWeb {
 
     protected function syncFailHandler(result:ApiCallResult):void {
         if (result.status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
-            registerDevice();
+            registerUser();
         }
         else {
             trace("[Saltr] Dev feature Sync has failed. " + result.status.statusMessage);

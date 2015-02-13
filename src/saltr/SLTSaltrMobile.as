@@ -24,9 +24,10 @@ import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.DialogController;
+import saltr.utils.dialog.DialogController;
 import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
+import saltr.utils.dialog.MobileDialogController;
 
 use namespace saltr_internal;
 
@@ -59,7 +60,7 @@ public class SLTSaltrMobile {
     private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
-    private var _dialogController:DialogController;
+    private var _dialogController:MobileDialogController;
 
     private var _appData:AppData;
     private var _levelData:LevelData;
@@ -87,7 +88,7 @@ public class SLTSaltrMobile {
         _requestIdleTimeout = 0;
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
-        _dialogController = new DialogController(_flashStage, addDeviceToSALTR);
+        _dialogController = new MobileDialogController(_flashStage, addDeviceToSALTR);
 
         _appData = new AppData();
         _levelData = new LevelData();
@@ -352,7 +353,7 @@ public class SLTSaltrMobile {
         if (!_started) {
             throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
         }
-        _dialogController.showDeviceRegistrationDialog();
+        _dialogController.showRegistrationDialog();
     }
 
     /**
@@ -489,7 +490,7 @@ public class SLTSaltrMobile {
 
     protected function addDeviceFailHandler(result:ApiCallResult):void {
         trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showDeviceRegistrationFailStatus(result.status.statusMessage);
+        _dialogController.showRegistrationFailStatus(result.status.statusMessage);
     }
 
     private function addDeviceToSALTR(email:String):void {

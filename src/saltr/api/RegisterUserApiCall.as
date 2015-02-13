@@ -42,9 +42,7 @@ public class RegisterUserApiCall extends ApiCall {
         args.apiVersion = ApiCall.API_VERSION;
         args.id = _params.socialId;
 
-        //TODO: @TIGR ask about below params to Gev.
-        args.source = "PC";//_params.deviceInfo.device;
-        args.os = "OS";//_params.deviceInfo.os;
+        args.source = _params.platform;
         args.email = _params.email;
 
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
