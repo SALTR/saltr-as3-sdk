@@ -95,7 +95,9 @@ public class ApiCall {
 
     saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         resource.dispose();
-        _callback(new ApiCallResult());
+        var apiCallResult:ApiCallResult = new ApiCallResult();
+        apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
+        _callback(apiCallResult);
     }
 
 
