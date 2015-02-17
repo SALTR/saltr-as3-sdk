@@ -216,7 +216,10 @@ public class SLTSaltrMobile {
 
         if (!_started) {
             path = path == null ? SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL : path;
-            var applicationData:Object = _repository.getObjectFromApplication(path);
+            var applicationData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
+            if(null == applicationData) {
+                applicationData = _repository.getObjectFromApplication(path);
+            }
             _levelData.initWithData(applicationData);
         } else {
             throw new Error("Method 'importLevels()' should be called before 'start()' only.");
