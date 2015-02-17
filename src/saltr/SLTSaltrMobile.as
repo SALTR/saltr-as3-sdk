@@ -214,9 +214,12 @@ public class SLTSaltrMobile {
             return;
         }
 
-        if (!_started) {
-            path = path == null ? SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL : path;
-            var applicationData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
+        if(!_started) {
+            var applicationData:Object = null;
+            if(null == path) {
+                path = SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL;
+                applicationData = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
+            }
             if(null == applicationData) {
                 applicationData = _repository.getObjectFromApplication(path);
             }
