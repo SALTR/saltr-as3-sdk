@@ -24,7 +24,6 @@ import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.dialog.DialogController;
 import saltr.utils.MobileDeviceInfo;
 import saltr.utils.Utils;
 import saltr.utils.dialog.MobileDialogController;
@@ -214,13 +213,13 @@ public class SLTSaltrMobile {
             return;
         }
 
-        if(!_started) {
+        if (!_started) {
             var applicationData:Object = null;
-            if(null == path) {
+            if (null == path) {
                 path = SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL;
                 applicationData = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
             }
-            if(null == applicationData) {
+            if (null == applicationData) {
                 applicationData = _repository.getObjectFromApplication(path);
             }
             _levelData.initWithData(applicationData);
