@@ -14,6 +14,11 @@ buildscript {
     }
 }
 
+task copyTask(type: Copy) {
+    from workspace+'/doc_generation/manual_docs/getting-started.html'
+    into workspace+'/'+outdir+'/doc'
+}
+
 task ('generateSaltrDoc') {
     println 'generating SALTR doc'
     exec {
@@ -29,7 +34,16 @@ task ('generateSaltrDoc') {
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceInfo",
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceInfoEvent",
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceProperties",
-                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData"] }
+                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData",
+                "-main-title", "SALTR SDK",
+                "-window-title", "SALTR SDK",
+                "-templates-path",
+                workspace+"/doc_generation/templates" ] }
+
+    copy {
+        from workspace+'/doc_generation/manual_docs/getting-started.html'
+        into workspace+'/'+outdir+'/doc'
+    }
 }
 
 dependencies {
