@@ -1,0 +1,87 @@
+
+<html>
+<head>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+<body style="margin-top: 50px; margin-left: 100px; margin-right: 0px;">
+
+<h3>INTRODUCTION</h3>
+<div class="pcontContainer">
+    <p class="sdkText">
+        SALTR Adobe Air/Flash SDK is a library of classes which help to develop mobile and web games that are to be integrated with SALTR platform.
+    </p>
+
+    <p class="sdkText">
+        SDK performs all necessary and possible action with SALTR REST API to connect, update, set and download data related to game's features or levels.
+    </p>
+
+    <p class="sdkText">
+        All data received from SALTR REST API is parsed and represented through set of instances of classes, each carrying specific objects and their properties.
+    </p>
+
+    <p class="sdkText">
+        Basically SDK, as the REST API, has few simple actions. The most important one is connecting (getAppData), which loads the app data objects containing features, experiments and level headers.
+    </p>
+
+    <p class="sdkText">
+        This and other actions will be described in the sections below.
+    </p>
+</div>
+
+
+<a name="usage"></a>
+<h3>USAGE</h3>
+<div class="pocontContainer">
+    <p class="sdkText">
+        To use the SDK you need to download/clone SDK repository, and then import files to your project.
+    </p>
+        <pre>$ git clone https://github.com/plexonic/saltr-as3-sdk.git</pre>
+    <p class="sdkText">
+        The recommended IDE's for Adobe Air/Flash are <a href="http://www.adobe.com/products/flash-builder.html" target="blank">Adobe Flash Builder</a> or <a href="http://www.jetbrains.com/idea/">IntelliJ Idea.</a>
+    </p>
+
+    <p class="sdkText">
+        The entry point classes in SDK are different if the project is mobile or web based application:
+    </p>
+
+    <ul class="apiLimitUl">
+        <li>For Mobile Apps <code>SLTSaltrMobile</code>is the main class.</li>
+        <li>Fow Web Apps <code>SLTSaltrWeb</code>is the main class.</li>
+    </ul>
+
+    <p class="sdkText">
+        Each have some differences of initialization and usage.
+    </p>
+
+    <p class="sdkText">
+        Note: All classes in the package start with "SLT" prefix.
+    </p>
+</div>
+
+
+<a name="packages"></a>
+<h3>DIRECTORY STRUCTURE</h3>
+<div class="poicontContainer    <p class="sdkText">
+        The SDK has the following directory structure:
+    </p>
+
+    <ul class="apiLimitUl">
+        <li>/src - root folder of the library;</li>
+        <li>saltr - main package of library;</li>
+        <li>saltr.game - package contains game related classes;</li>
+        <li>saltr.game.canvas2d - classes related to 2D games;</li>
+        <li>saltr.game.matching - classes related to matching or board based games;</li>
+        <li>saltr.game.repository - local data repository classes (implementation widely varies through platforms);</li>
+        <li>saltr.game.status - status classes representing warnings and error statuses used within library code;</li>
+        <li>saltr.game.utils - helper or utility classes;</li>
+    </ul>
+
+    <p class="sdkText">
+        New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
+    </p>
+</div>
+
+</body>
+
+
+</html>

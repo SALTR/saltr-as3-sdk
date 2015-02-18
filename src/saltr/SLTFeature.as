@@ -3,7 +3,14 @@
  */
 
 package saltr {
-internal class SLTFeature {
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
+
+/**
+ * @private
+ */
+public class SLTFeature {
     private var _token:String;
     private var _properties:Object;
     private var _required:Boolean;
@@ -14,19 +21,19 @@ internal class SLTFeature {
         _required = required;
     }
 
-    public function get token():String {
+    saltr_internal function get token():String {
         return _token;
     }
 
-    public function get properties():Object {
+    saltr_internal function get properties():Object {
         return _properties;
     }
 
-    public function get required():Boolean {
+    saltr_internal function get required():Boolean {
         return _required;
     }
 
-    public function toString():String {
+    saltr_internal function toString():String {
         return "[SALTR] Feature { token : " + _token + ", value : " + _properties + "}";
     }
 }

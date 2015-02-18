@@ -1,7 +1,7 @@
 /**
  * Created by TIGR on 12/4/14.
  */
-package saltr.utils {
+package saltr.utils.dialog {
 import flash.display.SimpleButton;
 import flash.display.Sprite;
 import flash.display.Stage;
@@ -19,6 +19,7 @@ use namespace saltr_internal;
  */
 public class AlertDialog extends Sprite {
     saltr_internal static const DLG_DEVICE_REGISTRATION_TITLE:String = "Device Registration";
+    saltr_internal static const DLG_USER_REGISTRATION_TITLE:String = "User Registration";
 
     private static const DLG_BUTTON_CLOSE:String = "OK";
 

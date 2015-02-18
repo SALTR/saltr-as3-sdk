@@ -1,0 +1,52 @@
+//Define output directory for swc and documentation
+def outdir = "saltr-sdk.v.1.3.2"
+println "Output directory: "+outdir
+
+def workspace =System.getenv()['WORKSPACE']
+println "Workspace: "+workspace
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.gradlefx', name: 'gradlefx', version: '1.0'
+    }
+}
+
+task ('generateSaltrDoc') {
+    println 'generating SALTR doc'
+    exec {
+        executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
+        args = ["-doc-sources",
+                workspace+"/src",
+                workspace+"/external/src/nl/funkymonkey/android/deviceinfo",
+                "-output",
+                workspace+"/"+outdir+"/doc",
+                "-library-path",
+                "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
+                "-exclude-classes",
+                "nl.funkymonkey.android.deviceinfo.NativeDeviceInfo",
+                "nl.funkymonkey.android.deviceinfo.NativeDeviceInfoEvent",
+                "nl.funkymonkey.android.deviceinfo.NativeDeviceProperties",
+                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData"] }
+}
+
+dependencies {
+    generateSaltrDoc
+}
+
+apply plugin: 'gradlefx'
+
+srcDirs = ['src','external/src']
+
+
+flexHome='C:/jenkins_tools/AIRSDK_Compiler_15.0/'
+
+output="../"+outdir+"/"+"saltr-sdk"
+
+additionalCompilerOptions = [
+        "-load-config=air-config.xml"
+]
+
+type = 'swc'
