@@ -29,7 +29,18 @@ task ('generateSaltrDoc') {
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceInfo",
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceInfoEvent",
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceProperties",
-                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData"] }
+                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData",
+                "-main-title \"SALTR SDK\"",
+                "-window-title \"SALTR SDK\"",
+                "-template-path", workspace+"/doc_generation/templates_own"
+        ] }
+    ResCopy
+}
+
+task ResCopy(type: Copy) {
+
+    from("$workspace/doc_generation/manual_docs/getting-started.html")
+    into "${workspace}/${outdir}/doc"
 }
 
 dependencies {
