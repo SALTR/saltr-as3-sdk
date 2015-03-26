@@ -39,5 +39,9 @@ public class SLT2DBoard extends SLTBoard {
     public function get height():Number {
         return _height;
     }
+
+    override public function regenerate():void {
+        // Nothing to do
+    }
 }
 }

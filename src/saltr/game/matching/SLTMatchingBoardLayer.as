@@ -14,6 +14,7 @@ use namespace saltr_internal;
 public class SLTMatchingBoardLayer extends SLTBoardLayer {
 
     private var _chunks:Vector.<SLTChunk>;
+    private var _implementation:SLTMatchingBoardLayerImpl;
 
     /**
      * Class constructor.
@@ -25,14 +26,16 @@ public class SLTMatchingBoardLayer extends SLTBoardLayer {
         _chunks = new Vector.<SLTChunk>()
     }
 
-    /**
-     * Regenerates the content of the layer.
-     * @private
-     */
-    override saltr_internal function regenerate():void {
-        for (var i:int = 0, len:int = _chunks.length; i < len; ++i) {
-            _chunks[i].generateContent();
-        }
+    saltr_internal function set implementation(implementation:SLTMatchingBoardLayerImpl):void {
+        _implementation = implementation;
+    }
+
+    saltr_internal function get implementation():SLTMatchingBoardLayerImpl {
+        return _implementation;
+    }
+
+    saltr_internal function get chunks():Vector.<SLTChunk> {
+        return _chunks;
     }
 
     /**
@@ -43,6 +46,5 @@ public class SLTMatchingBoardLayer extends SLTBoardLayer {
     saltr_internal function addChunk(chunk:SLTChunk):void {
         _chunks.push(chunk);
     }
-
 }
 }

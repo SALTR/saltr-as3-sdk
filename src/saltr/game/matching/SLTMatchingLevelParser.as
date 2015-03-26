@@ -33,7 +33,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private static function initializeCells(cells:SLTCells, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
-        var cellProperties:Array = boardNode.hasOwnProperty("cellProperties")  ? boardNode.cellProperties : [];
+        var cellProperties:Array = boardNode.hasOwnProperty("cellProperties") ? boardNode.cellProperties : [];
         var cols:int = cells.width;
         var rows:int = cells.height;
 
@@ -97,6 +97,15 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
         var cells:SLTCells = new SLTCells(boardNode.cols, boardNode.rows);
         initializeCells(cells, boardNode);
 
+        var matchingRulesEnabled:Boolean = false;
+        if (boardNode.hasOwnProperty("matchingRulesEnabled")) {
+            matchingRulesEnabled = boardNode.matchingRulesEnabled;
+        }
+        var squareMatchingRuleEnabled:Boolean = false;
+        if (boardNode.hasOwnProperty("squareMatchingRuleEnabled")) {
+            squareMatchingRuleEnabled = boardNode.squareMatchingRuleEnabled;
+        }
+
         var layers:Vector.<SLTBoardLayer> = new Vector.<SLTBoardLayer>();
         var layerNodes:Array = boardNode.layers;
         for (var i:int = 0, len:int = layerNodes.length; i < len; ++i) {
@@ -105,7 +114,26 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             layers.push(layer);
         }
 
-        return new SLTMatchingBoard(cells, layers, boardProperties);
+        var alternativeMatchAssets:Vector.<SLTMatchingRuleAsset> = new <SLTMatchingRuleAsset>[];
+        if (boardNode.hasOwnProperty("alternativeMatchAssets")) {
+            var alternativeAssetNodes:Array = boardNode.alternativeMatchAssets as Array;
+            for each (var alternativeAssetNode:Object in alternativeAssetNodes) {
+                alternativeMatchAssets.push(new SLTMatchingRuleAsset(alternativeAssetNode.assetId, alternativeAssetNode.stateId));
+            }
+        }
+
+        var excludedMatchAssets:Vector.<SLTMatchingRuleAsset> = new <SLTMatchingRuleAsset>[];
+        if (boardNode.hasOwnProperty("excludedMatchAssets")) {
+            var excludedAssetNodes:Array = boardNode.excludedMatchAssets as Array;
+            for each (var excludedAssetNode:Object in excludedAssetNodes) {
+                excludedMatchAssets.push(new SLTMatchingRuleAsset(excludedAssetNode.assetId, excludedAssetNode.stateId));
+            }
+        }
+
+        var board:SLTMatchingBoard = new SLTMatchingBoard(cells, layers, boardProperties);
+        var boardImplementation:SLTMatchingBoardImpl = new SLTMatchingBoardImpl(board, matchingRulesEnabled, squareMatchingRuleEnabled, alternativeMatchAssets, excludedMatchAssets);
+        board.implementation = boardImplementation;
+        return board;
     }
 
     private function parseLayerChunks(layer:SLTMatchingBoardLayer, chunkNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
@@ -147,12 +175,21 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
     private function parseLayer(layerNode:Object, index:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
         //temporarily checking for 2 names until "layerId" is removed!
         var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
+        var matchingRulesEnabled:Boolean = false;
+        if (layerNode.hasOwnProperty("matchingRulesEnabled")) {
+            matchingRulesEnabled = layerNode.matchingRulesEnabled;
+        }
+        var matchSize:int = -1;
+        if (layerNode.hasOwnProperty("matchSize")) {
+            matchSize = layerNode.matchSize;
+        }
         var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(token, index);
+        var layerImplementation:SLTMatchingBoardLayerImpl = new SLTMatchingBoardLayerImpl(layer, matchingRulesEnabled, matchSize);
+        layer.implementation = layerImplementation;
         parseFixedAssets(layer, layerNode.fixedAssets as Array, cells, assetMap);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;
     }
-
 }
 }
 

@@ -42,10 +42,7 @@ public class SLTBoard {
      * Regenerates the content of all layers.
      */
     public function regenerate():void {
-        for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
-            var layer:SLTBoardLayer = _layers[i] as SLTBoardLayer;
-            layer.regenerate();
-        }
+        throw new Error("Virtual function call: regenerate");
     }
 }
 }

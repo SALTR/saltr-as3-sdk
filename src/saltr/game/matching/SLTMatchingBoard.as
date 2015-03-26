@@ -5,6 +5,9 @@
 package saltr.game.matching {
 import saltr.game.SLTBoard;
 import saltr.game.SLTBoardLayer;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTMatchingBoard class represents the matching game board.
@@ -13,6 +16,7 @@ public class SLTMatchingBoard extends SLTBoard {
     private var _cells:SLTCells;
     private var _rows:int;
     private var _cols:int;
+    private var _implementation:SLTMatchingBoardImpl;
 
     /**
      * Class constructor.
@@ -46,6 +50,14 @@ public class SLTMatchingBoard extends SLTBoard {
      */
     public function get cols():int {
         return _cols;
+    }
+
+    override public function regenerate():void {
+        _implementation.regenerate();
+    }
+
+    saltr_internal function set implementation(implementation:SLTMatchingBoardImpl):void {
+        _implementation = implementation;
     }
 }
 }
