@@ -4,7 +4,6 @@
 
 package saltr.game.matching {
 import saltr.game.SLTBoard;
-import saltr.game.SLTBoardLayer;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -16,7 +15,8 @@ public class SLTMatchingBoard extends SLTBoard {
     private var _cells:SLTCells;
     private var _rows:int;
     private var _cols:int;
-    private var _implementation:SLTMatchingBoardImpl;
+
+    private var _config:SLTMatchingBoardConfig;
 
     /**
      * Class constructor.
@@ -24,11 +24,21 @@ public class SLTMatchingBoard extends SLTBoard {
      * @param layers The layers of the board.
      * @param properties The board associated properties.
      */
-    public function SLTMatchingBoard(cells:SLTCells, layers:Vector.<SLTBoardLayer>, properties:Object) {
+    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, properties:Object) {
         super(layers, properties);
-        _cells = cells;
+
+        _config = config;
+        _cells = _config.cells;
         _cols = cells.width;
         _rows = cells.height;
+    }
+
+    public function get config():SLTMatchingBoardConfig {
+        return _config;
+    }
+
+    public function set config(value:*):void {
+        _config = value;
     }
 
     /**
@@ -53,11 +63,11 @@ public class SLTMatchingBoard extends SLTBoard {
     }
 
     override public function regenerate():void {
-        _implementation.regenerate();
-    }
-
-    saltr_internal function set implementation(implementation:SLTMatchingBoardImpl):void {
-        _implementation = implementation;
+        for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
+            var layer:SLTMatchingBoardLayer = _config.layers[i] as SLTMatchingBoardLayer;
+            var generator:SLTMatchingBoardGeneratorBase = SLTMatchingBoardGeneratorBase.getGenerator(layer);
+            generator.generate(_config, layer);
+        }
     }
 }
 }

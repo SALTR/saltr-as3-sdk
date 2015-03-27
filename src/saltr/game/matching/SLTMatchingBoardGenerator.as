@@ -6,11 +6,11 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-internal class SLTMatchingBoardGenerator implements ISLTMatchingBoardGenerator {
+internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
     private static var INSTANCE:SLTMatchingBoardGenerator;
 
-    private var _boardImpl:SLTMatchingBoardImpl;
-    private var _layerImpl:SLTMatchingBoardLayerImpl;
+    private var _boardConfig:SLTMatchingBoardConfig;
+    private var _layer:SLTMatchingBoardLayer;
 
     saltr_internal static function getInstance():SLTMatchingBoardGenerator {
         if (!INSTANCE) {
@@ -25,20 +25,21 @@ internal class SLTMatchingBoardGenerator implements ISLTMatchingBoardGenerator {
         }
     }
 
-    public function generate(board:SLTMatchingBoardImpl, layer:SLTMatchingBoardLayerImpl):void {
-        _boardImpl = board;
-        _layerImpl = layer;
-        _layerImpl.generateAssetData();
+    override public function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
+        _boardConfig = boardConfig;
+        _layer = layer;
+        parseFixedAssets(layer, [], _boardConfig.cells, _boardConfig.assetMap);
+        generateAssetData(layer);
         fillLayerChunkAssets();
     }
 
     private function fillLayerChunkAssets():void {
-        var chunks:Vector.<SLTChunk> = _layerImpl.chunks;
-        for(var i:uint=0; i<chunks.length; ++i) {
+        var chunks:Vector.<SLTChunk> = _layer.chunks;
+        for (var i:uint = 0; i < chunks.length; ++i) {
             var chunk:SLTChunk = chunks[i];
             var availableAssetData:Vector.<SLTChunkAssetDatum> = chunk.availableAssetData.concat();
             var chunkCells:Vector.<SLTCell> = chunk.cells.concat();
-            for(var j:uint=0; j<chunkCells.length; ++j) {
+            for (var j:uint = 0; j < chunkCells.length; ++j) {
                 var assetDatumRandIndex:int = Math.random() * availableAssetData.length;
                 var assetDatum = availableAssetData[assetDatumRandIndex];
                 availableAssetData.splice(assetDatumRandIndex, 1);

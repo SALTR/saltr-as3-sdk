@@ -46,10 +46,6 @@ internal class SLTChunk {
         _uniqueAssetData = new Vector.<SLTChunkAssetDatum>();
     }
 
-    saltr_internal function get assetMap():Dictionary {
-        return _assetMap;
-    }
-
     saltr_internal function get cells():Vector.<SLTCell> {
         return _chunkCells;
     }
@@ -75,14 +71,6 @@ internal class SLTChunk {
         var stateIds:Array = assetDatum.stateIds;
         cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
     }
-
-//    saltr_internal function  addAssetInstance(assetDatum:SLTChunkAssetDatum, col:uint, row:uint):void {
-//        var asset:SLTAsset = _assetMap[assetDatum.assetId] as SLTAsset;
-//        var cell:SLTCell = getCellWithPosition(col, row);
-//        var stateIds:Array = assetDatum.stateIds;
-//        cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
-//        var cellIndex:int = getCellIndexWithPosition(col, row);
-//    }
 
     saltr_internal function get availableAssetData():Vector.<SLTChunkAssetDatum> {
         return _availableAssetData;

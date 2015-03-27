@@ -2,16 +2,19 @@
  * Created by Tigran Hakobyan on 3/25/2015.
  */
 package saltr.game.matching {
+import flash.utils.Dictionary;
+
+import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoardGenerator {
+internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGeneratorBase {
     private static var INSTANCE:SLTMatchingBoardRulesEnabledGenerator;
 
-    private var _boardImpl:SLTMatchingBoardImpl;
-    private var _layerImpl:SLTMatchingBoardLayerImpl;
+    private var _boardConfig:SLTMatchingBoardConfig;
+    private var _layer:SLTMatchingBoardLayer;
     private var _matchedAssetPositions:Vector.<MatchedAssetPosition>;
 
     saltr_internal static function getInstance():SLTMatchingBoardRulesEnabledGenerator {
@@ -27,14 +30,16 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
         }
     }
 
-    public function generate(board:SLTMatchingBoardImpl, layer:SLTMatchingBoardLayerImpl):void {
-        _boardImpl = board;
-        _layerImpl = layer;
+    override public function generate(boardConfig : SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
+        _boardConfig = boardConfig;
+        _layer = layer;
         if (null == _matchedAssetPositions) {
             _matchedAssetPositions = new Vector.<MatchedAssetPosition>();
         }
         _matchedAssetPositions.length = 0;
-        _layerImpl.generateAssetData();
+
+        parseFixedAssets(layer, [], _boardConfig.cells, _boardConfig.assetMap);
+        generateAssetData(layer);
         fillLayerChunkAssetsWithMatchingRules();
         correctChunksMatchesWithChunkAssets();
     }
@@ -48,7 +53,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
         for (var i:uint = 0; i < matchedAssetPositions.length; ++i) {
             var matchedCellPosition:MatchedAssetPosition = matchedAssetPositions[i];
             ++insolvenciesCount;
-            var chunk:SLTChunk = _layerImpl.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
+            var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
             correctionAssets = chunk.uniqueAssetData;
             for (var j:uint = 0; j < correctionAssets.length; ++j) {
                 appendingResult = appendChunkAsset(correctionAssets[j], chunk, matchedCellPosition.col, matchedCellPosition.row);
@@ -65,15 +70,15 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
     }
 
     private function correctChunksMatchesWithAltAssets():void {
-        var correctionAssets:Vector.<SLTMatchingRuleAsset> = _boardImpl.alternativeMatchAssets;
+        var correctionAssets:Vector.<SLTMatchingRuleAsset> = _boardConfig.alternativeMatchAssets;
         var appendingResult:Boolean = false;
         if (correctionAssets.length > 0) {
             for (var i:uint = 0; i < _matchedAssetPositions.length; ++i) {
                 for (var j:uint = 0; j < correctionAssets.length; ++j) {
                     var matchedCellPosition:MatchedAssetPosition = _matchedAssetPositions[i];
-                    var chunk:SLTChunk = _layerImpl.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
+                    var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
                     var matchingRuleAsset:SLTMatchingRuleAsset = correctionAssets[j];
-                    var chunkAssetDatum:SLTChunkAssetDatum = new SLTChunkAssetDatum(matchingRuleAsset.assetId, [matchingRuleAsset.stateId], chunk.assetMap);
+                    var chunkAssetDatum:SLTChunkAssetDatum = new SLTChunkAssetDatum(matchingRuleAsset.assetId, [matchingRuleAsset.stateId], _boardConfig.assetMap);
                     appendingResult = appendChunkAsset(chunkAssetDatum, chunk, matchedCellPosition.col, matchedCellPosition.row);
                     if (appendingResult) {
                         break;
@@ -89,8 +94,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
         var assetDatum:SLTChunkAssetDatum;
         var appendResult:Boolean;
 
-        for (var y:int = 0; y < _boardImpl.rows; ++y) {
-            for (var x:int = 0; x < _boardImpl.cols; ++x) {
+        for (var y:int = 0; y < _boardConfig.rows; ++y) {
+            for (var x:int = 0; x < _boardConfig.cols; ++x) {
                 positionCells.push([x, y]);
             }
         }
@@ -102,7 +107,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
             x = positionCells[ cellRandomIndex ][ 0 ];
             y = positionCells[ cellRandomIndex ][ 1 ];
 
-            var chunk:SLTChunk = _layerImpl.getChunkWithCellPosition(x, y);
+            var chunk:SLTChunk = _layer.getChunkWithCellPosition(x, y);
 
             if (null != chunk && chunk.availableAssetData.length > 0) {
                 chunkAvailableAssetData = chunk.availableAssetData;
@@ -165,14 +170,14 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
     }
 
     private function appendChunkAsset(assetDatum:SLTChunkAssetDatum, chunk:SLTChunk, col:uint, row:uint):Boolean {
-        var matchesCount:int = _layerImpl.matchSize - 1;
+        var matchesCount:int = _layer.matchSize - 1;
         var horizontalMatches:int = calculateHorizontalMatches(assetDatum.assetToken, col, row);
         var verticalMatches:int = calculateVerticalMatches(assetDatum.assetToken, col, row);
         var squareMatch:Boolean = false;
         var excludedAsset:Boolean = false;
-        var excludedMathAssets:Vector.<SLTMatchingRuleAsset> = _boardImpl.excludedMatchAssets;
+        var excludedMathAssets:Vector.<SLTMatchingRuleAsset> = _boardConfig.excludedMatchAssets;
 
-        if (_boardImpl.squareMatchingRuleEnabled) {
+        if (_boardConfig.squareMatchingRuleEnabled) {
             squareMatch = checkSquareMatch(assetDatum.assetToken, col, row);
         }
 
@@ -194,12 +199,12 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
     private function calculateHorizontalMatches(assetToken:String, col:uint, row:uint):int {
         var i:int = 1;
         var hasMatch:Boolean = true;
-        var matchesCount:int = _layerImpl.matchSize - 1;
+        var matchesCount:int = _layer.matchSize - 1;
         var siblingCellAssetToken:String;
         var horizontalMatches:uint = 0;
 
         while (i <= Math.min(col, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardImpl.cells, col - 1, row, _layerImpl.token);
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col - 1, row, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++horizontalMatches;
@@ -210,8 +215,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
         i = 1;
         hasMatch = true;
 
-        while (i <= Math.min(_boardImpl.cols - col - 1, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardImpl.cells, col + i, row, _layerImpl.token);
+        while (i <= Math.min(_boardConfig.cols - col - 1, matchesCount) && hasMatch) {
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col + i, row, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++horizontalMatches;
@@ -225,12 +230,12 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
     private function calculateVerticalMatches(assetToken:String, col:uint, row:uint):int {
         var i:int = 1;
         var hasMatch:Boolean = true;
-        var matchesCount:int = _layerImpl.matchSize - 1;
+        var matchesCount:int = _layer.matchSize - 1;
         var siblingCellAssetToken:String;
         var verticalMatches:uint = 0;
 
         while (i <= Math.min(row, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardImpl.cells, col, row - 1, _layerImpl.token);
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col, row - 1, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++verticalMatches;
@@ -241,8 +246,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
         i = 1;
         hasMatch = true;
 
-        while (i <= Math.min(_boardImpl.rows - row - 1, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardImpl.cells, col, row + 1, _layerImpl.token);
+        while (i <= Math.min(_boardConfig.rows - row - 1, matchesCount) && hasMatch) {
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col, row + 1, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++verticalMatches;
@@ -286,7 +291,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator implements ISLTMatchingBoar
             direction = directions[ i ];
 
             for (var j = 0; j < direction.length; ++j) {
-                siblingCellAssetToken = getAssetTokenAtPosition(_boardImpl.cells, col + direction[j][0], row + direction[j][1], _layerImpl.token);
+                siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col + direction[j][0], row + direction[j][1], _layer.token);
 
                 if (assetToken == siblingCellAssetToken) {
                     ++directionMatchesCount;
