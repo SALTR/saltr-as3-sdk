@@ -4,11 +4,14 @@
 
 package saltr {
 import flash.display.Stage;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
 
 import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
 import saltr.api.AppDataApiCall;
+import saltr.api.HeartbeatApiCall;
 import saltr.api.LevelContentApiCall;
 import saltr.api.RegisterDeviceApiCall;
 import saltr.api.SendLevelEndEventApiCall;
@@ -63,6 +66,8 @@ public class SLTSaltrMobile {
 
     private var _appData:AppData;
     private var _levelData:LevelData;
+
+    private var _heartbeatTimer:Timer;
 
     /**
      * Class constructor.
@@ -556,6 +561,37 @@ public class SLTSaltrMobile {
         }
         else {
             trace("[Saltr] Dev feature Sync has failed. " + result.status.statusMessage);
+        }
+    }
+
+    private function startHeartbeat():void {
+        stopHeartbeat();
+        _heartbeatTimer = new Timer(SLTConfig.HEARTBEAT_TIMER_DELAY);
+        _heartbeatTimer.start();
+    }
+
+    private function stopHeartbeat():void {
+        if(null != _heartbeatTimer) {
+            _heartbeatTimer.stop();
+            _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeat);
+            _heartbeatTimer = null;
+        }
+    }
+
+    private function heartbeat():void {
+        var params:Object = {
+            clientKey: _clientKey,
+            devMode: _devMode,
+            deviceId: _deviceId,
+            socialId: _socialId
+        };
+        var heartbeatApiCall:HeartbeatApiCall = new HeartbeatApiCall(params);
+        heartbeatApiCall.call(heartbeatApiCallback);
+    }
+
+    private function heartbeatApiCallback(result:ApiCallResult):void {
+        if (!result.success) {
+            stopHeartbeat();
         }
     }
 
