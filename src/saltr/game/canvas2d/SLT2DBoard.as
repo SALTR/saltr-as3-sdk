@@ -5,6 +5,9 @@ package saltr.game.canvas2d {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTBoard;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLT2DBoard class represents the 2D game board.
