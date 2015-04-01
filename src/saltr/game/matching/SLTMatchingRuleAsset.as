@@ -1,5 +1,5 @@
 /**
- * Created by Tigran Hakobyan on 3/18/2015.
+ * Created by TIGR on 3/18/2015.
  */
 package saltr.game.matching {
 

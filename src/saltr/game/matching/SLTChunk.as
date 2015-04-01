@@ -13,6 +13,7 @@ use namespace saltr_internal;
 
 /**
  * The SLTChunk class represents a collection of cells on matching board that is populated with assets according to certain rules.
+ * @private
  */
 internal class SLTChunk {
     private var _layerToken:String;
@@ -46,30 +47,11 @@ internal class SLTChunk {
         _uniqueAssetData = new Vector.<SLTChunkAssetDatum>();
     }
 
-    saltr_internal function get cells():Vector.<SLTCell> {
-        return _chunkCells;
-    }
-
-    saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {
-        var cellFound:Boolean = false;
-        for each(var cell:SLTCell in _chunkCells) {
-            if(col == cell.col && row == cell.row) {
-                cellFound = true;
-                break;
-            }
-        }
-        return cellFound;
-    }
-
-    saltr_internal function  addAssetInstanceWithPosition(assetDatum:SLTChunkAssetDatum, col:uint, row:uint):void {
-        addAssetInstanceWithCellIndex(assetDatum, getCellIndexWithPosition(col, row));
-    }
-
-    saltr_internal function addAssetInstanceWithCellIndex(assetDatum:SLTChunkAssetDatum, cellIndex:uint):void {
-        var asset:SLTAsset = _assetMap[assetDatum.assetId] as SLTAsset;
-        var cell:SLTCell = _chunkCells[cellIndex];
-        var stateIds:Array = assetDatum.stateIds;
-        cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+    /**
+     * Returns the available cells count plus chunk asset rules count as string.
+     */
+    public function toString():String {
+        return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
     }
 
     saltr_internal function get availableAssetData():Vector.<SLTChunkAssetDatum> {
@@ -80,16 +62,32 @@ internal class SLTChunk {
         return _uniqueAssetData;
     }
 
-    /**
-     * Returns the available cells count plus chunk asset rules count as string.
-     */
-    public function toString():String {
-        return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
+    saltr_internal function get cells():Vector.<SLTCell> {
+        return _chunkCells;
     }
 
-    /**
-     * Generates the content.
-     */
+    saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {
+        var cellFound:Boolean = false;
+        for each(var cell:SLTCell in _chunkCells) {
+            if (col == cell.col && row == cell.row) {
+                cellFound = true;
+                break;
+            }
+        }
+        return cellFound;
+    }
+
+    saltr_internal function addAssetInstanceWithPosition(assetDatum:SLTChunkAssetDatum, col:uint, row:uint):void {
+        addAssetInstanceWithCellIndex(assetDatum, getCellIndexWithPosition(col, row));
+    }
+
+    saltr_internal function addAssetInstanceWithCellIndex(assetDatum:SLTChunkAssetDatum, cellIndex:uint):void {
+        var asset:SLTAsset = _assetMap[assetDatum.assetId] as SLTAsset;
+        var cell:SLTCell = _chunkCells[cellIndex];
+        var stateIds:Array = assetDatum.stateIds;
+        cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+    }
+
     saltr_internal function generateAssetData():void {
         //resetting chunk cells, as when chunk can contain empty cells, previous generation can leave assigned values to cells
         resetChunkCells();
@@ -137,7 +135,7 @@ internal class SLTChunk {
     }
 
     private function addToAvailableAssetData(assetData:Vector.<SLTChunkAssetDatum>):void {
-        for(var i:int=0; i<assetData.length; ++i) {
+        for (var i:int = 0; i < assetData.length; ++i) {
             _availableAssetData.push(assetData[i]);
         }
     }
@@ -221,7 +219,7 @@ internal class SLTChunk {
     private function getCellWithPosition(col:uint, row:uint):SLTCell {
         var cellToReturn:SLTCell = null;
         for each(var cell:SLTCell in _chunkCells) {
-            if(col == cell.col && row == cell.row) {
+            if (col == cell.col && row == cell.row) {
                 cellToReturn = cell;
                 break;
             }
@@ -231,9 +229,9 @@ internal class SLTChunk {
 
     private function getCellIndexWithPosition(col:uint, row:uint):int {
         var indexToReturn:int = -1;
-        for(var i:int=0; i<_chunkCells.length; ++i) {
+        for (var i:int = 0; i < _chunkCells.length; ++i) {
             var cell:SLTCell = _chunkCells[i];
-            if(col == cell.col && row == cell.row) {
+            if (col == cell.col && row == cell.row) {
                 indexToReturn = i;
                 break;
             }

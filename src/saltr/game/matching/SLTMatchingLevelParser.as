@@ -4,8 +4,6 @@
 package saltr.game.matching {
 import flash.utils.Dictionary;
 
-import saltr.game.SLTAsset;
-import saltr.game.SLTAssetInstance;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 import saltr.saltr_internal;
@@ -105,7 +103,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             layers.push(layer);
         }
 
-        var config : SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap);
+        var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap);
         var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardProperties);
 
         return board;
@@ -142,7 +140,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
         if (layerNode.hasOwnProperty("matchSize")) {
             matchSize = layerNode.matchSize;
         }
-        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(matchingRulesEnabled, matchSize, layerNode.fixedAssets, token, index);
+        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(matchingRulesEnabled, matchSize, layerNode.fixedAssets as Array, token, index);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;
     }

@@ -1,12 +1,10 @@
 /**
- * Created by Tigran Hakobyan on 3/25/2015.
+ * Created by TIGR on 3/25/2015.
  */
 package saltr.game.matching {
-import flash.utils.Dictionary;
-
-import saltr.game.SLTAsset;
 import saltr.game.SLTAssetInstance;
 import saltr.saltr_internal;
+import saltr.utils.Utils;
 
 use namespace saltr_internal;
 
@@ -30,7 +28,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         }
     }
 
-    override public function generate(boardConfig : SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
+    override saltr_internal function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
         _boardConfig = boardConfig;
         _layer = layer;
         if (null == _matchedAssetPositions) {
@@ -38,7 +36,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         }
         _matchedAssetPositions.length = 0;
 
-        parseFixedAssets(layer, [], _boardConfig.cells, _boardConfig.assetMap);
+        parseFixedAssets(layer, _boardConfig.cells, _boardConfig.assetMap);
         generateAssetData(layer);
         fillLayerChunkAssetsWithMatchingRules();
         correctChunksMatchesWithChunkAssets();
@@ -71,6 +69,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     private function correctChunksMatchesWithAltAssets():void {
         var correctionAssets:Vector.<SLTMatchingRuleAsset> = _boardConfig.alternativeMatchAssets;
+        Utils.shuffleVector(correctionAssets);
         var appendingResult:Boolean = false;
         if (correctionAssets.length > 0) {
             for (var i:uint = 0; i < _matchedAssetPositions.length; ++i) {

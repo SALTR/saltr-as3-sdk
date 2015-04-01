@@ -9,9 +9,9 @@ use namespace saltr_internal;
 
 /**
  * The SLT2DBoardLayer class represents the game 2D board's layer.
+ * @private
  */
-public class SLT2DBoardLayer extends SLTBoardLayer {
-
+internal class SLT2DBoardLayer extends SLTBoardLayer {
     private var _assets:Array;
 
     /**
@@ -19,12 +19,12 @@ public class SLT2DBoardLayer extends SLTBoardLayer {
      * @param layerId The layer's identifier.
      * @param layerIndex The layer's ordering index.
      */
-    public function SLT2DBoardLayer(layerId:String, layerIndex:int, assets : Array) {
+    public function SLT2DBoardLayer(layerId:String, layerIndex:int, assets:Array) {
         super(layerId, layerIndex);
         _assets = assets;
     }
 
-    public function get assets():Array {
+    saltr_internal function get assets():Array {
         return _assets;
     }
 }

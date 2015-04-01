@@ -10,53 +10,55 @@ use namespace saltr_internal;
 
 /**
  * The SLTMatchingBoardLayer class represents the matching board.
+ * @private
  */
-public class SLTMatchingBoardLayer extends SLTBoardLayer {
-
+internal class SLTMatchingBoardLayer extends SLTBoardLayer {
     private var _chunks:Vector.<SLTChunk>;
-
     private var _matchingRulesEnabled:Boolean;
     private var _matchSize:int;
     private var _fixedAssets:Array;
 
     /**
      * Class constructor.
+     * @param matchingRulesEnabled The matching rules enabled state.
+     * @param matchSize The match size.
+     * @param fixedAssets The fixed assets.
      * @param layerId The layer's identifier.
      * @param layerIndex The layer's index.
      */
-    public function SLTMatchingBoardLayer(matchingRulesEnabled : Boolean, matchSize : int, fixedAssets:Array, layerId:String, layerIndex:int) {
+    public function SLTMatchingBoardLayer(matchingRulesEnabled:Boolean, matchSize:int, fixedAssets:Array, layerId:String, layerIndex:int) {
         super(layerId, layerIndex);
-        _chunks = new Vector.<SLTChunk>()
+        _chunks = new Vector.<SLTChunk>();
         _matchingRulesEnabled = matchingRulesEnabled;
         _matchSize = matchSize;
         _fixedAssets = fixedAssets;
     }
 
-    saltr_internal function getChunkWithCellPosition(col:uint, row:uint):SLTChunk {
-        var chunkFound:SLTChunk = null;
-        for each(var chunk:SLTChunk in _chunks) {
-            if(chunk.hasCellWithPosition(col, row)) {
-                chunkFound = chunk;
-                break;
-            }
-        }
-        return chunkFound;
-    }
-
-    public function get matchingRulesEnabled():Boolean {
+    saltr_internal function get matchingRulesEnabled():Boolean {
         return _matchingRulesEnabled;
     }
 
-    public function get matchSize():int {
+    saltr_internal function get matchSize():int {
         return _matchSize;
     }
 
-    public function get fixedAssets():Array {
+    saltr_internal function get fixedAssets():Array {
         return _fixedAssets;
     }
 
     saltr_internal function get chunks():Vector.<SLTChunk> {
         return _chunks;
+    }
+
+    saltr_internal function getChunkWithCellPosition(col:uint, row:uint):SLTChunk {
+        var chunkFound:SLTChunk = null;
+        for each(var chunk:SLTChunk in _chunks) {
+            if (chunk.hasCellWithPosition(col, row)) {
+                chunkFound = chunk;
+                break;
+            }
+        }
+        return chunkFound;
     }
 
     /**

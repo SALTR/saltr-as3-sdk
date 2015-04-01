@@ -1,5 +1,5 @@
 /**
- * Created by Tigran Hakobyan on 3/25/2015.
+ * Created by TIGR on 3/25/2015.
  */
 package saltr.game.matching {
 
@@ -15,7 +15,7 @@ use namespace saltr_internal;
 internal class SLTMatchingBoardGeneratorBase {
 
 
-    public static function getGenerator(layer:SLTMatchingBoardLayer):SLTMatchingBoardGeneratorBase {
+    saltr_internal static function getGenerator(layer:SLTMatchingBoardLayer):SLTMatchingBoardGeneratorBase {
         if (layer.matchingRulesEnabled) {
             return SLTMatchingBoardRulesEnabledGenerator.getInstance();
         } else {
@@ -23,7 +23,7 @@ internal class SLTMatchingBoardGeneratorBase {
         }
     }
 
-    public function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
+    saltr_internal function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
         throw new Error("Abstract method error");
     }
 
@@ -33,7 +33,8 @@ internal class SLTMatchingBoardGeneratorBase {
         }
     }
 
-    protected function parseFixedAssets(layer:SLTMatchingBoardLayer, assetNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
+    protected function parseFixedAssets(layer:SLTMatchingBoardLayer, cells:SLTCells, assetMap:Dictionary):void {
+        var assetNodes:Array = layer.fixedAssets;
         //creating fixed asset instances and assigning them to cells where they belong
         for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
             var assetInstanceNode:Object = assetNodes[i];
@@ -44,10 +45,10 @@ internal class SLTMatchingBoardGeneratorBase {
             for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
                 var position:Array = cellPositions[j];
                 var cell:SLTCell = cells.retrieve(position[0], position[1]);
+                cell.removeAssetInstance(layer.token, layer.index);
                 cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
             }
         }
     }
-
 }
 }

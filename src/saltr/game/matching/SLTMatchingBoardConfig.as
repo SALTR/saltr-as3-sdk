@@ -1,17 +1,13 @@
 package saltr.game.matching {
 import flash.utils.Dictionary;
 
-import saltr.game.SLTAsset;
-import saltr.game.SLTAssetInstance;
-
 import saltr.game.SLTBoardLayer;
-
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
 
-public class SLTMatchingBoardConfig {
+internal class SLTMatchingBoardConfig {
     private var _matchingRulesEnabled:Boolean;
     private var _squareMatchingRuleEnabled:Boolean;
     private var _alternativeMatchAssets:Vector.<SLTMatchingRuleAsset>;
@@ -24,15 +20,13 @@ public class SLTMatchingBoardConfig {
     private var _assetMap:Dictionary;
     private var _layers:Vector.<SLTBoardLayer>;
 
-    public function SLTMatchingBoardConfig(cells:SLTCells, layers : Vector.<SLTBoardLayer>, boardNode:Object, assetMap : Dictionary) {
+    public function SLTMatchingBoardConfig(cells:SLTCells, layers:Vector.<SLTBoardLayer>, boardNode:Object, assetMap:Dictionary) {
         _assetMap = assetMap;
-
 
         _matchingRulesEnabled = boardNode.hasOwnProperty("matchingRulesEnabled") ? boardNode.matchingRulesEnabled : false;
         _squareMatchingRuleEnabled = boardNode.hasOwnProperty("squareMatchingRuleEnabled") ? boardNode.squareMatchingRuleEnabled : false;
 
-
-        var _alternativeMatchAssets:Vector.<SLTMatchingRuleAsset> = new <SLTMatchingRuleAsset>[];
+        _alternativeMatchAssets = new <SLTMatchingRuleAsset>[];
         if (boardNode.hasOwnProperty("alternativeMatchAssets")) {
             var alternativeAssetNodes:Array = boardNode.alternativeMatchAssets as Array;
             for each (var alternativeAssetNode:Object in alternativeAssetNodes) {
@@ -40,7 +34,7 @@ public class SLTMatchingBoardConfig {
             }
         }
 
-        var _excludedMatchAssets:Vector.<SLTMatchingRuleAsset> = new <SLTMatchingRuleAsset>[];
+        _excludedMatchAssets = new <SLTMatchingRuleAsset>[];
         if (boardNode.hasOwnProperty("excludedMatchAssets")) {
             var excludedAssetNodes:Array = boardNode.excludedMatchAssets as Array;
             for each (var excludedAssetNode:Object in excludedAssetNodes) {
@@ -52,41 +46,25 @@ public class SLTMatchingBoardConfig {
         _cellProperties = boardNode.hasOwnProperty("cellProperties") ? boardNode.cellProperties : [];
 
         _cols = boardNode.cols;
-        _rows = boardNode.row;
+        _rows = boardNode.rows;
 
         _cells = cells;
         _layers = layers;
     }
 
-    private function parseFixedAssets(layer:SLTMatchingBoardLayer, assetNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
-        //creating fixed asset instances and assigning them to cells where they belong
-        for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
-            var assetInstanceNode:Object = assetNodes[i];
-            var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
-            var stateIds:Array = assetInstanceNode.states as Array;
-            var cellPositions:Array = assetInstanceNode.cells;
-
-            for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
-                var position:Array = cellPositions[j];
-                var cell:SLTCell = cells.retrieve(position[0], position[1]);
-                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
-            }
-        }
-    }
-
-    public function get blockedCells():Array {
+    saltr_internal function get blockedCells():Array {
         return _blockedCells;
     }
 
-    public function get cellProperties():Array {
+    saltr_internal function get cellProperties():Array {
         return _cellProperties;
     }
 
-    public function get cols():int {
+    saltr_internal function get cols():int {
         return _cols;
     }
 
-    public function get rows():int {
+    saltr_internal function get rows():int {
         return _rows;
     }
 
@@ -112,18 +90,16 @@ public class SLTMatchingBoardConfig {
         return _excludedMatchAssets;
     }
 
-    public function get layers():Vector.<SLTBoardLayer> {
+    saltr_internal function get layers():Vector.<SLTBoardLayer> {
         return _layers;
     }
 
-    public function get cells():SLTCells {
+    saltr_internal function get cells():SLTCells {
         return _cells;
     }
 
-    public function get assetMap():Dictionary {
+    saltr_internal function get assetMap():Dictionary {
         return _assetMap;
     }
 }
-
-
 }

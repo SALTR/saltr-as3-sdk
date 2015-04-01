@@ -1,5 +1,5 @@
 /**
- * Created by Tigran Hakobyan on 3/25/2015.
+ * Created by TIGR on 3/25/2015.
  */
 package saltr.game.matching {
 import saltr.saltr_internal;
@@ -25,10 +25,10 @@ internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
         }
     }
 
-    override public function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
+    override saltr_internal function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {
         _boardConfig = boardConfig;
         _layer = layer;
-        parseFixedAssets(layer, [], _boardConfig.cells, _boardConfig.assetMap);
+        parseFixedAssets(layer, _boardConfig.cells, _boardConfig.assetMap);
         generateAssetData(layer);
         fillLayerChunkAssets();
     }

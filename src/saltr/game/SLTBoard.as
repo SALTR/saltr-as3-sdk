@@ -39,7 +39,7 @@ public class SLTBoard {
     }
 
     /**
-     * Regenerates the content of all layers.
+     * Regenerates the content of the board.
      */
     public function regenerate():void {
         throw new Error("Virtual function call: regenerate");
