@@ -45,7 +45,11 @@ public class SLTCells {
      * @return The cell at given col and row.
      */
     public function retrieve(col:int, row:int):SLTCell {
-        return _rawData[(row * _width) + col];
+        var retVal:SLTCell = null;
+        if(col < _width && row < _height) {
+            retVal = _rawData[(row * _width) + col];
+        }
+        return retVal;
     }
 
     /**

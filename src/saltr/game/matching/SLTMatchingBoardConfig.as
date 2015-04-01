@@ -10,8 +10,8 @@ use namespace saltr_internal;
 internal class SLTMatchingBoardConfig {
     private var _matchingRulesEnabled:Boolean;
     private var _squareMatchingRuleEnabled:Boolean;
-    private var _alternativeMatchAssets:Vector.<SLTMatchingRuleAsset>;
-    private var _excludedMatchAssets:Vector.<SLTMatchingRuleAsset>;
+    private var _alternativeMatchAssets:Vector.<SLTChunkAssetDatum>;
+    private var _excludedMatchAssets:Vector.<SLTChunkAssetDatum>;
     private var _blockedCells:Array;
     private var _cellProperties:Array;
     private var _cols:int;
@@ -26,19 +26,19 @@ internal class SLTMatchingBoardConfig {
         _matchingRulesEnabled = boardNode.hasOwnProperty("matchingRulesEnabled") ? boardNode.matchingRulesEnabled : false;
         _squareMatchingRuleEnabled = boardNode.hasOwnProperty("squareMatchingRuleEnabled") ? boardNode.squareMatchingRuleEnabled : false;
 
-        _alternativeMatchAssets = new <SLTMatchingRuleAsset>[];
+        _alternativeMatchAssets = new <SLTChunkAssetDatum>[];
         if (boardNode.hasOwnProperty("alternativeMatchAssets")) {
             var alternativeAssetNodes:Array = boardNode.alternativeMatchAssets as Array;
             for each (var alternativeAssetNode:Object in alternativeAssetNodes) {
-                _alternativeMatchAssets.push(new SLTMatchingRuleAsset(alternativeAssetNode.assetId, alternativeAssetNode.stateId));
+                _alternativeMatchAssets.push(new SLTChunkAssetDatum(alternativeAssetNode.assetId, alternativeAssetNode.states, _assetMap));
             }
         }
 
-        _excludedMatchAssets = new <SLTMatchingRuleAsset>[];
+        _excludedMatchAssets = new <SLTChunkAssetDatum>[];
         if (boardNode.hasOwnProperty("excludedMatchAssets")) {
             var excludedAssetNodes:Array = boardNode.excludedMatchAssets as Array;
             for each (var excludedAssetNode:Object in excludedAssetNodes) {
-                _excludedMatchAssets.push(new SLTMatchingRuleAsset(excludedAssetNode.assetId, excludedAssetNode.stateId));
+                _excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetNode.assetId, [excludedAssetNode.stateId], _assetMap));
             }
         }
 
@@ -82,11 +82,11 @@ internal class SLTMatchingBoardConfig {
         return _squareMatchingRuleEnabled;
     }
 
-    saltr_internal function get alternativeMatchAssets():Vector.<SLTMatchingRuleAsset> {
+    saltr_internal function get alternativeMatchAssets():Vector.<SLTChunkAssetDatum> {
         return _alternativeMatchAssets;
     }
 
-    saltr_internal function get excludedMatchAssets():Vector.<SLTMatchingRuleAsset> {
+    saltr_internal function get excludedMatchAssets():Vector.<SLTChunkAssetDatum> {
         return _excludedMatchAssets;
     }
 

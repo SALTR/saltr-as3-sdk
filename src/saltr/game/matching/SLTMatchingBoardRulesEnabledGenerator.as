@@ -68,7 +68,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function correctChunksMatchesWithAltAssets():void {
-        var correctionAssets:Vector.<SLTMatchingRuleAsset> = _boardConfig.alternativeMatchAssets;
+        var correctionAssets:Vector.<SLTChunkAssetDatum> = _boardConfig.alternativeMatchAssets;
         Utils.shuffleVector(correctionAssets);
         var appendingResult:Boolean = false;
         if (correctionAssets.length > 0) {
@@ -76,8 +76,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
                 for (var j:uint = 0; j < correctionAssets.length; ++j) {
                     var matchedCellPosition:MatchedAssetPosition = _matchedAssetPositions[i];
                     var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
-                    var matchingRuleAsset:SLTMatchingRuleAsset = correctionAssets[j];
-                    var chunkAssetDatum:SLTChunkAssetDatum = new SLTChunkAssetDatum(matchingRuleAsset.assetId, [matchingRuleAsset.stateId], _boardConfig.assetMap);
+                    var chunkAssetDatum:SLTChunkAssetDatum = correctionAssets[j];
                     appendingResult = appendChunkAsset(chunkAssetDatum, chunk, matchedCellPosition.col, matchedCellPosition.row);
                     if (appendingResult) {
                         break;
@@ -174,7 +173,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var verticalMatches:int = calculateVerticalMatches(assetDatum.assetToken, col, row);
         var squareMatch:Boolean = false;
         var excludedAsset:Boolean = false;
-        var excludedMathAssets:Vector.<SLTMatchingRuleAsset> = _boardConfig.excludedMatchAssets;
+        var excludedMathAssets:Vector.<SLTChunkAssetDatum> = _boardConfig.excludedMatchAssets;
 
         if (_boardConfig.squareMatchingRuleEnabled) {
             squareMatch = checkSquareMatch(assetDatum.assetToken, col, row);
