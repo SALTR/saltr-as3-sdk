@@ -580,13 +580,13 @@ public class SLTSaltrMobile {
     private function stopHeartbeat():void {
         if(null != _heartbeatTimer) {
             _heartbeatTimer.stop();
-            _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeat);
+            _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeatTimerHandler);
             _heartbeatTimer = null;
         }
         _heartBeatTimerStarted = false;
     }
 
-    private function heartbeat():void {
+    private function heartbeatTimerHandler():void {
         var params:Object = {
             clientKey: _clientKey,
             devMode: _devMode,
