@@ -4,9 +4,7 @@
 package saltr.game.canvas2d {
 import flash.utils.Dictionary;
 
-import saltr.game.SLTAsset;
 import saltr.game.SLTAssetState;
-import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 import saltr.saltr_internal;
 
@@ -17,7 +15,6 @@ use namespace saltr_internal;
  * @private
  */
 public class SLT2DLevelParser extends SLTLevelParser {
-
     private static var INSTANCE:SLT2DLevelParser;
 
     /**
@@ -60,7 +57,7 @@ public class SLT2DLevelParser extends SLTLevelParser {
             boardProperties = boardNode.properties;
         }
 
-        var layers:Vector.<SLTBoardLayer> = new Vector.<SLTBoardLayer>();
+        var layers:Vector.<SLT2DBoardLayer> = new Vector.<SLT2DBoardLayer>();
         var layerNodes:Array = boardNode.layers;
         for (var i:int = 0, len:int = layerNodes.length; i < len; ++i) {
             var layerNode:Object = layerNodes[i];
@@ -71,27 +68,15 @@ public class SLT2DLevelParser extends SLTLevelParser {
         var width:Number = boardNode.hasOwnProperty("width") ? boardNode.width : 0;
         var height:Number = boardNode.hasOwnProperty("height") ? boardNode.height : 0;
 
-        return new SLT2DBoard(width, height, layers, boardProperties);
+        var config:SLT2DBoardConfig = new SLT2DBoardConfig(layers, boardNode, assetMap);
+        return new SLT2DBoard(config, boardProperties);
     }
 
     private function parseLayer(layerNode:Object, index:int, assetMap:Dictionary):SLT2DBoardLayer {
         //temporarily checking for 2 names until "layerId" is removed!
         var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
-        var layer:SLT2DBoardLayer = new SLT2DBoardLayer(token, index);
-        parseAssetInstances(layer, layerNode.assets as Array, assetMap);
+        var layer:SLT2DBoardLayer = new SLT2DBoardLayer(token, index, layerNode.assets);
         return layer;
-    }
-
-    private function parseAssetInstances(layer:SLT2DBoardLayer, assetNodes:Array, assetMap:Dictionary):void {
-        for (var i:int = 0, len:int = assetNodes.length; i < len; ++i) {
-            var assetInstanceNode:Object = assetNodes[i];
-            var x:Number = assetInstanceNode.x;
-            var y:Number = assetInstanceNode.y;
-            var rotation:Number = assetInstanceNode.rotation;
-            var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
-            var stateIds:Array = assetInstanceNode.states as Array;
-            layer.addAssetInstance(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, rotation));
-        }
     }
 
     override protected function parseAssetState(stateNode:Object):SLTAssetState {

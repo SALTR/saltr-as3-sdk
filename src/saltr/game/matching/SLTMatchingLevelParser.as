@@ -4,8 +4,6 @@
 package saltr.game.matching {
 import flash.utils.Dictionary;
 
-import saltr.game.SLTAsset;
-import saltr.game.SLTAssetInstance;
 import saltr.game.SLTBoardLayer;
 import saltr.game.SLTLevelParser;
 import saltr.saltr_internal;
@@ -33,7 +31,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private static function initializeCells(cells:SLTCells, boardNode:Object):void {
         var blockedCells:Array = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
-        var cellProperties:Array = boardNode.hasOwnProperty("cellProperties")  ? boardNode.cellProperties : [];
+        var cellProperties:Array = boardNode.hasOwnProperty("cellProperties") ? boardNode.cellProperties : [];
         var cols:int = cells.width;
         var rows:int = cells.height;
 
@@ -105,7 +103,10 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             layers.push(layer);
         }
 
-        return new SLTMatchingBoard(cells, layers, boardProperties);
+        var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap);
+        var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardProperties);
+
+        return board;
     }
 
     private function parseLayerChunks(layer:SLTMatchingBoardLayer, chunkNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
@@ -127,32 +128,22 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
         }
     }
 
-    private function parseFixedAssets(layer:SLTMatchingBoardLayer, assetNodes:Array, cells:SLTCells, assetMap:Dictionary):void {
-        //creating fixed asset instances and assigning them to cells where they belong
-        for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
-            var assetInstanceNode:Object = assetNodes[i];
-            var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
-            var stateIds:Array = assetInstanceNode.states as Array;
-            var cellPositions:Array = assetInstanceNode.cells;
-
-            for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
-                var position:Array = cellPositions[j];
-                var cell:SLTCell = cells.retrieve(position[0], position[1]);
-                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
-            }
-        }
-    }
-
 
     private function parseLayer(layerNode:Object, index:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
         //temporarily checking for 2 names until "layerId" is removed!
         var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
-        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(token, index);
-        parseFixedAssets(layer, layerNode.fixedAssets as Array, cells, assetMap);
+        var matchingRulesEnabled:Boolean = false;
+        if (layerNode.hasOwnProperty("matchingRulesEnabled")) {
+            matchingRulesEnabled = layerNode.matchingRulesEnabled;
+        }
+        var matchSize:int = -1;
+        if (layerNode.hasOwnProperty("matchSize")) {
+            matchSize = layerNode.matchSize;
+        }
+        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(matchingRulesEnabled, matchSize, layerNode.fixedAssets as Array, token, index);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;
     }
-
 }
 }
 

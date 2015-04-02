@@ -13,6 +13,7 @@ use namespace saltr_internal;
 
 /**
  * The SLTChunk class represents a collection of cells on matching board that is populated with assets according to certain rules.
+ * @private
  */
 internal class SLTChunk {
     private var _layerToken:String;
@@ -21,6 +22,8 @@ internal class SLTChunk {
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
+    private var _availableAssetData:Vector.<SLTChunkAssetDatum>;
+    private var _uniqueAssetData:Vector.<SLTChunkAssetDatum>;
 
     private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {
         return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
@@ -40,6 +43,8 @@ internal class SLTChunk {
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
         _assetMap = assetMap;
+        _availableAssetData = new Vector.<SLTChunkAssetDatum>();
+        _uniqueAssetData = new Vector.<SLTChunkAssetDatum>();
     }
 
     /**
@@ -49,12 +54,45 @@ internal class SLTChunk {
         return "[Chunk] cells:" + _availableCells.length + ", " + " chunkAssets: " + _chunkAssetRules.length;
     }
 
-    /**
-     * Generates the content.
-     */
-    public function generateContent():void {
+    saltr_internal function get availableAssetData():Vector.<SLTChunkAssetDatum> {
+        return _availableAssetData;
+    }
+
+    saltr_internal function get uniqueAssetData():Vector.<SLTChunkAssetDatum> {
+        return _uniqueAssetData;
+    }
+
+    saltr_internal function get cells():Vector.<SLTCell> {
+        return _chunkCells;
+    }
+
+    saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {
+        var cellFound:Boolean = false;
+        for each(var cell:SLTCell in _chunkCells) {
+            if (col == cell.col && row == cell.row) {
+                cellFound = true;
+                break;
+            }
+        }
+        return cellFound;
+    }
+
+    saltr_internal function addAssetInstanceWithPosition(assetDatum:SLTChunkAssetDatum, col:uint, row:uint):void {
+        addAssetInstanceWithCellIndex(assetDatum, getCellIndexWithPosition(col, row));
+    }
+
+    saltr_internal function addAssetInstanceWithCellIndex(assetDatum:SLTChunkAssetDatum, cellIndex:uint):void {
+        var asset:SLTAsset = _assetMap[assetDatum.assetId] as SLTAsset;
+        var cell:SLTCell = _chunkCells[cellIndex];
+        var stateIds:Array = assetDatum.stateIds;
+        cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+    }
+
+    saltr_internal function generateAssetData():void {
         //resetting chunk cells, as when chunk can contain empty cells, previous generation can leave assigned values to cells
         resetChunkCells();
+        _availableAssetData.length = 0;
+        _uniqueAssetData.length = 0;
 
         //availableCells are being always overwritten here, so no need to initialize
         _availableCells = _chunkCells.concat();
@@ -66,23 +104,23 @@ internal class SLTChunk {
         for (var i:int = 0, len:int = _chunkAssetRules.length; i < len; ++i) {
             var assetRule:SLTChunkAssetRule = _chunkAssetRules[i];
             switch (assetRule.distributionType) {
-                case "count":
+                case SLTChunkAssetRule.ASSET_DISTRIBUTION_TYPE_COUNT:
                     countChunkAssetRules.push(assetRule);
                     break;
-                case "ratio":
+                case SLTChunkAssetRule.ASSET_DISTRIBUTION_TYPE_RATIO:
                     ratioChunkAssetRules.push(assetRule);
                     break;
-                case "random":
+                case SLTChunkAssetRule.ASSET_DISTRIBUTION_TYPE_RANDOM:
                     randomChunkAssetRules.push(assetRule);
                     break;
             }
         }
 
         if (countChunkAssetRules.length > 0) {
-            generateAssetInstancesByCount(countChunkAssetRules);
+            generateAssetDataByCount(countChunkAssetRules);
         }
         if (ratioChunkAssetRules.length > 0) {
-            generateAssetInstancesByRatio(ratioChunkAssetRules);
+            generateAssetDataByRatio(ratioChunkAssetRules);
         }
         else if (randomChunkAssetRules.length > 0) {
             generateAssetInstancesRandomly(randomChunkAssetRules);
@@ -96,14 +134,24 @@ internal class SLTChunk {
         }
     }
 
-    private function generateAssetInstancesByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
-        for (var i:int = 0, len:int = countChunkAssetRules.length; i < len; ++i) {
-            var assetRule:SLTChunkAssetRule = countChunkAssetRules[i];
-            generateAssetInstances(assetRule.distributionValue, assetRule.assetId, assetRule.stateIds);
+    private function addToAvailableAssetData(assetData:Vector.<SLTChunkAssetDatum>):void {
+        for (var i:int = 0; i < assetData.length; ++i) {
+            _availableAssetData.push(assetData[i]);
         }
     }
 
-    private function generateAssetInstancesByRatio(ratioChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
+    private function addToUniqueAssetData(assetDatum:SLTChunkAssetDatum):void {
+        _uniqueAssetData.push(assetDatum);
+    }
+
+    private function generateAssetDataByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
+        for (var i:int = 0, len:int = countChunkAssetRules.length; i < len; ++i) {
+            var assetRule:SLTChunkAssetRule = countChunkAssetRules[i];
+            addToAvailableAssetData(getAssetData(assetRule.distributionValue, assetRule.assetId, assetRule.stateIds));
+        }
+    }
+
+    private function generateAssetDataByRatio(ratioChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
         var ratioSum:Number = 0;
         var len:int = ratioChunkAssetRules.length;
         var assetRule:SLTChunkAssetRule;
@@ -122,14 +170,16 @@ internal class SLTChunk {
                 proportion = assetRule.distributionValue / ratioSum * availableCellsNum;
                 count = proportion; //assigning number to int to floor the value;
                 fractionAssets.push({fraction: proportion - count, assetRule: assetRule});
-                generateAssetInstances(count, assetRule.assetId, assetRule.stateIds);
+                addToAvailableAssetData(getAssetData(count, assetRule.assetId, assetRule.stateIds));
+                addToUniqueAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateIds, _assetMap));
             }
 
             fractionAssets.sortOn("fraction", Array.DESCENDING);
             availableCellsNum = _availableCells.length;
 
             for (var k:int = 0; k < availableCellsNum; ++k) {
-                generateAssetInstances(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds);
+                addToAvailableAssetData(getAssetData(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds));
+                addToUniqueAssetData(new SLTChunkAssetDatum(fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds, _assetMap));
             }
         }
     }
@@ -148,23 +198,45 @@ internal class SLTChunk {
             for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
                 chunkAssetRule = randomChunkAssetRules[i];
                 count = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
-                generateAssetInstances(count, chunkAssetRule.assetId, chunkAssetRule.stateIds);
+                addToAvailableAssetData(getAssetData(count, chunkAssetRule.assetId, chunkAssetRule.stateIds));
+                addToUniqueAssetData(new SLTChunkAssetDatum(chunkAssetRule.assetId, chunkAssetRule.stateIds, _assetMap));
             }
         }
     }
 
-    private function generateAssetInstances(count:uint, assetId:String, stateIds:Array):void {
-        var asset:SLTAsset = _assetMap[assetId] as SLTAsset;
-
+    private function getAssetData(count:uint, assetId:String, stateIds:Array):Vector.<SLTChunkAssetDatum> {
+        var assetData:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
         for (var i:int = 0; i < count; ++i) {
-            var randCellIndex:int = Math.random() * _availableCells.length;
-            var randCell:SLTCell = _availableCells[randCellIndex];
-            randCell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
-            _availableCells.splice(randCellIndex, 1);
-            if (_availableCells.length == 0) {
-                return;
+            assetData.push(new SLTChunkAssetDatum(assetId, stateIds, _assetMap));
+            _availableCells.splice(0, 1);
+            if (0 == _availableCells.length) {
+                break;
             }
         }
+        return assetData;
+    }
+
+    private function getCellWithPosition(col:uint, row:uint):SLTCell {
+        var cellToReturn:SLTCell = null;
+        for each(var cell:SLTCell in _chunkCells) {
+            if (col == cell.col && row == cell.row) {
+                cellToReturn = cell;
+                break;
+            }
+        }
+        return cellToReturn;
+    }
+
+    private function getCellIndexWithPosition(col:uint, row:uint):int {
+        var indexToReturn:int = -1;
+        for (var i:int = 0; i < _chunkCells.length; ++i) {
+            var cell:SLTCell = _chunkCells[i];
+            if (col == cell.col && row == cell.row) {
+                indexToReturn = i;
+                break;
+            }
+        }
+        return indexToReturn;
     }
 }
 }

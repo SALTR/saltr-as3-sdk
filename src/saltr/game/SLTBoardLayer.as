@@ -37,13 +37,5 @@ public class SLTBoardLayer {
     public function get index():int {
         return _index;
     }
-
-    /**
-     * Regenerates the content of the layer.
-     * @private
-     */
-    saltr_internal function regenerate():void {
-        //override
-    }
 }
 }
