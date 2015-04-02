@@ -1,5 +1,5 @@
 /**
- * Created by Tigran Hakobyan on 3/30/2015.
+ * Created by TIGR on 3/30/2015.
  */
 package saltr.api {
 import flash.net.URLVariables;
@@ -9,7 +9,7 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-public class HeartbeatApiCall extends ApiCall{
+public class HeartbeatApiCall extends ApiCall {
     public function HeartbeatApiCall(params:Object, isMobile:Boolean = true) {
         super(params, isMobile);
         _url = SLTConfig.SALTR_API_URL;

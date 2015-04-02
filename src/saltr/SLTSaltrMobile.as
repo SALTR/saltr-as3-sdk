@@ -68,6 +68,7 @@ public class SLTSaltrMobile {
     private var _levelData:LevelData;
 
     private var _heartbeatTimer:Timer;
+    private var _heartBeatTimerStarted:Boolean;
 
     /**
      * Class constructor.
@@ -84,6 +85,7 @@ public class SLTSaltrMobile {
         _connected = false;
         _useNoLevels = false;
         _useNoFeatures = false;
+        _heartBeatTimerStarted = false;
 
         _devMode = false;
         _autoRegisterDevice = true;
@@ -481,6 +483,10 @@ public class SLTSaltrMobile {
 
         _connectSuccessCallback();
 
+        if(!_heartBeatTimerStarted) {
+            startHeartbeat();
+        }
+
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
     }
 
@@ -568,6 +574,7 @@ public class SLTSaltrMobile {
         stopHeartbeat();
         _heartbeatTimer = new Timer(SLTConfig.HEARTBEAT_TIMER_DELAY);
         _heartbeatTimer.start();
+        _heartBeatTimerStarted = true;
     }
 
     private function stopHeartbeat():void {
@@ -576,6 +583,7 @@ public class SLTSaltrMobile {
             _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeat);
             _heartbeatTimer = null;
         }
+        _heartBeatTimerStarted = false;
     }
 
     private function heartbeat():void {
