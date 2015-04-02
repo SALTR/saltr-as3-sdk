@@ -23,6 +23,9 @@ import saltr.saltr_internal;
 use namespace saltr_internal;
 
 //TODO:: @daal add some flushCache method.
+/**
+ * @private
+ */
 public class SLTSaltrWeb_Old {
 
     public static const CLIENT:String = "AS3-Web";

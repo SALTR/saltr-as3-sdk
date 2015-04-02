@@ -10,6 +10,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTChunkAssetDatum {
     private var _assetId:String;
     private var _assetToken:String;

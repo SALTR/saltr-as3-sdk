@@ -8,6 +8,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class MobileDialogController extends DialogController {
     public function MobileDialogController(flashStage:Stage, registrationCallback:Function) {
         super(flashStage, registrationCallback);
