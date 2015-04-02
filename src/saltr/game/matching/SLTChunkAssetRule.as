@@ -3,11 +3,18 @@
  */
 
 package saltr.game.matching {
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The SLTChunkAssetRule class represents the asset's rule.
  */
 internal class SLTChunkAssetRule {
+
+    saltr_internal static const ASSET_DISTRIBUTION_TYPE_COUNT:String = "count";
+    saltr_internal static const ASSET_DISTRIBUTION_TYPE_RATIO:String = "ratio";
+    saltr_internal static const ASSET_DISTRIBUTION_TYPE_RANDOM:String = "random";
 
     private var _assetId:String;
     private var _stateIds:Array;
