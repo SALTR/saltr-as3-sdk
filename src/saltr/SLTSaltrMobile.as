@@ -573,6 +573,7 @@ public class SLTSaltrMobile {
     private function startHeartbeat():void {
         stopHeartbeat();
         _heartbeatTimer = new Timer(SLTConfig.HEARTBEAT_TIMER_DELAY);
+        _heartbeatTimer.addEventListener(TimerEvent.TIMER, heartbeatTimerHandler);
         _heartbeatTimer.start();
         _heartBeatTimerStarted = true;
     }
@@ -586,7 +587,7 @@ public class SLTSaltrMobile {
         _heartBeatTimerStarted = false;
     }
 
-    private function heartbeatTimerHandler():void {
+    private function heartbeatTimerHandler(event:TimerEvent):void {
         var params:Object = {
             clientKey: _clientKey,
             devMode: _devMode,
