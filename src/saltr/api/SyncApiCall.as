@@ -25,7 +25,7 @@ public class SyncApiCall extends ApiCall {
         var featureList:Array = [];
         for (var i:String in _params.developerFeatures) {
             var feature:SLTFeature = _params.developerFeatures[i];
-            featureList.push({token: feature.token, value: JSON.stringify(feature.properties)});
+            featureList.push({token: feature.token, properties: feature.properties});
         }
         args.developerFeatures = featureList;
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
