@@ -18,6 +18,8 @@ public class SLTConfig {
     saltr_internal static const ACTION_DEV_REGISTER_DEVICE:String = "registerDevice";
     saltr_internal static const ACTION_DEV_REGISTER_USER:String = "registerUser";
     saltr_internal static const ACTION_DEV_ADD_LEVELEND_EVENT:String = "addLevelEndEvent";
+    saltr_internal static const ACTION_HEARTBEAT:String = "heartbeat";
+
     saltr_internal static const SALTR_API_URL:String = "https://api.saltr.com/call";
     saltr_internal static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";
 
@@ -36,5 +38,7 @@ public class SLTConfig {
     saltr_internal static const DEVICE_TYPE_ANDROID:String = "android";
     saltr_internal static const DEVICE_PLATFORM_ANDROID:String = "android";
     saltr_internal static const DEVICE_PLATFORM_IOS:String = "ios";
+
+    saltr_internal static const HEARTBEAT_TIMER_DELAY:Number = 30000;
 }
 }

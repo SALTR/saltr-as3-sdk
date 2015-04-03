@@ -4,11 +4,14 @@
 
 package saltr {
 import flash.display.Stage;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
 
 import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
 import saltr.api.AppDataApiCall;
+import saltr.api.HeartbeatApiCall;
 import saltr.api.LevelContentApiCall;
 import saltr.api.RegisterUserApiCall;
 import saltr.api.SendLevelEndEventApiCall;
@@ -62,6 +65,9 @@ public class SLTSaltrWeb {
     private var _appData:AppData;
     private var _levelData:LevelData;
 
+    private var _heartbeatTimer:Timer;
+    private var _heartBeatTimerStarted:Boolean;
+
     /**
      * Class constructor.
      * @param flashStage The flash stage.
@@ -76,6 +82,7 @@ public class SLTSaltrWeb {
         _connected = false;
         _useNoLevels = false;
         _useNoFeatures = false;
+        _heartBeatTimerStarted = false;
 
         _devMode = false;
         _autoRegisterDevice = true;
@@ -419,6 +426,10 @@ public class SLTSaltrWeb {
 
         _connected = true;
         _connectSuccessCallback();
+
+        if(!_heartBeatTimerStarted) {
+            startHeartbeat();
+        }
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
     }
 
@@ -498,6 +509,39 @@ public class SLTSaltrWeb {
         }
         else {
             trace("[Saltr] Dev feature Sync has failed. " + result.status.statusMessage);
+        }
+    }
+
+    private function startHeartbeat():void {
+        stopHeartbeat();
+        _heartbeatTimer = new Timer(SLTConfig.HEARTBEAT_TIMER_DELAY);
+        _heartbeatTimer.addEventListener(TimerEvent.TIMER, heartbeatTimerHandler);
+        _heartbeatTimer.start();
+        _heartBeatTimerStarted = true;
+    }
+
+    private function stopHeartbeat():void {
+        if(null != _heartbeatTimer) {
+            _heartbeatTimer.stop();
+            _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeatTimerHandler);
+            _heartbeatTimer = null;
+        }
+        _heartBeatTimerStarted = false;
+    }
+
+    private function heartbeatTimerHandler(event:TimerEvent):void {
+        var params:Object = {
+            clientKey: _clientKey,
+            devMode: _devMode,
+            socialId: _socialId
+        };
+        var heartbeatApiCall:HeartbeatApiCall = new HeartbeatApiCall(params);
+        heartbeatApiCall.call(heartbeatApiCallback);
+    }
+
+    private function heartbeatApiCallback(result:ApiCallResult):void {
+        if (!result.success) {
+            stopHeartbeat();
         }
     }
 }
