@@ -31,27 +31,5 @@ public class SyncApiCall extends ApiCall {
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
         return urlVars;
     }
-
-    override saltr_internal function validateMobileParams():Object {
-        return validateDeveloperFeatures(validateDefaultMobileParams());
-    }
-
-    override saltr_internal function validateWebParams():Object {
-        return validateDeveloperFeatures(validateDefaultWebParams());
-    }
-
-    private function validateDeveloperFeatures(defaultParamsValidation:Object):Object {
-        if (false == defaultParamsValidation.isValid) {
-            return defaultParamsValidation;
-        }
-        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
-        for (var i:String in _params.developerFeatures) {
-            var feature:SLTFeature = _params.developerFeatures[i];
-            if (null == feature.token || "" == feature.token || -1 != feature.token.search(pattern)) {
-                return {isValid: false, message: "Developer feature token value is incorrect."};
-            }
-        }
-        return {isValid: true};
-    }
 }
 }
