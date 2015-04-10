@@ -11,6 +11,8 @@ import org.flexunit.listeners.CIListener;
 
 import org.flexunit.runner.FlexUnitCore;
 
+import tests.status.SLTStatusSucessTest;
+
 import tests.status.SLTStatusTest;
 
 public class FlexUnitRunner extends Sprite{
@@ -31,6 +33,7 @@ public class FlexUnitRunner extends Sprite{
     {
         var testsToRun:Array = new Array();
         testsToRun.push(tests.status.SLTStatusTest);
+        testsToRun.push(tests.status.SLTStatusSucessTest);
         return testsToRun;
     }
 }
