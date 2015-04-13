@@ -7,27 +7,19 @@ import flash.display.Stage;
 
 import org.flexunit.internals.TraceListener;
 import org.flexunit.listeners.AirCIListener;
-import org.flexunit.listeners.CIListener;
-
-
 import org.flexunit.runner.FlexUnitCore;
 
-import tests.saltr_mobile.SLTSaltrMobileTest;
+import tests.mobile.SLTSaltrMobileTest;
 
-import tests.status.SLTStatusSucessTest;
+public class FlexUnitRunner extends Sprite {
 
-import tests.status.SLTStatusTest;
-
-public class FlexUnitRunner extends Sprite{
-
-    public static var STAGE : Stage;
+    public static var STAGE:Stage;
 
     public function FlexUnitRunner() {
         onCreationComplete();
     }
 
-    private function onCreationComplete():void
-    {
+    private function onCreationComplete():void {
         STAGE = stage;
         var core:FlexUnitCore = new FlexUnitCore();
         core.addListener(new TraceListener());
@@ -36,13 +28,12 @@ public class FlexUnitRunner extends Sprite{
         core.run(currentRunTestSuite());
     }
 
-    public function currentRunTestSuite():Array
-    {
+    public function currentRunTestSuite():Array {
         var testsToRun:Array = new Array();
 //        testsToRun.push(tests.status.SLTStatusTest);
 //        testsToRun.push(tests.status.SLTStatusSucessTest);
 //        testsToRun.push(tests.status.SLTConnectTest);
-        testsToRun.push(tests.saltr_mobile.SLTSaltrMobileTest);
+        testsToRun.push(SLTSaltrMobileTest);
         return testsToRun;
     }
 }

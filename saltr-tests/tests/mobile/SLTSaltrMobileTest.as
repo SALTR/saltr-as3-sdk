@@ -1,7 +1,7 @@
 /**
  * Created by TIGR on 4/10/2015.
  */
-package tests.saltr_mobile {
+package tests.mobile {
 import mockolate.runner.MockolateRule;
 
 import org.flexunit.asserts.assertNull;
@@ -36,7 +36,6 @@ public class SLTSaltrMobileTest {
 
     [Test]
     public function getLevelByGlobalIndexTest():void {
-        //_saltr.importLevels("D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\build\tests\saltr");
         var level:SLTLevel = _saltr.getLevelByGlobalIndex(-1);
         assertNull(level);
     }
