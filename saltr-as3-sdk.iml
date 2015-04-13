@@ -5,8 +5,8 @@
       <configuration name="saltr-as3-sdk" target-platform="Mobile" pure-as="true" output-type="Library" output-file="saltr-as3-sdk.swc" output-folder="$MODULE_DIR$/out/production/saltr-as3-sdk">
         <dependencies target-player="16.0">
           <entries>
-            <entry library-name="flexunit" library-level="application">
-              <dependency linkage="Test" />
+            <entry library-id="304eda30-990b-4fff-9535-a346b9244492">
+              <dependency linkage="Merged" />
             </entry>
           </entries>
           <sdk name="AIRSDK_Compiler_16.0" />
@@ -28,7 +28,17 @@
     </content>
     <orderEntry type="jdk" jdkName="AIRSDK_Compiler_16.0" jdkType="Flex SDK Type (new)" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="flexunit" level="application" />
+    <orderEntry type="module-library" exported="">
+      <library type="flex">
+        <properties id="304eda30-990b-4fff-9535-a346b9244492" />
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/build/tests/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/build/tests/lib" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
