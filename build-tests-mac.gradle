@@ -2,7 +2,6 @@
  * Created by TIGR on 2/27/2015.
  */
 
-def workspace =System.getenv()['WORKSPACE']
 
 // needed for deploying
 apply plugin: 'maven'
@@ -55,16 +54,16 @@ def xsltFile = "https://raw.githubusercontent.com/vpmedia/mvnrepository/master/o
 // add additional jars to the AntBuilder classpath for use within the imported build.
 ClassLoader antClassLoader = org.apache.tools.ant.Project.class.classLoader
 configurations.antClassPath.each { File f ->
-    antClassLoader.addURL(f.toURI().toURL())
-}
+  antClassLoader.addURL(f.toURI().toURL())
+} 
 
 //----------------------------------
 //  SDK
 //----------------------------------
 
-def AIR_HOME = 'C:/jenkins_tools/AIRSDK_Compiler_15.0' //System.getenv('AIR_HOME')
-def FLEX_HOME = 'C:/jenkins_tools/flex_sdk_4.6' //System.getenv('FLEX_HOME')
-def FLASH_PLAYER_EXE = 'C:/jenkins_tools/FLASH_PLAYER/flashplayer_16_sa.exe' // System.getenv('FLASH_PLAYER_EXE')
+def AIR_HOME = '/Users/daal/Projects/dev/as/flash-sdk/mac/AIRSDK_Compiler_16.0' //System.getenv('AIR_HOME')
+def FLEX_HOME = '/Users/daal/Projects/dev/as/flash-sdk/mac/flex_sdk_4.6' //System.getenv('FLEX_HOME')
+def FLASH_PLAYER_EXE = '/Users/daal/Projects/dev/as/flash-sdk/flashplayers/Flash\\ Player.app' // System.getenv('FLASH_PLAYER_EXE')
 ant.FLEX_HOME = FLEX_HOME
 ant.FLASH_PLAYER_EXE = FLASH_PLAYER_EXE
 
@@ -89,8 +88,6 @@ if("${System.env.BUILD_NUMBER}" != "null") {
 //----------------------------------
 //  Folders
 //----------------------------------
-
-def projectDir = workspace
 
 //def binDir = new File(projectDir, '/bin')
 def libDir = new File(projectDir, '/build/tests/lib')
@@ -143,8 +140,8 @@ task compileTest(type: JavaExec) {
 
     args = argsList
 }
-
-task test << {
+            
+task test << { 
     if (reportDir.isDirectory()) {
         delete("${reportDir}")
     }
@@ -156,6 +153,37 @@ task test << {
         ant.taskdef(resource: 'flexUnitTasks.tasks', classpath: configurations.test.asPath)
 
         ant.flexunit(swf: testRunner, toDir: reportDir, haltonfailure:'false', failureproperty: testTaskResult, verbose:'true', player:'air', headless:'false', localTrusted:'true')
+
+        ant.junitreport(todir: reportDir) {
+            fileset(dir: reportDir, includes: 'TEST-*.xml')
+            report(format:'frames', todir: htmlOutputDir)
+        }
+
+        String fileContents = new File(projectDir, '/build/tests/reports/TESTS-TestSuites.xml').text
+        println(fileContents)
+
+        if (ant.project.properties[testTaskResult]) {
+            ant.fail('One or more tests failed.')
+        }
+    }    
+}
+               
+task analyze << { 
+    ant.taskdef(name: 'flexPmd', classname: 'com.adobe.ac.pmd.ant.FlexPmdAntTask', classpath: configurations.test.asPath)
+    ant.taskdef(name: 'flexCpd', classname: 'com.adobe.ac.cpd.ant.FlexCpdAntTask', classpath: configurations.test.asPath)
+    ant.flexPmd(sourceDirectory: srcDir, outputDirectory: reportDir )
+    ant.get(src: xsltFile, dest: reportDir)   
+    ant.xslt(in: "${reportDir.absolutePath}/pmd.xml", style:"${reportDir.absolutePath}/flex-pmd-report-1.3.xslt", out:"${reportDir.absolutePath}/pmd.html")
+}
+        
+task document << { 
+    ant.taskdef(resource: 'flexTasks.tasks', classpath: "${FLEX_HOME}/ant/lib/flexTasks.jar")
+    ant.asdoc(output: 'build/docs', lenient: true) {
+        'doc-sources'("${srcDir}")
+        'compiler.source-path'("${srcDir}")
+        'external-library-path'(dir: "${AIR_HOME}/frameworks/libs/air", append: true) {
+            'include'(name: '*.swc')
+        }
     }
 }
 
@@ -165,7 +193,7 @@ artifacts {
 
 uploadArchives {
     repositories {
-        mavenLocal()
+        mavenLocal() 
     }
 }
 
