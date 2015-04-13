@@ -3,72 +3,42 @@
  */
 package tests.saltr_mobile {
 import mockolate.runner.MockolateRule;
-import mockolate.stub;
-import mockolate.verify;
 
+import org.flexunit.asserts.assertNull;
+
+import saltr.SLTSaltrMobile;
+import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 
 public class SLTSaltrMobileTest {
-
     [Rule]
     public var mocks:MockolateRule = new MockolateRule();
+    [Mock(type="nice")]//[Mock(type="strict")]
+    public var mobileRepository:SLTMobileRepository;
 
-    [Mock(type="strict")]
-    //[Mock(type="nice")]
-    public var strictlyThanks:SLTMobileRepository;
+    private var clientKey:String = "";
+    private var deviceId:String = "";
+    private var _saltr:SLTSaltrMobile;
 
     public function SLTSaltrMobileTest() {
     }
 
-//    [Before(async, timeout=5000)]
-//    public function prepareMockolates():void {
-//        Async.proceedOnEvent(this,
-//                prepare(SLTMobileRepository),
-//                Event.COMPLETE);
-//    }
-
-    //[Test(expects="mockolate.errors.InvocationError")]
-    [Test]
-    public function strictlyIfYouMust():void {
-        //var flavour:Flavour = strict(DarkChocolate);
-        //var repository:SLTMobileRepository = strict(SLTMobileRepository);
-
-        // accessing a property without a mock or stub
-        // will cause a strict Mock Object to throw an InvocationError
-        //var name:String = flavour.name;
-        //repository.getObjectFromCache("kuku");
-        //assertThat(repository.getObjectFromCache("kuku"), nullValue());
-        //strictlyThanks.getObjectFromCache("kuku");
-        //var strictlyThanks:SLTMobileRepository = new SLTMobileRepository();
-        //strictlyThanks.cacheObject("kyy", "90", {});
-        //strictlyThanks.getObjectVersion("kuku");
-        //Assert.assertNotNull(strictlyThanks.getObjectVersion("kuku"));
-        //Assert.assertNotNull(strictlyThanks.getObjectVersion("kuku"));
-
-        //mock(strictlyThanks).method("getObjectVersion").returns("Butterscotch");
-
-        //assertThat(strictlyThanks.getObjectVersion("kuku"), nullValue());
-
-        //var flavour:SLTSaltrMobileRepository = nice(SLTSaltrMobileRepository);
-
-        stub(strictlyThanks).method("getObjectVersion").returns("kuku")
-                .calls(function ():void {
-                    trace("anakonda >>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                });
-
-        strictlyThanks.getObjectVersion("kuku");
-
-        verify(strictlyThanks);
-
+    [Before]
+    public function tearUp():void {
+        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr.repository = mobileRepository;
     }
 
-//    [Test]
-//    public function nicelyPlease():void
-//    {
-//        //var flavour:Flavour = nice(Flavour);
-//        var repository:SLTMobileRepository = nice(SLTMobileRepository);
-//
-//        assertThat(repository.getObjectFromCache("kuku"), nullValue());
-//    }
+    [After]
+    public function tearDown():void {
+        _saltr = null;
+    }
+
+    [Test]
+    public function getLevelByGlobalIndexTest():void {
+        //_saltr.importLevels("D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\build\tests\saltr");
+        var level:SLTLevel = _saltr.getLevelByGlobalIndex(-1);
+        assertNull(level);
+    }
 }
 }
