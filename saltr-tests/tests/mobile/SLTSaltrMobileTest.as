@@ -35,9 +35,13 @@ public class SLTSaltrMobileTest {
     }
 
     [Test]
-    public function getLevelByGlobalIndexTest():void {
-        var level:SLTLevel = _saltr.getLevelByGlobalIndex(-1);
-        assertNull(level);
+    public function saltrImportLevelsTest():void {
+        //_saltr.start();
+        //_saltr.useNoFeatures = true;
+        //_saltr.importLevels("D:\Projects\dev\as\plexonic\libs\saltr-as3-sdk\build\tests");
+
+//        var level:SLTLevel = _saltr.getLevelByGlobalIndex(-1);
+//        assertNull(level);
     }
 }
 }
