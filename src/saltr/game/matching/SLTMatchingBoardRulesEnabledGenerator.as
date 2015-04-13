@@ -99,7 +99,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         }
 
         var cellRandomIndex:uint = Math.floor(Math.random() * positionCells.length);
-        var chunkAssetIndex = 0;
+        var chunkAssetIndex:int = 0;
 
         while (positionCells.length > 0) {
             x = positionCells[ cellRandomIndex ][ 0 ];
@@ -288,7 +288,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             directionMatchesCount = 0;
             direction = directions[ i ];
 
-            for (var j = 0; j < direction.length; ++j) {
+            for (var j:uint = 0; j < direction.length; ++j) {
                 siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col + direction[j][0], row + direction[j][1], _layer.token);
 
                 if (assetToken == siblingCellAssetToken) {

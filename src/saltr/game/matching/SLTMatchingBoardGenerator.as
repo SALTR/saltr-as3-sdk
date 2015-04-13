@@ -41,7 +41,7 @@ internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
             var chunkCells:Vector.<SLTCell> = chunk.cells.concat();
             for (var j:uint = 0; j < chunkCells.length; ++j) {
                 var assetDatumRandIndex:int = Math.random() * availableAssetData.length;
-                var assetDatum = availableAssetData[assetDatumRandIndex];
+                var assetDatum:SLTChunkAssetDatum = availableAssetData[assetDatumRandIndex];
                 availableAssetData.splice(assetDatumRandIndex, 1);
                 chunk.addAssetInstanceWithCellIndex(assetDatum, j);
             }
