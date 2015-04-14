@@ -2,8 +2,6 @@
  * Created by TIGR on 4/10/2015.
  */
 package tests.mobile {
-import flash.filesystem.FileStream;
-
 import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
@@ -103,7 +101,7 @@ public class SLTSaltrMobileTest {
     [Test]
     public function getPackByLevelGlobalIndex_A():void {
         _saltr.importLevels("Levels Path");
-        var levelPack:SLTLevelPack = _saltr.getPackByLevelGlobalIndex(20)
+        var levelPack:SLTLevelPack = _saltr.getPackByLevelGlobalIndex(20);
         assertEquals(1, levelPack.index);
     }
 
