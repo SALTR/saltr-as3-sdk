@@ -37,7 +37,6 @@ public class SLTSaltrMobileTest {
         _fileStream = new FileStream();
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
-        stub(mobileRepository).method("getObjectFromApplication").returns(getJson(new AppDataJson()));
     }
 
     [After]
@@ -52,8 +51,25 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function saltrImportLevelsTest():void {
+        stub(mobileRepository).method("getObjectFromApplication").returns(getJson(new AppDataJson()));
         _saltr.importLevels("Levels Path");
         assertEquals(75, _saltr.allLevelsCount);
+    }
+
+    /**
+     * saltrDefineFeatureTest.
+     * The intent of this test is to check the define feature.
+     */
+    [Test]
+    public function saltrDefineFeatureTest():void {
+        _saltr.defineFeature("SETTINGS", {
+            general: {
+                lifeRefillTime: 30
+            }
+        }, true);
+
+        _saltr.getFeatureProperties("SETTINGS");
+        assertEquals(30, _saltr.getFeatureProperties("SETTINGS").general.lifeRefillTime);
     }
 
     private function getJson(stringData:String):Object {
