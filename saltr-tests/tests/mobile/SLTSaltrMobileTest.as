@@ -16,7 +16,7 @@ import saltr.repository.SLTMobileRepository;
  * The SLTSaltrMobileTest class contain the tests which can be performed without saltr.connect()
  */
 public class SLTSaltrMobileTest {
-    [Embed(source="D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
     [Rule]
@@ -27,14 +27,12 @@ public class SLTSaltrMobileTest {
     private var clientKey:String = "";
     private var deviceId:String = "";
     private var _saltr:SLTSaltrMobile;
-    private var _fileStream:FileStream;
 
     public function SLTSaltrMobileTest() {
     }
 
     [Before]
     public function tearUp():void {
-        _fileStream = new FileStream();
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
     }
