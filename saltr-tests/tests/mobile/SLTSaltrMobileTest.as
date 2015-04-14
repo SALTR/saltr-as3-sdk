@@ -12,6 +12,9 @@ import org.flexunit.asserts.assertEquals;
 import saltr.SLTSaltrMobile;
 import saltr.repository.SLTMobileRepository;
 
+/**
+ * The SLTSaltrMobileTest class contain the tests which can be performed without saltr.connect()
+ */
 public class SLTSaltrMobileTest {
     [Embed(source="D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
