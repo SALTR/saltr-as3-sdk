@@ -2,23 +2,18 @@
  * Created by TIGR on 4/10/2015.
  */
 package tests.mobile {
-import flash.filesystem.File;
-import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 
 import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
-import org.flexunit.asserts.assertNotNull;
-
-import org.flexunit.asserts.assertNull;
+import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
-import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 
 public class SLTSaltrMobileTest {
-    [Embed(source = "D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
+    [Embed(source="D:/Projects/dev/as/plexonic/libs/saltr-as3-sdk/build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
     [Rule]
@@ -47,12 +42,15 @@ public class SLTSaltrMobileTest {
         _saltr = null;
     }
 
+    /**
+     * saltrImportLevelsTest.
+     * The intent of this test is to check the levels importing.
+     * Mobile repository's getObjectFromApplication() mocked in order to provide levels data
+     */
     [Test]
     public function saltrImportLevelsTest():void {
         _saltr.importLevels("Levels Path");
-
-        var level:SLTLevel = _saltr.getLevelByGlobalIndex(1);
-        assertNotNull(level);
+        assertEquals(75, _saltr.allLevelsCount);
     }
 
     private function getJson(stringData:String):Object {
