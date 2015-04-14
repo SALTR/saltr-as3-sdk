@@ -40,6 +40,9 @@ public class LevelData {
     }
 
     public function getLevelByGlobalIndex(index:int):SLTLevel {
+        if(index < 0) {
+            return null;
+        }
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
@@ -54,6 +57,9 @@ public class LevelData {
     }
 
     public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
+        if(index < 0) {
+            return null;
+        }
         var levelsSum:int = 0;
         for (var i:int = 0, len:int = _levelPacks.length; i < len; ++i) {
             var packLength:int = _levelPacks[i].levels.length;
