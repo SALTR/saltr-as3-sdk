@@ -1,7 +1,7 @@
 /**
  * Created by TIGR on 4/10/2015.
  */
-package tests.mobile {
+package tests.saltr {
 import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
@@ -37,6 +37,9 @@ public class SLTSaltrMobileTest {
         stub(mobileRepository).method("getObjectFromApplication").returns(getJson(new AppDataJson()));
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
+
+        //importLevels() takes as input levels path, in this test it is just a dummy value because of MobileRepository's mocking
+        _saltr.importLevels("");
     }
 
     [After]
@@ -45,14 +48,13 @@ public class SLTSaltrMobileTest {
     }
 
     /**
-     * importLevelsTest.
+     * allLevelsTest.
      * The intent of this test is to check the levels importing.
      * Mobile repository's getObjectFromApplication() mocked in order to provide levels data
      */
     [Test]
-    public function importLevelsTest():void {
-        //importLevels() takes as input levels path, in this test it is just a dummy value because of MobileRepository's mocking
-        _saltr.importLevels("Levels Path");
+    public function allLevelsTest():void {
+
         assertEquals(75, _saltr.allLevelsCount);
     }
 
@@ -73,45 +75,41 @@ public class SLTSaltrMobileTest {
     }
 
     /**
-     * getLevelByGlobalIndex_A
+     * getLevelByGlobalIndexWithValidIndex
      * The intent of this test is to get the SLTLevel by valid global index.
      */
     [Test]
-    public function getLevelByGlobalIndex_A():void {
-        _saltr.importLevels("Levels Path");
+    public function getLevelByGlobalIndexWithValidIndex():void {
         var level:SLTLevel = _saltr.getLevelByGlobalIndex(20);
         assertEquals(5, level.localIndex);
     }
 
     /**
-     * getLevelByGlobalIndex_B
+     * getLevelByGlobalIndexWithInvalidIndex
      * The intent of this test is to pass incorrect index and get null as a result
      */
     [Test]
-    public function getLevelByGlobalIndex_B():void {
-        _saltr.importLevels("Levels Path");
+    public function getLevelByGlobalIndexWithInvalidIndex():void {
         var level:SLTLevel = _saltr.getLevelByGlobalIndex(-1);
         assertNull(level);
     }
 
     /**
-     * getPackByLevelGlobalIndex_A
+     * getPackByLevelGlobalIndexWithValidIndex
      * The intent of this test is to get the SLTLevelPack by valid global index.
      */
     [Test]
-    public function getPackByLevelGlobalIndex_A():void {
-        _saltr.importLevels("Levels Path");
+    public function getPackByLevelGlobalIndexWithValidIndex():void {
         var levelPack:SLTLevelPack = _saltr.getPackByLevelGlobalIndex(20);
         assertEquals(1, levelPack.index);
     }
 
     /**
-     * getPackByLevelGlobalIndex_B
+     * getPackByLevelGlobalIndexWithInvalidIndex
      * The intent of this test is to pass incorrect index and get null as a result
      */
     [Test]
-    public function getPackByLevelGlobalIndex_B():void {
-        _saltr.importLevels("Levels Path");
+    public function getPackByLevelGlobalIndexWithInvalidIndex():void {
         var levelPack:SLTLevelPack = _saltr.getPackByLevelGlobalIndex(-1);
         assertNull(levelPack);
     }
