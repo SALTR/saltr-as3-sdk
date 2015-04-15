@@ -9,7 +9,8 @@ import org.flexunit.internals.TraceListener;
 import org.flexunit.listeners.AirCIListener;
 import org.flexunit.runner.FlexUnitCore;
 
-import tests.mobile.SLTSaltrMobileTest;
+import tests.saltr.SLTImportLevelsTest;
+import tests.saltr.SLTSaltrMobileTest;
 
 public class FlexUnitRunner extends Sprite {
 
@@ -34,6 +35,7 @@ public class FlexUnitRunner extends Sprite {
 //        testsToRun.push(tests.status.SLTStatusSucessTest);
 //        testsToRun.push(tests.status.SLTConnectTest);
         testsToRun.push(SLTSaltrMobileTest);
+        testsToRun.push(SLTImportLevelsTest);
         return testsToRun;
     }
 }

@@ -6,11 +6,8 @@ import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
-import org.flexunit.asserts.assertNull;
 
 import saltr.SLTSaltrMobile;
-import saltr.game.SLTLevel;
-import saltr.game.SLTLevelPack;
 import saltr.repository.SLTMobileRepository;
 
 /**
@@ -19,6 +16,12 @@ import saltr.repository.SLTMobileRepository;
 public class SLTImportLevelsTest {
     [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
+
+    [Embed(source="../../../build/tests/saltr/level_packs_1_pack.json", mimeType="application/octet-stream")]
+    private static const AppDataWithOnePackJson:Class;
+
+    [Embed(source="../../../build/tests/saltr/level_packs_2_pack.json", mimeType="application/octet-stream")]
+    private static const AppDataWithTwoPacksJson:Class;
 
 
     private static const localData:Class;
@@ -40,8 +43,8 @@ public class SLTImportLevelsTest {
 
     [Before]
     public function tearUp():void {
-        stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new AppDataJson()));
-        stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new customPathData()));
+        stub(mobileRepository).method("getObjectFromApplication").args("onePack").returns(JSON.parse(new AppDataWithOnePackJson()));
+        stub(mobileRepository).method("getObjectFromApplication").args("saltr/level_packs.json").returns(JSON.parse(new AppDataWithTwoPacksJson()));
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
     }
@@ -52,13 +55,34 @@ public class SLTImportLevelsTest {
     }
 
     /**
-     * allLevelsTest.
-     * The intent of this test is to check the levels importing.
-     * Mobile repository's getObjectFromApplication() mocked in order to provide levels data
+     * importLevelsTestFromProvidedPath.
+     * The intent of this test is to check the levels importing from the provided path.
      */
     [Test]
-    public function importLevelsTest():void {
-        //_saltr.importLevels(path);
+    public function importLevelsTestFromProvidedPath():void {
+        _saltr.importLevels("onePack");
+        assertEquals(15, _saltr.allLevelsCount);
+    }
+
+    /**
+     * importLevelsTestFromCache.
+     * The intent of this test is to check the levels importing from the cache.
+     */
+    [Test]
+    public function importLevelsTestFromCache():void {
+        stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new AppDataJson()));
+        _saltr.importLevels(null);
+        assertEquals(75, _saltr.allLevelsCount);
+    }
+
+    /**
+     * importLevelsTestFromApplication.
+     * The intent of this test is to check the levels importing from the application internal path.
+     */
+    [Test]
+    public function importLevelsTestFromApplication():void {
+        _saltr.importLevels(null);
+        assertEquals(30, _saltr.allLevelsCount);
     }
 }
 }
