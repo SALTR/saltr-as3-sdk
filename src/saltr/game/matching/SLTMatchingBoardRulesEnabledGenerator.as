@@ -4,7 +4,6 @@
 package saltr.game.matching {
 import saltr.game.SLTAssetInstance;
 import saltr.saltr_internal;
-import saltr.utils.Utils;
 
 use namespace saltr_internal;
 
@@ -63,26 +62,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             }
         }
         if (insolvenciesCount > 0) {
-            correctChunksMatchesWithAltAssets();
-        }
-    }
-
-    private function correctChunksMatchesWithAltAssets():void {
-        var correctionAssets:Vector.<SLTChunkAssetDatum> = _boardConfig.alternativeMatchAssets;
-        Utils.shuffleVector(correctionAssets);
-        var appendingResult:Boolean = false;
-        if (correctionAssets.length > 0) {
-            for (var i:uint = 0; i < _matchedAssetPositions.length; ++i) {
-                for (var j:uint = 0; j < correctionAssets.length; ++j) {
-                    var matchedCellPosition:MatchedAssetPosition = _matchedAssetPositions[i];
-                    var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
-                    var chunkAssetDatum:SLTChunkAssetDatum = correctionAssets[j];
-                    appendingResult = appendChunkAsset(chunkAssetDatum, chunk, matchedCellPosition.col, matchedCellPosition.row);
-                    if (appendingResult) {
-                        break;
-                    }
-                }
-            }
+            //correctChunksMatchesWithAltAssets();
         }
     }
 

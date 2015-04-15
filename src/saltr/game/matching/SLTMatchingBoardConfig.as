@@ -10,7 +10,6 @@ use namespace saltr_internal;
 internal class SLTMatchingBoardConfig {
     private var _matchingRulesEnabled:Boolean;
     private var _squareMatchingRuleEnabled:Boolean;
-    private var _alternativeMatchAssets:Vector.<SLTChunkAssetDatum>;
     private var _excludedMatchAssets:Vector.<SLTChunkAssetDatum>;
     private var _blockedCells:Array;
     private var _cellProperties:Array;
@@ -25,14 +24,6 @@ internal class SLTMatchingBoardConfig {
 
         _matchingRulesEnabled = boardNode.hasOwnProperty("matchingRulesEnabled") ? boardNode.matchingRulesEnabled : false;
         _squareMatchingRuleEnabled = boardNode.hasOwnProperty("squareMatchingRuleEnabled") ? boardNode.squareMatchingRuleEnabled : false;
-
-        _alternativeMatchAssets = new <SLTChunkAssetDatum>[];
-        if (boardNode.hasOwnProperty("alternativeMatchAssets")) {
-            var alternativeAssetNodes:Array = boardNode.alternativeMatchAssets as Array;
-            for each (var alternativeAssetNode:Object in alternativeAssetNodes) {
-                _alternativeMatchAssets.push(new SLTChunkAssetDatum(alternativeAssetNode.assetId, alternativeAssetNode.states, _assetMap));
-            }
-        }
 
         _excludedMatchAssets = new <SLTChunkAssetDatum>[];
         if (boardNode.hasOwnProperty("excludedMatchAssets")) {
@@ -80,10 +71,6 @@ internal class SLTMatchingBoardConfig {
      */
     saltr_internal function get squareMatchingRuleEnabled():Boolean {
         return _squareMatchingRuleEnabled;
-    }
-
-    saltr_internal function get alternativeMatchAssets():Vector.<SLTChunkAssetDatum> {
-        return _alternativeMatchAssets;
     }
 
     saltr_internal function get excludedMatchAssets():Vector.<SLTChunkAssetDatum> {
