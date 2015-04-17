@@ -14,7 +14,7 @@ import saltr.repository.SLTMobileRepository;
  * The SLTStartTest class contain the saltr.start() method tests
  */
 public class SLTStartTest {
-    [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../build/tests/saltr/app_data.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
     private var clientKey:String = "";
@@ -29,6 +29,11 @@ public class SLTStartTest {
     public function SLTStartTest() {
     }
 
+    [After]
+    public function tearDown():void {
+        _saltr = null;
+    }
+
     /**
      * startWithDeviceIdNullCheck.
      * The intent of this test is to check the start() with deviceId = null. An error should be thrown.
@@ -37,7 +42,6 @@ public class SLTStartTest {
     public function startWithDeviceIdNullCheck():void {
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, null);
         _saltr.start();
-        _saltr = null;
     }
 
     /**
@@ -48,7 +52,6 @@ public class SLTStartTest {
     public function startWithNoDeveloperFeaturesCheck():void {
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.start();
-        _saltr = null;
     }
 
     /**
@@ -60,7 +63,6 @@ public class SLTStartTest {
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.useNoFeatures = true;
         _saltr.start();
-        _saltr = null;
     }
 
     /**
@@ -78,7 +80,6 @@ public class SLTStartTest {
         assertEquals(0, _saltr.experiments.length);
         assertEquals(0, _saltr.getActiveFeatureTokens().length);
         assertEquals(null, _saltr.getFeatureProperties("token"));
-        _saltr = null;
     }
 
     /**
@@ -93,10 +94,7 @@ public class SLTStartTest {
         _saltr.useNoFeatures = true;
         _saltr.useNoLevels = true;
         _saltr.start();
-        //assertEquals(0, _saltr.experiments.length);
-        //assertEquals(0, _saltr.getActiveFeatureTokens().length);
-        //assertEquals(null, _saltr.getFeatureProperties("token"));
-        _saltr = null;
+        assertEquals(1, _saltr.experiments.length);
     }
 }
 }
