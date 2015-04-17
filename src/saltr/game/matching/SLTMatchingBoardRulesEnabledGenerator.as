@@ -2,8 +2,6 @@
  * Created by TIGR on 3/25/2015.
  */
 package saltr.game.matching {
-import flash.utils.getTimer;
-
 import saltr.game.SLTAssetInstance;
 import saltr.saltr_internal;
 
@@ -44,7 +42,6 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function runGenerationTires(layer:SLTMatchingBoardLayer):void {
-        var a:Number = getTimer();//TODO @TIGR delete later
         // Tire 1 - Try to generate board without breaking asset distribution rules.
         for (var tier_1_i:int = 0; tier_1_i < TRY_COUNT_BREAKING_RULES_DISABLED; ++tier_1_i) {
             _matchedAssetPositions.length = 0;
@@ -64,7 +61,6 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         // Tire 3 - Breaking matching rules board generation.
         _matchedAssetPositions.length = 0;
         generateWithForceEnabled(layer);
-        trace("ANAKONDA executionTimer: " + (getTimer() - a));//TODO @TIGR delete later
     }
 
     /*
@@ -157,7 +153,6 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
                 if (null != assetDatum && "" != assetDatum.assetToken) {
                     appendResult = appendChunkAssetWithMatchCheck(assetDatum, chunk, x, y);
-
                     if (appendResult) {
                         chunkAvailableAssetData.splice(chunkAssetIndex, 1);
                         positionCells.splice(cellRandomIndex, 1);
@@ -230,7 +225,6 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             addAssetInstanceToChunk(assetDatum, chunk, col, row);
             return true;
         }
-
         return false;
     }
 
@@ -246,7 +240,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var horizontalMatches:uint = 0;
 
         while (i <= Math.min(col, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col - 1, row, _layer.token);
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col - i, row, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++horizontalMatches;
@@ -277,7 +271,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var verticalMatches:uint = 0;
 
         while (i <= Math.min(row, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col, row - 1, _layer.token);
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col, row - i, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++verticalMatches;
@@ -289,7 +283,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         hasMatch = true;
 
         while (i <= Math.min(_boardConfig.rows - row - 1, matchesCount) && hasMatch) {
-            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col, row + 1, _layer.token);
+            siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col, row + i, _layer.token);
             hasMatch = (assetToken == siblingCellAssetToken);
             if (hasMatch) {
                 ++verticalMatches;
