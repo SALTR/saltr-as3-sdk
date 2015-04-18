@@ -10,6 +10,7 @@ import org.flexunit.listeners.AirCIListener;
 import org.flexunit.runner.FlexUnitCore;
 
 import tests.saltr.AppDataTest;
+import tests.saltr.LevelDataTest;
 import tests.saltr.SLTImportLevelsTest;
 import tests.saltr.SLTSaltrMobileTest;
 import tests.saltr.SLTStartTest;
@@ -40,6 +41,7 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTImportLevelsTest);
         testsToRun.push(SLTStartTest);
         testsToRun.push(AppDataTest);
+        testsToRun.push(LevelDataTest);
         return testsToRun;
     }
 }
