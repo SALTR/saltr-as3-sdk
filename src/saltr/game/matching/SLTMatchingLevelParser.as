@@ -73,20 +73,53 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     /**
      * Parses the level content.
-     * @param boardNodes The board nodes.
+     * @param rootNode The root node.
      * @param assetMap The asset map.
      * @return The parsed boards.
      */
-    override saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    override saltr_internal function parseLevelContent(rootNode:Object, assetMap:Dictionary):Dictionary {
+        var matchingRuleProperties:SLTMatchingRuleProperties = parseMatchingRuleProperties(rootNode, assetMap);
+        var matchingRuleIncludedBoards:Array = parseMatchingRuleIncludedBoards(rootNode);
+
+        var boardNodes:Object = getBoardsNode(rootNode);
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
+            var boardRelatedMatchingRuleProperties:SLTMatchingRuleProperties = new SLTMatchingRuleProperties();
+            if (matchingRuleProperties.matchingRuleEnabled && -1 != matchingRuleIncludedBoards.indexOf(boardId)) {
+                boardRelatedMatchingRuleProperties = matchingRuleProperties;
+            }
             var boardNode:Object = boardNodes[boardId];
-            boards[boardId] = parseLevelBoard(boardNode, assetMap);
+            boards[boardId] = parseLevelBoard(boardRelatedMatchingRuleProperties, boardNode, assetMap);
         }
         return boards;
     }
 
-    private function parseLevelBoard(boardNode:Object, assetMap:Dictionary):SLTMatchingBoard {
+    private function parseMatchingRuleProperties(rootNode:Object, assetMap:Dictionary):SLTMatchingRuleProperties {
+        var matchingRuleProperties:SLTMatchingRuleProperties = new SLTMatchingRuleProperties();
+        if (rootNode.hasOwnProperty("matchingRuleProperties")) {
+            matchingRuleProperties.matchingRuleEnabled = true;
+            matchingRuleProperties.squareRuleEnabled = rootNode.matchingRuleProperties.squareRuleEnabled;
+            matchingRuleProperties.matchSize = rootNode.matchingRuleProperties.matchSize;
+
+            var excludedAssetNodes:Array = rootNode.matchingRuleProperties.excludedAssets as Array;
+            var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
+            for each (var excludedAssetNode:Object in excludedAssetNodes) {
+                excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetNode.assetId, [excludedAssetNode.stateId], assetMap));
+            }
+            matchingRuleProperties.excludedAssets = excludedMatchAssets;
+        }
+        return matchingRuleProperties;
+    }
+
+    private function parseMatchingRuleIncludedBoards(rootNode:Object):Array {
+        var boards:Array = null;
+        if (rootNode.hasOwnProperty("matchingRuleProperties")) {
+            boards = rootNode.matchingRuleProperties.includedBoards as Array;
+        }
+        return boards;
+    }
+
+    private function parseLevelBoard(matchingRuleProperties:SLTMatchingRuleProperties, boardNode:Object, assetMap:Dictionary):SLTMatchingBoard {
         var boardProperties:Object = {};
         if (boardNode.hasOwnProperty("properties")) {
             boardProperties = boardNode.properties;
@@ -102,8 +135,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             var layer:SLTMatchingBoardLayer = parseLayer(layerNode, i, cells, assetMap);
             layers.push(layer);
         }
-
-        var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap);
+        var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap, matchingRuleProperties);
         var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardProperties);
 
         return board;
