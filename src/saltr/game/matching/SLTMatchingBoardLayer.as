@@ -14,32 +14,18 @@ use namespace saltr_internal;
  */
 internal class SLTMatchingBoardLayer extends SLTBoardLayer {
     private var _chunks:Vector.<SLTChunk>;
-    private var _matchingRulesEnabled:Boolean;
-    private var _matchSize:int;
     private var _fixedAssets:Array;
 
     /**
      * Class constructor.
-     * @param matchingRulesEnabled The matching rules enabled state.
-     * @param matchSize The match size.
      * @param fixedAssets The fixed assets.
      * @param layerId The layer's identifier.
      * @param layerIndex The layer's index.
      */
-    public function SLTMatchingBoardLayer(matchingRulesEnabled:Boolean, matchSize:int, fixedAssets:Array, layerId:String, layerIndex:int) {
+    public function SLTMatchingBoardLayer(fixedAssets:Array, layerId:String, layerIndex:int) {
         super(layerId, layerIndex);
         _chunks = new Vector.<SLTChunk>();
-        _matchingRulesEnabled = matchingRulesEnabled;
-        _matchSize = matchSize;
         _fixedAssets = fixedAssets;
-    }
-
-    saltr_internal function get matchingRulesEnabled():Boolean {
-        return _matchingRulesEnabled;
-    }
-
-    saltr_internal function get matchSize():int {
-        return _matchSize;
     }
 
     saltr_internal function get fixedAssets():Array {

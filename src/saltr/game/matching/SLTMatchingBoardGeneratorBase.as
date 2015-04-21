@@ -15,12 +15,24 @@ use namespace saltr_internal;
 internal class SLTMatchingBoardGeneratorBase {
 
 
-    saltr_internal static function getGenerator(layer:SLTMatchingBoardLayer):SLTMatchingBoardGeneratorBase {
-        if (layer.matchingRulesEnabled) {
+    saltr_internal static function getGenerator(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):SLTMatchingBoardGeneratorBase {
+        if (boardConfig.matchingRulesEnabled && isMatchingRuleEnabledLayer(layer)) {
             return SLTMatchingBoardRulesEnabledGenerator.getInstance();
         } else {
             return SLTMatchingBoardGenerator.getInstance();
         }
+    }
+
+    private static function isMatchingRuleEnabledLayer(layer:SLTMatchingBoardLayer):Boolean {
+        var matchingRuleEnabled:Boolean = false;
+        for (var i:int = 0; i < layer.chunks.length; ++i) {
+            var chunk:SLTChunk = layer.chunks[i];
+            if (chunk.matchingRuleEnabled) {
+                matchingRuleEnabled = true;
+                break;
+            }
+        }
+        return matchingRuleEnabled;
     }
 
     saltr_internal function generate(boardConfig:SLTMatchingBoardConfig, layer:SLTMatchingBoardLayer):void {

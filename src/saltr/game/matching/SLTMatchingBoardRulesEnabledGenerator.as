@@ -203,7 +203,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function appendChunkAssetWithMatchCheck(assetDatum:SLTChunkAssetDatum, chunk:SLTChunk, col:uint, row:uint):Boolean {
-        var matchesCount:int = _layer.matchSize - 1;
+        var matchesCount:int = _boardConfig.matchSize - 1;
         var horizontalMatches:int = calculateHorizontalMatches(assetDatum.assetToken, col, row);
         var verticalMatches:int = calculateVerticalMatches(assetDatum.assetToken, col, row);
         var squareMatch:Boolean = false;
@@ -235,7 +235,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     private function calculateHorizontalMatches(assetToken:String, col:uint, row:uint):int {
         var i:int = 1;
         var hasMatch:Boolean = true;
-        var matchesCount:int = _layer.matchSize - 1;
+        var matchesCount:int = _boardConfig.matchSize - 1;
         var siblingCellAssetToken:String;
         var horizontalMatches:uint = 0;
 
@@ -266,7 +266,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     private function calculateVerticalMatches(assetToken:String, col:uint, row:uint):int {
         var i:int = 1;
         var hasMatch:Boolean = true;
-        var matchesCount:int = _layer.matchSize - 1;
+        var matchesCount:int = _boardConfig.matchSize - 1;
         var siblingCellAssetToken:String;
         var verticalMatches:uint = 0;
 

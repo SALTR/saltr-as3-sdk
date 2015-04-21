@@ -156,7 +156,12 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
                 chunkAssetRules.push(new SLTChunkAssetRule(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.states));
             }
 
-            layer.addChunk(new SLTChunk(layer.token, layer.index, chunkCells, chunkAssetRules, assetMap));
+            var matchingRuleEnabled = true;
+            if (chunkNode.hasOwnProperty("matchingRuleDisabled")) {
+                matchingRuleEnabled = false;
+            }
+
+            layer.addChunk(new SLTChunk(layer.token, layer.index, chunkCells, chunkAssetRules, matchingRuleEnabled, assetMap));
         }
     }
 
@@ -164,15 +169,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
     private function parseLayer(layerNode:Object, index:int, cells:SLTCells, assetMap:Dictionary):SLTMatchingBoardLayer {
         //temporarily checking for 2 names until "layerId" is removed!
         var token:String = layerNode.hasOwnProperty("token") ? layerNode.token : layerNode.layerId;
-        var matchingRulesEnabled:Boolean = false;
-        if (layerNode.hasOwnProperty("matchingRulesEnabled")) {
-            matchingRulesEnabled = layerNode.matchingRulesEnabled;
-        }
-        var matchSize:int = -1;
-        if (layerNode.hasOwnProperty("matchSize")) {
-            matchSize = layerNode.matchSize;
-        }
-        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(matchingRulesEnabled, matchSize, layerNode.fixedAssets as Array, token, index);
+        var layer:SLTMatchingBoardLayer = new SLTMatchingBoardLayer(layerNode.fixedAssets as Array, token, index);
         parseLayerChunks(layer, layerNode.chunks as Array, cells, assetMap);
         return layer;
     }

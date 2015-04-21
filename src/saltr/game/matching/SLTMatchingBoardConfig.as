@@ -54,6 +54,13 @@ internal class SLTMatchingBoardConfig {
     }
 
     /**
+     * The matching size.
+     */
+    saltr_internal function get matchSize():int {
+        return _matchingRuleProperties.matchSize;
+    }
+
+    /**
      * The square matching rules enabled state.
      */
     saltr_internal function get squareMatchingRuleEnabled():Boolean {
