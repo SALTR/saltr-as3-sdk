@@ -38,7 +38,32 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             _matchedAssetPositions = new Vector.<MatchedAssetPosition>();
         }
         parseFixedAssets(layer, _boardConfig.cells, _boardConfig.assetMap);
+        parseMatchingRuleDisabledChunks();
         runGenerationTires(layer);
+    }
+
+    private function parseMatchingRuleDisabledChunks():void {
+        var chunks:Vector.<SLTChunk> = new Vector.<SLTChunk>();
+        for (var i:int = 0; i < _layer.chunks.length; ++i) {
+            var chunk:SLTChunk = _layer.chunks[i];
+            if (false == chunk.matchingRuleEnabled) {
+                chunks.push(chunk);
+            }
+        }
+        if (chunks.length > 0) {
+            fillLayerChunkAssets(chunks);
+        }
+    }
+
+    private function getMatchingRuleEnabledChunks(layer:SLTMatchingBoardLayer):Vector.<SLTChunk> {
+        var chunks:Vector.<SLTChunk> = new Vector.<SLTChunk>();
+        for (var i:int = 0; i < _layer.chunks.length; ++i) {
+            var chunk:SLTChunk = _layer.chunks[i];
+            if (chunk.matchingRuleEnabled) {
+                chunks.push(chunk);
+            }
+        }
+        return chunks;
     }
 
     private function runGenerationTires(layer:SLTMatchingBoardLayer):void {
@@ -67,7 +92,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
      Board generation without breaking asset distribution rules
      */
     private function generateWithDisabledBreakingRules(layer:SLTMatchingBoardLayer):void {
-        generateAssetData(layer);
+        generateAssetData(getMatchingRuleEnabledChunks(layer));
         fillLayerChunkAssetsWithMatchingRules();
     }
 
@@ -143,7 +168,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
             var chunk:SLTChunk = _layer.getChunkWithCellPosition(x, y);
 
-            if (null != chunk && chunk.availableAssetData.length > 0) {
+            if (null != chunk && chunk.matchingRuleEnabled && chunk.availableAssetData.length > 0) {
                 chunkAvailableAssetData = chunk.availableAssetData;
 
                 assetDatum = null;

@@ -39,9 +39,9 @@ internal class SLTMatchingBoardGeneratorBase {
         throw new Error("Abstract method error");
     }
 
-    protected function generateAssetData(layer:SLTMatchingBoardLayer):void {
-        for (var i:int = 0, len:int = layer.chunks.length; i < len; ++i) {
-            layer.chunks[i].generateAssetData();
+    protected function generateAssetData(chunks:Vector.<SLTChunk>):void {
+        for (var i:int = 0, len:int = chunks.length; i < len; ++i) {
+            chunks[i].generateAssetData();
         }
     }
 
@@ -59,6 +59,20 @@ internal class SLTMatchingBoardGeneratorBase {
                 var cell:SLTCell = cells.retrieve(position[0], position[1]);
                 cell.removeAssetInstance(layer.token, layer.index);
                 cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+            }
+        }
+    }
+
+    protected function fillLayerChunkAssets(chunks:Vector.<SLTChunk>):void {
+        for (var i:uint = 0; i < chunks.length; ++i) {
+            var chunk:SLTChunk = chunks[i];
+            var availableAssetData:Vector.<SLTChunkAssetDatum> = chunk.availableAssetData.concat();
+            var chunkCells:Vector.<SLTCell> = chunk.cells.concat();
+            for (var j:uint = 0; j < chunkCells.length; ++j) {
+                var assetDatumRandIndex:int = Math.random() * availableAssetData.length;
+                var assetDatum:SLTChunkAssetDatum = availableAssetData[assetDatumRandIndex];
+                availableAssetData.splice(assetDatumRandIndex, 1);
+                chunk.addAssetInstanceWithCellIndex(assetDatum, j);
             }
         }
     }
