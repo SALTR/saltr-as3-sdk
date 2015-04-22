@@ -156,7 +156,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
                 chunkAssetRules.push(new SLTChunkAssetRule(assetNode.assetId, assetNode.distributionType, assetNode.distributionValue, assetNode.states));
             }
 
-            var matchingRuleEnabled = true;
+            var matchingRuleEnabled:Boolean = true;
             if (chunkNode.hasOwnProperty("matchingRuleDisabled")) {
                 matchingRuleEnabled = false;
             }
