@@ -5,6 +5,8 @@ package saltr.game.matching {
 import saltr.saltr_internal;
 
 public class SLTMatchingRuleProperties {
+    public static const MATCHING_RULE_PROPERTIES:String = "matchingRuleProperties";
+
     private var _matchingRuleEnabled:Boolean;
     private var _matchSize:int;
     private var _squareRuleEnabled:Boolean;

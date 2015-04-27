@@ -51,6 +51,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             }
         }
         if (chunks.length > 0) {
+            generateAssetData(chunks);
             fillLayerChunkAssets(chunks);
         }
     }

@@ -96,7 +96,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private function parseMatchingRuleProperties(rootNode:Object, assetMap:Dictionary):SLTMatchingRuleProperties {
         var matchingRuleProperties:SLTMatchingRuleProperties = new SLTMatchingRuleProperties();
-        if (rootNode.hasOwnProperty("matchingRuleProperties")) {
+        if (rootNode.hasOwnProperty(SLTMatchingRuleProperties.MATCHING_RULE_PROPERTIES)) {
             matchingRuleProperties.matchingRuleEnabled = true;
             matchingRuleProperties.squareRuleEnabled = rootNode.matchingRuleProperties.squareRuleEnabled;
             matchingRuleProperties.matchSize = rootNode.matchingRuleProperties.matchSize;
@@ -113,7 +113,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
 
     private function parseMatchingRuleIncludedBoards(rootNode:Object):Array {
         var boards:Array = null;
-        if (rootNode.hasOwnProperty("matchingRuleProperties")) {
+        if (rootNode.hasOwnProperty(SLTMatchingRuleProperties.MATCHING_RULE_PROPERTIES)) {
             boards = rootNode.matchingRuleProperties.includedBoards as Array;
         }
         return boards;
