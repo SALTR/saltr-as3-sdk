@@ -1,5 +1,5 @@
 //Define output directory for swc and documentation
-def outdir = "saltr-sdk.v.1.3.4"
+def outdir = "saltr-sdk.v.1.3.5"
 println "Output directory: "+outdir
 
 def workspace =System.getenv()['WORKSPACE']
