@@ -10,11 +10,11 @@ use namespace saltr_internal;
 
 public class ApiCallMock extends ApiCall{
 
-    public function ApiCallMock(params : Array, isMobile:Boolean) {
-        super(params, isMobile);
+    public function ApiCallMock(isMobile:Boolean=true) {
+        super(isMobile);
     }
 
-    override saltr_internal function call(callback:Function, timeout:int = 0):void {
+    override saltr_internal function call(params:Object, callback:Function, timeout:int = 0):void {
         callback(getMockedCallResult());
     }
 
