@@ -19,11 +19,13 @@ internal class SLTChunk {
     private var _layerToken:String;
     private var _layerIndex:int;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
+    private var _matchingRuleEnabled:Boolean;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
     private var _availableAssetData:Vector.<SLTChunkAssetDatum>;
-    private var _uniqueAssetData:Vector.<SLTChunkAssetDatum>;
+    private var _uniqueInAvailableAssetData:Vector.<SLTChunkAssetDatum>;
+    private var _uniqueInCountAssetData:Vector.<SLTChunkAssetDatum>;
 
     private static function randomWithin(min:Number, max:Number, isFloat:Boolean = false):Number {
         return isFloat ? Math.random() * (1 + max - min) + min : int(Math.random() * (1 + max - min)) + min;
@@ -35,16 +37,19 @@ internal class SLTChunk {
      * @param layerIndex The layer index.
      * @param chunkCells The cells of chunk.
      * @param chunkAssetRules The asset rules.
+     * @param matchingRuleEnabled The matching rule enabled state.
      * @param assetMap The assets.
      */
-    public function SLTChunk(layerToken:String, layerIndex:int, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
+    public function SLTChunk(layerToken:String, layerIndex:int, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, matchingRuleEnabled:Boolean, assetMap:Dictionary) {
         _layerToken = layerToken;
         _layerIndex = layerIndex;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
+        _matchingRuleEnabled = matchingRuleEnabled;
         _assetMap = assetMap;
         _availableAssetData = new Vector.<SLTChunkAssetDatum>();
-        _uniqueAssetData = new Vector.<SLTChunkAssetDatum>();
+        _uniqueInAvailableAssetData = new Vector.<SLTChunkAssetDatum>();
+        _uniqueInCountAssetData = new Vector.<SLTChunkAssetDatum>();
     }
 
     /**
@@ -58,12 +63,20 @@ internal class SLTChunk {
         return _availableAssetData;
     }
 
-    saltr_internal function get uniqueAssetData():Vector.<SLTChunkAssetDatum> {
-        return _uniqueAssetData;
+    saltr_internal function get uniqueInAvailableAssetData():Vector.<SLTChunkAssetDatum> {
+        return _uniqueInAvailableAssetData;
+    }
+
+    saltr_internal function get uniqueInCountAssetData():Vector.<SLTChunkAssetDatum> {
+        return _uniqueInCountAssetData;
     }
 
     saltr_internal function get cells():Vector.<SLTCell> {
         return _chunkCells;
+    }
+
+    saltr_internal function get matchingRuleEnabled():Boolean {
+        return _matchingRuleEnabled;
     }
 
     saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {
@@ -92,7 +105,8 @@ internal class SLTChunk {
         //resetting chunk cells, as when chunk can contain empty cells, previous generation can leave assigned values to cells
         resetChunkCells();
         _availableAssetData.length = 0;
-        _uniqueAssetData.length = 0;
+        _uniqueInAvailableAssetData.length = 0;
+        _uniqueInCountAssetData.length = 0;
 
         //availableCells are being always overwritten here, so no need to initialize
         _availableCells = _chunkCells.concat();
@@ -140,14 +154,19 @@ internal class SLTChunk {
         }
     }
 
-    private function addToUniqueAssetData(assetDatum:SLTChunkAssetDatum):void {
-        _uniqueAssetData.push(assetDatum);
+    private function addToUniqueInAvailableAssetData(assetDatum:SLTChunkAssetDatum):void {
+        _uniqueInAvailableAssetData.push(assetDatum);
+    }
+
+    private function addToUniqueInCountAssetData(assetDatum:SLTChunkAssetDatum):void {
+        _uniqueInCountAssetData.push(assetDatum);
     }
 
     private function generateAssetDataByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
         for (var i:int = 0, len:int = countChunkAssetRules.length; i < len; ++i) {
             var assetRule:SLTChunkAssetRule = countChunkAssetRules[i];
             addToAvailableAssetData(getAssetData(assetRule.distributionValue, assetRule.assetId, assetRule.stateIds));
+            addToUniqueInCountAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateIds, _assetMap));
         }
     }
 
@@ -171,7 +190,7 @@ internal class SLTChunk {
                 count = proportion; //assigning number to int to floor the value;
                 fractionAssets.push({fraction: proportion - count, assetRule: assetRule});
                 addToAvailableAssetData(getAssetData(count, assetRule.assetId, assetRule.stateIds));
-                addToUniqueAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateIds, _assetMap));
+                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateIds, _assetMap));
             }
 
             fractionAssets.sortOn("fraction", Array.DESCENDING);
@@ -179,7 +198,7 @@ internal class SLTChunk {
 
             for (var k:int = 0; k < availableCellsNum; ++k) {
                 addToAvailableAssetData(getAssetData(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds));
-                addToUniqueAssetData(new SLTChunkAssetDatum(fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds, _assetMap));
+                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds, _assetMap));
             }
         }
     }
@@ -199,7 +218,7 @@ internal class SLTChunk {
                 chunkAssetRule = randomChunkAssetRules[i];
                 count = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
                 addToAvailableAssetData(getAssetData(count, chunkAssetRule.assetId, chunkAssetRule.stateIds));
-                addToUniqueAssetData(new SLTChunkAssetDatum(chunkAssetRule.assetId, chunkAssetRule.stateIds, _assetMap));
+                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(chunkAssetRule.assetId, chunkAssetRule.stateIds, _assetMap));
             }
         }
     }

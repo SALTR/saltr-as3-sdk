@@ -40,9 +40,9 @@ public class SendLevelEndEventApiCall extends ApiCall {
             var key:String = "cD" + (i + 1);
             eventProps[key] = numericArray[i];
         }
-        for (var i:int = 0; i < textArray.length; i++) {
-            var key:String = "cT" + (i + 1);
-            eventProps[key] = textArray[i];
+        for (var j:int = 0; j < textArray.length; j++) {
+            var key_j:String = "cT" + (j + 1);
+            eventProps[key_j] = textArray[j];
         }
         return eventProps;
     }

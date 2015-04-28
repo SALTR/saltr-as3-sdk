@@ -29,23 +29,8 @@ internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
         _boardConfig = boardConfig;
         _layer = layer;
         parseFixedAssets(layer, _boardConfig.cells, _boardConfig.assetMap);
-        generateAssetData(layer);
-        fillLayerChunkAssets();
-    }
-
-    private function fillLayerChunkAssets():void {
-        var chunks:Vector.<SLTChunk> = _layer.chunks;
-        for (var i:uint = 0; i < chunks.length; ++i) {
-            var chunk:SLTChunk = chunks[i];
-            var availableAssetData:Vector.<SLTChunkAssetDatum> = chunk.availableAssetData.concat();
-            var chunkCells:Vector.<SLTCell> = chunk.cells.concat();
-            for (var j:uint = 0; j < chunkCells.length; ++j) {
-                var assetDatumRandIndex:int = Math.random() * availableAssetData.length;
-                var assetDatum = availableAssetData[assetDatumRandIndex];
-                availableAssetData.splice(assetDatumRandIndex, 1);
-                chunk.addAssetInstanceWithCellIndex(assetDatum, j);
-            }
-        }
+        generateAssetData(_layer.chunks);
+        fillLayerChunkAssets(_layer.chunks);
     }
 }
 }

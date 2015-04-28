@@ -48,7 +48,7 @@ public class SLTMatchingBoard extends SLTBoard {
     override public function regenerate():void {
         for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
             var layer:SLTMatchingBoardLayer = _config.layers[i] as SLTMatchingBoardLayer;
-            var generator:SLTMatchingBoardGeneratorBase = SLTMatchingBoardGeneratorBase.getGenerator(layer);
+            var generator:SLTMatchingBoardGeneratorBase = SLTMatchingBoardGeneratorBase.getGenerator(_config, layer);
             generator.generate(_config, layer);
         }
     }

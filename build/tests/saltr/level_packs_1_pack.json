@@ -1,0 +1,364 @@
+{"levelType": "matching", "levelPacks": [
+    {
+        "index": 0,
+        "token": "STAGE_1",
+        "levels": [
+            {
+                "id": 225045,
+                "index": 0,
+                "url": "pack_0/level_0.json",
+                "properties": {
+                    "movesCount": "18",
+                    "objectives": {
+                        "explode-melon": "2"
+                    },
+                    "star_milestones": "150,350,1150",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isMelnSplashDisabled": true,
+                    "isMatchFourExplosionDisabled": true,
+                    "isMatchCrossExplosionDisabled": true,
+                    "isMatchFiveExplosionDisabled": true,
+                    "isTutorialDisabled": true
+                },
+                "version": 44,
+                "variationId": 246970,
+                "variationVersion": 317
+            },
+            {
+                "id": 225046,
+                "index": 1,
+                "url": "pack_0/level_1.json",
+                "properties": {
+                    "movesCount": "20",
+                    "objectives": {
+                        "explode-watermelon": "3"
+                    },
+                    "star_milestones": "1000,2500,4000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isMelnSplashDisabled": true,
+                    "isMatchFiveExplosionDisabled": true,
+                    "isMatchFourExplosionDisabled": true,
+                    "isMatchCrossExplosionDisabled": true,
+                    "isTutorialDisabled": true
+                },
+                "version": 35,
+                "variationId": 246972,
+                "variationVersion": 253
+            },
+            {
+                "id": 225047,
+                "index": 2,
+                "url": "pack_0/level_2.json",
+                "properties": {
+                    "movesCount": "16",
+                    "objectives": {
+                        "explode-any": "12"
+                    },
+                    "star_milestones": "800,2500,4500",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isMelnSplashDisabled": true,
+                    "isMatchFiveExplosionDisabled": true,
+                    "isMatchFourExplosionDisabled": true,
+                    "isMatchCrossExplosionDisabled": true,
+                    "isTutorialDisabled": true
+                },
+                "version": 35,
+                "variationId": 246974,
+                "variationVersion": 255
+            },
+            {
+                "id": 225048,
+                "index": 3,
+                "url": "pack_0/level_3.json",
+                "properties": {
+                    "movesCount": "22",
+                    "objectives": {
+                        "explode-any": "10"
+                    },
+                    "star_milestones": "3600,15000,25000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isMelnSplashDisabled": true,
+                    "isMatchFiveExplosionDisabled": true,
+                    "isMatchCrossExplosionDisabled": true,
+                    "isTutorialDisabled": true
+                },
+                "version": 37,
+                "variationId": 246976,
+                "variationVersion": 257
+            },
+            {
+                "id": 225049,
+                "index": 4,
+                "url": "pack_0/level_4.json",
+                "properties": {
+                    "movesCount": "20",
+                    "objectives": {
+                        "explode-any": "15"
+                    },
+                    "star_milestones": "2000,10000,18000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isMelnSplashDisabled": true,
+                    "isMatchFiveExplosionDisabled": true,
+                    "isTutorialDisabled": true
+                },
+                "version": 38,
+                "variationId": 246978,
+                "variationVersion": 261
+            },
+            {
+                "id": 225050,
+                "index": 5,
+                "url": "pack_0/level_5.json",
+                "properties": {
+                    "movesCount": "25",
+                    "objectives": {
+                        "explode-tomato": "7"
+                    },
+                    "star_milestones": "3600,14000,20000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isMelnSplashDisabled": true,
+                    "isTutorialDisabled": true
+                },
+                "version": 34,
+                "variationId": 246980,
+                "variationVersion": 271
+            },
+            {
+                "id": 225051,
+                "index": 6,
+                "url": "pack_0/level_6.json",
+                "properties": {
+                    "movesCount": "18",
+                    "objectives": {
+                        "explode-watermelon": "5",
+                        "explode-melon": "5"
+                    },
+                    "star_milestones": "2000,20000,30000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isTutorialDisabled": true
+                },
+                "version": 34,
+                "variationId": 246982,
+                "variationVersion": 261
+            },
+            {
+                "id": 225052,
+                "index": 7,
+                "url": "pack_0/level_7.json",
+                "properties": {
+                    "movesCount": "24",
+                    "objectives": {
+                        "wood": "2",
+                        "explode-melon": "4"
+                    },
+                    "star_milestones": "2000,15000,25000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isTutorialDisabled": true
+                },
+                "version": 34,
+                "variationId": 246985,
+                "variationVersion": 292
+            },
+            {
+                "id": 225054,
+                "index": 8,
+                "url": "pack_0/level_8.json",
+                "properties": {
+                    "movesCount": "45",
+                    "star_milestones": "3000,16000,26000",
+                    "fiestaChainLength": 5.0,
+                    "objectives": {
+                        "rescue-chick": "12"
+                    },
+                    "boosts": {
+                        "COMMON_COLOR_REMOVER_BOOST": true,
+                        "COMMON_MAGIC_SEED_BOOST": true,
+                        "BOOST_SHOVEL": true
+                    },
+                    "preGameBoosts": {
+                        "COMMON_COLOR_REMOVER_BOOST": true,
+                        "COMMON_MAGIC_SEED_BOOST": true,
+                        "COMMON_SHOVEL_BOOST": true
+                    },
+                    "isTutorialDisabled": true
+                },
+                "version": 45,
+                "variationId": 246989,
+                "variationVersion": 337
+            },
+            {
+                "id": 225053,
+                "index": 9,
+                "url": "pack_0/level_9.json",
+                "properties": {
+                    "movesCount": "22",
+                    "star_milestones": "2400,20000,37000",
+                    "objectives": {
+                        "wood": "12"
+                    },
+                    "Boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    },
+                    "isTutorialDisabled": false
+                },
+                "version": 35,
+                "variationId": 246987,
+                "variationVersion": 361
+            },
+            {
+                "id": 225056,
+                "index": 10,
+                "url": "pack_0/level_10.json",
+                "properties": {
+                    "movesCount": "18",
+                    "star_milestones": "6750,20000,28000",
+                    "objectives": {
+                        "wood": "4"
+                    },
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": true,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    }
+                },
+                "version": 33,
+                "variationId": 246994,
+                "variationVersion": 272
+            },
+            {
+                "id": 225057,
+                "index": 11,
+                "url": "pack_0/level_11.json",
+                "properties": {
+                    "movesCount": "24",
+                    "star_milestones": "2500,10000,17000",
+                    "objectives": {
+                        "wood": "14"
+                    },
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": false,
+                        "BOOST_MAGIC_SEED": false,
+                        "BOOST_SHOVEL": false
+                    }
+                },
+                "version": 51,
+                "variationId": 246999,
+                "variationVersion": 314
+            },
+            {
+                "id": 225055,
+                "index": 12,
+                "url": "pack_0/level_12.json",
+                "properties": {
+                    "movesCount": "30",
+                    "objectives": {
+                        "rescue": "5"
+                    },
+                    "star_milestones": "7200,28000,40000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": true,
+                        "BOOST_MAGIC_SEED": true,
+                        "BOOST_SHOVEL": true
+                    },
+                    "isTutorialDisabled": true
+                },
+                "version": 56,
+                "variationId": 246991,
+                "variationVersion": 226
+            },
+            {
+                "id": 225058,
+                "index": 13,
+                "url": "pack_0/level_13.json",
+                "properties": {
+                    "movesCount": "30",
+                    "objectives": {
+                        "explode-pepper": "2"
+                    },
+                    "star_milestones": "10800,48000,61000",
+                    "fiestaChainLength": "5",
+                    "inGameBoosts": {
+                        "COMMON_COLOR_REMOVER_BOOST": true,
+                        "COMMON_MAGIC_SEED_BOOST": true,
+                        "COMMON_SHOVEL_BOOST": true
+                    },
+                    "preGameBoosts": {
+                        "COMMON_COLOR_REMOVER_BOOST": true,
+                        "COMMON_MAGIC_SEED_BOOST": true,
+                        "COMMON_SHOVEL_BOOST": true
+                    }
+                },
+                "version": 33,
+                "variationId": 247000,
+                "variationVersion": 278
+            },
+            {
+                "id": 225059,
+                "index": 14,
+                "url": "pack_0/level_14.json",
+                "properties": {
+                    "movesCount": 50.0,
+                    "objectives": {
+                        "explode-pepper": "11",
+                        "explode-melon": 10.0,
+                        "explode-tomato": 10.0
+                    },
+                    "star_milestones": "7500,40000,60000",
+                    "boosts": {
+                        "BOOST_COLOR_REMOVER": true,
+                        "BOOST_MAGIC_SEED": true,
+                        "BOOST_SHOVEL": true
+                    },
+                    "preGameBoosts": {
+                        "COMMON_COLOR_REMOVER_BOOST": true,
+                        "COMMON_MAGIC_SEED_BOOST": true,
+                        "COMMON_SHOVEL_BOOST": true
+                    },
+                    "pies": {
+                        "col": "[0.5]",
+                        "row": "[0,8]",
+                        "pie1": "2x3",
+                        "pie2": "3x5"
+                    }
+                },
+                "version": 94,
+                "variationId": 247477,
+                "variationVersion": 419
+            }
+        ]
+    }
+]}

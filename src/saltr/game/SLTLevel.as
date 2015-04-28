@@ -153,13 +153,6 @@ public class SLTLevel {
      * Updates the content of the level.
      */
     public function updateContent(rootNode:Object):void {
-        var boardsNode:Object;
-        if (rootNode.hasOwnProperty("boards")) {
-            boardsNode = rootNode["boards"];
-        } else {
-            throw new Error("[SALTR: ERROR] Level content's 'boards' node can not be found.");
-        }
-
         _properties = rootNode["properties"];
 
         var parser:SLTLevelParser = getParser(_levelType);
@@ -172,7 +165,7 @@ public class SLTLevel {
             }
 
             try {
-                _boards = parser.parseLevelContent(boardsNode, _assetMap);
+                _boards = parser.parseLevelContent(rootNode, _assetMap);
             }
             catch (e:Error) {
                 throw new Error("[SALTR: ERROR] Level content boards parsing failed.")

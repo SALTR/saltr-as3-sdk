@@ -27,8 +27,8 @@ public class SLTMobileRepository implements ISLTRepository {
         _cacheDirectory = File.cacheDirectory;
         _fileStream = new FileStream();
 
-        trace("storageDirectory: " + _storageDirectory.nativePath);
-        trace("cacheDir: " + _cacheDirectory.nativePath);
+//        trace("storageDirectory: " + _storageDirectory.nativePath);
+//        trace("cacheDir: " + _cacheDirectory.nativePath);
     }
 
     /**

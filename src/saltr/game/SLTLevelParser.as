@@ -22,12 +22,22 @@ public class SLTLevelParser {
 
     /**
      * Parses the level content.
-     * @param boardNodes The board nodes.
+     * @param rootNode The root node.
      * @param assetMap The asset map.
      * @return The parsed boards.
      */
-    saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    saltr_internal function parseLevelContent(rootNode:Object, assetMap:Dictionary):Dictionary {
         throw new Error("[SALTR: ERROR] parseLevelContent() is virtual method.");
+    }
+
+    saltr_internal function getBoardsNode(rootNode:Object):Object {
+        var boardsNode:Object;
+        if (rootNode.hasOwnProperty("boards")) {
+            boardsNode = rootNode["boards"];
+        } else {
+            throw new Error("[SALTR: ERROR] Level content's 'boards' node can not be found.");
+        }
+        return boardsNode;
     }
 
 

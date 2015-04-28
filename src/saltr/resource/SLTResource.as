@@ -166,7 +166,7 @@ public class SLTResource {
 
     protected function initLoaderListeners(dispatcher:EventDispatcher):void {
         dispatcher.addEventListener(Event.COMPLETE, completeHandler);
-        if (_onProgress) {
+        if (null != _onProgress) {
             dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
         }
         dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);

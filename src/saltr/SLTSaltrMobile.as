@@ -10,6 +10,7 @@ import flash.utils.Timer;
 import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
+import saltr.api.ApiFactory;
 import saltr.api.AppDataApiCall;
 import saltr.api.HeartbeatApiCall;
 import saltr.api.LevelContentApiCall;
@@ -69,6 +70,7 @@ public class SLTSaltrMobile {
 
     private var _heartbeatTimer:Timer;
     private var _heartBeatTimerStarted:Boolean;
+    private var _apiFactory:ApiFactory;
 
     /**
      * Class constructor.
@@ -98,6 +100,12 @@ public class SLTSaltrMobile {
 
         _appData = new AppData();
         _levelData = new LevelData();
+
+        _apiFactory = new ApiFactory();
+    }
+
+    public function set apiFactory(value:ApiFactory):void {
+        _apiFactory = value;
     }
 
     /**
@@ -630,6 +638,10 @@ public class SLTSaltrMobile {
     private function loadLevelContentFromDisk(sltLevel:SLTLevel):Object {
         var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromApplication(url);
+    }
+
+    public function doCallbackTest(f:Function):void {
+        _apiFactory.getCall("heartbeat",true).call(f);
     }
 }
 }
