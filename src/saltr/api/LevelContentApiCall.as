@@ -10,9 +10,8 @@ use namespace saltr_internal;
  * @private
  */
 public class LevelContentApiCall extends ApiCall {
-    public function LevelContentApiCall(params:Object, isMobile:Boolean = true) {
-        super(params, isMobile);
-        _url = _params.levelContentUrl;
+    public function LevelContentApiCall(isMobile:Boolean = true) {
+        super(isMobile);
     }
 
     override saltr_internal function validateMobileParams():Object {
@@ -24,6 +23,7 @@ public class LevelContentApiCall extends ApiCall {
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = _params.levelContentUrl;
         return null;
     }
 

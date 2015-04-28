@@ -11,12 +11,12 @@ use namespace saltr_internal;
  */
 public class SendLevelEndEventApiCall extends ApiCall {
 
-    public function SendLevelEndEventApiCall(params:Object, isMobile:Boolean = true):void {
-        super(params, isMobile);
-        _url = SLTConfig.SALTR_DEVAPI_URL;
+    public function SendLevelEndEventApiCall(isMobile:Boolean = true):void {
+        super(isMobile);
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = SLTConfig.SALTR_DEVAPI_URL;
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_DEV_ADD_LEVELEND_EVENT;
 

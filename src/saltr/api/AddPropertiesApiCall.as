@@ -11,12 +11,12 @@ use namespace saltr_internal;
  */
 public class AddPropertiesApiCall extends ApiCall {
 
-    public function AddPropertiesApiCall(params:Object, isMobile:Boolean = true):void {
-        super(params, isMobile);
-        _url = SLTConfig.SALTR_API_URL;
+    public function AddPropertiesApiCall(isMobile:Boolean = true):void {
+        super(isMobile);
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = SLTConfig.SALTR_API_URL;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = buildDefaultArgs();
         urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;

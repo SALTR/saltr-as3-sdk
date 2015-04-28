@@ -39,13 +39,13 @@ public class ApiCall {
         return ticket;
     }
 
-    public function ApiCall(params:Object, isMobile:Boolean = true) {
-        _params = params;
+    public function ApiCall(isMobile:Boolean = true) {
         _isMobile = isMobile;
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(callback:Function, timeout:int = 0):void {
+    saltr_internal function call(params:Object, callback:Function, timeout:int = 0):void {
+        _params = params;
         _callback = callback;
         var validationResult:Object = validateParams();
         if (validationResult.isValid == false) {

@@ -7,15 +7,9 @@ import flash.display.Stage;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
-import saltr.api.AppDataApiCall;
-import saltr.api.HeartbeatApiCall;
-import saltr.api.LevelContentApiCall;
-import saltr.api.RegisterUserApiCall;
-import saltr.api.SendLevelEndEventApiCall;
-import saltr.api.SyncApiCall;
+import saltr.api.ApiFactory;
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
@@ -67,6 +61,7 @@ public class SLTSaltrWeb {
 
     private var _heartbeatTimer:Timer;
     private var _heartBeatTimerStarted:Boolean;
+    private var _apiFactory:ApiFactory;
 
     /**
      * Class constructor.
@@ -95,6 +90,12 @@ public class SLTSaltrWeb {
 
         _appData = new AppData();
         _levelData = new LevelData();
+
+        _apiFactory = new ApiFactory();
+    }
+
+    public function set apiFactory(value:ApiFactory):void {
+        _apiFactory = value;
     }
 
     /**
@@ -278,8 +279,8 @@ public class SLTSaltrWeb {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var appDataCall:AppDataApiCall = new AppDataApiCall(params, false);
-        appDataCall.call(appDataApiCallback, _requestIdleTimeout);
+        var appDataCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_APP_DATA, false);
+        appDataCall.call(params, appDataApiCallback, _requestIdleTimeout);
     }
 
     /**
@@ -310,8 +311,8 @@ public class SLTSaltrWeb {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:AddPropertiesApiCall = new AddPropertiesApiCall(params, false);
-        addPropertiesApiCall.call(addPropertiesApiCallback, _requestIdleTimeout);
+        var addPropertiesApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_ADD_PROPERTIES, false);
+        addPropertiesApiCall.call(params, addPropertiesApiCallback, _requestIdleTimeout);
     }
 
     /**
@@ -346,8 +347,8 @@ public class SLTSaltrWeb {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params, false);
-        sendLevelEndEventApiCall.call(sendLevelEndApiCallback);
+        var sendLevelEndEventApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_SEND_LEVEL_END, false);
+        sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
     }
 
     /**
@@ -358,8 +359,8 @@ public class SLTSaltrWeb {
         var params:Object = {
             levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
         };
-        var levelContentApiCall:LevelContentApiCall = new LevelContentApiCall(params, false);
-        levelContentApiCall.call(levelContentApiCallback, _requestIdleTimeout);
+        var levelContentApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_LEVEL_CONTENT, false);
+        levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
 
         function levelContentApiCallback(result:ApiCallResult):void {
             var content:Object = result.data;
@@ -427,7 +428,7 @@ public class SLTSaltrWeb {
         _connected = true;
         _connectSuccessCallback();
 
-        if(!_heartBeatTimerStarted) {
+        if (!_heartBeatTimerStarted) {
             startHeartbeat();
         }
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
@@ -460,8 +461,8 @@ public class SLTSaltrWeb {
             platform: _platform,
             devMode: _devMode
         };
-        var apiCall:ApiCall = new RegisterUserApiCall(params, false);
-        apiCall.call(registerUserApiCallback);
+        var apiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_REGISTER_USER, false);
+        apiCall.call(params, registerUserApiCallback);
     }
 
     private function registerUserApiCallback(result:ApiCallResult):void {
@@ -487,8 +488,8 @@ public class SLTSaltrWeb {
             socialId: _socialId,
             developerFeatures: _appData.developerFeatures
         };
-        var syncApiCall:SyncApiCall = new SyncApiCall(params, false);
-        syncApiCall.call(syncApiCallback);
+        var syncApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_SYNC, false);
+        syncApiCall.call(params, syncApiCallback);
     }
 
     private function syncApiCallback(result:ApiCallResult):void {
@@ -521,7 +522,7 @@ public class SLTSaltrWeb {
     }
 
     private function stopHeartbeat():void {
-        if(null != _heartbeatTimer) {
+        if (null != _heartbeatTimer) {
             _heartbeatTimer.stop();
             _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeatTimerHandler);
             _heartbeatTimer = null;
@@ -535,8 +536,8 @@ public class SLTSaltrWeb {
             devMode: _devMode,
             socialId: _socialId
         };
-        var heartbeatApiCall:HeartbeatApiCall = new HeartbeatApiCall(params);
-        heartbeatApiCall.call(heartbeatApiCallback);
+        var heartbeatApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_HEARTBEAT, false);
+        heartbeatApiCall.call(params, heartbeatApiCallback);
     }
 
     private function heartbeatApiCallback(result:ApiCallResult):void {

@@ -13,9 +13,8 @@ use namespace saltr_internal;
  */
 public class RegisterDeviceApiCall extends ApiCall {
 
-    public function RegisterDeviceApiCall(params:Object, isMobile:Boolean = true) {
-        super(params, isMobile);
-        _url = SLTConfig.SALTR_DEVAPI_URL;
+    public function RegisterDeviceApiCall(isMobile:Boolean = true) {
+        super(isMobile);
     }
 
     override saltr_internal function validateMobileParams():Object {
@@ -35,6 +34,7 @@ public class RegisterDeviceApiCall extends ApiCall {
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = SLTConfig.SALTR_DEVAPI_URL;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = {};
         urlVars.action = SLTConfig.ACTION_DEV_REGISTER_DEVICE;

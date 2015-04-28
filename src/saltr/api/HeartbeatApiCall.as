@@ -10,12 +10,12 @@ import saltr.saltr_internal;
 use namespace saltr_internal;
 
 public class HeartbeatApiCall extends ApiCall {
-    public function HeartbeatApiCall(params:Object, isMobile:Boolean = true) {
-        super(params, isMobile);
-        _url = SLTConfig.SALTR_API_URL;
+    public function HeartbeatApiCall(isMobile:Boolean = true) {
+        super(isMobile);
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = SLTConfig.SALTR_API_URL;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = buildDefaultArgs();
         urlVars.action = SLTConfig.ACTION_HEARTBEAT;

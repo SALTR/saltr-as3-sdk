@@ -7,16 +7,9 @@ import flash.display.Stage;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCall;
 import saltr.api.ApiCallResult;
 import saltr.api.ApiFactory;
-import saltr.api.AppDataApiCall;
-import saltr.api.HeartbeatApiCall;
-import saltr.api.LevelContentApiCall;
-import saltr.api.RegisterDeviceApiCall;
-import saltr.api.SendLevelEndEventApiCall;
-import saltr.api.SyncApiCall;
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
@@ -313,8 +306,8 @@ public class SLTSaltrMobile {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var appDataCall:AppDataApiCall = new AppDataApiCall(params);
-        appDataCall.call(appDataApiCallback, _requestIdleTimeout);
+        var appDataCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_APP_DATA, true);
+        appDataCall.call(params, appDataApiCallback, _requestIdleTimeout);
     }
 
     /**
@@ -362,8 +355,8 @@ public class SLTSaltrMobile {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:AddPropertiesApiCall = new AddPropertiesApiCall(params);
-        addPropertiesApiCall.call(addPropertiesApiCallback, _requestIdleTimeout);
+        var addPropertiesApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_ADD_PROPERTIES, true);
+        addPropertiesApiCall.call(params, addPropertiesApiCallback, _requestIdleTimeout);
     }
 
     /**
@@ -399,8 +392,8 @@ public class SLTSaltrMobile {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:SendLevelEndEventApiCall = new SendLevelEndEventApiCall(params);
-        sendLevelEndEventApiCall.call(sendLevelEndApiCallback);
+        var sendLevelEndEventApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_SEND_LEVEL_END, true);
+        sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
     }
 
     /**
@@ -411,8 +404,8 @@ public class SLTSaltrMobile {
         var params:Object = {
             levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
         };
-        var levelContentApiCall:LevelContentApiCall = new LevelContentApiCall(params);
-        levelContentApiCall.call(levelContentApiCallback, _requestIdleTimeout);
+        var levelContentApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_LEVEL_CONTENT, true);
+        levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
 
         function levelContentApiCallback(result:ApiCallResult):void {
             var content:Object = result.data;
@@ -491,7 +484,7 @@ public class SLTSaltrMobile {
 
         _connectSuccessCallback();
 
-        if(!_heartBeatTimerStarted) {
+        if (!_heartBeatTimerStarted) {
             startHeartbeat();
         }
 
@@ -525,8 +518,8 @@ public class SLTSaltrMobile {
             deviceInfo: MobileDeviceInfo.getDeviceInfo(),
             devMode: _devMode
         };
-        var apiCall:ApiCall = new RegisterDeviceApiCall(params);
-        apiCall.call(registerDeviceApiCallback);
+        var apiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_REGISTER_DEVICE, true);
+        apiCall.call(params, registerDeviceApiCallback);
     }
 
     private function registerDeviceApiCallback(result:ApiCallResult):void {
@@ -553,8 +546,8 @@ public class SLTSaltrMobile {
             socialId: _socialId,
             developerFeatures: _appData.developerFeatures
         };
-        var syncApiCall:SyncApiCall = new SyncApiCall(params);
-        syncApiCall.call(syncApiCallback);
+        var syncApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_SYNC, true);
+        syncApiCall.call(params, syncApiCallback);
     }
 
     private function syncApiCallback(result:ApiCallResult):void {
@@ -587,7 +580,7 @@ public class SLTSaltrMobile {
     }
 
     private function stopHeartbeat():void {
-        if(null != _heartbeatTimer) {
+        if (null != _heartbeatTimer) {
             _heartbeatTimer.stop();
             _heartbeatTimer.removeEventListener(TimerEvent.TIMER, heartbeatTimerHandler);
             _heartbeatTimer = null;
@@ -602,8 +595,8 @@ public class SLTSaltrMobile {
             deviceId: _deviceId,
             socialId: _socialId
         };
-        var heartbeatApiCall:HeartbeatApiCall = new HeartbeatApiCall(params);
-        heartbeatApiCall.call(heartbeatApiCallback);
+        var heartbeatApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_HEARTBEAT, true);
+        heartbeatApiCall.call(params, heartbeatApiCallback);
     }
 
     private function heartbeatApiCallback(result:ApiCallResult):void {
@@ -640,8 +633,9 @@ public class SLTSaltrMobile {
         return _repository.getObjectFromApplication(url);
     }
 
-    public function doCallbackTest(f:Function):void {
-        _apiFactory.getCall("heartbeat",true).call(f);
-    }
+    //TODO @TIGR fix this
+//    public function doCallbackTest(f:Function):void {
+//        _apiFactory.getCall("heartbeat",true).call(f);
+//    }
 }
 }
