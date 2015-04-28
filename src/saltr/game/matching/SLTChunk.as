@@ -19,6 +19,7 @@ internal class SLTChunk {
     private var _layerToken:String;
     private var _layerIndex:int;
     private var _chunkAssetRules:Vector.<SLTChunkAssetRule>;
+    private var _matchingRuleEnabled:Boolean;
     private var _chunkCells:Vector.<SLTCell>;
     private var _availableCells:Vector.<SLTCell>;
     private var _assetMap:Dictionary;
@@ -36,13 +37,15 @@ internal class SLTChunk {
      * @param layerIndex The layer index.
      * @param chunkCells The cells of chunk.
      * @param chunkAssetRules The asset rules.
+     * @param matchingRuleEnabled The matching rule enabled state.
      * @param assetMap The assets.
      */
-    public function SLTChunk(layerToken:String, layerIndex:int, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, assetMap:Dictionary) {
+    public function SLTChunk(layerToken:String, layerIndex:int, chunkCells:Vector.<SLTCell>, chunkAssetRules:Vector.<SLTChunkAssetRule>, matchingRuleEnabled:Boolean, assetMap:Dictionary) {
         _layerToken = layerToken;
         _layerIndex = layerIndex;
         _chunkCells = chunkCells;
         _chunkAssetRules = chunkAssetRules;
+        _matchingRuleEnabled = matchingRuleEnabled;
         _assetMap = assetMap;
         _availableAssetData = new Vector.<SLTChunkAssetDatum>();
         _uniqueInAvailableAssetData = new Vector.<SLTChunkAssetDatum>();
@@ -70,6 +73,10 @@ internal class SLTChunk {
 
     saltr_internal function get cells():Vector.<SLTCell> {
         return _chunkCells;
+    }
+
+    saltr_internal function get matchingRuleEnabled():Boolean {
+        return _matchingRuleEnabled;
     }
 
     saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {

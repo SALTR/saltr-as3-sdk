@@ -38,11 +38,12 @@ public class SLT2DLevelParser extends SLTLevelParser {
 
     /**
      * Parses the level content.
-     * @param boardNodes The board nodes.
+     * @param rootNodes The root node.
      * @param assetMap The asset map.
      * @return The parsed boards.
      */
-    override saltr_internal function parseLevelContent(boardNodes:Object, assetMap:Dictionary):Dictionary {
+    override saltr_internal function parseLevelContent(rootNode:Object, assetMap:Dictionary):Dictionary {
+        var boardNodes:Object = getBoardsNode(rootNode);
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
             var boardNode:Object = boardNodes[boardId];
