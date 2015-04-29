@@ -7,6 +7,8 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
+import saltr.SLTExperiment;
+
 import saltr.SLTSaltrMobile;
 import saltr.api.ApiCallResult;
 import saltr.api.ApiFactory;
@@ -45,7 +47,9 @@ public class SLTSaltrMobileTestWithConnection {
     [Before]
     public function tearUp():void {
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelPacksJson()));
-        stub(mobileRepository).method("cacheObject").calls(function():void{trace("cacheObject")});
+        stub(mobileRepository).method("cacheObject").calls(function ():void {
+            trace("cacheObject");
+        });
         stub(mobileRepository).method("getObjectFromCache").returns(null);
 
         stub(apiFactory).method("getCall").returns(apiCallMock);
@@ -104,12 +108,11 @@ public class SLTSaltrMobileTestWithConnection {
     /**
      * connectTestWithSuccess.
      * The intent of this test is to check the connect function.
-     * Everything is OK, sync() not called, heartbeat() started.
+     * Everything is OK, sync() not called.
      */
     [Test]
     public function connectTestWithSuccess():void {
         var apiCallResult:ApiCallResult = new ApiCallResult();
-        //apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
         apiCallResult.data = JSON.parse(new AppDataJson());
         apiCallResult.success = true;
         stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
@@ -123,6 +126,15 @@ public class SLTSaltrMobileTestWithConnection {
         _saltr.start();
         _saltr.connect(successCallback, failCallback);
         assertEquals(true, isConnected);
+
+        var experiments:Vector.<SLTExperiment> = _saltr.experiments;
+        assertEquals(1, experiments.length);
+        assertEquals("EXP1", experiments[0].token);
+        assertEquals("feature", experiments[0].type);
+        assertEquals("A", experiments[0].partition);
+
+        assertEquals(75, _saltr.allLevelsCount);
+        assertEquals(5, _saltr.levelPacks.length);
     }
 }
 }
