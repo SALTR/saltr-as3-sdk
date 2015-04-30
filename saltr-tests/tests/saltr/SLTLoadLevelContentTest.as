@@ -8,6 +8,7 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
+import saltr.api.ApiCallResult;
 import saltr.api.ApiFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
@@ -43,14 +44,17 @@ public class SLTLoadLevelContentTest {
     [Mock(type="nice")]
     public var apiFactory:ApiFactory;
     [Mock(type="nice")]
-    public var apiCallMock:ApiCallMock;
+    public var apiCallGeneralMock:ApiCallMock;
+    [Mock(type="nice")]
+    public var apiCallLevelContentMock:ApiCallMock;
 
     public function SLTLoadLevelContentTest() {
     }
 
     [Before]
     public function tearUp():void {
-        stub(apiFactory).method("getCall").returns(apiCallMock);
+        stub(apiFactory).method("getCall").args("AppData", true).returns(apiCallGeneralMock);
+        stub(apiFactory).method("getCall").args("LevelContent", true).returns(apiCallLevelContentMock);
 
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.apiFactory = apiFactory;
@@ -216,38 +220,67 @@ public class SLTLoadLevelContentTest {
      */
     [Test]
     public function loadLevelContentTestFromSaltrCacheDisabled():void {
-//        var apiCallResult:ApiCallResult = new ApiCallResult();
-//        apiCallResult.data = JSON.parse(new LevelDataFromSaltrJson());
-//        apiCallResult.success = true;
-//        stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
-//
-//        var levelLoaded:Boolean = false;
-//        var failCallback:Function = function ():void {
-//            levelLoaded = false;
-//        };
-//        var successCallback:Function = function ():void {
-//            levelLoaded = true;
-//        };
-//        var levelProperties:Object = {
-//            "movesCount": "18",
-//            "objectives": {
-//                "explode-melon": "2"
-//            },
-//            "star_milestones": "150,350,1150",
-//            "boosts": {
-//                "BOOST_COLOR_REMOVER": false,
-//                "BOOST_MAGIC_SEED": false,
-//                "BOOST_SHOVEL": false
-//            },
-//            "isMelnSplashDisabled": true,
-//            "isMatchFourExplosionDisabled": true,
-//            "isMatchCrossExplosionDisabled": true,
-//            "isMatchFiveExplosionDisabled": true,
-//            "isTutorialDisabled": true
-//        };
-//        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-//        assertEquals(false, level.contentReady);
-//        _saltr.loadLevelContent(level, successCallback, failCallback, false);
+        stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelPacksJson()));
+        stub(mobileRepository).method("cacheObject").calls(function ():void {
+            trace("cacheObject");
+        });
+        stub(mobileRepository).method("getObjectFromCache").returns(null);
+
+        _saltr.importLevels("");
+
+        var apiCallResultGeneral:ApiCallResult = new ApiCallResult();
+        apiCallResultGeneral.data = JSON.parse(new AppDataJson);
+        apiCallResultGeneral.success = true;
+        stub(apiCallGeneralMock).method("getMockedCallResult").returns(apiCallResultGeneral);
+
+        var apiCallResultLevelContent:ApiCallResult = new ApiCallResult();
+        apiCallResultLevelContent.data = JSON.parse(new LevelDataFromSaltrJson);
+        apiCallResultLevelContent.success = true;
+        stub(apiCallLevelContentMock).method("getMockedCallResult").returns(apiCallResultLevelContent);
+
+        var isConnected:Boolean = false;
+        var connectFailCallback:Function;
+        var connectSuccessCallback:Function = function ():void {
+            isConnected = true;
+        };
+
+        _saltr.start();
+        _saltr.connect(connectSuccessCallback, connectFailCallback);
+        assertEquals(true, isConnected);
+
+
+        var levelLoaded:Boolean = false;
+        var loadLevelContentFailCallback:Function = function ():void {
+            levelLoaded = false;
+        };
+        var loadLevelContentSuccessCallback:Function = function ():void {
+            levelLoaded = true;
+        };
+        var levelProperties:Object = {
+            "movesCount": "18",
+            "objectives": {
+                "explode-melon": "2"
+            },
+            "star_milestones": "150,350,1150",
+            "boosts": {
+                "BOOST_COLOR_REMOVER": false,
+                "BOOST_MAGIC_SEED": false,
+                "BOOST_SHOVEL": false
+            },
+            "isMelnSplashDisabled": true,
+            "isMatchFourExplosionDisabled": true,
+            "isMatchCrossExplosionDisabled": true,
+            "isMatchFiveExplosionDisabled": true,
+            "isTutorialDisabled": true
+        };
+        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        assertEquals(false, level.contentReady);
+        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback, false);
+
+        assertEquals(true, levelLoaded);
+        assertEquals(true, level.contentReady);
+        assertEquals("default", level.getBoard("main").layers[0].token);
+        assertEquals("saltr", level.properties.levelDataFrom);
     }
 }
 }
