@@ -191,6 +191,100 @@ public class SLTSaltrMobileTestWithConnection {
         assertEquals("cached", level.properties.levelDataFrom);
     }
 
+    /**
+     * loadLevelContentTestFromApplicationCacheDisabled.
+     * The intent of this test is to check the loadLevelContent function.
+     * Not connected state, useCache = false. Data from application expected.
+     */
+    [Test]
+    public function loadLevelContentTestFromApplicationCacheDisabled():void {
+        stub(mobileRepository).method("cacheObject").calls(function ():void {
+            trace("cacheObject");
+        });
+        stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new LevelDataCachedJson()));
+        stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
+
+        var levelLoaded:Boolean = false;
+        var failCallback:Function = function ():void {
+            levelLoaded = false;
+        };
+        var successCallback:Function = function ():void {
+            levelLoaded = true;
+        };
+        var levelProperties:Object = {
+            "movesCount": "18",
+            "objectives": {
+                "explode-melon": "2"
+            },
+            "star_milestones": "150,350,1150",
+            "boosts": {
+                "BOOST_COLOR_REMOVER": false,
+                "BOOST_MAGIC_SEED": false,
+                "BOOST_SHOVEL": false
+            },
+            "isMelnSplashDisabled": true,
+            "isMatchFourExplosionDisabled": true,
+            "isMatchCrossExplosionDisabled": true,
+            "isMatchFiveExplosionDisabled": true,
+            "isTutorialDisabled": true
+        };
+        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        assertEquals(false, level.contentReady);
+        _saltr.loadLevelContent(level, successCallback, failCallback, false);
+
+        assertEquals(true, levelLoaded);
+        assertEquals(true, level.contentReady);
+        assertEquals("default", level.getBoard("main").layers[0].token);
+        assertEquals("application", level.properties.levelDataFrom);
+    }
+
+    /**
+     * loadLevelContentTestFromApplicationCacheEnabled.
+     * The intent of this test is to check the loadLevelContent function.
+     * Not connected state, useCache = true. Data from application expected.
+     */
+    [Test]
+    public function loadLevelContentTestFromApplicationCacheEnabled():void {
+        stub(mobileRepository).method("cacheObject").calls(function ():void {
+            trace("cacheObject");
+        });
+        stub(mobileRepository).method("getObjectFromCache").returns(null);
+        stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
+
+        var levelLoaded:Boolean = false;
+        var failCallback:Function = function ():void {
+            levelLoaded = false;
+        };
+        var successCallback:Function = function ():void {
+            levelLoaded = true;
+        };
+        var levelProperties:Object = {
+            "movesCount": "18",
+            "objectives": {
+                "explode-melon": "2"
+            },
+            "star_milestones": "150,350,1150",
+            "boosts": {
+                "BOOST_COLOR_REMOVER": false,
+                "BOOST_MAGIC_SEED": false,
+                "BOOST_SHOVEL": false
+            },
+            "isMelnSplashDisabled": true,
+            "isMatchFourExplosionDisabled": true,
+            "isMatchCrossExplosionDisabled": true,
+            "isMatchFiveExplosionDisabled": true,
+            "isTutorialDisabled": true
+        };
+        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        assertEquals(false, level.contentReady);
+        _saltr.loadLevelContent(level, successCallback, failCallback);
+
+        assertEquals(true, levelLoaded);
+        assertEquals(true, level.contentReady);
+        assertEquals("default", level.getBoard("main").layers[0].token);
+        assertEquals("application", level.properties.levelDataFrom);
+    }
+
     private function prepareStandard():void {
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelPacksJson()));
         stub(mobileRepository).method("cacheObject").calls(function ():void {
