@@ -93,21 +93,7 @@ public class SLTLoadLevelContentTest {
             levelLoaded = true;
         };
         var levelProperties:Object = {
-            "movesCount": "18",
-            "objectives": {
-                "explode-melon": "2"
-            },
-            "star_milestones": "150,350,1150",
-            "boosts": {
-                "BOOST_COLOR_REMOVER": false,
-                "BOOST_MAGIC_SEED": false,
-                "BOOST_SHOVEL": false
-            },
-            "isMelnSplashDisabled": true,
-            "isMatchFourExplosionDisabled": true,
-            "isMatchCrossExplosionDisabled": true,
-            "isMatchFiveExplosionDisabled": true,
-            "isTutorialDisabled": true
+            "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
         assertEquals(false, level.contentReady);
@@ -140,21 +126,7 @@ public class SLTLoadLevelContentTest {
             levelLoaded = true;
         };
         var levelProperties:Object = {
-            "movesCount": "18",
-            "objectives": {
-                "explode-melon": "2"
-            },
-            "star_milestones": "150,350,1150",
-            "boosts": {
-                "BOOST_COLOR_REMOVER": false,
-                "BOOST_MAGIC_SEED": false,
-                "BOOST_SHOVEL": false
-            },
-            "isMelnSplashDisabled": true,
-            "isMatchFourExplosionDisabled": true,
-            "isMatchCrossExplosionDisabled": true,
-            "isMatchFiveExplosionDisabled": true,
-            "isTutorialDisabled": true
+            "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
         assertEquals(false, level.contentReady);
@@ -187,21 +159,7 @@ public class SLTLoadLevelContentTest {
             levelLoaded = true;
         };
         var levelProperties:Object = {
-            "movesCount": "18",
-            "objectives": {
-                "explode-melon": "2"
-            },
-            "star_milestones": "150,350,1150",
-            "boosts": {
-                "BOOST_COLOR_REMOVER": false,
-                "BOOST_MAGIC_SEED": false,
-                "BOOST_SHOVEL": false
-            },
-            "isMelnSplashDisabled": true,
-            "isMatchFourExplosionDisabled": true,
-            "isMatchCrossExplosionDisabled": true,
-            "isMatchFiveExplosionDisabled": true,
-            "isTutorialDisabled": true
+            "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
         assertEquals(false, level.contentReady);
@@ -257,21 +215,7 @@ public class SLTLoadLevelContentTest {
             levelLoaded = true;
         };
         var levelProperties:Object = {
-            "movesCount": "18",
-            "objectives": {
-                "explode-melon": "2"
-            },
-            "star_milestones": "150,350,1150",
-            "boosts": {
-                "BOOST_COLOR_REMOVER": false,
-                "BOOST_MAGIC_SEED": false,
-                "BOOST_SHOVEL": false
-            },
-            "isMelnSplashDisabled": true,
-            "isMatchFourExplosionDisabled": true,
-            "isMatchCrossExplosionDisabled": true,
-            "isMatchFiveExplosionDisabled": true,
-            "isTutorialDisabled": true
+            "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
         assertEquals(false, level.contentReady);
