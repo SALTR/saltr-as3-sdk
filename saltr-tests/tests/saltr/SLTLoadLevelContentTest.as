@@ -230,14 +230,43 @@ public class SLTLoadLevelContentTest {
         assertEquals("saltr", level.properties.levelDataFrom);
     }
 
+    /**
+     * loadLevelContentFromCacheConnected.
+     * The intent of this test is to check the loadLevelContent function.
+     * connected = true, useCache = true. Provided level version in cache matches with level version in cache. Data from cache expected.
+     */
+    [Test]
+    public function loadLevelContentFromCacheConnected():void {
+        prepareLoadLevelContentConnected();
+
+        var levelLoaded:Boolean = false;
+        var loadLevelContentFailCallback:Function = function ():void {
+            levelLoaded = false;
+        };
+        var loadLevelContentSuccessCallback:Function = function ():void {
+            levelLoaded = true;
+        };
+        var levelProperties:Object = {
+            "movesCount": "18"
+        };
+        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "45");
+        assertEquals(false, level.contentReady);
+        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
+
+        assertEquals(true, levelLoaded);
+        assertEquals(true, level.contentReady);
+        assertEquals("default", level.getBoard("main").layers[0].token);
+        assertEquals("cached", level.properties.levelDataFrom);
+    }
+
     private function prepareLoadLevelContentConnected():void {
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelPacksJson()));
         stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
         stub(mobileRepository).method("getObjectFromCache").args(SLTConfig.APP_DATA_URL_CACHE).returns(null);
-        stub(mobileRepository).method("getObjectFromCache").args("pack_{0}_level_{0}.json").returns(JSON.parse(new LevelDataCachedJson()));
-        stub(mobileRepository).method("getObjectVersion").args("pack_{0}_level_{0}.json").returns(45);
+        stub(mobileRepository).method("getObjectFromCache").args("pack_0_level_0.json").returns(JSON.parse(new LevelDataCachedJson()));
+        stub(mobileRepository).method("getObjectVersion").args("pack_0_level_0.json").returns("45");
 
         _saltr.importLevels("");
 
