@@ -7,6 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
+import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
 import saltr.api.ApiCallResult;
 import saltr.api.ApiFactory;
@@ -172,17 +173,71 @@ public class SLTLoadLevelContentTest {
     }
 
     /**
-     * loadLevelContentTestFromSaltrCacheDisabled
+     * loadLevelContentTestFromSaltrCacheDisabled.
      * The intent of this test is to check the loadLevelContent function.
      * connected = true, useCache = false. Data from saltr expected.
      */
     [Test]
     public function loadLevelContentTestFromSaltrCacheDisabled():void {
+        prepareLoadLevelContentConnected();
+
+        var levelLoaded:Boolean = false;
+        var loadLevelContentFailCallback:Function = function ():void {
+            levelLoaded = false;
+        };
+        var loadLevelContentSuccessCallback:Function = function ():void {
+            levelLoaded = true;
+        };
+        var levelProperties:Object = {
+            "movesCount": "18"
+        };
+        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        assertEquals(false, level.contentReady);
+        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback, false);
+
+        assertEquals(true, levelLoaded);
+        assertEquals(true, level.contentReady);
+        assertEquals("default", level.getBoard("main").layers[0].token);
+        assertEquals("saltr", level.properties.levelDataFrom);
+    }
+
+    /**
+     * loadLevelContentTestFromSaltrCashEnabledDifferentVersions.
+     * The intent of this test is to check the loadLevelContent function.
+     * connected = true, useCache = true. Different level versions in cache. Data from saltr expected.
+     */
+    [Test]
+    public function loadLevelContentTestFromSaltrCashEnabledDifferentVersions():void {
+        prepareLoadLevelContentConnected();
+
+        var levelLoaded:Boolean = false;
+        var loadLevelContentFailCallback:Function = function ():void {
+            levelLoaded = false;
+        };
+        var loadLevelContentSuccessCallback:Function = function ():void {
+            levelLoaded = true;
+        };
+        var levelProperties:Object = {
+            "movesCount": "18"
+        };
+        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        assertEquals(false, level.contentReady);
+        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
+
+        assertEquals(true, levelLoaded);
+        assertEquals(true, level.contentReady);
+        assertEquals("default", level.getBoard("main").layers[0].token);
+        assertEquals("saltr", level.properties.levelDataFrom);
+    }
+
+    private function prepareLoadLevelContentConnected():void {
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelPacksJson()));
         stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
-        stub(mobileRepository).method("getObjectFromCache").returns(null);
+        stub(mobileRepository).method("getObjectFromCache").args(SLTConfig.APP_DATA_URL_CACHE).returns(null);
+        stub(mobileRepository).method("getObjectFromCache").args("pack_{0}_level_{0}.json").returns(JSON.parse(new LevelDataCachedJson()));
+        stub(mobileRepository).method("getObjectVersion").args("pack_{0}_level_{0}.json").returns(45);
 
         _saltr.importLevels("");
 
@@ -204,27 +259,6 @@ public class SLTLoadLevelContentTest {
 
         _saltr.start();
         _saltr.connect(connectSuccessCallback, connectFailCallback);
-        assertEquals(true, isConnected);
-
-
-        var levelLoaded:Boolean = false;
-        var loadLevelContentFailCallback:Function = function ():void {
-            levelLoaded = false;
-        };
-        var loadLevelContentSuccessCallback:Function = function ():void {
-            levelLoaded = true;
-        };
-        var levelProperties:Object = {
-            "movesCount": "18"
-        };
-        var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback, false);
-
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("saltr", level.properties.levelDataFrom);
     }
 }
 }
