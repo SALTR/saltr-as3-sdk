@@ -1,0 +1,8 @@
+{
+    "response": [
+        {
+            "message": "Player properties are stored successfully",
+            "success": true
+        }
+    ]
+}

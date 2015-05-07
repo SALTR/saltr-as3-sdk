@@ -2,8 +2,12 @@
  * Created by TIGR on 5/5/2015.
  */
 package tests.saltr.api {
+import mockolate.runner.MockolateRule;
+import mockolate.stub;
+
 import org.flexunit.asserts.assertEquals;
 
+import saltr.SLTConfig;
 import saltr.api.AddPropertiesApiCall;
 import saltr.api.ApiCallResult;
 import saltr.saltr_internal;
@@ -14,7 +18,15 @@ use namespace saltr_internal;
  * The AddPropertiesApiCallTest class contain the AddPropertiesApiCall tests
  */
 public class AddPropertiesApiCallTest {
+    [Embed(source="../../../../build/tests/saltr/api_call_tests/add_properties/response_success.json", mimeType="application/octet-stream")]
+    private static const ResponseSuccessJson:Class;
+
     private var _call:AddPropertiesApiCall;
+
+    [Rule]
+    public var mocks:MockolateRule = new MockolateRule();
+    [Mock(type="nice")]
+    public var resource:SLTResourceMock;
 
     public function AddPropertiesApiCallTest() {
     }
@@ -28,11 +40,59 @@ public class AddPropertiesApiCallTest {
         _call = null;
     }
 
+    /**
+     * mobileCallParamsValidationSuccessTest.
+     * The intent of this test is to validate passing mobile parameters.
+     * Correct parameters provided.
+     */
     [Test]
-    public function aaa():void {
-        prepareMobile();
+    public function mobileCallParamsValidationSuccessTest():void {
+        createCallMobile();
+        assertEquals(true, ApiCallTestHelper.validateCallParams(_call, getCorrectMobileCallParams(), SLTConfig.ACTION_ADD_PROPERTIES));
+    }
 
-        var isCallSuccess:Boolean = true;
+    /**
+     * mobileCallParamsValidationFailTest.
+     * The intent of this test is to validate passing mobile parameters.
+     * Incorrect parameters provided.
+     */
+    [Test]
+    public function mobileCallParamsValidationFailTest():void {
+        createCallMobile();
+        assertEquals(false, ApiCallTestHelper.validateCallParams(_call, getCorrectWebCallParams(), SLTConfig.ACTION_ADD_PROPERTIES));
+    }
+
+    /**
+     * webCallParamsValidationSuccessTest.
+     * The intent of this test is to validate passing web parameters.
+     * Correct parameters provided.
+     */
+    [Test]
+    public function webCallParamsValidationSuccessTest():void {
+        createCallWeb();
+        assertEquals(true, ApiCallTestHelper.validateCallParams(_call, getCorrectWebCallParams(), SLTConfig.ACTION_ADD_PROPERTIES));
+    }
+
+    /**
+     * webCallParamsValidationFailTest.
+     * The intent of this test is to validate passing mobile parameters.
+     * Incorrect parameters provided.
+     */
+    [Test]
+    public function webCallParamsValidationFailTest():void {
+        createCallWeb();
+        assertEquals(false, ApiCallTestHelper.validateCallParams(_call, getCorrectMobileCallParams(), SLTConfig.ACTION_ADD_PROPERTIES));
+    }
+
+    /**
+     * callRequestCompletedHandlerTest.
+     * The intent of this test is to validate passing mobile parameters.
+     * Incorrect parameters provided.
+     */
+    [Test]
+    public function callRequestCompletedHandlerTest():void {
+        createCallMobile();
+        var isCallSuccess:Boolean = false;
         var callback:Function = function (result:ApiCallResult):void {
             if (result.success) {
                 isCallSuccess = true;
@@ -41,19 +101,36 @@ public class AddPropertiesApiCallTest {
             }
         };
 
-        var params:Object = {
-            clientKey: "clientKey",
-            deviceId: "deviceId",
-            socialId: "socialId",
-            basicProperties: null,
-            customProperties: null
-        };
-        _call.call(params, callback);
+        _call.call(getCorrectMobileCallParams(), callback);
+        stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseSuccessJson()));
+        _call.callRequestCompletedHandler(resource);
         assertEquals(true, isCallSuccess);
     }
 
-    private function prepareMobile():void {
+    private function createCallMobile():void {
         _call = new AddPropertiesApiCall();
+    }
+
+    private function createCallWeb():void {
+        _call = new AddPropertiesApiCall(false);
+    }
+
+    private function getCorrectMobileCallParams():Object {
+        return {
+            clientKey: "clientKey",
+            deviceId: "deviceId",
+            basicProperties: {type: "basic"},
+            customProperties: {type: "custom"}
+        };
+    }
+
+    private function getCorrectWebCallParams():Object {
+        return {
+            clientKey: "clientKey",
+            socialId: "socialId",
+            basicProperties: {type: "basic"},
+            customProperties: {type: "custom"}
+        };
     }
 }
 }
