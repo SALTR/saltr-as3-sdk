@@ -19,6 +19,7 @@ import tests.saltr.SLTStartTest;
 import tests.saltr.api.AddPropertiesApiCallTest;
 import tests.saltr.api.AppDataApiCallTest;
 import tests.saltr.api.HeartbeatApiCallTest;
+import tests.saltr.api.LevelContentApiCallTest;
 import tests.saltr.game.SLTLevelTest;
 import tests.saltr.game.matching.SLTCellTest;
 import tests.saltr.game.matching.SLTCellsTest;
@@ -58,6 +59,7 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(AddPropertiesApiCallTest);
         testsToRun.push(AppDataApiCallTest);
         testsToRun.push(HeartbeatApiCallTest);
+        testsToRun.push(LevelContentApiCallTest);
         return testsToRun;
     }
 }
