@@ -20,6 +20,8 @@ use namespace saltr_internal;
 public class AddPropertiesApiCallTest {
     [Embed(source="../../../../build/tests/saltr/api_call_tests/add_properties/response_success.json", mimeType="application/octet-stream")]
     private static const ResponseSuccessJson:Class;
+    [Embed(source="../../../../build/tests/saltr/api_call_tests/add_properties/response_fail.json", mimeType="application/octet-stream")]
+    private static const ResponseFailJson:Class;
 
     private var _call:AddPropertiesApiCall;
 
@@ -86,8 +88,7 @@ public class AddPropertiesApiCallTest {
 
     /**
      * callRequestCompletedHandlerTest.
-     * The intent of this test is to validate passing mobile parameters.
-     * Incorrect parameters provided.
+     * The intent of this test is to check the success request handling
      */
     [Test]
     public function callRequestCompletedHandlerTest():void {
@@ -105,6 +106,28 @@ public class AddPropertiesApiCallTest {
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseSuccessJson()));
         _call.callRequestCompletedHandler(resource);
         assertEquals(true, isCallSuccess);
+    }
+
+    /**
+     * callRequestCompletedWithFailHandlerTest.
+     * The intent of this test is to check the failed request handling
+     */
+    [Test]
+    public function callRequestCompletedWithFailHandlerTest():void {
+        createCallMobile();
+        var isCallSuccess:Boolean = true;
+        var callback:Function = function (result:ApiCallResult):void {
+            if (result.success) {
+                isCallSuccess = true;
+            } else {
+                isCallSuccess = false;
+            }
+        };
+
+        _call.call(getCorrectMobileCallParams(), callback);
+        stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseFailJson()));
+        _call.callRequestCompletedHandler(resource);
+        assertEquals(false, isCallSuccess);
     }
 
     private function createCallMobile():void {
