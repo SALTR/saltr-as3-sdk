@@ -1,5 +1,5 @@
 /**
- * Created by TIGR on 5/5/2015.
+ * Created by TIGR on 5/8/2015.
  */
 package tests.saltr.api {
 import mockolate.runner.MockolateRule;
@@ -15,12 +15,12 @@ import saltr.saltr_internal;
 use namespace saltr_internal;
 
 /**
- * The AddPropertiesApiCallTest class contain the AddPropertiesApiCall tests
+ * The AppDataApiCallTest class contain the AppDataApiCall tests
  */
-public class AddPropertiesApiCallTest extends ApiCallTest {
-    [Embed(source="../../../../build/tests/saltr/api_call_tests/add_properties/response_success.json", mimeType="application/octet-stream")]
+public class AppDataApiCallTest extends ApiCallTest {
+    [Embed(source="../../../../build/tests/saltr/api_call_tests/get_app_data/response_success.json", mimeType="application/octet-stream")]
     private static const ResponseSuccessJson:Class;
-    [Embed(source="../../../../build/tests/saltr/api_call_tests/add_properties/response_fail.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../../build/tests/saltr/api_call_tests/get_app_data/response_fail.json", mimeType="application/octet-stream")]
     private static const ResponseFailJson:Class;
 
     [Rule]
@@ -28,8 +28,8 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
     [Mock(type="nice")]
     public var resource:SLTResourceMock;
 
-    public function AddPropertiesApiCallTest() {
-        super(ApiFactory.API_CALL_ADD_PROPERTIES);
+    public function AppDataApiCallTest() {
+        super(ApiFactory.API_CALL_APP_DATA);
     }
 
     [Before]
@@ -49,7 +49,7 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
     [Test]
     public function mobileCallParamsValidationSuccessTest():void {
         createCallMobile();
-        assertEquals(true, validateParams(getCorrectMobileCallParams, SLTConfig.ACTION_ADD_PROPERTIES));
+        assertEquals(true, validateParams(getCorrectMobileCallParams, SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -60,7 +60,7 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
     [Test]
     public function mobileCallParamsValidationFailTest():void {
         createCallMobile();
-        assertEquals(false, validateParams(getCorrectWebCallParams, SLTConfig.ACTION_ADD_PROPERTIES));
+        assertEquals(false, validateParams(getCorrectWebCallParams, SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -71,7 +71,7 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
     [Test]
     public function webCallParamsValidationSuccessTest():void {
         createCallWeb();
-        assertEquals(true, validateParams(getCorrectWebCallParams, SLTConfig.ACTION_ADD_PROPERTIES));
+        assertEquals(true, validateParams(getCorrectWebCallParams, SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -82,7 +82,7 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
     [Test]
     public function webCallParamsValidationFailTest():void {
         createCallWeb();
-        assertEquals(false, validateParams(getCorrectMobileCallParams, SLTConfig.ACTION_ADD_PROPERTIES));
+        assertEquals(false, validateParams(getCorrectMobileCallParams, SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -111,6 +111,7 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
         return {
             clientKey: "clientKey",
             deviceId: "deviceId",
+            devMode: true,
             basicProperties: {type: "basic"},
             customProperties: {type: "custom"}
         };
@@ -120,6 +121,7 @@ public class AddPropertiesApiCallTest extends ApiCallTest {
         return {
             clientKey: "clientKey",
             socialId: "socialId",
+            devMode: true,
             basicProperties: {type: "basic"},
             customProperties: {type: "custom"}
         };
