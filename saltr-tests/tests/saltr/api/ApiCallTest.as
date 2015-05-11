@@ -54,6 +54,23 @@ public class ApiCallTest {
         return isCallSuccess;
     }
 
+    protected function getWebCallRequestCompletedResult(callResult:ApiCallResult, resource:SLTResource):Boolean {
+        createCallWeb();
+        var isCallSuccess:Boolean = false;
+        var callback:Function = function (result:ApiCallResult):void {
+            callResult = result;
+            if (result.success) {
+                isCallSuccess = true;
+            } else {
+                isCallSuccess = false;
+            }
+        };
+        _call.call(getCorrectWebCallParams(), callback);
+        _call.callRequestCompletedHandler(resource);
+
+        return isCallSuccess;
+    }
+
     protected function getCorrectMobileCallParams():Object {
         throw new Error("Virtual method error!");
     }
