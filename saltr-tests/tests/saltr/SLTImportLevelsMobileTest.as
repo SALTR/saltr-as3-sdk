@@ -13,7 +13,7 @@ import saltr.repository.SLTMobileRepository;
 /**
  * The SLTSaltrMobileTest class contain the tests which can be performed without saltr.connect()
  */
-public class SLTImportLevelsTest {
+public class SLTImportLevelsMobileTest {
     [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
@@ -38,7 +38,7 @@ public class SLTImportLevelsTest {
     private var deviceId:String = "";
     private var _saltr:SLTSaltrMobile;
 
-    public function SLTImportLevelsTest() {
+    public function SLTImportLevelsMobileTest() {
     }
 
     [Before]

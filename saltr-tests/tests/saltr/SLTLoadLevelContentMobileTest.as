@@ -20,7 +20,7 @@ use namespace saltr_internal;
 /**
  * The SLTLoadLevelContentTest class contain the tests which can be performed with saltr.loadLevelContent()
  */
-public class SLTLoadLevelContentTest {
+public class SLTLoadLevelContentMobileTest {
     [Embed(source="../../../build/tests/saltr/app_data.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
@@ -49,7 +49,7 @@ public class SLTLoadLevelContentTest {
     [Mock(type="nice")]
     public var apiCallLevelContentMock:ApiCallMock;
 
-    public function SLTLoadLevelContentTest() {
+    public function SLTLoadLevelContentMobileTest() {
     }
 
     [Before]
