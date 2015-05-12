@@ -1,43 +1,30 @@
 /**
- * Created by TIGR on 4/10/2015.
+ * Created by TIGR on 5/12/2015.
  */
 package tests.saltr {
-import mockolate.runner.MockolateRule;
-import mockolate.stub;
-
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTSaltrMobile;
-import saltr.repository.SLTMobileRepository;
+import saltr.SLTSaltrWeb;
 
 /**
- * The SLTSaltrMobileTest class contain the tests which can be performed without saltr.connect()
+ * The SLTSaltrWebTest class contain the tests which can be performed without saltr.connect()
  */
-public class SLTSaltrMobileTest extends SLTSaltrTest {
+public class SLTSaltrWebTest extends SLTSaltrTest {
     [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
-    private static const AppDataJson:Class;
-
-    [Rule]
-    public var mocks:MockolateRule = new MockolateRule();
-    [Mock(type="nice")]
-    public var mobileRepository:SLTMobileRepository;
+    private static const LevelPacksJson:Class;
 
     private var clientKey:String = "";
-    private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var socialId:String = "";
+    private var _saltr:SLTSaltrWeb;
 
-    public function SLTSaltrMobileTest() {
+    public function SLTSaltrWebTest() {
     }
 
     [Before]
     public function tearUp():void {
-        stub(mobileRepository).method("getObjectFromApplication").returns(getJson(new AppDataJson()));
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.repository = mobileRepository;
-
-        //importLevels() takes as input levels path, in this test it is just a dummy value because of MobileRepository's mocking
-        _saltr.importLevels("");
-        setSaltrMobile(_saltr);
+        _saltr = new SLTSaltrWeb(FlexUnitRunner.STAGE, clientKey, socialId);
+        _saltr.importLevelsFromJSON(new LevelPacksJson());
+        setSaltrWeb(_saltr);
     }
 
     [After]
@@ -49,7 +36,6 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
     /**
      * allLevelsTest.
      * The intent of this test is to check the levels importing.
-     * Mobile repository's getObjectFromApplication() mocked in order to provide levels data
      */
     [Test]
     public function allLevelsTest():void {
@@ -99,10 +85,6 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
     [Test]
     public function getPackByLevelGlobalIndexWithInvalidIndex():void {
         assertEquals(true, getPackByLevelGlobalIndexWithInvalidIndexPassed());
-    }
-
-    private function getJson(stringData:String):Object {
-        return JSON.parse(stringData);
     }
 }
 }

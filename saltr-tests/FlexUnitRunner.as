@@ -15,6 +15,7 @@ import tests.saltr.SLTImportLevelsMobileTest;
 import tests.saltr.SLTLoadLevelContentMobileTest;
 import tests.saltr.SLTSaltrMobileTest;
 import tests.saltr.SLTSaltrMobileTestWithConnection;
+import tests.saltr.SLTSaltrWebTest;
 import tests.saltr.SLTStartTest;
 import tests.saltr.api.AddPropertiesApiCallTest;
 import tests.saltr.api.AppDataApiCallTest;
@@ -68,6 +69,7 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(RegisterUserApiCallTest);
         testsToRun.push(SendLevelEndApiCallTest);
         testsToRun.push(SyncApiCallTest);
+        testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }
 }
