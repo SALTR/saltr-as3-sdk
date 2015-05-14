@@ -15,7 +15,6 @@ CONTENTS
 1. INTRODUCTION
 2. USAGE
 3. DIRECTORY STRUCTURE
-4. DOCUMENTATION
 
 ----
 
@@ -75,8 +74,3 @@ The SDK has the following directory structure:
 
 New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
 
-
-4. DOCUMENTATION
-================
-
-Detailed documentation for all public classes and methods is coming soon.
