@@ -4,10 +4,10 @@ SALTR Flash/AS3 SDK
 This is the README file of the SALTR ActionScript3 iOS SDK.
 
 To clone the project from GitHub:
-<a href="https://github.com/plexonic/saltr-ios-sdk.git">https://github.com/plexonic/saltr-ios-sdk.git</a>
+<a href="https://github.com/SALTR/saltr-ios-sdk.git">https://github.com/SALTR/saltr-ios-sdk.git</a>
 
 To download the latest ZIP:
-<a href="https://github.com/plexonic/saltr-as3-sdk/archive/master.zip">https://github.com/plexonic/saltr-as3-sdk/archive/master.zip</a>
+<a href="https://github.com/SALTR/saltr-as3-sdk/archive/master.zip">https://github.com/SALTR/saltr-as3-sdk/archive/master.zip</a>
 
 
 CONTENTS
@@ -15,7 +15,6 @@ CONTENTS
 1. INTRODUCTION
 2. USAGE
 3. DIRECTORY STRUCTURE
-4. DOCUMENTATION
 
 ----
 
@@ -75,8 +74,3 @@ The SDK has the following directory structure:
 
 New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
 
-
-4. DOCUMENTATION
-================
-
-Detailed documentation for all public classes and methods is coming soon.

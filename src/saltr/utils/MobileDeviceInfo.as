@@ -39,7 +39,11 @@ public class MobileDeviceInfo {
         var iosDevice:String;
         var iosVersion:String;
 
-        if(null != os.match("iPad") || null != os.match("iPhone") || null != os.match("iPod")) {
+        // Windows, Windows mobile, Mac, Linux hook
+        if(null != os.match("Windows") || null != os.match("Mac") || null != os.match("Linux")) {
+            deviceInfo.os = "";
+            deviceInfo.device ="";
+        } else if(null != os.match("iPad") || null != os.match("iPhone") || null != os.match("iPod")) {
             devArr = os.split(" ");
             internalName = devArr.pop();
             iosDevice = (internalName.indexOf(",") > -1) ? internalName.split(",").shift() : UNKNOWN_VALUE;
