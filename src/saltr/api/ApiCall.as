@@ -127,12 +127,18 @@ public class ApiCall {
         if (_params.deviceId == null) {
             return {isValid: false, message: "Field deviceId is required"};
         }
+        if (_params.clientKey == null) {
+            return {isValid: false, message: "Field clientKey is required"};
+        }
         return {isValid: true};
     }
 
     saltr_internal function validateDefaultWebParams():Object {
         if (_params.socialId == null) {
             return {isValid: false, message: "Field socialId is required"};
+        }
+        if (_params.clientKey == null) {
+            return {isValid: false, message: "Field clientKey is required"};
         }
         return {isValid: true};
     }
