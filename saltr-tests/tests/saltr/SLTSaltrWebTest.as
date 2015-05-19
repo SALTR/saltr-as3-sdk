@@ -133,10 +133,11 @@ public class SLTSaltrWebTest extends SLTSaltrTest {
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
         _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("saltr", level.properties.levelDataFrom);
+        var testPassed:Boolean = true;
+        if (false == levelLoaded || false == level.contentReady || "default" != level.getBoard("main").layers[0].token || "saltr" != level.properties.levelDataFrom) {
+            testPassed = false;
+        }
+        assertEquals(true, testPassed);
     }
 
     private function prepareLoadLevelContentConnected():void {

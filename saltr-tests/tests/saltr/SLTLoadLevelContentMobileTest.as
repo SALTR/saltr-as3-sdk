@@ -97,13 +97,15 @@ public class SLTLoadLevelContentMobileTest {
             "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, successCallback, failCallback);
 
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("cached", level.properties.levelDataFrom);
+        var testPassed:Boolean = false;
+        if (false == level.contentReady) {
+            _saltr.loadLevelContent(level, successCallback, failCallback);
+            if (true == levelLoaded && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "cached" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -130,13 +132,15 @@ public class SLTLoadLevelContentMobileTest {
             "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, successCallback, failCallback, false);
 
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("application", level.properties.levelDataFrom);
+        var testPassed:Boolean = false;
+        if (false == level.contentReady) {
+            _saltr.loadLevelContent(level, successCallback, failCallback, false);
+            if (true == levelLoaded && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "application" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -163,13 +167,15 @@ public class SLTLoadLevelContentMobileTest {
             "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, successCallback, failCallback);
 
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("application", level.properties.levelDataFrom);
+        var testPassed:Boolean = false;
+        if (false == level.contentReady) {
+            _saltr.loadLevelContent(level, successCallback, failCallback);
+            if (true == levelLoaded && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "application" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -192,13 +198,15 @@ public class SLTLoadLevelContentMobileTest {
             "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback, false);
 
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("saltr", level.properties.levelDataFrom);
+        var testPassed:Boolean = false;
+        if (false == level.contentReady) {
+            _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback, false);
+            if (true == levelLoaded && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "saltr" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -221,13 +229,15 @@ public class SLTLoadLevelContentMobileTest {
             "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
 
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("saltr", level.properties.levelDataFrom);
+        var testPassed:Boolean = false;
+        if (false == level.contentReady) {
+            _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
+            if (true == levelLoaded && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "saltr" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -250,13 +260,15 @@ public class SLTLoadLevelContentMobileTest {
             "movesCount": "18"
         };
         var level:SLTLevel = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "45");
-        assertEquals(false, level.contentReady);
-        _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
 
-        assertEquals(true, levelLoaded);
-        assertEquals(true, level.contentReady);
-        assertEquals("default", level.getBoard("main").layers[0].token);
-        assertEquals("cached", level.properties.levelDataFrom);
+        var testPassed:Boolean = false;
+        if (false == level.contentReady) {
+            _saltr.loadLevelContent(level, loadLevelContentSuccessCallback, loadLevelContentFailCallback);
+            if (true == levelLoaded && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "cached" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     private function prepareLoadLevelContentConnected():void {

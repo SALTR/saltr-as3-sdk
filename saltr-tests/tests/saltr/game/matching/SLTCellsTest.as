@@ -12,6 +12,7 @@ import saltr.game.matching.SLTCells;
  */
 public class SLTCellsTest {
     private var _cells:SLTCells;
+
     public function SLTCellsTest() {
     }
 
@@ -34,8 +35,11 @@ public class SLTCellsTest {
         var col:int = 3;
         var row:int = 5;
         _cells.insert(col, row, new SLTCell(col, row));
-        assertEquals(3, _cells.retrieve(col, row).col);
-        assertEquals(5, _cells.retrieve(col, row).row);
+        var testPassed:Boolean = false;
+        if (3 == _cells.retrieve(col, row).col && 5 == _cells.retrieve(col, row).row) {
+            testPassed = true;
+        }
+        assertEquals(true, testPassed);
     }
 }
 }

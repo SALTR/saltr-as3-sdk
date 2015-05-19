@@ -44,9 +44,14 @@ public class SLTLevelTest {
      */
     [Test]
     public function updateContentCorrectTest():void {
-        assertEquals(false, _level.contentReady);
-        _level.updateContent(JSON.parse(new CorrectLevelDataJson()));
-        assertEquals(true, _level.contentReady);
+        var testPassed:Boolean = false;
+        if (false == _level.contentReady) {
+            _level.updateContent(JSON.parse(new CorrectLevelDataJson()));
+            if (true == _level.contentReady) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**

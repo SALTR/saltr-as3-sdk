@@ -48,9 +48,15 @@ public class LevelDataTest {
     [Test]
     public function multipleInitWithCorrectDataTest():void {
         _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
-        assertEquals(75, _levelData.allLevelsCount);
-        _levelData.initWithData(JSON.parse(new LevelPackDataWithOnePackJson()));
-        assertEquals(15, _levelData.allLevelsCount);
+
+        var testPassed:Boolean = false;
+        if (75 == _levelData.allLevelsCount) {
+            _levelData.initWithData(JSON.parse(new LevelPackDataWithOnePackJson()));
+            if (15 == _levelData.allLevelsCount) {
+                testPassed = true;
+            }
+        }
+        assertEquals(true, testPassed);
     }
 
     /**

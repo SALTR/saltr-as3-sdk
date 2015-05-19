@@ -124,16 +124,15 @@ public class SLTSaltrMobileTestWithConnection {
 
         _saltr.start();
         _saltr.connect(successCallback, failCallback);
-        assertEquals(true, isConnected);
 
         var experiments:Vector.<SLTExperiment> = _saltr.experiments;
-        assertEquals(1, experiments.length);
-        assertEquals("EXP1", experiments[0].token);
-        assertEquals("feature", experiments[0].type);
-        assertEquals("A", experiments[0].partition);
 
-        assertEquals(75, _saltr.allLevelsCount);
-        assertEquals(5, _saltr.levelPacks.length);
+        var testPassed:Boolean = true;
+        if (false == isConnected || 1 != experiments.length || "EXP1" != experiments[0].token || "feature" != experiments[0].type ||
+                "A" != experiments[0].partition || 75 != _saltr.allLevelsCount || 5 != _saltr.levelPacks.length) {
+            testPassed = false;
+        }
+        assertEquals(true, testPassed);
     }
 }
 }

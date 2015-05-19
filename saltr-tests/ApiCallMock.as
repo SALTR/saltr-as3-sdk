@@ -8,9 +8,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-public class ApiCallMock extends ApiCall{
+public class ApiCallMock extends ApiCall {
 
-    public function ApiCallMock(isMobile:Boolean=true) {
+    public function ApiCallMock(isMobile:Boolean = true) {
         super(isMobile);
     }
 
@@ -18,7 +18,7 @@ public class ApiCallMock extends ApiCall{
         callback(getMockedCallResult());
     }
 
-    public function getMockedCallResult() : ApiCallResult {
+    public function getMockedCallResult():ApiCallResult {
         return new ApiCallResult();
     }
 }

@@ -42,8 +42,12 @@ public class AppDataTest {
         }, true);
         _appData.initEmpty();
         var tokens:Vector.<String> = _appData.getActiveFeatureTokens();
-        assertEquals(1, tokens.length);
-        assertEquals("SETTINGS", tokens[0]);
+
+        var testPassed:Boolean = false;
+        if (1 == tokens.length && "SETTINGS" == tokens[0]) {
+            testPassed = true;
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -53,8 +57,12 @@ public class AppDataTest {
     [Test]
     public function initWithDataTest():void {
         _appData.initWithData(JSON.parse(new AppDataJson()));
-        assertEquals(1, _appData.experiments.length);
-        assertEquals(5, _appData.getActiveFeatureTokens().length);
+
+        var testPassed:Boolean = false;
+        if (1 == _appData.experiments.length && 5 == _appData.getActiveFeatureTokens().length) {
+            testPassed = true;
+        }
+        assertEquals(true, testPassed);
     }
 
     /**
@@ -114,8 +122,12 @@ public class AppDataTest {
         }, true);
         _appData.initEmpty();
         var tokens:Vector.<String> = _appData.getActiveFeatureTokens();
-        assertEquals(2, tokens.length);
-        assertFalse(-1 == tokens.indexOf("VALIDATION"));
+
+        var testPassed:Boolean = false;
+        if (2 == tokens.length && -1 != tokens.indexOf("VALIDATION")) {
+            testPassed = true;
+        }
+        assertEquals(true, testPassed);
     }
 
     /**

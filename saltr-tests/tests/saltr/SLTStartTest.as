@@ -77,9 +77,11 @@ public class SLTStartTest {
         _saltr.useNoFeatures = true;
         _saltr.useNoLevels = true;
         _saltr.start();
-        assertEquals(0, _saltr.experiments.length);
-        assertEquals(0, _saltr.getActiveFeatureTokens().length);
-        assertEquals(null, _saltr.getFeatureProperties("token"));
+        var testPassed:Boolean = true;
+        if (0 != _saltr.experiments.length || 0 != _saltr.getActiveFeatureTokens().length || null != _saltr.getFeatureProperties("token")) {
+            testPassed = false;
+        }
+        assertEquals(true, testPassed);
     }
 
     /**

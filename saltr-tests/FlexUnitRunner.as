@@ -48,9 +48,6 @@ public class FlexUnitRunner extends Sprite {
 
     public function currentRunTestSuite():Array {
         var testsToRun:Array = new Array();
-//        testsToRun.push(tests.status.SLTStatusTest);
-//        testsToRun.push(tests.status.SLTStatusSucessTest);
-//        testsToRun.push(tests.status.SLTConnectTest);
         testsToRun.push(SLTSaltrMobileTest);
         testsToRun.push(SLTImportLevelsMobileTest);
         testsToRun.push(SLTStartTest);
