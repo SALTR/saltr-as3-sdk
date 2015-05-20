@@ -44,7 +44,7 @@ project.
 
 To clone Git repository via command line:
 ```
-$ git clone https://github.com/plexonic/saltr-as3-sdk.git
+$ git clone https://github.com/SALTR/saltr-as3-sdk.git
 ```
 
 The recommended IDE's for Flash/AS3 are <a href="http://www.adobe.com/products/flash-builder.html">Adobe Flash Builder</a> or <a href="http://www.jetbrains.com/idea/">IntelliJ Idea</a>.
