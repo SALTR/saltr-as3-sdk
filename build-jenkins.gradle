@@ -208,14 +208,7 @@ task generateSaltrDoc << {
                 "nl.funkymonkey.android.deviceinfo.NativeDeviceProperties",
                 "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData",
                 "-main-title", "SALTR SDK",
-                "-window-title", "SALTR SDK",
-                "-templates-path",
-                workspace+"/doc_generation/templates" ] }
-
-    copy {
-        from workspace+'/doc_generation/manual_docs/getting-started.html'
-        into workspace+'/'+outdir+'/doc'
-    }
+                "-window-title", "SALTR SDK"] }
 }
 
 generateSaltrDoc.dependsOn build
