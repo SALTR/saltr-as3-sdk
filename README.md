@@ -1,9 +1,11 @@
 #SALTR AS3 SDK (Flash, Adobe AIR)
 * Modified: May 22th, 2015
-* AS3 SDK Version: 1.3.6
-* Unity Plug-in Version: 1.4.0
-* iOS SDK Version: 1.3.3
-* Android SDK Version: 1.1.1
+* AS3 SDK Version: 1.3.6 
+
+Other supported platforms:
+* [Unity Plug-in Version: 1.4.0](https://github.com/SALTR/saltr-unity-sdk)
+* [iOS SDK Version: 1.3.3](https://github.com/SALTR/saltr-ios-sdk)
+* [Android SDK Version: 1.1.1](https://github.com/SALTR/saltr-android-sdk)
 
 ##Getting Started with SALTR AS3
 Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/flash-as3) doc.
