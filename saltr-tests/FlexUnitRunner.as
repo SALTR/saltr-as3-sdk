@@ -9,8 +9,25 @@ import org.flexunit.internals.TraceListener;
 import org.flexunit.listeners.AirCIListener;
 import org.flexunit.runner.FlexUnitCore;
 
-import tests.saltr.SLTImportLevelsTest;
+import tests.saltr.AppDataTest;
+import tests.saltr.LevelDataTest;
+import tests.saltr.SLTImportLevelsMobileTest;
+import tests.saltr.SLTLoadLevelContentMobileTest;
 import tests.saltr.SLTSaltrMobileTest;
+import tests.saltr.SLTSaltrMobileTestWithConnection;
+import tests.saltr.SLTSaltrWebTest;
+import tests.saltr.SLTStartTest;
+import tests.saltr.api.AddPropertiesApiCallTest;
+import tests.saltr.api.AppDataApiCallTest;
+import tests.saltr.api.HeartbeatApiCallTest;
+import tests.saltr.api.LevelContentApiCallTest;
+import tests.saltr.api.RegisterDeviceApiCallTest;
+import tests.saltr.api.RegisterUserApiCallTest;
+import tests.saltr.api.SendLevelEndApiCallTest;
+import tests.saltr.api.SyncApiCallTest;
+import tests.saltr.game.SLTLevelTest;
+import tests.saltr.game.matching.SLTCellTest;
+import tests.saltr.game.matching.SLTCellsTest;
 
 public class FlexUnitRunner extends Sprite {
 
@@ -31,11 +48,25 @@ public class FlexUnitRunner extends Sprite {
 
     public function currentRunTestSuite():Array {
         var testsToRun:Array = new Array();
-//        testsToRun.push(tests.status.SLTStatusTest);
-//        testsToRun.push(tests.status.SLTStatusSucessTest);
-//        testsToRun.push(tests.status.SLTConnectTest);
         testsToRun.push(SLTSaltrMobileTest);
-        testsToRun.push(SLTImportLevelsTest);
+        testsToRun.push(SLTImportLevelsMobileTest);
+        testsToRun.push(SLTStartTest);
+        testsToRun.push(AppDataTest);
+        testsToRun.push(LevelDataTest);
+        testsToRun.push(SLTCellTest);
+        testsToRun.push(SLTCellsTest);
+        testsToRun.push(SLTSaltrMobileTestWithConnection);
+        testsToRun.push(SLTLoadLevelContentMobileTest);
+        testsToRun.push(SLTLevelTest);
+        testsToRun.push(AddPropertiesApiCallTest);
+        testsToRun.push(AppDataApiCallTest);
+        testsToRun.push(HeartbeatApiCallTest);
+        testsToRun.push(LevelContentApiCallTest);
+        testsToRun.push(RegisterDeviceApiCallTest);
+        testsToRun.push(RegisterUserApiCallTest);
+        testsToRun.push(SendLevelEndApiCallTest);
+        testsToRun.push(SyncApiCallTest);
+        testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }
 }

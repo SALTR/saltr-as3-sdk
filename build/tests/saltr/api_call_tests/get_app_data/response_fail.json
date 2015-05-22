@@ -1,0 +1,11 @@
+{
+    "response": [
+        {
+            "success": false,
+            "error": {
+                "code": "1002",
+                "message": "Cannot find an application with the client key."
+            }
+        }
+    ]
+}

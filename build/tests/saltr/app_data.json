@@ -1,0 +1,1866 @@
+{
+
+    "levelPacks": [{
+      "id": 11226,
+      "name": "Stage 1",
+      "token": "STAGE_1",
+      "index": 0,
+      "levels": [{
+        "id": 230849,
+        "localIndex": 0,
+        "globalIndex": 0,
+        "packIndex": 0,
+        "index": 0,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260501_406.json",
+        "version": 66,
+        "variationVersion": 406,
+        "properties": {
+          "movesCount": "18",
+          "objectives": {
+            "rescue": "1"
+          },
+          "star_milestones": "600,700,800",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isMelnSplashDisabled": false,
+          "isMatchFourExplosionDisabled": true,
+          "isMatchCrossExplosionDisabled": true,
+          "isMatchFiveExplosionDisabled": true,
+          "isFlyingMelonDisabled": true,
+          "isTutorialDisabled": true
+        },
+        "variationId": 260501
+      }, {
+        "id": 230848,
+        "localIndex": 1,
+        "globalIndex": 1,
+        "packIndex": 0,
+        "index": 1,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260499_348.json",
+        "version": 66,
+        "variationVersion": 348,
+        "properties": {
+          "movesCount": "20",
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "300,500,700",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isMelnSplashDisabled": true,
+          "isMatchFiveExplosionDisabled": true,
+          "isMatchFourExplosionDisabled": true,
+          "isMatchCrossExplosionDisabled": true,
+          "isTutorialDisabled": true
+        },
+        "variationId": 260499
+      }, {
+        "id": 230850,
+        "localIndex": 2,
+        "globalIndex": 2,
+        "packIndex": 0,
+        "index": 2,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260502_326.json",
+        "version": 62,
+        "variationVersion": 326,
+        "properties": {
+          "movesCount": "16",
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "40,4640,6130",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isMelnSplashDisabled": true,
+          "isMatchFiveExplosionDisabled": true,
+          "isMatchFourExplosionDisabled": true,
+          "isMatchCrossExplosionDisabled": true,
+          "isTutorialDisabled": true
+        },
+        "variationId": 260502
+      }, {
+        "id": 230851,
+        "localIndex": 3,
+        "globalIndex": 3,
+        "packIndex": 0,
+        "index": 3,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260503_363.json",
+        "version": 86,
+        "variationVersion": 363,
+        "properties": {
+          "movesCount": "8",
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "300,6730,9210",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isMelnSplashDisabled": true,
+          "isMatchFiveExplosionDisabled": true,
+          "isMatchCrossExplosionDisabled": true,
+          "isTutorialDisabled": true
+        },
+        "variationId": 260503
+      }, {
+        "id": 230852,
+        "localIndex": 4,
+        "globalIndex": 4,
+        "packIndex": 0,
+        "index": 4,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260504_329.json",
+        "version": 62,
+        "variationVersion": 329,
+        "properties": {
+          "movesCount": "20",
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "10,6210,7950",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isMelnSplashDisabled": true,
+          "isMatchFiveExplosionDisabled": true,
+          "isTutorialDisabled": true
+        },
+        "variationId": 260504
+      }, {
+        "id": 230864,
+        "localIndex": 5,
+        "globalIndex": 5,
+        "packIndex": 0,
+        "index": 5,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260525_593.json",
+        "version": 59,
+        "variationVersion": 593,
+        "properties": {
+          "movesCount": "20",
+          "star_milestones": "1800,4710,6650",
+          "objectives": {
+            "rescue-chick": "6"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isTutorialDisabled": true,
+          "isMelnSplashDisabled": true
+        },
+        "variationId": 260525
+      }, {
+        "id": 230857,
+        "localIndex": 6,
+        "globalIndex": 6,
+        "packIndex": 0,
+        "index": 6,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260512_416.json",
+        "version": 57,
+        "variationVersion": 416,
+        "properties": {
+          "movesCount": "24",
+          "star_milestones": "1800,6530,9680",
+          "objectives": {
+            "rescue-pig": "6"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isTutorialDisabled": true,
+          "isMelnSplashDisabled": false
+        },
+        "variationId": 260512
+      }, {
+        "id": 230853,
+        "localIndex": 7,
+        "globalIndex": 7,
+        "packIndex": 0,
+        "index": 7,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260505_385.json",
+        "version": 57,
+        "variationVersion": 385,
+        "properties": {
+          "movesCount": "25",
+          "objectives": {
+            "rescue-rabbit": "7"
+          },
+          "star_milestones": "2100,7200,10590",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isMelnSplashDisabled": true,
+          "isTutorialDisabled": true
+        },
+        "variationId": 260505
+      }, {
+        "id": 230854,
+        "localIndex": 8,
+        "globalIndex": 8,
+        "packIndex": 0,
+        "index": 8,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260507_376.json",
+        "version": 60,
+        "variationVersion": 376,
+        "properties": {
+          "movesCount": "18",
+          "objectives": {
+            "rescue-chick": "4",
+            "rescue-pig": "4"
+          },
+          "star_milestones": "2400,8950,13310",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isTutorialDisabled": true
+        },
+        "variationId": 260507
+      }, {
+        "id": 230865,
+        "localIndex": 9,
+        "globalIndex": 9,
+        "packIndex": 0,
+        "index": 9,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260528_541.json",
+        "version": 60,
+        "variationVersion": 541,
+        "properties": {
+          "movesCount": "18",
+          "star_milestones": "1800,9070,13910",
+          "objectives": {
+            "rescue-chick": "6"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          }
+        },
+        "variationId": 260528
+      }, {
+        "id": 230859,
+        "localIndex": 10,
+        "globalIndex": 10,
+        "packIndex": 0,
+        "index": 10,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260514_536.json",
+        "version": 58,
+        "variationVersion": 536,
+        "properties": {
+          "movesCount": "15",
+          "star_milestones": "2400,8250,12150",
+          "objectives": {
+            "rescue-chick": "8"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          }
+        },
+        "variationId": 260514
+      }, {
+        "id": 230867,
+        "localIndex": 11,
+        "globalIndex": 11,
+        "packIndex": 0,
+        "index": 11,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/262602_564.json",
+        "version": 65,
+        "variationVersion": 564,
+        "properties": {
+          "movesCount": "26",
+          "star_milestones": "3600,12080,17730",
+          "objectives": {
+            "rescue-rabbit": "6",
+            "rescue-pig": "6"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          },
+          "isTutorialDisabled": false
+        },
+        "variationId": 262602
+      }, {
+        "id": 230858,
+        "localIndex": 12,
+        "globalIndex": 12,
+        "packIndex": 0,
+        "index": 12,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260513_475.json",
+        "version": 62,
+        "variationVersion": 475,
+        "properties": {
+          "movesCount": "27",
+          "star_milestones": "2400,13550,20970",
+          "objectives": {
+            "rescue-pig": "2",
+            "rescue-chick": "6"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": false
+          },
+          "isTutorialDisabled": true
+        },
+        "variationId": 260513
+      }, {
+        "id": 230866,
+        "localIndex": 13,
+        "globalIndex": 13,
+        "packIndex": 0,
+        "index": 13,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260530_590.json",
+        "version": 69,
+        "variationVersion": 590,
+        "properties": {
+          "movesCount": "20",
+          "star_milestones": "2700,10850,16270",
+          "objectives": {
+            "rescue-pig": "5",
+            "rescue-rabbit": "4"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": false,
+            "BOOST_MAGIC_SEED": false,
+            "BOOST_SHOVEL": false
+          }
+        },
+        "variationId": 260530
+      }, {
+        "id": 230807,
+        "localIndex": 14,
+        "globalIndex": 14,
+        "packIndex": 0,
+        "index": 14,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260439_519.json",
+        "version": 60,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-rabbit": "8"
+          },
+          "star_milestones": "2400,14330,22280",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": false
+          }
+        },
+        "variationId": 260439
+      }]
+    }, {
+      "id": 11227,
+      "name": "Stage 2",
+      "token": "STAGE_2",
+      "index": 1,
+      "levels": [{
+        "id": 230808,
+        "localIndex": 0,
+        "globalIndex": 15,
+        "packIndex": 1,
+        "index": 0,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260442_459.json",
+        "version": 60,
+        "variationVersion": 459,
+        "properties": {
+          "movesCount": "18",
+          "objectives": {
+            "rescue-dog": "4"
+          },
+          "star_milestones": "1200,8350,13110",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": false
+          },
+          "isTutorialDisabled": true
+        },
+        "variationId": 260442
+      }, {
+        "id": 230809,
+        "localIndex": 1,
+        "globalIndex": 16,
+        "packIndex": 1,
+        "index": 1,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260443_423.json",
+        "version": 57,
+        "variationVersion": 423,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "6"
+          },
+          "star_milestones": "1800,10830,16840",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": false
+          }
+        },
+        "variationId": 260443
+      }, {
+        "id": 230810,
+        "localIndex": 2,
+        "globalIndex": 17,
+        "packIndex": 1,
+        "index": 2,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260446_430.json",
+        "version": 60,
+        "variationVersion": 430,
+        "properties": {
+          "movesCount": "25",
+          "objectives": {
+            "rescue-pig": "7"
+          },
+          "star_milestones": "2100,12240,19000",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260446
+      }, {
+        "id": 230868,
+        "localIndex": 3,
+        "globalIndex": 18,
+        "packIndex": 1,
+        "index": 3,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260535_482.json",
+        "version": 61,
+        "variationVersion": 482,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-dog": "4",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "2400,14580,22690",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260535
+      }, {
+        "id": 230862,
+        "localIndex": 4,
+        "globalIndex": 19,
+        "packIndex": 1,
+        "index": 4,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260520_471.json",
+        "version": 60,
+        "variationVersion": 471,
+        "properties": {
+          "movesCount": "32",
+          "star_milestones": "2100,15300,24100",
+          "objectives": {
+            "rescue-chick": "7"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260520
+      }, {
+        "id": 230861,
+        "localIndex": 5,
+        "globalIndex": 20,
+        "packIndex": 1,
+        "index": 5,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260518_572.json",
+        "version": 59,
+        "variationVersion": 572,
+        "properties": {
+          "movesCount": "31",
+          "star_milestones": "2400,14390,22380",
+          "objectives": {
+            "rescue-pig": "8"
+          },
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260518
+      }, {
+        "id": 230815,
+        "localIndex": 6,
+        "globalIndex": 21,
+        "packIndex": 1,
+        "index": 6,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260458_511.json",
+        "version": 60,
+        "variationVersion": 511,
+        "properties": {
+          "movesCount": "40",
+          "objectives": {
+            "ice": "38"
+          },
+          "star_milestones": "2400,14980,23360",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260458
+      }, {
+        "id": 230812,
+        "localIndex": 7,
+        "globalIndex": 22,
+        "packIndex": 1,
+        "index": 7,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260449_442.json",
+        "version": 60,
+        "variationVersion": 442,
+        "properties": {
+          "movesCount": "40",
+          "objectives": {
+            "rescue-pig": "6",
+            "rescue-dog": "6",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "4800,23150,35380",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260449
+      }, {
+        "id": 230860,
+        "localIndex": 8,
+        "globalIndex": 23,
+        "packIndex": 1,
+        "index": 8,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260516_510.json",
+        "version": 60,
+        "variationVersion": 510,
+        "properties": {
+          "movesCount": "40",
+          "objectives": {
+            "ice": "38"
+          },
+          "star_milestones": "2400,14980,23360",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260516
+      }, {
+        "id": 230817,
+        "localIndex": 9,
+        "globalIndex": 24,
+        "packIndex": 1,
+        "index": 9,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260461_545.json",
+        "version": 58,
+        "variationVersion": 545,
+        "properties": {
+          "movesCount": "31",
+          "objectives": {
+            "rescue-chick": "6",
+            "rescue-dog": "6"
+          },
+          "star_milestones": "3600,21420,33300",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260461
+      }, {
+        "id": 230811,
+        "localIndex": 10,
+        "globalIndex": 25,
+        "packIndex": 1,
+        "index": 10,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260448_452.json",
+        "version": 59,
+        "variationVersion": 452,
+        "properties": {
+          "movesCount": "27",
+          "objectives": {
+            "rescue-rabbit": "8",
+            "rescue-dog": "4"
+          },
+          "star_milestones": "6000,18360,26590",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260448
+      }, {
+        "id": 230813,
+        "localIndex": 11,
+        "globalIndex": 26,
+        "packIndex": 1,
+        "index": 11,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260451_501.json",
+        "version": 59,
+        "variationVersion": 501,
+        "properties": {
+          "movesCount": "33",
+          "objectives": {
+            "rescue-chick": "6",
+            "rescue-pig": "6",
+            "rescue-dog": "6"
+          },
+          "star_milestones": "7200,20880,30000",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260451
+      }, {
+        "id": 230814,
+        "localIndex": 12,
+        "globalIndex": 27,
+        "packIndex": 1,
+        "index": 12,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260454_563.json",
+        "version": 60,
+        "variationVersion": 563,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-pig": "6",
+            "rescue-rabbit": "5",
+            "rescue-chick": "4"
+          },
+          "star_milestones": "5700,20960,31130",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260454
+      }, {
+        "id": 230863,
+        "localIndex": 13,
+        "globalIndex": 28,
+        "packIndex": 1,
+        "index": 13,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260523_438.json",
+        "version": 58,
+        "variationVersion": 438,
+        "properties": {
+          "movesCount": "25",
+          "objectives": {
+            "rescue-rabbit": "7"
+          },
+          "star_milestones": "2100,14270,22380",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260523
+      }, {
+        "id": 230816,
+        "localIndex": 14,
+        "globalIndex": 29,
+        "packIndex": 1,
+        "index": 14,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260460_451.json",
+        "version": 59,
+        "variationVersion": 451,
+        "properties": {
+          "movesCount": "30",
+          "objectives": {
+            "rescue-dog": "8"
+          },
+          "star_milestones": "3300,18470,28570",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260460
+      }]
+    }, {
+      "id": 11228,
+      "name": "Stage 3",
+      "token": "STAGE_3",
+      "index": 2,
+      "levels": [{
+        "id": 230818,
+        "localIndex": 0,
+        "globalIndex": 30,
+        "packIndex": 2,
+        "index": 0,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260462_491.json",
+        "version": 77,
+        "variationVersion": 491,
+        "properties": {
+          "movesCount": "28",
+          "objectives": {
+            "rescue-sheep": "6"
+          },
+          "star_milestones": "1800,12980,20420",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260462
+      }, {
+        "id": 230822,
+        "localIndex": 1,
+        "globalIndex": 31,
+        "packIndex": 2,
+        "index": 1,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260466_463.json",
+        "version": 69,
+        "variationVersion": 463,
+        "properties": {
+          "movesCount": "22",
+          "objectives": {
+            "rescue-sheep": "5",
+            "rescue-chick": "5"
+          },
+          "star_milestones": "3000,13280,20130",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260466
+      }, {
+        "id": 230820,
+        "localIndex": 2,
+        "globalIndex": 32,
+        "packIndex": 2,
+        "index": 2,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260464_476.json",
+        "version": 62,
+        "variationVersion": 476,
+        "properties": {
+          "movesCount": "34",
+          "star_milestones": "5400,22870,34510",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "objectives": {
+            "rescue-rabbit": "6",
+            "rescue-pig": "4",
+            "rescue-chick": "4"
+          }
+        },
+        "variationId": 260464
+      }, {
+        "id": 230821,
+        "localIndex": 3,
+        "globalIndex": 33,
+        "packIndex": 2,
+        "index": 3,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260465_447.json",
+        "version": 59,
+        "variationVersion": 447,
+        "properties": {
+          "movesCount": "33",
+          "objectives": {
+            "rescue-chick": "7",
+            "rescue-sheep": "7"
+          },
+          "star_milestones": "5700,21200,31530",
+          "fiestaChainLength": "5",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260465
+      }, {
+        "id": 230819,
+        "localIndex": 4,
+        "globalIndex": 34,
+        "packIndex": 2,
+        "index": 4,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260463_423.json",
+        "version": 67,
+        "variationVersion": 423,
+        "properties": {
+          "movesCount": "19",
+          "objectives": {
+            "rescue-rabbit": "4",
+            "rescue-pig": "2",
+            "rescue-dog": "2"
+          },
+          "star_milestones": "3600,15420,23300",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "preGameBoosts": {
+            "COMMON_COLOR_REMOVER_BOOST": true,
+            "COMMON_MAGIC_SEED_BOOST": true,
+            "COMMON_SHOVEL_BOOST": true
+          }
+        },
+        "variationId": 260463
+      }, {
+        "id": 230823,
+        "localIndex": 5,
+        "globalIndex": 35,
+        "packIndex": 2,
+        "index": 5,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260467_466.json",
+        "version": 66,
+        "variationVersion": 466,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-rabbit": "4",
+            "rescue-chick": "6",
+            "rescue-dog": "4"
+          },
+          "star_milestones": "4200,20900,32030",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260467
+      }, {
+        "id": 230832,
+        "localIndex": 6,
+        "globalIndex": 36,
+        "packIndex": 2,
+        "index": 6,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260478_548.json",
+        "version": 61,
+        "variationVersion": 548,
+        "properties": {
+          "movesCount": "36",
+          "objectives": {
+            "rescue-sheep": "4",
+            "rescue-chick": "4",
+            "rescue-dog": "4",
+            "rescue-pig": "4"
+          },
+          "star_milestones": "4800,22190,33780",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260478
+      }, {
+        "id": 230825,
+        "localIndex": 7,
+        "globalIndex": 37,
+        "packIndex": 2,
+        "index": 7,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260470_457.json",
+        "version": 63,
+        "variationVersion": 457,
+        "properties": {
+          "movesCount": "24",
+          "objectives": {
+            "rescue-rabbit": "6"
+          },
+          "star_milestones": "2400,11850,18150",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260470
+      }, {
+        "id": 230824,
+        "localIndex": 8,
+        "globalIndex": 38,
+        "packIndex": 2,
+        "index": 8,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260469_502.json",
+        "version": 60,
+        "variationVersion": 502,
+        "properties": {
+          "movesCount": "40",
+          "star_milestones": "10,100,1000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "objectives": {
+            "ice": "18"
+          }
+        },
+        "variationId": 260469
+      }, {
+        "id": 230827,
+        "localIndex": 9,
+        "globalIndex": 39,
+        "packIndex": 2,
+        "index": 9,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260473_511.json",
+        "version": 59,
+        "variationVersion": 511,
+        "properties": {
+          "movesCount": "40",
+          "objectives": {
+            "rescue-dog": "4",
+            "rescue-chick": "8"
+          },
+          "star_milestones": "4800,22480,34260",
+          "fiestaChainLength": "5",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260473
+      }, {
+        "id": 230826,
+        "localIndex": 10,
+        "globalIndex": 40,
+        "packIndex": 2,
+        "index": 10,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260471_488.json",
+        "version": 64,
+        "variationVersion": 488,
+        "properties": {
+          "movesCount": "28",
+          "objectives": {
+            "rescue-sheep": "10",
+            "rescue-rabbit": "8",
+            "rescue-pig": "8"
+          },
+          "star_milestones": "10200,24380,33820",
+          "fiestaChainLength": "5",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260471
+      }, {
+        "id": 230829,
+        "localIndex": 11,
+        "globalIndex": 41,
+        "packIndex": 2,
+        "index": 11,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260475_447.json",
+        "version": 59,
+        "variationVersion": 447,
+        "properties": {
+          "movesCount": 27,
+          "star_milestones": "67500,40000,52000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "objectives": {
+            "rescue-pig": "1"
+          }
+        },
+        "variationId": 260475
+      }, {
+        "id": 230831,
+        "localIndex": 12,
+        "globalIndex": 42,
+        "packIndex": 2,
+        "index": 12,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260477_567.json",
+        "version": 59,
+        "variationVersion": 567,
+        "properties": {
+          "movesCount": "38",
+          "objectives": {
+            "rescue-rabbit": "14",
+            "rescue-dog": "14"
+          },
+          "star_milestones": "8400,28820,42430",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260477
+      }, {
+        "id": 230830,
+        "localIndex": 13,
+        "globalIndex": 43,
+        "packIndex": 2,
+        "index": 13,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260476_407.json",
+        "version": 61,
+        "variationVersion": 407,
+        "properties": {
+          "movesCount": 30,
+          "star_milestones": "7000,28000,35000",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "objectives": {
+            "rescue-pig": "1"
+          }
+        },
+        "variationId": 260476
+      }, {
+        "id": 230828,
+        "localIndex": 14,
+        "globalIndex": 44,
+        "packIndex": 2,
+        "index": 14,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260474_573.json",
+        "version": 68,
+        "variationVersion": 573,
+        "properties": {
+          "movesCount": "32",
+          "objectives": {
+            "rescue-pig": "6",
+            "rescue-chick": "8"
+          },
+          "star_milestones": "4200,21690,33350",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260474
+      }]
+    }, {
+      "id": 11229,
+      "name": "Stage 4",
+      "token": "STAGE_4",
+      "index": 3,
+      "levels": [{
+        "id": 230833,
+        "localIndex": 0,
+        "globalIndex": 45,
+        "packIndex": 3,
+        "index": 0,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260479_455.json",
+        "version": 61,
+        "variationVersion": 455,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-sheep": "12"
+          },
+          "star_milestones": "4800,16770,24740",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260479
+      }, {
+        "id": 230834,
+        "localIndex": 1,
+        "globalIndex": 46,
+        "packIndex": 3,
+        "index": 1,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260480_442.json",
+        "version": 59,
+        "variationVersion": 442,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-dog": "6",
+            "rescue-rabbit": "4",
+            "rescue-chick": "4",
+            "rescue-pig": "4"
+          },
+          "star_milestones": "7200,23710,34710",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260480
+      }, {
+        "id": 230838,
+        "localIndex": 2,
+        "globalIndex": 47,
+        "packIndex": 3,
+        "index": 2,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260484_439.json",
+        "version": 59,
+        "variationVersion": 439,
+        "properties": {
+          "movesCount": 30,
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "1600,35000,50000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260484
+      }, {
+        "id": 230835,
+        "localIndex": 3,
+        "globalIndex": 48,
+        "packIndex": 3,
+        "index": 3,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260481_442.json",
+        "version": 59,
+        "variationVersion": 442,
+        "properties": {
+          "movesCount": 30,
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "4400,49000,55000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260481
+      }, {
+        "id": 230844,
+        "localIndex": 4,
+        "globalIndex": 49,
+        "packIndex": 3,
+        "index": 4,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260492_536.json",
+        "version": 59,
+        "variationVersion": 536,
+        "properties": {
+          "movesCount": 38,
+          "objectives": {
+            "rescue-pig": "4"
+          },
+          "star_milestones": "2600,48000,57000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260492
+      }, {
+        "id": 230839,
+        "localIndex": 5,
+        "globalIndex": 50,
+        "packIndex": 3,
+        "index": 5,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260485_587.json",
+        "version": 59,
+        "variationVersion": 587,
+        "properties": {
+          "movesCount": "27",
+          "objectives": {
+            "rescue-pig": "8",
+            "rescue-rabbit": "6"
+          },
+          "star_milestones": "6000,19880,29130",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260485
+      }, {
+        "id": 230840,
+        "localIndex": 6,
+        "globalIndex": 51,
+        "packIndex": 3,
+        "index": 6,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260486_496.json",
+        "version": 59,
+        "variationVersion": 496,
+        "properties": {
+          "movesCount": "28",
+          "objectives": {
+            "rescue-sheep": "6",
+            "rescue-chick": "6",
+            "rescue-dog": "6"
+          },
+          "star_milestones": "5400,20060,29820",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260486
+      }, {
+        "id": 230836,
+        "localIndex": 7,
+        "globalIndex": 52,
+        "packIndex": 3,
+        "index": 7,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260482_559.json",
+        "version": 64,
+        "variationVersion": 559,
+        "properties": {
+          "movesCount": "28",
+          "objectives": {
+            "rescue-pig": "14"
+          },
+          "star_milestones": "5400,20840,31130",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260482
+      }, {
+        "id": 230846,
+        "localIndex": 8,
+        "globalIndex": 53,
+        "packIndex": 3,
+        "index": 8,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260496_504.json",
+        "version": 60,
+        "variationVersion": 504,
+        "properties": {
+          "movesCount": "40",
+          "star_milestones": "10,100,1000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "objectives": {
+            "ice": "18"
+          }
+        },
+        "variationId": 260496
+      }, {
+        "id": 230842,
+        "localIndex": 9,
+        "globalIndex": 54,
+        "packIndex": 3,
+        "index": 9,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260489_502.json",
+        "version": 82,
+        "variationVersion": 502,
+        "properties": {
+          "movesCount": "3",
+          "objectives": {
+            "rescue-pig": "2",
+            "rescue-rabbit": "1",
+            "rescue-sheep": "1"
+          },
+          "star_milestones": "1000,60000,80000",
+          "boosts": {
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260489
+      }, {
+        "id": 230843,
+        "localIndex": 10,
+        "globalIndex": 55,
+        "packIndex": 3,
+        "index": 10,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260491_518.json",
+        "version": 59,
+        "variationVersion": 518,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260491
+      }, {
+        "id": 230837,
+        "localIndex": 11,
+        "globalIndex": 56,
+        "packIndex": 3,
+        "index": 11,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260483_491.json",
+        "version": 59,
+        "variationVersion": 491,
+        "properties": {
+          "movesCount": "29",
+          "objectives": {
+            "rescue-pig": "7",
+            "rescue-sheep": "15",
+            "rescue-chick": "5",
+            "rescue-dog": "5"
+          },
+          "star_milestones": "9600,27600,39590",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260483
+      }, {
+        "id": 230845,
+        "localIndex": 12,
+        "globalIndex": 57,
+        "packIndex": 3,
+        "index": 12,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260493_616.json",
+        "version": 138,
+        "variationVersion": 616,
+        "properties": {
+          "movesCount": "25",
+          "star_milestones": "1,2,3",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          },
+          "objectives": {
+            "jam": "0"
+          }
+        },
+        "variationId": 260493
+      }, {
+        "id": 230841,
+        "localIndex": 13,
+        "globalIndex": 58,
+        "packIndex": 3,
+        "index": 13,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260487_571.json",
+        "version": 59,
+        "variationVersion": 571,
+        "properties": {
+          "movesCount": "40",
+          "objectives": {
+            "rescue-pig": "22"
+          },
+          "star_milestones": "2800,45000,60000",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260487
+      }, {
+        "id": 230847,
+        "localIndex": 14,
+        "globalIndex": 59,
+        "packIndex": 3,
+        "index": 14,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260497_633.json",
+        "version": 141,
+        "variationVersion": 633,
+        "properties": {
+          "movesCount": 40,
+          "objectives": {
+            "rescue-pig": "1"
+          },
+          "star_milestones": "2400,55000,71000",
+          "fiestaChainLength": 5,
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260497
+      }]
+    }, {
+      "id": 11230,
+      "name": "Stage 5",
+      "token": "STAGE_5",
+      "index": 4,
+      "levels": [{
+        "id": 230869,
+        "localIndex": 0,
+        "globalIndex": 60,
+        "packIndex": 4,
+        "index": 0,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260537_520.json",
+        "version": 60,
+        "variationVersion": 520,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260537
+      }, {
+        "id": 230870,
+        "localIndex": 1,
+        "globalIndex": 61,
+        "packIndex": 4,
+        "index": 1,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260545_529.json",
+        "version": 69,
+        "variationVersion": 529,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260545
+      }, {
+        "id": 230871,
+        "localIndex": 2,
+        "globalIndex": 62,
+        "packIndex": 4,
+        "index": 2,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260546_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260546
+      }, {
+        "id": 230872,
+        "localIndex": 3,
+        "globalIndex": 63,
+        "packIndex": 4,
+        "index": 3,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260547_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260547
+      }, {
+        "id": 230873,
+        "localIndex": 4,
+        "globalIndex": 64,
+        "packIndex": 4,
+        "index": 4,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260548_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260548
+      }, {
+        "id": 230874,
+        "localIndex": 5,
+        "globalIndex": 65,
+        "packIndex": 4,
+        "index": 5,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260549_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260549
+      }, {
+        "id": 230875,
+        "localIndex": 6,
+        "globalIndex": 66,
+        "packIndex": 4,
+        "index": 6,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260550_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260550
+      }, {
+        "id": 230876,
+        "localIndex": 7,
+        "globalIndex": 67,
+        "packIndex": 4,
+        "index": 7,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260551_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260551
+      }, {
+        "id": 230877,
+        "localIndex": 8,
+        "globalIndex": 68,
+        "packIndex": 4,
+        "index": 8,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260552_525.json",
+        "version": 65,
+        "variationVersion": 525,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "ice": "1"
+          },
+          "star_milestones": "500,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260552
+      }, {
+        "id": 230878,
+        "localIndex": 9,
+        "globalIndex": 69,
+        "packIndex": 4,
+        "index": 9,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260553_528.json",
+        "version": 72,
+        "variationVersion": 528,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260553
+      }, {
+        "id": 230879,
+        "localIndex": 10,
+        "globalIndex": 70,
+        "packIndex": 4,
+        "index": 10,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260554_519.json",
+        "version": 59,
+        "variationVersion": 519,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260554
+      }, {
+        "id": 230880,
+        "localIndex": 11,
+        "globalIndex": 71,
+        "packIndex": 4,
+        "index": 11,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260555_520.json",
+        "version": 60,
+        "variationVersion": 520,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260555
+      }, {
+        "id": 230881,
+        "localIndex": 12,
+        "globalIndex": 72,
+        "packIndex": 4,
+        "index": 12,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260556_521.json",
+        "version": 61,
+        "variationVersion": 521,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-dog": "8",
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "6000,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260556
+      }, {
+        "id": 230882,
+        "localIndex": 13,
+        "globalIndex": 73,
+        "packIndex": 4,
+        "index": 13,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260557_534.json",
+        "version": 76,
+        "variationVersion": 534,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "honey": "14"
+          },
+          "star_milestones": "500,19130,27870",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260557
+      }, {
+        "id": 230883,
+        "localIndex": 14,
+        "globalIndex": 74,
+        "packIndex": 4,
+        "index": 14,
+        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/260558_528.json",
+        "version": 68,
+        "variationVersion": 528,
+        "properties": {
+          "movesCount": "21",
+          "objectives": {
+            "rescue-rabbit": "4"
+          },
+          "star_milestones": "1,2.3",
+          "boosts": {
+            "BOOST_COLOR_REMOVER": true,
+            "BOOST_MAGIC_SEED": true,
+            "BOOST_SHOVEL": true
+          }
+        },
+        "variationId": 260558
+      }]
+    }],
+    "features": [{
+      "token": "COLLECT_SCROLLING1",
+      "properties": {
+        "bottom-row-limit": 3
+      },
+      "featureType": "generic"
+    }, {
+      "token": "SETTINGS",
+      "properties": {
+        "general": {
+          "lifeRefillTime": 5
+        },
+        "popups": {
+          "sendRequestRecurrence": "8",
+          "showFbConnectAtLevel": "5",
+          "inboxMessagesLimit": "100"
+        }
+      }
+    }, {
+      "token": "LOCAL_NOTIFICATIONS1",
+      "properties": {
+        "lowIdleTime": 24,
+        "criticalIdleTime": 330,
+        "firstReminder": 21,
+        "mediumIdleTime": 69,
+        "highIdleTime": 165
+      },
+      "featureType": "generic"
+    }, {
+      "token": "SCORES",
+      "properties": {
+        "autoMatchesFactorPoints": 50,
+        "explosionPoints": 500,
+        "rescueObjectivePoints": 500,
+        "obstaclesPoints": 500,
+        "chainReactionsFactorPoints": 250,
+        "melnSplashPoints": 500,
+        "collectPoints": 100
+      }
+    }, {
+      "token": "PRICES",
+      "properties": {
+        "COLOR_REMOVER": {
+          "packSize": 3,
+          "order": 3,
+          "price": 250
+        },
+        "SHOVEL": {
+          "packSize": 3,
+          "order": 1,
+          "price": 150
+        },
+        "OUT_OF_MOVES": {
+          "price": 50
+        },
+        "MAGIC_SEED": {
+          "packSize": 3,
+          "order": 2,
+          "price": 200
+        },
+        "LIFE_REFILL": {
+          "price": 100
+        }
+      }
+    }],
+    "experiments": [{
+      "token": "EXP1",
+      "partition": "A",
+      "type": "feature"
+    }],
+    "saltrUserId": "s_100000024783448",
+    "levelType": "matching",
+    "success": true
+
+}

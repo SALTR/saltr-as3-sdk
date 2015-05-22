@@ -19,6 +19,9 @@ public class SLTCells {
      * @param height The number of rows.
      */
     public function SLTCells(width:int, height:int) {
+        if(width < 0 || height < 0) {
+            throw new Error("Incorrect width, or height passed.");
+        }
         _width = width;
         _height = height;
         allocate();
@@ -35,6 +38,9 @@ public class SLTCells {
      * @param cell The cell.
      */
     public function insert(col:int, row:int, cell:SLTCell):void {
+        if(col < 0 || row < 0) {
+            throw new Error("Incorrect col, or row passed.");
+        }
         _rawData[ (row * _width) + col] = cell;
     }
 
@@ -45,6 +51,9 @@ public class SLTCells {
      * @return The cell at given col and row.
      */
     public function retrieve(col:int, row:int):SLTCell {
+        if(col < 0 || row < 0) {
+            throw new Error("Incorrect col, or row passed.");
+        }
         var retVal:SLTCell = null;
         if(col < _width && row < _height) {
             retVal = _rawData[(row * _width) + col];

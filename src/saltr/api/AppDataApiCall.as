@@ -11,12 +11,12 @@ use namespace saltr_internal;
  */
 public class AppDataApiCall extends ApiCall {
 
-    public function AppDataApiCall(params:Object, isMobile:Boolean = true) {
-        super(params, isMobile);
-        _url = SLTConfig.SALTR_API_URL;
+    public function AppDataApiCall(isMobile:Boolean = true) {
+        super(isMobile);
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = SLTConfig.SALTR_API_URL;
         var urlVars:URLVariables = new URLVariables();
         urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
 

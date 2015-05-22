@@ -12,12 +12,12 @@ use namespace saltr_internal;
  */
 public class SyncApiCall extends ApiCall {
 
-    public function SyncApiCall(params:Object, isMobile:Boolean = true) {
-        super(params, isMobile);
-        _url = SLTConfig.SALTR_DEVAPI_URL;
+    public function SyncApiCall(isMobile:Boolean = true) {
+        super(isMobile);
     }
 
     override saltr_internal function buildCall():URLVariables {
+        _url = SLTConfig.SALTR_DEVAPI_URL;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = buildDefaultArgs();
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;

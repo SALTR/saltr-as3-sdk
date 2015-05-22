@@ -6,17 +6,14 @@ import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
-import org.flexunit.asserts.assertNull;
 
 import saltr.SLTSaltrMobile;
-import saltr.game.SLTLevel;
-import saltr.game.SLTLevelPack;
 import saltr.repository.SLTMobileRepository;
 
 /**
  * The SLTSaltrMobileTest class contain the tests which can be performed without saltr.connect()
  */
-public class SLTSaltrMobileTest {
+public class SLTSaltrMobileTest extends SLTSaltrTest {
     [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
@@ -40,10 +37,12 @@ public class SLTSaltrMobileTest {
 
         //importLevels() takes as input levels path, in this test it is just a dummy value because of MobileRepository's mocking
         _saltr.importLevels("");
+        setSaltrMobile(_saltr);
     }
 
     [After]
     public function tearDown():void {
+        clearSaltr();
         _saltr = null;
     }
 
@@ -54,8 +53,7 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function allLevelsTest():void {
-
-        assertEquals(75, _saltr.allLevelsCount);
+        assertEquals(true, allLevelsTestPassed());
     }
 
     /**
@@ -64,14 +62,7 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function defineFeatureTest():void {
-        _saltr.defineFeature("SETTINGS", {
-            general: {
-                lifeRefillTime: 30
-            }
-        }, true);
-
-        _saltr.getFeatureProperties("SETTINGS");
-        assertEquals(30, _saltr.getFeatureProperties("SETTINGS").general.lifeRefillTime);
+        assertEquals(true, defineFeatureTestPassed());
     }
 
     /**
@@ -80,8 +71,7 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function getLevelByGlobalIndexWithValidIndex():void {
-        var level:SLTLevel = _saltr.getLevelByGlobalIndex(20);
-        assertEquals(5, level.localIndex);
+        assertEquals(true, getLevelByGlobalIndexWithValidIndexTestPassed());
     }
 
     /**
@@ -90,8 +80,7 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function getLevelByGlobalIndexWithInvalidIndex():void {
-        var level:SLTLevel = _saltr.getLevelByGlobalIndex(-1);
-        assertNull(level);
+        assertEquals(true, getLevelByGlobalIndexWithInvalidIndexPassed());
     }
 
     /**
@@ -100,8 +89,7 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function getPackByLevelGlobalIndexWithValidIndex():void {
-        var levelPack:SLTLevelPack = _saltr.getPackByLevelGlobalIndex(20);
-        assertEquals(1, levelPack.index);
+        assertEquals(true, getPackByLevelGlobalIndexWithValidIndexPassed());
     }
 
     /**
@@ -110,8 +98,7 @@ public class SLTSaltrMobileTest {
      */
     [Test]
     public function getPackByLevelGlobalIndexWithInvalidIndex():void {
-        var levelPack:SLTLevelPack = _saltr.getPackByLevelGlobalIndex(-1);
-        assertNull(levelPack);
+        assertEquals(true, getPackByLevelGlobalIndexWithInvalidIndexPassed());
     }
 
     private function getJson(stringData:String):Object {
