@@ -64,7 +64,7 @@ and download data related to game's features or levels.
 All data received from SALTR REST API is parsed and represented through set of instances of classes, 
 each carrying specific objects and their properties.
 
-Basically SDK, as the REST API, has few simple actions. The most important one is connecting (`getAppData()`), 
+Basically SDK, as the REST API, has few simple actions. The most important one is connecting `getAppData()`, 
 which loads the app data objects containing features, experiments and level headers.
 
 ##Contact Us
