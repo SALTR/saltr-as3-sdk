@@ -1,26 +1,25 @@
-SALTR Flash/AS3 SDK
-=============
+#SALTR AS3 SDK (Flash, Adobe AIR)
+* Modified: May 22th, 2015
+* AS3 SDK Version: 1.3.6
+* Unity Plug-in Version: 1.4.0
+* iOS SDK Version: 1.3.3
+* Android SDK Version: 1.1.1
 
-This is the README file of the SALTR ActionScript3 iOS SDK.
+##Getting Started with SALTR AS3
+Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/flash-as3) doc.
 
-To clone the project from GitHub:
-<a href="https://github.com/SALTR/saltr-ios-sdk.git">https://github.com/SALTR/saltr-ios-sdk.git</a>
+###SALTR SDK Contains:
+* `/src` - root folder of the library;
+* `saltr` - main package of library;
+  * `saltr.game` - package contains game related classes;
+    * `saltr.game.canvas2d` - classes related to 2D games;
+    * `saltr.game.matching` - classes related to matching or board based games;
+  * `saltr.repository` - local data repository classes (implementation widely varies through platforms);
+  * `saltr.status` - status classes representing warnings and error statuses used within library code;
+  * `saltr.utils` - helper or utility classes;
 
-To download the latest ZIP:
-<a href="https://github.com/SALTR/saltr-as3-sdk/archive/master.zip">https://github.com/SALTR/saltr-as3-sdk/archive/master.zip</a>
 
-
-CONTENTS
-========
-1. INTRODUCTION
-2. USAGE
-3. DIRECTORY STRUCTURE
-
-----
-
-1. INTRODUCTION
-===============
-
+##Introduction
 SALTR Flash/AS3 SDK is a library of classes which help to develop mobile and web
 games that are to be integrated with SALTR platform.
 
@@ -36,8 +35,8 @@ which loads the app data objects containing features, experiments and level head
 This and other actions will be described in the sections below.
 
 
-2. USAGE
-========
+##Usage
+
 
 To use the SDK you need to download/clone SDK repository, and then import files to your
 project.
@@ -63,14 +62,7 @@ Note: All classes in the package start with "SLT" prefix.
 
 The SDK has the following directory structure:
 
-- /src - root folder of the library;
-- saltr - main package of library;
-- saltr.game - package contains game related classes;
-- saltr.game.canvas2d - classes related to 2D games;
-- saltr.game.matching - classes related to matching or board based games;
-- saltr.game.repository - local data repository classes (implementation widely varies through platforms);
-- saltr.game.status - status classes representing warnings and error statuses used within library code;
-- saltr.game.utils - helper or utility classes;
+
 
 New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
 
