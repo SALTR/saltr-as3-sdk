@@ -1,0 +1,22 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.gradlefx', name: 'gradlefx', version: '1.0'
+    }
+}
+
+apply plugin: 'gradlefx'
+
+srcDirs = ['src','external/src']
+
+flexHome='/Users/daal/Projects/dev/as/flash-sdk/mac/AIRSDK_Compiler_15.0'
+
+output='bin/saltr-sdk.v.1.3.1'
+
+additionalCompilerOptions = [
+        "-load-config=air-config.xml"
+]
+
+type = 'swc'
