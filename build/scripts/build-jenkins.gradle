@@ -144,7 +144,6 @@ task compileTest(type: JavaExec) {
     argsList.push('-debug=true')
     argsList.push("${testDir}/FlexUnitRunner.as")
     argsList.push("-source-path=${srcDir}")
-    argsList.push("-source-path=${srcDir2}")
     argsList.push("-source-path=${testDir}")
     argsList.push("-output=${buildDir}/tests.swf")
     argsList.push("-library-path+=${libDir}");
