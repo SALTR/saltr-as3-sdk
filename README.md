@@ -1,4 +1,4 @@
-#SALTR AS3 SDK (Flash, Adobe AIR)
+#SALTR AS3 SDK (Adobe AIR, Flash)
 * Modified: May 22th, 2015
 * AS3 SDK Version: 1.3.6 
 
