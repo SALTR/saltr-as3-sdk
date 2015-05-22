@@ -100,7 +100,6 @@ def buildDir = new File(projectDir, '/build/tests/build')
 //def publishDir = new File(projectDir, '/publish')
 def reportDir = new File(projectDir, '/build/tests/reports')
 def srcDir = new File(projectDir, '/src')
-def srcDir2 = new File(projectDir, '/external/src')
 def testDir = new File(projectDir, '/saltr-tests')
 //def fixturesDir = new File(projectDir, '/fixtures')
 
@@ -129,8 +128,6 @@ task build(type: JavaExec) {
     argsList.push('-debug=true')
     def includeSources = '-include-sources=' + srcDir
     argsList.push(includeSources)
-    def includeSources2 = '-include-sources=' + srcDir2
-    argsList.push(includeSources2)
     argsList.push('-output='+"${workspace}/${outdir}"+'/saltr-sdk.swc');
     def airConfig = "${AIR_HOME}" + '/frameworks/air-config.xml'
     def loadAirConfig = '-load-config+='+"${airConfig}";
