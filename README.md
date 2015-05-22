@@ -17,6 +17,7 @@ Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/flash-as3) doc.
     * `saltr.game.canvas2d` - classes related to 2D games;
     * `saltr.game.matching` - classes related to matching or board based games;
   * `saltr.repository` - local data repository classes (implementation widely varies through platforms);
+  * `saltr.resource` - resource loading classes;
   * `saltr.status` - status classes representing warnings and error statuses used within library code;
   * `saltr.utils` - helper or utility classes;
 
