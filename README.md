@@ -43,7 +43,7 @@ The entry point classes in SDK are different if the project is mobile or web bas
 
 Each have some differences of initialization and usage.
 
-`Note: All classes in the package start with SLT prefix.`
+Note: All classes in the package start with `SLT` prefix.
 
 
 ##Introduction
