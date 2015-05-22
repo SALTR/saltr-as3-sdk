@@ -197,16 +197,10 @@ task generateSaltrDoc << {
         executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
         args = ["-doc-sources",
                 workspace+"/src",
-                workspace+"/external/src/nl/funkymonkey/android/deviceinfo",
                 "-output",
                 workspace+"/"+outdir+"/doc",
                 "-library-path",
                 "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
-                "-exclude-classes",
-                "nl.funkymonkey.android.deviceinfo.NativeDeviceInfo",
-                "nl.funkymonkey.android.deviceinfo.NativeDeviceInfoEvent",
-                "nl.funkymonkey.android.deviceinfo.NativeDeviceProperties",
-                "nl.funkymonkey.android.deviceinfo.NativeDevicePropertiesData",
                 "-main-title", "SALTR SDK",
                 "-window-title", "SALTR SDK"] }
 }
