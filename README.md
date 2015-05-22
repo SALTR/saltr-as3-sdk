@@ -2,7 +2,7 @@
 * Modified: May 22th, 2015
 * AS3 SDK Version: 1.3.6 
 
-Other supported platforms:
+Other Supported Platforms:
 * [Unity Plug-in Version: 1.4.0](https://github.com/SALTR/saltr-unity-sdk)
 * [iOS SDK Version: 1.3.3](https://github.com/SALTR/saltr-ios-sdk)
 * [Android SDK Version: 1.1.1](https://github.com/SALTR/saltr-android-sdk)
@@ -24,6 +24,7 @@ Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/flash-as3) doc.
 
 ##To Download
 The SALTR AS3 SDK archive is [Available Here for download](https://github.com/SALTR/saltr-as3-sdk/archive/master.zip).
+
 
 ##To Install
 To use the SDK you need to download/clone SDK repository, and then import files to your
