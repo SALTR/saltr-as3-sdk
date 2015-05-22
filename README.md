@@ -19,25 +19,10 @@ Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/flash-as3) doc.
   * `saltr.utils` - helper or utility classes;
 
 
-##Introduction
-SALTR Flash/AS3 SDK is a library of classes which help to develop mobile and web
-games that are to be integrated with SALTR platform.
+##To Download
+The SALTR AS3 SDK archive is [Available Here for download](https://github.com/SALTR/saltr-as3-sdk/archive/master.zip).
 
-SDK performs all necessary and possible action with SALTR REST API to connect, update, set 
-and download data related to game's  features or levels.
-
-All data received from SALTR REST API is parsed and represented through set of instances of classes,
-each carrying specific objects and their properties.
-
-Basically SDK, as the REST API, has few simple actions. The most important one is connecting (getAppData),
-which loads the app data objects containing features, experiments and level headers.
-
-This and other actions will be described in the sections below.
-
-
-##Usage
-
-
+##To Install
 To use the SDK you need to download/clone SDK repository, and then import files to your
 project.
 
@@ -57,12 +42,21 @@ Each have some differences of initialization and usage.
 
 Note: All classes in the package start with "SLT" prefix.
 
-3. DIRECTORY STRUCTURE
-======================
 
-The SDK has the following directory structure:
+##Introduction
+SALTR Flash/AS3 SDK is a library of classes which help to develop mobile and web
+games that are to be integrated with SALTR platform.
 
+SDK performs all necessary and possible action with SALTR REST API to connect, update, set 
+and download data related to game's  features or levels.
 
+All data received from SALTR REST API is parsed and represented through set of instances of classes,
+each carrying specific objects and their properties.
 
-New packages supporting new gameplays and genres will be be added to <code>saltr.game</code> package.
+Basically SDK, as the REST API, has few simple actions. The most important one is connecting (getAppData),
+which loads the app data objects containing features, experiments and level headers.
 
+This and other actions will be described in the sections below.
+
+##Contact Us
+For more information, please visit [saltr.com](https://saltr.com). For questions or assistance, please email us at support@saltr.com.
