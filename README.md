@@ -8,7 +8,7 @@ Other Supported Platforms:
 * [Android SDK Version: 1.1.1](https://github.com/SALTR/saltr-android-sdk)
 
 ##Getting Started with SALTR AS3
-Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/flash-as3) doc.
+Please read [SALTR AS3 SDK Setup](https://saltr.com/setup#/as3) doc.
 
 ###SALTR SDK Contains:
 * `/src` - root folder of the library;
