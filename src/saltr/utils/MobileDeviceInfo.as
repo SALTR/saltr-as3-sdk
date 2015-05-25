@@ -47,8 +47,8 @@ public class MobileDeviceInfo {
         var iosDevice:String;
         var iosVersion:String;
 
-        // Windows, Windows mobile, Mac, Linux hook
-        if (null != os.match("Windows") || null != os.match("Mac") || null != os.match("Linux")) {
+        // Windows, Windows mobile, Mac hook
+        if (null != os.match("Windows") || null != os.match("Mac")) {
             deviceInfo.os = "";
             deviceInfo.device = "";
         } else if (null != os.match("iPad") || null != os.match("iPhone") || null != os.match("iPod")) {
@@ -113,7 +113,7 @@ public class MobileDeviceInfo {
         var pattern:RegExp = /\r?\n/;
         var lines:Array = content.split(pattern);
 
-        var infoData:Object;
+        var infoData:Object = new Object();
         for (var i:int = 0; i < lines.length; ++i) {
             var line:String = String(lines[i]);
             if ("" != line) {
