@@ -1,6 +1,7 @@
 
 //Define output directory for swc and documentation
-def outdir = "saltr-sdk.v.1.3.6"
+def version = "1.3.6"
+def outdir = "saltr-sdk.v."+version
 println "Output directory: "+outdir
 
 def workspace =System.getenv()['WORKSPACE']
@@ -197,8 +198,8 @@ task generateSaltrDoc << {
                 workspace+"/"+outdir+"/doc",
                 "-library-path",
                 "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
-                "-main-title", "SALTR SDK",
-                "-window-title", "SALTR SDK"] }
+                "-main-title", "SALTR SDK Version "+version,
+                "-window-title", "SALTR SDK Version "+version] }
 }
 
 generateSaltrDoc.dependsOn build
