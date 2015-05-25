@@ -210,12 +210,12 @@ public class SLTLoadLevelContentMobileTest {
     }
 
     /**
-     * loadLevelContentTestFromSaltrCashEnabledDifferentVersions.
+     * loadLevelContentTestFromSaltrCacheEnabledDifferentVersions.
      * The intent of this test is to check the loadLevelContent function.
      * connected = true, useCache = true. Different level versions in cache. Data from saltr expected.
      */
     [Test]
-    public function loadLevelContentTestFromSaltrCashEnabledDifferentVersions():void {
+    public function loadLevelContentTestFromSaltrCacheEnabledDifferentVersions():void {
         prepareLoadLevelContentConnected();
 
         var levelLoaded:Boolean = false;

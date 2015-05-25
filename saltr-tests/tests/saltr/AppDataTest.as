@@ -134,6 +134,7 @@ public class AppDataTest {
      * getFeaturePropertiesWithActiveFeaturesTest.
      * The intent of this test is to check the getFeatureProperties method. In this test active features will be returned.
      */
+    //TODO:: @daal. Is this correct test implementation? The correct flow is : first define features. Then initWithData...
     [Test]
     public function getFeaturePropertiesWithActiveFeaturesTest():void {
         _appData.initWithData(JSON.parse(new AppDataJson()));
@@ -149,6 +150,7 @@ public class AppDataTest {
      * getFeaturePropertiesWithDeveloperFeaturesTest.
      * The intent of this test is to check the getFeatureProperties method. In this test developer features will be returned.
      */
+    //TODO:: @daal. Is this correct test implementation? The correct flow is : first define features. Then initWithData...
     [Test]
     public function getFeaturePropertiesWithDeveloperFeaturesTest():void {
         _appData.initWithData(JSON.parse(new AppDataJson()));
@@ -164,6 +166,7 @@ public class AppDataTest {
      * getFeaturePropertiesWithNullResultTest.
      * The intent of this test is to check the getFeatureProperties method. In this test null be returned.
      */
+    //TODO:: @daal. Is this correct test implementation? The correct flow is : first define features. Then initWithData...
     [Test]
     public function getFeaturePropertiesWithNullResultTest():void {
         _appData.initWithData(JSON.parse(new AppDataJson()));
