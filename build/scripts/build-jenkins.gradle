@@ -198,8 +198,8 @@ task generateSaltrDoc << {
                 workspace+"/"+outdir+"/doc",
                 "-library-path",
                 "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
-                "-main-title", "SALTR SDK Version "+str(version),
-                "-window-title", "SALTR SDK Version "+str(version)] }
+                "-main-title", "SALTR SDK Version "+"${version}",
+                "-window-title", "SALTR SDK Version "+"${version}"] }
 }
 
 generateSaltrDoc.dependsOn build
