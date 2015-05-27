@@ -33,9 +33,8 @@ public class ApiCallTest {
         _call = null;
     }
 
-    //TODO:: @daal. Why this method get Function Handler as argument instead of passing params Object?
-    protected function validateParams(getParams:Function, actionName:String):Boolean {
-        return ApiCallTestHelper.validateCallParams(_call, getParams(), actionName);
+    protected function validateParams(params:Object, actionName:String):Boolean {
+        return ApiCallTestHelper.validateCallParams(_call, params, actionName);
     }
 
     protected function getMobileCallRequestCompletedResult(callResult:ApiCallResult, resource:SLTResource):Boolean {

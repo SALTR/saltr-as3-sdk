@@ -95,7 +95,6 @@ def buildDir = new File(projectDir, '../../build/tests/build')
 //def publishDir = new File(projectDir, '/publish')
 def reportDir = new File(projectDir, '../../build/tests/reports')
 def srcDir = new File(projectDir, '../../src')
-def srcDir2 = new File(projectDir, '../../external/src')
 def testDir = new File(projectDir, '../../saltr-tests')
 //def fixturesDir = new File(projectDir, '/fixtures')
 
@@ -124,7 +123,6 @@ task compileTest(type: JavaExec) {
     argsList.push('-debug=true')
     argsList.push("${testDir}/FlexUnitRunner.as")
     argsList.push("-source-path=${srcDir}")
-    argsList.push("-source-path=${srcDir2}")
     argsList.push("-source-path=${testDir}")
     argsList.push("-output=${buildDir}/tests.swf")
     argsList.push("-library-path+=${libDir}");

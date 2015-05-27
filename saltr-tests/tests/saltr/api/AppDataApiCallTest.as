@@ -49,7 +49,7 @@ public class AppDataApiCallTest extends ApiCallTest {
     [Test]
     public function mobileCallParamsValidationSuccessTest():void {
         createCallMobile();
-        assertEquals(true, validateParams(getCorrectMobileCallParams, SLTConfig.ACTION_GET_APP_DATA));
+        assertEquals(true, validateParams(getCorrectMobileCallParams(), SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -60,7 +60,7 @@ public class AppDataApiCallTest extends ApiCallTest {
     [Test]
     public function mobileCallParamsValidationFailTest():void {
         createCallMobile();
-        assertEquals(false, validateParams(getCorrectWebCallParams, SLTConfig.ACTION_GET_APP_DATA));
+        assertEquals(false, validateParams(getCorrectWebCallParams(), SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -71,7 +71,7 @@ public class AppDataApiCallTest extends ApiCallTest {
     [Test]
     public function webCallParamsValidationSuccessTest():void {
         createCallWeb();
-        assertEquals(true, validateParams(getCorrectWebCallParams, SLTConfig.ACTION_GET_APP_DATA));
+        assertEquals(true, validateParams(getCorrectWebCallParams(), SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
@@ -82,7 +82,7 @@ public class AppDataApiCallTest extends ApiCallTest {
     [Test]
     public function webCallParamsValidationFailTest():void {
         createCallWeb();
-        assertEquals(false, validateParams(getCorrectMobileCallParams, SLTConfig.ACTION_GET_APP_DATA));
+        assertEquals(false, validateParams(getCorrectMobileCallParams(), SLTConfig.ACTION_GET_APP_DATA));
     }
 
     /**
