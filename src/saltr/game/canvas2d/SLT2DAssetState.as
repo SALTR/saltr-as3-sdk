@@ -66,14 +66,14 @@ public class SLT2DAssetState extends SLTAssetState {
     /**
      * @private
      */
-    saltr_internal function set width(value:Number) {
+    saltr_internal function setWidth(value:Number):void {
         _width = value;
     }
 
     /**
      * @private
      */
-    saltr_internal function set height(value:Number) {
+    saltr_internal function setHeight(value:Number):void {
         _height = value;
     }
 

@@ -31,7 +31,7 @@ public class ApiCallTestHelper {
 
         var isCallActionCorrect:Boolean = action === urlVars.action;
         //var paramsValues:String = JSON.stringify(params, ApiCall.removeEmptyAndNullsJSONReplacer);
-        var isObjectsEqual = areObjectsEqual(params, jsonParsed);
+        var isObjectsEqual:Boolean = areObjectsEqual(params, jsonParsed);
 
         return isCallSuccess && isObjectsEqual && isCallActionCorrect;
     }

@@ -63,8 +63,8 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
         var scaleAppliedStates:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
         for (var i:int = 0; i < states.length; ++i) {
             var clonedState:SLT2DAssetState = (states[i] as SLT2DAssetState).clone();
-            clonedState.width = clonedState.width * _scaleX;
-            clonedState.height = clonedState.height * _scaleY;
+            clonedState.setWidth(clonedState.width * _scaleX);
+            clonedState.setHeight(clonedState.height * _scaleY);
             scaleAppliedStates.push(clonedState);
         }
         return scaleAppliedStates;
