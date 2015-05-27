@@ -4,6 +4,8 @@
 
 package saltr.utils {
 import flash.utils.Dictionary;
+import flash.utils.describeType;
+import flash.utils.getQualifiedClassName;
 
 import saltr.saltr_internal;
 
@@ -79,6 +81,44 @@ public class Utils {
         var temp:Object = vect[a];
         vect[a] = vect[b];
         vect[b] = temp;
+    }
+
+    /**
+     * Clone object.
+     * @param object The object.
+     */
+    saltr_internal static function cloneObject(object:Object):Object {
+        if (object is Number || object is String || object is Boolean || object == null) {
+            return object;
+        } else if (object is Array) {
+            var array:Array = object as Array;
+            var arrayClone:Array = [];
+            var length:int = array.length;
+            for (var i:int = 0; i < length; ++i) arrayClone[i] = cloneObject(array[i]);
+            return arrayClone;
+        } else {
+            var objectClone:Object = {};
+            var typeDescription:XML = null;
+
+            if (getQualifiedClassName(object) == "Object") {
+                for (var key:String in object)
+                    objectClone[key] = cloneObject(object[key]);
+            } else {
+                typeDescription = describeType(object);
+                var properties:XMLList = typeDescription.variable + typeDescription.accessor;
+
+                for each (var property:XML in properties) {
+                    var propertyName:String = property.@name.toString();
+                    var access:String = property.@access.toString();
+                    var nonSerializedMetaData:XMLList = property.metadata.(@name == "NonSerialized");
+
+                    if (access != "writeonly" && nonSerializedMetaData.length() == 0) {
+                        objectClone[propertyName] = cloneObject(object[propertyName]);
+                    }
+                }
+            }
+            return objectClone;
+        }
     }
 }
 }

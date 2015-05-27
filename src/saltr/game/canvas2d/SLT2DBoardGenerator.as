@@ -6,7 +6,6 @@ package saltr.game.canvas2d {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
-import saltr.game.SLTAssetState;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -26,21 +25,14 @@ internal class SLT2DBoardGenerator {
             var assetInstanceNode:Object = assetNodes[i];
             var x:Number = assetInstanceNode.x;
             var y:Number = assetInstanceNode.y;
+            var scaleX:Number = assetInstanceNode.scaleX;
+            var scaleY:Number = assetInstanceNode.scaleY;
             var rotation:Number = assetInstanceNode.rotation;
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateIds:Array = assetInstanceNode.states as Array;
-            assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, rotation));
+            assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, scaleX, scaleY, rotation));
         }
         return assetInstances;
-    }
-
-    private function parseAssetState(stateNode:Object):SLTAssetState {
-        var token:String = stateNode.hasOwnProperty("token") ? stateNode.token : null;
-        var properties:Object = stateNode.hasOwnProperty("properties") ? stateNode.properties : null;
-        var pivotX:Number = stateNode.hasOwnProperty("pivotX") ? stateNode.pivotX : 0;
-        var pivotY:Number = stateNode.hasOwnProperty("pivotY") ? stateNode.pivotY : 0;
-
-        return new SLT2DAssetState(token, properties, pivotX, pivotY);
     }
 }
 }
