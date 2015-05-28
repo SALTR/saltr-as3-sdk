@@ -10,7 +10,6 @@ import saltr.game.matching.SLTCells;
 /**
  * The SLTCellsTest class contain the SLTCells method tests.
  */
-//TODO:: @daal Test for only one method is written.
 public class SLTCellsTest {
     private var _cells:SLTCells;
 
