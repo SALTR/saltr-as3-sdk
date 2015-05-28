@@ -1,0 +1,67 @@
+/**
+ * Created by TIGR on 5/28/2015.
+ */
+package tests.saltr.game.canvas2d {
+import org.flexunit.asserts.assertEquals;
+
+import saltr.game.SLTAssetState;
+import saltr.game.SLTLevel;
+import saltr.game.canvas2d.SLT2DAssetInstance;
+import saltr.game.canvas2d.SLT2DAssetState;
+import saltr.game.canvas2d.SLT2DBoard;
+
+/**
+ * The SLT2DAssetInstanceTest class contain the SLT2DAssetInstance method tests
+ */
+public class SLT2DAssetInstanceTest {
+    [Embed(source="../../../../../build/tests/saltr/slt_2d_asset_instance_test/level.json", mimeType="application/octet-stream")]
+    private static const LevelDataJson:Class;
+
+    private static const STATE_0_WIDTH:Number = 1.0 * 199.0;
+    private static const STATE_0_HEIGHT:Number = 1.286 * 199.0;
+    private static const STATE_1_WIDTH:Number = 1.528 * 199.0;
+    private static const STATE_1_HEIGHT:Number = 1.0 * 199.0;
+
+    private var _level:SLTLevel;
+
+    public function SLT2DAssetInstanceTest() {
+    }
+
+    [Before]
+    public function tearUp():void {
+        var levelProperties:Object = {
+            "movesCount": "18"
+        };
+        _level = new SLTLevel("225045", "246970", "canvas2D", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+    }
+
+    [After]
+    public function tearDown():void {
+        _level = null;
+    }
+
+    /**
+     * assetStateWidthHeightTest
+     * The intent of this test is to check the SLT2DAssetState width / height, which are SLT2DInstance's scale factor depended values.
+     */
+    [Test]
+    public function assetStateWidthHeightTest():void {
+        var testPassed:Boolean = false;
+        if (false == _level.contentReady) {
+            _level.updateContent(JSON.parse(new LevelDataJson()));
+            if (true == _level.contentReady) {
+                var board:SLT2DBoard = _level.getBoard("UNTITLED_1") as SLT2DBoard;
+                var assetInstances:Vector.<SLT2DAssetInstance> = board.getAssetInstancesByLayerId("default");
+                var states_0:Vector.<SLTAssetState> = assetInstances[0].states;
+                var states_1:Vector.<SLTAssetState> = assetInstances[1].states;
+                var state_0:SLT2DAssetState = states_0[0] as SLT2DAssetState;
+                var state_1:SLT2DAssetState = states_1[0] as SLT2DAssetState;
+                if (STATE_0_WIDTH == state_0.width && STATE_0_HEIGHT == state_0.height && STATE_1_WIDTH == state_1.width && STATE_1_HEIGHT == state_1.height) {
+                    testPassed = true;
+                }
+            }
+        }
+        assertEquals(true, testPassed);
+    }
+}
+}
