@@ -2,6 +2,9 @@
  * Created by GSAR on 7/12/14.
  */
 package saltr.game.canvas2d {
+import flash.geom.Point;
+import flash.utils.Dictionary;
+
 import saltr.game.SLTAssetInstance;
 import saltr.game.SLTAssetState;
 import saltr.saltr_internal;
@@ -18,6 +21,7 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
     private var _scaleX:Number;
     private var _scaleY:Number;
     private var _rotation:Number;
+    private var _positions:Dictionary;
 
     /**
      * Class constructor.
@@ -26,14 +30,18 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
      * @param properties The current instance properties.
      * @param x The current instance x coordinate.
      * @param y The current instance y coordinate.
+     * @param scaleX The current instance scale by X value.
+     * @param scaleY The current instance scale by Y value.
      * @param rotation The current instance rotation.
+     * @param positions The current instance positions.
      */
-    public function SLT2DAssetInstance(token:String, states:Vector.<SLTAssetState>, properties:Object, x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number) {
+    public function SLT2DAssetInstance(token:String, states:Vector.<SLTAssetState>, properties:Object, x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number, positions:Dictionary) {
         _x = x;
         _y = y;
         _scaleX = scaleX;
         _scaleY = scaleY;
         _rotation = rotation;
+        _positions = positions;
 
         super(token, getScaleAppliedStates(states), properties);
     }
@@ -57,6 +65,20 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
      */
     public function get rotation():Number {
         return _rotation;
+    }
+
+    /**
+     * The current instance positions.
+     */
+    public function get positions():Dictionary {
+        return _positions;
+    }
+
+    /**
+     * The current instance position by id.
+     */
+    public function getPositionById(id:String):Point {
+        return _positions[id];
     }
 
     private function getScaleAppliedStates(states:Vector.<SLTAssetState>):Vector.<SLTAssetState> {

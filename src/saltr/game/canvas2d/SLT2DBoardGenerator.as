@@ -3,6 +3,7 @@
  */
 package saltr.game.canvas2d {
 
+import flash.geom.Point;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
@@ -30,9 +31,22 @@ internal class SLT2DBoardGenerator {
             var rotation:Number = assetInstanceNode.rotation;
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateIds:Array = assetInstanceNode.states as Array;
-            assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, scaleX, scaleY, rotation));
+            var positions:Dictionary = getAssetInstancePositions(assetInstanceNode);
+            assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, scaleX, scaleY, rotation, positions));
         }
         return assetInstances;
+    }
+
+    private function getAssetInstancePositions(assetInstanceNode:Object):Dictionary {
+        var positions:Dictionary = new Dictionary();
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("positions") ? assetInstanceNode.positions as Array : new Array();
+        var positionsCount:int = positionsArray.length;
+        for (var i:int = 0; i < positionsCount; ++i) {
+            var positionObject:Object = positionsArray[i];
+            var positionId:String = positionObject.id;
+            positions[positionId] = new Point(positionObject.x, positionObject.y);
+        }
+        return positions;
     }
 }
 }
