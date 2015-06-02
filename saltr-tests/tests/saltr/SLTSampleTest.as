@@ -10,8 +10,8 @@ import org.flexunit.asserts.assertNotNull;
 
 import saltr.SLTSaltrMobile;
 
-import saltr.api.ApiCallResult;
-import saltr.api.ApiFactory;
+import saltr.api.SLTApiCallResult;
+import saltr.api.SLTApiFactory;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 
@@ -25,7 +25,7 @@ public class SLTSampleTest {
     [Mock(type="nice")]
     public var _heartbeatMock:ApiCallMock;
     [Mock(type="nice")]
-    public var _apiFactory:ApiFactory;
+    public var _apiFactory:SLTApiFactory;
     private var _saltr:SLTSaltrMobile;
 
     public function SLTSampleTest() {
@@ -50,12 +50,12 @@ public class SLTSampleTest {
     }
 
 
-    private function ttt(apiResult : ApiCallResult) : void {
+    private function ttt(apiResult : SLTApiCallResult) : void {
         assertEquals("RRR",apiResult.status.statusMessage);
     }
 
-    private function createMockedCallResult():ApiCallResult {
-        var apiCallResult:ApiCallResult = new ApiCallResult();
+    private function createMockedCallResult():SLTApiCallResult {
+        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         var status:SLTStatus = new SLTStatus(SLTStatus.API_ERROR, "RRR");
         apiCallResult.status = status;
         return apiCallResult;

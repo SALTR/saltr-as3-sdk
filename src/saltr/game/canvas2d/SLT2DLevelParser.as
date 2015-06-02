@@ -85,8 +85,10 @@ public class SLT2DLevelParser extends SLTLevelParser {
         var properties:Object = stateNode.hasOwnProperty("properties") ? stateNode.properties : null;
         var pivotX:Number = stateNode.hasOwnProperty("pivotX") ? stateNode.pivotX : 0;
         var pivotY:Number = stateNode.hasOwnProperty("pivotY") ? stateNode.pivotY : 0;
+        var width:Number = stateNode.hasOwnProperty("width") ? stateNode.width : 0;
+        var height:Number = stateNode.hasOwnProperty("height") ? stateNode.height : 0;
 
-        return new SLT2DAssetState(token, properties, pivotX, pivotY);
+        return new SLT2DAssetState(token, properties, pivotX, pivotY, width, height);
     }
 }
 }

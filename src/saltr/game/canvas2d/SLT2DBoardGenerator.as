@@ -3,10 +3,10 @@
  */
 package saltr.game.canvas2d {
 
+import flash.geom.Point;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
-import saltr.game.SLTAssetState;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -26,21 +26,27 @@ internal class SLT2DBoardGenerator {
             var assetInstanceNode:Object = assetNodes[i];
             var x:Number = assetInstanceNode.x;
             var y:Number = assetInstanceNode.y;
+            var scaleX:Number = assetInstanceNode.hasOwnProperty("scaleX") ? assetInstanceNode.scaleX : 1;
+            var scaleY:Number = assetInstanceNode.hasOwnProperty("scaleY") ? assetInstanceNode.scaleY : 1;
             var rotation:Number = assetInstanceNode.rotation;
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateIds:Array = assetInstanceNode.states as Array;
-            assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, rotation));
+            var positions:Dictionary = getAssetInstancePositions(assetInstanceNode);
+            assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties, x, y, scaleX, scaleY, rotation, positions));
         }
         return assetInstances;
     }
 
-    private function parseAssetState(stateNode:Object):SLTAssetState {
-        var token:String = stateNode.hasOwnProperty("token") ? stateNode.token : null;
-        var properties:Object = stateNode.hasOwnProperty("properties") ? stateNode.properties : null;
-        var pivotX:Number = stateNode.hasOwnProperty("pivotX") ? stateNode.pivotX : 0;
-        var pivotY:Number = stateNode.hasOwnProperty("pivotY") ? stateNode.pivotY : 0;
-
-        return new SLT2DAssetState(token, properties, pivotX, pivotY);
+    private function getAssetInstancePositions(assetInstanceNode:Object):Dictionary {
+        var positions:Dictionary = new Dictionary();
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("positions") ? assetInstanceNode.positions as Array : new Array();
+        var positionsCount:int = positionsArray.length;
+        for (var i:int = 0; i < positionsCount; ++i) {
+            var positionObject:Object = positionsArray[i];
+            var positionId:String = positionObject.id;
+            positions[positionId] = new Point(positionObject.x, positionObject.y);
+        }
+        return positions;
     }
 }
 }

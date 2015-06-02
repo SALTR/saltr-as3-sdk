@@ -17,7 +17,7 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-import saltr.utils.HTTPStatus;
+import saltr.utils.SLTHTTPStatus;
 
 /**
  * The SLTResource class represents the resource.
@@ -192,7 +192,7 @@ public class SLTResource {
         stopDropTimeoutTimer();
         var dispatcher:EventDispatcher = event.target as EventDispatcher;
         removeLoaderListeners(dispatcher);
-        if (HTTPStatus.isInSuccessCodes(_httpStatus)) {
+        if (SLTHTTPStatus.isInSuccessCodes(_httpStatus)) {
             _isLoaded = true;
             _onSuccess(this);
         }

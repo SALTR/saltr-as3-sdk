@@ -7,9 +7,9 @@ import flash.display.Stage;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.ApiCall;
-import saltr.api.ApiCallResult;
-import saltr.api.ApiFactory;
+import saltr.api.SLTApiCall;
+import saltr.api.SLTApiCallResult;
+import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
@@ -21,9 +21,9 @@ import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.MobileDeviceInfo;
-import saltr.utils.Utils;
-import saltr.utils.dialog.MobileDialogController;
+import saltr.utils.SLTMobileDeviceInfo;
+import saltr.utils.SLTUtils;
+import saltr.utils.dialog.SLTMobileDialogController;
 
 use namespace saltr_internal;
 
@@ -56,14 +56,14 @@ public class SLTSaltrMobile {
     private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
     private var _useNoFeatures:Boolean;
-    private var _dialogController:MobileDialogController;
+    private var _dialogController:SLTMobileDialogController;
 
-    private var _appData:AppData;
-    private var _levelData:LevelData;
+    private var _appData:SLTAppData;
+    private var _levelData:SLTLevelData;
 
     private var _heartbeatTimer:Timer;
     private var _heartBeatTimerStarted:Boolean;
-    private var _apiFactory:ApiFactory;
+    private var _apiFactory:SLTApiFactory;
 
     /**
      * Class constructor.
@@ -89,15 +89,15 @@ public class SLTSaltrMobile {
         _requestIdleTimeout = 0;
 
         _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
-        _dialogController = new MobileDialogController(_flashStage, addDeviceToSALTR);
+        _dialogController = new SLTMobileDialogController(_flashStage, addDeviceToSALTR);
 
-        _appData = new AppData();
-        _levelData = new LevelData();
+        _appData = new SLTAppData();
+        _levelData = new SLTLevelData();
 
-        _apiFactory = new ApiFactory();
+        _apiFactory = new SLTApiFactory();
     }
 
-    public function set apiFactory(value:ApiFactory):void {
+    public function set apiFactory(value:SLTApiFactory):void {
         _apiFactory = value;
     }
 
@@ -262,7 +262,7 @@ public class SLTSaltrMobile {
             throw new Error("deviceId field is required and can't be null.");
         }
 
-        if (Utils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
+        if (SLTUtils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
             throw new Error("Features should be defined.");
         }
 
@@ -306,7 +306,7 @@ public class SLTSaltrMobile {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var appDataCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_APP_DATA, true);
+        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, appDataApiCallback, _requestIdleTimeout);
     }
 
@@ -355,7 +355,7 @@ public class SLTSaltrMobile {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_ADD_PROPERTIES, true);
+        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_ADD_PROPERTIES, true);
         addPropertiesApiCall.call(params, addPropertiesApiCallback, _requestIdleTimeout);
     }
 
@@ -392,7 +392,7 @@ public class SLTSaltrMobile {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_SEND_LEVEL_END, true);
+        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SEND_LEVEL_END, true);
         sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
     }
 
@@ -404,10 +404,10 @@ public class SLTSaltrMobile {
         var params:Object = {
             levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
         };
-        var levelContentApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_LEVEL_CONTENT, true);
+        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_LEVEL_CONTENT, true);
         levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
 
-        function levelContentApiCallback(result:ApiCallResult):void {
+        function levelContentApiCallback(result:SLTApiCallResult):void {
             var content:Object = result.data;
             if (result.success) {
                 cacheLevelContent(sltLevel, content);
@@ -436,7 +436,7 @@ public class SLTSaltrMobile {
         _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
     }
 
-    private function addPropertiesApiCallback(result:ApiCallResult):void {
+    private function addPropertiesApiCallback(result:SLTApiCallResult):void {
         if (result.success) {
             trace("[addPropertiesApiCallback] success");
         } else {
@@ -444,7 +444,7 @@ public class SLTSaltrMobile {
         }
     }
 
-    private function appDataApiCallback(result:ApiCallResult):void {
+    private function appDataApiCallback(result:SLTApiCallResult):void {
         if (result.success) {
             appDataLoadSuccessCallback(result);
         } else {
@@ -453,7 +453,7 @@ public class SLTSaltrMobile {
     }
 
     //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
-    private function appDataLoadSuccessCallback(result:ApiCallResult):void {
+    private function appDataLoadSuccessCallback(result:SLTApiCallResult):void {
         _isLoading = false;
 
         if (_devMode && !_isSynced) {
@@ -505,7 +505,7 @@ public class SLTSaltrMobile {
         sync();
     }
 
-    protected function addDeviceFailHandler(result:ApiCallResult):void {
+    protected function addDeviceFailHandler(result:SLTApiCallResult):void {
         trace("[Saltr] Dev adding new device has failed.");
         _dialogController.showRegistrationFailStatus(result.status.statusMessage);
     }
@@ -515,14 +515,14 @@ public class SLTSaltrMobile {
             email: email,
             clientKey: _clientKey,
             deviceId: _deviceId,
-            deviceInfo: MobileDeviceInfo.getDeviceInfo(),
+            deviceInfo: SLTMobileDeviceInfo.getDeviceInfo(),
             devMode: _devMode
         };
-        var apiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_REGISTER_DEVICE, true);
+        var apiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_REGISTER_DEVICE, true);
         apiCall.call(params, registerDeviceApiCallback);
     }
 
-    private function registerDeviceApiCallback(result:ApiCallResult):void {
+    private function registerDeviceApiCallback(result:SLTApiCallResult):void {
         if (result.success) {
             addDeviceSuccessHandler();
         } else {
@@ -530,7 +530,7 @@ public class SLTSaltrMobile {
         }
     }
 
-    private function sendLevelEndApiCallback(result:ApiCallResult):void {
+    private function sendLevelEndApiCallback(result:SLTApiCallResult):void {
         if (result.success) {
             trace("sendLevelEndSuccessHandler");
         } else {
@@ -546,11 +546,11 @@ public class SLTSaltrMobile {
             socialId: _socialId,
             developerFeatures: _appData.developerFeatures
         };
-        var syncApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_SYNC, true);
+        var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SYNC, true);
         syncApiCall.call(params, syncApiCallback);
     }
 
-    private function syncApiCallback(result:ApiCallResult):void {
+    private function syncApiCallback(result:SLTApiCallResult):void {
         if (result.success) {
             syncSuccessHandler();
         } else {
@@ -562,7 +562,7 @@ public class SLTSaltrMobile {
         _isSynced = true;
     }
 
-    protected function syncFailHandler(result:ApiCallResult):void {
+    protected function syncFailHandler(result:SLTApiCallResult):void {
         if (result.status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
             registerDevice();
         }
@@ -595,23 +595,23 @@ public class SLTSaltrMobile {
             deviceId: _deviceId,
             socialId: _socialId
         };
-        var heartbeatApiCall:ApiCall = _apiFactory.getCall(ApiFactory.API_CALL_HEARTBEAT, true);
+        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_HEARTBEAT, true);
         heartbeatApiCall.call(params, heartbeatApiCallback);
     }
 
-    private function heartbeatApiCallback(result:ApiCallResult):void {
+    private function heartbeatApiCallback(result:SLTApiCallResult):void {
         if (!result.success) {
             stopHeartbeat();
         }
     }
 
     private function getCachedLevelVersion(sltLevel:SLTLevel):String {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
+        var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectVersion(cachedFileName);
     }
 
     private function cacheLevelContent(sltLevel:SLTLevel, content:Object):void {
-        var cachedFileName:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
+        var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
     }
 
@@ -624,12 +624,12 @@ public class SLTSaltrMobile {
     }
 
     private function loadLevelContentFromCache(sltLevel:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
+        var url:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromCache(url);
     }
 
     private function loadLevelContentFromDisk(sltLevel:SLTLevel):Object {
-        var url:String = Utils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
+        var url:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
         return _repository.getObjectFromApplication(url);
     }
 
