@@ -4,7 +4,7 @@
 package saltr.game.canvas2d {
 import saltr.game.SLTAssetState;
 import saltr.saltr_internal;
-import saltr.utils.Utils;
+import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
 
@@ -81,7 +81,7 @@ public class SLT2DAssetState extends SLTAssetState {
      * @private
      */
     saltr_internal function clone():SLT2DAssetState {
-        return new SLT2DAssetState(token, Utils.cloneObject(properties), pivotX, pivotY, width, height);
+        return new SLT2DAssetState(token, SLTUtils.cloneObject(properties), pivotX, pivotY, width, height);
     }
 }
 }

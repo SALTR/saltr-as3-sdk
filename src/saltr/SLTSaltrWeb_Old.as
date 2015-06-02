@@ -17,7 +17,7 @@ import saltr.status.SLTStatusExperimentsParseError;
 import saltr.status.SLTStatusFeaturesParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.Utils;
+import saltr.utils.SLTUtils;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -227,7 +227,7 @@ public class SLTSaltrWeb_Old {
             throw new Error("'socialId' field is required and can't be null.");
         }
 
-        if (Utils.getDictionarySize(_developerFeatures) == 0 && _useNoFeatures == false) {
+        if (SLTUtils.getDictionarySize(_developerFeatures) == 0 && _useNoFeatures == false) {
             throw new Error("Features should be defined.");
         }
 

@@ -9,8 +9,8 @@ import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
-import saltr.api.ApiCallResult;
-import saltr.api.ApiFactory;
+import saltr.api.SLTApiCallResult;
+import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 import saltr.saltr_internal;
@@ -43,7 +43,7 @@ public class SLTLoadLevelContentMobileTest {
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
     [Mock(type="nice")]
-    public var apiFactory:ApiFactory;
+    public var apiFactory:SLTApiFactory;
     [Mock(type="nice")]
     public var apiCallGeneralMock:ApiCallMock;
     [Mock(type="nice")]
@@ -282,12 +282,12 @@ public class SLTLoadLevelContentMobileTest {
 
         _saltr.importLevels("");
 
-        var apiCallResultGeneral:ApiCallResult = new ApiCallResult();
+        var apiCallResultGeneral:SLTApiCallResult = new SLTApiCallResult();
         apiCallResultGeneral.data = JSON.parse(new AppDataJson);
         apiCallResultGeneral.success = true;
         stub(apiCallGeneralMock).method("getMockedCallResult").returns(apiCallResultGeneral);
 
-        var apiCallResultLevelContent:ApiCallResult = new ApiCallResult();
+        var apiCallResultLevelContent:SLTApiCallResult = new SLTApiCallResult();
         apiCallResultLevelContent.data = JSON.parse(new LevelDataFromSaltrJson);
         apiCallResultLevelContent.success = true;
         stub(apiCallLevelContentMock).method("getMockedCallResult").returns(apiCallResultLevelContent);

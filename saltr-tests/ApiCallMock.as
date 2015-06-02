@@ -2,13 +2,13 @@
  * Created by daal on 4/15/15.
  */
 package {
-import saltr.api.ApiCall;
-import saltr.api.ApiCallResult;
+import saltr.api.SLTApiCall;
+import saltr.api.SLTApiCallResult;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-public class ApiCallMock extends ApiCall {
+public class ApiCallMock extends SLTApiCall {
 
     public function ApiCallMock(isMobile:Boolean = true) {
         super(isMobile);
@@ -18,8 +18,8 @@ public class ApiCallMock extends ApiCall {
         callback(getMockedCallResult());
     }
 
-    public function getMockedCallResult():ApiCallResult {
-        return new ApiCallResult();
+    public function getMockedCallResult():SLTApiCallResult {
+        return new SLTApiCallResult();
     }
 }
 }

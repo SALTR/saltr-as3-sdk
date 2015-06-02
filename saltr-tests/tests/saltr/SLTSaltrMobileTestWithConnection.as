@@ -9,8 +9,8 @@ import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTExperiment;
 import saltr.SLTSaltrMobile;
-import saltr.api.ApiCallResult;
-import saltr.api.ApiFactory;
+import saltr.api.SLTApiCallResult;
+import saltr.api.SLTApiFactory;
 import saltr.repository.SLTMobileRepository;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
@@ -36,7 +36,7 @@ public class SLTSaltrMobileTestWithConnection {
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
     [Mock(type="nice")]
-    public var apiFactory:ApiFactory;
+    public var apiFactory:SLTApiFactory;
     [Mock(type="nice")]
     public var apiCallMock:ApiCallMock;
 
@@ -89,7 +89,7 @@ public class SLTSaltrMobileTestWithConnection {
      */
     [Test]
     public function connectTestFailCallback():void {
-        var apiCallResult:ApiCallResult = new ApiCallResult();
+        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
         stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
 
@@ -111,7 +111,7 @@ public class SLTSaltrMobileTestWithConnection {
      */
     [Test]
     public function connectTestWithSuccess():void {
-        var apiCallResult:ApiCallResult = new ApiCallResult();
+        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.data = JSON.parse(new AppDataJson());
         apiCallResult.success = true;
         stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
