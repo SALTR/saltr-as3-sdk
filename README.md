@@ -1,6 +1,6 @@
 #SALTR AS3 SDK (Adobe AIR, Flash)
-* Modified: May 22th, 2015
-* AS3 SDK Version: 1.3.6 
+* Modified: June 02, 2015
+* AS3 SDK Version: 1.3.7 
 
 Other Supported Platforms:
 * [Unity Plug-in Version: 1.4.0](https://github.com/SALTR/saltr-unity-sdk)
