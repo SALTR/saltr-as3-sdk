@@ -74,32 +74,6 @@ public class SLT2DAssetInstanceTest {
      */
     [Test]
     public function assetInstancePositionsTest():void {
-
-        function checkPosition(position:Point, positionId:String):Boolean {
-            var isCorrect:Boolean = false;
-            switch (positionId) {
-                case "pointA" :
-                {
-                    if (399.98685 == position.x && 310.48752 == position.y) {
-                        isCorrect = true;
-                    }
-                    break;
-                }
-                case "pointB" :
-                {
-                    if (442.0 == position.x && 356.0 == position.y) {
-                        isCorrect = true;
-                    }
-                    break;
-                }
-                default :
-                {
-                    isCorrect = false;
-                }
-            }
-            return isCorrect;
-        }
-
         var testPassed:Boolean = false;
         if (false == _level.contentReady) {
             _level.updateContent(JSON.parse(new PositionTestLevelDataJson()));
@@ -111,12 +85,37 @@ public class SLT2DAssetInstanceTest {
                 var positionA:Point = assetInstance.getPositionById("pointA");
                 var positionB:Point = assetInstance.getPositionById("pointB");
                 var positionUnknown:Point = assetInstance.getPositionById("pointUnknown");
-                if (checkPosition(positionA, "pointA") && checkPosition(positionB, "pointB") && null == positionUnknown) {
+                if (checkAssetInstancePosition(positionA, "pointA") && checkAssetInstancePosition(positionB, "pointB") && null == positionUnknown) {
                     testPassed = true;
                 }
             }
         }
         assertEquals(true, testPassed);
+    }
+
+    private function checkAssetInstancePosition(position:Point, positionId:String):Boolean {
+        var isCorrect:Boolean = false;
+        switch (positionId) {
+            case "pointA" :
+            {
+                if (399.98685 == position.x && 310.48752 == position.y) {
+                    isCorrect = true;
+                }
+                break;
+            }
+            case "pointB" :
+            {
+                if (442.0 == position.x && 356.0 == position.y) {
+                    isCorrect = true;
+                }
+                break;
+            }
+            default :
+            {
+                isCorrect = false;
+            }
+        }
+        return isCorrect;
     }
 }
 }
