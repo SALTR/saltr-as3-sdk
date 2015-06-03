@@ -321,21 +321,12 @@ public class SLTSaltrMobile {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
         var content:Object = null;
-        if (_connected == false) {
-            if (useCache == true) {
-                content = loadLevelContentInternally(sltLevel);
-            } else {
-                content = loadLevelContentFromDisk(sltLevel);
-            }
-            levelContentLoadSuccessHandler(sltLevel, content);
+        if (useCache == true) {
+            content = loadLevelContentInternally(sltLevel);
         } else {
-            if (useCache == false || sltLevel.version != getCachedLevelVersion(sltLevel)) {
-                loadLevelContentFromSaltr(sltLevel);
-            } else {
-                content = loadLevelContentFromCache(sltLevel);
-                levelContentLoadSuccessHandler(sltLevel, content);
-            }
+            content = loadLevelContentFromDisk(sltLevel);
         }
+        levelContentLoadSuccessHandler(sltLevel, content);
     }
 
     /**
