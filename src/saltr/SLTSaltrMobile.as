@@ -95,7 +95,7 @@ public class SLTSaltrMobile {
         _levelData = new SLTLevelData();
 
         _apiFactory = new SLTApiFactory();
-        _levelUpdater = new SLTMobileLevelUpdater(this, _repository, _apiFactory, _requestIdleTimeout);
+        _levelUpdater = new SLTMobileLevelUpdater(_repository, _apiFactory, _requestIdleTimeout);
     }
 
     public function set apiFactory(value:SLTApiFactory):void {
@@ -445,7 +445,7 @@ public class SLTSaltrMobile {
             startHeartbeat();
         }
 
-        _levelUpdater.updateOutdatedLevelContents();
+        _levelUpdater.updateOutdatedLevelContents(_levelData.allLevels);
 
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
     }
