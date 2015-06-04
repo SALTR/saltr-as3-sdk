@@ -21,6 +21,7 @@ import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.SLTMobileDeviceInfo;
+import saltr.utils.SLTMobileLevelUpdater;
 import saltr.utils.SLTUtils;
 import saltr.utils.dialog.SLTMobileDialogController;
 
@@ -63,6 +64,7 @@ public class SLTSaltrMobile {
     private var _heartbeatTimer:Timer;
     private var _heartBeatTimerStarted:Boolean;
     private var _apiFactory:SLTApiFactory;
+    private var _levelUpdater:SLTMobileLevelUpdater;
 
     /**
      * Class constructor.
@@ -93,10 +95,12 @@ public class SLTSaltrMobile {
         _levelData = new SLTLevelData();
 
         _apiFactory = new SLTApiFactory();
+        _levelUpdater = new SLTMobileLevelUpdater(this, _repository, _apiFactory, _requestIdleTimeout);
     }
 
     public function set apiFactory(value:SLTApiFactory):void {
         _apiFactory = value;
+        _levelUpdater.apiFactory = _apiFactory;
     }
 
     /**
@@ -104,6 +108,7 @@ public class SLTSaltrMobile {
      */
     public function set repository(value:ISLTRepository):void {
         _repository = value;
+        _levelUpdater.repository = _repository;
     }
 
     /**
@@ -139,6 +144,7 @@ public class SLTSaltrMobile {
      */
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
+        _levelUpdater.requestIdleTimeout = _requestIdleTimeout;
     }
 
     /**
@@ -317,7 +323,7 @@ public class SLTSaltrMobile {
     public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
-        levelContentLoadSuccessHandler(sltLevel, loadLevelContentInternally(sltLevel));
+        levelContentLoadSuccessHandler(sltLevel, _levelUpdater.loadLevelContentInternally(sltLevel));
     }
 
     /**
@@ -376,34 +382,6 @@ public class SLTSaltrMobile {
 
         var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SEND_LEVEL_END, true);
         sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
-    }
-
-    /**
-     * Loads the level content.
-     * @param sltLevel The level.
-     */
-    protected function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
-        var params:Object = {
-            levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
-        };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_LEVEL_CONTENT, true);
-        levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
-
-        function levelContentApiCallback(result:SLTApiCallResult):void {
-            var content:Object = result.data;
-            if (result.success) {
-                cacheLevelContent(sltLevel, content);
-            } else {
-                content = loadLevelContentInternally(sltLevel);
-            }
-            loadInternally(sltLevel, content);
-        }
-
-        function loadInternally(sltLevel:SLTLevel, content:Object):void {
-            if (content != null) {
-                sltLevel.updateContent(content);
-            }
-        }
     }
 
     protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
@@ -467,25 +445,9 @@ public class SLTSaltrMobile {
             startHeartbeat();
         }
 
-        updateLevels();
+        _levelUpdater.updateLevels();
 
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
-    }
-
-    private function updateLevels():void {
-        getLevelsToUpdate();
-    }
-
-    private function getLevelsToUpdate():Vector.<SLTLevel> {
-        var allLevels:Vector.<SLTLevel> = _levelData.allLevels;
-        var levelsToUpdate:Vector.<SLTLevel> = new Vector.<SLTLevel>();
-        for (var i:int = 0; i < allLevels.length; ++i) {
-            var currentLevel:SLTLevel = allLevels[i];
-            if (currentLevel.version != getCachedLevelVersion(currentLevel)) {
-                levelsToUpdate.push(currentLevel);
-            }
-        }
-        return levelsToUpdate;
     }
 
     private function appDataLoadFailCallback(status:SLTStatus):void {
@@ -600,34 +562,6 @@ public class SLTSaltrMobile {
         if (!result.success) {
             stopHeartbeat();
         }
-    }
-
-    private function getCachedLevelVersion(sltLevel:SLTLevel):String {
-        var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectVersionFromCache(cachedFileName);
-    }
-
-    private function cacheLevelContent(sltLevel:SLTLevel, content:Object):void {
-        var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
-    }
-
-    private function loadLevelContentInternally(sltLevel:SLTLevel):Object {
-        var content:Object = loadLevelContentFromCache(sltLevel);
-        if (content == null) {
-            content = loadLevelContentFromDisk(sltLevel);
-        }
-        return content;
-    }
-
-    private function loadLevelContentFromCache(sltLevel:SLTLevel):Object {
-        var url:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectFromCache(url);
-    }
-
-    private function loadLevelContentFromDisk(sltLevel:SLTLevel):Object {
-        var url:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectFromApplication(url);
     }
 
     //TODO @TIGR fix this
