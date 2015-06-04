@@ -445,7 +445,7 @@ public class SLTSaltrMobile {
             startHeartbeat();
         }
 
-        _levelUpdater.updateLevels();
+        _levelUpdater.updateOutdatedLevelContents();
 
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
     }

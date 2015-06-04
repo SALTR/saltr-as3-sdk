@@ -18,21 +18,22 @@ use namespace saltr_internal;
 
 public class SLTMobileLevelUpdater {
     saltr_internal static const LEVEL_UPDATE_TIMER_DELAY:Number = 30000;
+    saltr_internal static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
 
-    private var _saltr:SLTSaltrMobile;
     private var _repository:ISLTRepository;
     private var _apiFactory:SLTApiFactory;
     private var _requestIdleTimeout:int;
     private var _isInProcess:Boolean;
-    private var _levelsToUpdate:Vector.<SLTLevel>;
+    private var _outdatedLevels:Vector.<SLTLevel>;
     private var _levelIndexToUpdate:int;
     private var _levelUpdateTimer:Timer;
+    private var _allLevels:Vector.<SLTLevel>;
 
-    public function SLTMobileLevelUpdater(saltrMobile:SLTSaltrMobile, repository:ISLTRepository, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
-        _saltr = saltrMobile;
+    public function SLTMobileLevelUpdater(repository:ISLTRepository, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
         _repository = repository;
         _apiFactory = apiFactory;
         _requestIdleTimeout = requestIdleTimeout;
+        _outdatedLevels = new Vector.<SLTLevel>();
         resetUpdateProcess();
     }
 
@@ -48,12 +49,15 @@ public class SLTMobileLevelUpdater {
         _requestIdleTimeout = value;
     }
 
-    public function updateLevels():void {
+    public function updateOutdatedLevelContents(allLevels:Vector.<SLTLevel>):void {
         if (_isInProcess) {
             return;
         }
-        initUpdateProcess();
-        if (_levelsToUpdate.length > 0) {
+        _allLevels = allLevels;
+        _outdatedLevels = getOutdatedLevels();
+        if (_outdatedLevels.length > 0) {
+            _levelIndexToUpdate = 0;
+            _isInProcess = true;
             startLevelUpdateTimer();
         }
     }
@@ -82,43 +86,27 @@ public class SLTMobileLevelUpdater {
     }
 
     private function levelUpdateTimerHandler(event:TimerEvent):void {
-        var updateSuccess:Boolean = updateLevel();
-        if (!updateSuccess) {
+        startNextLevelsUpdate();
+        if (_levelIndexToUpdate == _outdatedLevels.length) {
             stopLevelUpdateTimer();
             resetUpdateProcess();
         }
     }
 
-    private function updateLevel(numberOfLevels:int = 3):Boolean {
-        var levelUpdated:Boolean = false;
-        for (var i = 0; i < numberOfLevels; ++i) {
+    private function startNextLevelsUpdate():void {
+        for (var i : uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             var levelIndexToUpdate:int = _levelIndexToUpdate + 1;
-            if (levelIndexToUpdate < _levelsToUpdate.length) {
+            if (levelIndexToUpdate < _outdatedLevels.length) {
                 _levelIndexToUpdate = levelIndexToUpdate;
-                loadLevelContentFromSaltr(_levelsToUpdate[_levelIndexToUpdate]);
-                levelUpdated = true;
+                loadLevelContentFromSaltr(_outdatedLevels[_levelIndexToUpdate]);
             } else {
-                break;
-                levelUpdated = false;
+                return;
             }
-        }
-        return levelUpdated;
-    }
-
-    private function initUpdateProcess():void {
-        _isInProcess = true;
-        _levelsToUpdate = getLevelsToUpdate();
-        if (null != _levelsToUpdate && _levelsToUpdate.length > 0) {
-            _levelIndexToUpdate = 0;
-        } else {
-            resetUpdateProcess();
         }
     }
 
     private function resetUpdateProcess():void {
-        if (null != _levelsToUpdate) {
-            _levelsToUpdate.length = 0;
-        }
+        _outdatedLevels.length = 0;
         _levelIndexToUpdate = -1;
         _isInProcess = false;
     }
@@ -133,11 +121,10 @@ public class SLTMobileLevelUpdater {
         return _repository.getObjectFromApplication(url);
     }
 
-    private function getLevelsToUpdate():Vector.<SLTLevel> {
-        var allLevels:Vector.<SLTLevel> = _saltr.allLevels;
+    private function getOutdatedLevels():Vector.<SLTLevel> {
         var levelsToUpdate:Vector.<SLTLevel> = new Vector.<SLTLevel>();
-        for (var i:int = 0; i < allLevels.length; ++i) {
-            var currentLevel:SLTLevel = allLevels[i];
+        for (var i:int = 0; i < _allLevels.length; ++i) {
+            var currentLevel:SLTLevel = _allLevels[i];
             if (currentLevel.version != getCachedLevelVersion(currentLevel)) {
                 levelsToUpdate.push(currentLevel);
             }
@@ -165,15 +152,6 @@ public class SLTMobileLevelUpdater {
             var content:Object = result.data;
             if (result.success) {
                 cacheLevelContent(sltLevel, content);
-            } else {
-                content = loadLevelContentInternally(sltLevel);
-            }
-            loadInternally(sltLevel, content);
-        }
-
-        function loadInternally(sltLevel:SLTLevel, content:Object):void {
-            if (content != null) {
-                sltLevel.updateContent(content);
             }
         }
     }
