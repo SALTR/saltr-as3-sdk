@@ -63,11 +63,11 @@ public class SLTMobileRepository implements ISLTRepository {
     }
 
     /**
-     * Provides the object's version.
+     * Provides the object's version from cache.
      * @param name The name of the object.
      * @return The version of the requested object.
      */
-    public function getObjectVersion(name:String):String {
+    public function getObjectVersionFromCache(name:String):String {
         var file:File = _cacheDirectory.resolvePath(name.replace(".", "") + "_VERSION_");
         var obj:Object = getInternal(file);
         if (obj == null) {

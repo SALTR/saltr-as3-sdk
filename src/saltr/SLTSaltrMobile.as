@@ -479,7 +479,25 @@ public class SLTSaltrMobile {
             startHeartbeat();
         }
 
+        updateLevels();
+
         trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
+    }
+
+    private function updateLevels():void {
+        //anakonda
+    }
+
+    private function getLevelsToUpdate():Vector.<SLTLevel> {
+        var allLevels:Vector.<SLTLevel> = _levelData.allLevels;
+        var levelsToUpdate:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+        for (var i:int = 0; i < allLevels.length; ++i) {
+            var currentLevel:SLTLevel = allLevels[i];
+            if (currentLevel.version != getCachedLevelVersion(currentLevel)) {
+                levelsToUpdate.push(currentLevel);
+            }
+        }
+        return levelsToUpdate;
     }
 
     private function appDataLoadFailCallback(status:SLTStatus):void {
@@ -598,7 +616,7 @@ public class SLTSaltrMobile {
 
     private function getCachedLevelVersion(sltLevel:SLTLevel):String {
         var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectVersion(cachedFileName);
+        return _repository.getObjectVersionFromCache(cachedFileName);
     }
 
     private function cacheLevelContent(sltLevel:SLTLevel, content:Object):void {

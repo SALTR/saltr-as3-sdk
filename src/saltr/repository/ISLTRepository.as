@@ -24,11 +24,11 @@ public interface ISLTRepository {
     function getObjectFromCache(fileName:String):Object;
 
     /**
-     * Provides the object's version.
+     * Provides the object's version from cache.
      * @param name The name of the object.
      * @return The version of the requested object.
      */
-    function getObjectVersion(name:String):String;
+    function getObjectVersionFromCache(name:String):String;
 
     /**
      * Stores an object.

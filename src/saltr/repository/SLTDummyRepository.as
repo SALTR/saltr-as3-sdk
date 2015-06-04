@@ -42,11 +42,11 @@ public class SLTDummyRepository implements ISLTRepository {
     }
 
     /**
-     * Provides the object's version.
+     * Provides the object's version from cache.
      * @param name The name of the object.
      * @return The empty value.
      */
-    public function getObjectVersion(name:String):String {
+    public function getObjectVersionFromCache(name:String):String {
         return "";
     }
 
