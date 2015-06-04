@@ -13,7 +13,6 @@ import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
-import saltr.repository.SLTDummyRepository;
 import saltr.repository.SLTMobileRepository;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
@@ -70,9 +69,8 @@ public class SLTSaltrMobile {
      * @param flashStage The flash stage.
      * @param clientKey The client key.
      * @param deviceId The device unique identifier.
-     * @param useCache The cache enabled state.
      */
-    public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String, useCache:Boolean = true) {
+    public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String) {
         _flashStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
@@ -88,7 +86,7 @@ public class SLTSaltrMobile {
         _isSynced = false;
         _requestIdleTimeout = 0;
 
-        _repository = useCache ? new SLTMobileRepository() : new SLTDummyRepository();
+        _repository = new SLTMobileRepository();
         _dialogController = new SLTMobileDialogController(_flashStage, addDeviceToSALTR);
 
         _appData = new SLTAppData();
@@ -315,18 +313,11 @@ public class SLTSaltrMobile {
      * @param sltLevel The level.
      * @param successCallback The success callback function.
      * @param failCallback The fail callback function.
-     * @param useCache The cache enabled state.
      */
-    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function, useCache:Boolean = true):void {
+    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
-        var content:Object = null;
-        if (useCache == true) {
-            content = loadLevelContentInternally(sltLevel);
-        } else {
-            content = loadLevelContentFromDisk(sltLevel);
-        }
-        levelContentLoadSuccessHandler(sltLevel, content);
+        levelContentLoadSuccessHandler(sltLevel, loadLevelContentInternally(sltLevel));
     }
 
     /**
@@ -410,10 +401,7 @@ public class SLTSaltrMobile {
 
         function loadInternally(sltLevel:SLTLevel, content:Object):void {
             if (content != null) {
-                levelContentLoadSuccessHandler(sltLevel, content);
-            }
-            else {
-                levelContentLoadFailHandler();
+                sltLevel.updateContent(content);
             }
         }
     }
@@ -485,7 +473,7 @@ public class SLTSaltrMobile {
     }
 
     private function updateLevels():void {
-        //anakonda
+        getLevelsToUpdate();
     }
 
     private function getLevelsToUpdate():Vector.<SLTLevel> {
