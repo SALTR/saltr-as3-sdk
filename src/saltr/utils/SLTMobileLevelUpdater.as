@@ -6,7 +6,6 @@ import flash.events.TimerEvent;
 import flash.utils.Timer;
 
 import saltr.SLTConfig;
-import saltr.SLTSaltrMobile;
 import saltr.api.SLTApiCall;
 import saltr.api.SLTApiCallResult;
 import saltr.api.SLTApiFactory;
@@ -89,12 +88,11 @@ public class SLTMobileLevelUpdater {
         startNextLevelsUpdate();
         if (_levelIndexToUpdate == _outdatedLevels.length) {
             stopLevelUpdateTimer();
-            resetUpdateProcess();
         }
     }
 
     private function startNextLevelsUpdate():void {
-        for (var i : uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
+        for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             var levelIndexToUpdate:int = _levelIndexToUpdate + 1;
             if (levelIndexToUpdate < _outdatedLevels.length) {
                 _levelIndexToUpdate = levelIndexToUpdate;
@@ -152,6 +150,9 @@ public class SLTMobileLevelUpdater {
             var content:Object = result.data;
             if (result.success) {
                 cacheLevelContent(sltLevel, content);
+            }
+            if (_outdatedLevels[_outdatedLevels.length - 1].index == sltLevel.index) {
+                resetUpdateProcess();
             }
         }
     }
