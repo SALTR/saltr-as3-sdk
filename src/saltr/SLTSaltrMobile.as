@@ -18,7 +18,6 @@ import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
-import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.SLTMobileDeviceInfo;
 import saltr.utils.SLTMobileLevelUpdater;
@@ -46,8 +45,6 @@ public class SLTSaltrMobile {
 
     private var _connectSuccessCallback:Function;
     private var _connectFailCallback:Function;
-    private var _levelContentLoadSuccessCallback:Function;
-    private var _levelContentLoadFailCallback:Function;
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
@@ -315,19 +312,17 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * Loads the level content.
+     * Initialize level content.
      * @param sltLevel The level.
-     * @param successCallback The success callback function.
-     * @param failCallback The fail callback function.
+     * @return TRUE if success, FALSE otherwise.
      */
-    public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
-        _levelContentLoadSuccessCallback = successCallback;
-        _levelContentLoadFailCallback = failCallback;
+    public function initLevelContent(sltLevel:SLTLevel):Boolean {
         var content:Object = _levelUpdater.loadLevelContentInternally(sltLevel);
         if (null != content) {
-            levelContentLoadSuccessHandler(sltLevel, content);
+            sltLevel.updateContent(content);
+            return true;
         } else {
-            levelContentLoadFailHandler();
+            return false;
         }
 
     }
@@ -388,15 +383,6 @@ public class SLTSaltrMobile {
 
         var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SEND_LEVEL_END, true);
         sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
-    }
-
-    protected function levelContentLoadSuccessHandler(sltLevel:SLTLevel, content:Object):void {
-        sltLevel.updateContent(content);
-        _levelContentLoadSuccessCallback();
-    }
-
-    protected function levelContentLoadFailHandler():void {
-        _levelContentLoadFailCallback(new SLTStatusLevelContentLoadFail());
     }
 
     private function addPropertiesApiCallback(result:SLTApiCallResult):void {
