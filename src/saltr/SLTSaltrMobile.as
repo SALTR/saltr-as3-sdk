@@ -323,7 +323,13 @@ public class SLTSaltrMobile {
     public function loadLevelContent(sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
         _levelContentLoadSuccessCallback = successCallback;
         _levelContentLoadFailCallback = failCallback;
-        levelContentLoadSuccessHandler(sltLevel, _levelUpdater.loadLevelContentInternally(sltLevel));
+        var content:Object = _levelUpdater.loadLevelContentInternally(sltLevel);
+        if (null != content) {
+            levelContentLoadSuccessHandler(sltLevel, content);
+        } else {
+            levelContentLoadFailHandler();
+        }
+
     }
 
     /**
