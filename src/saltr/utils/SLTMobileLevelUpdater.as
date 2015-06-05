@@ -24,6 +24,7 @@ public class SLTMobileLevelUpdater {
     private var _requestIdleTimeout:int;
     private var _isInProcess:Boolean;
     private var _outdatedLevels:Vector.<SLTLevel>;
+    private var _updatedLevelCount:uint;
     private var _levelIndexToUpdate:int;
     private var _levelUpdateTimer:Timer;
     private var _allLevels:Vector.<SLTLevel>;
@@ -105,6 +106,7 @@ public class SLTMobileLevelUpdater {
 
     private function resetUpdateProcess():void {
         _outdatedLevels.length = 0;
+        _updatedLevelCount = 0;
         _levelIndexToUpdate = -1;
         _isInProcess = false;
     }
@@ -151,7 +153,8 @@ public class SLTMobileLevelUpdater {
             if (result.success) {
                 cacheLevelContent(sltLevel, content);
             }
-            if (_outdatedLevels[_outdatedLevels.length - 1].index == sltLevel.index) {
+            ++_updatedLevelCount;
+            if (_updatedLevelCount >= _outdatedLevels.length) {
                 resetUpdateProcess();
             }
         }
