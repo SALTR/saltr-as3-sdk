@@ -37,7 +37,6 @@ public class SLTSaltrMobile {
     private var _flashStage:Stage;
     private var _socialId:String;
     private var _deviceId:String;
-    private var _connected:Boolean;
     private var _clientKey:String;
     private var _isLoading:Boolean;
 
@@ -74,7 +73,6 @@ public class SLTSaltrMobile {
         _clientKey = clientKey;
         _deviceId = deviceId;
         _isLoading = false;
-        _connected = false;
         _useNoLevels = false;
         _useNoFeatures = false;
         _heartBeatTimerStarted = false;
@@ -428,7 +426,6 @@ public class SLTSaltrMobile {
 
         }
 
-        _connected = true;
         _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", result.data);
 
         _connectSuccessCallback();
