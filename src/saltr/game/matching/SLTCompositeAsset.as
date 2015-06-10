@@ -25,8 +25,8 @@ internal class SLTCompositeAsset extends SLTAsset {
         return _cellInfos;
     }
 
-    public function getInstance(stateIds:Array):SLTAssetInstance {
-        return new SLTCompositeInstance(_token, getInstanceStates(stateIds), properties, _cellInfos);
+    public function getInstance(stateId:String):SLTAssetInstance {
+        return new SLTCompositeInstance(_token, getInstanceState(stateId), properties, _cellInfos);
     }
 
 }

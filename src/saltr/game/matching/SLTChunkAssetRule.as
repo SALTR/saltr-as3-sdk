@@ -17,7 +17,7 @@ internal class SLTChunkAssetRule {
     saltr_internal static const ASSET_DISTRIBUTION_TYPE_RANDOM:String = "random";
 
     private var _assetId:String;
-    private var _stateIds:Array;
+    private var _stateId:String;
     private var _distributionType:String;
     private var _distributionValue:uint;
 
@@ -26,14 +26,14 @@ internal class SLTChunkAssetRule {
      * @param assetId The asset identifier.
      * @param distributionType The distribution type.
      * @param distributionValue The distribution value.
-     * @param stateIds The state identifiers.
+     * @param stateId The state identifier.
      */
-    public function SLTChunkAssetRule(assetId:String, distributionType:String, distributionValue:uint, stateIds:Array) {
+    public function SLTChunkAssetRule(assetId:String, distributionType:String, distributionValue:uint, stateId:String) {
 
         _assetId = assetId;
         _distributionType = distributionType;
         _distributionValue = distributionValue;
-        _stateIds = stateIds;
+        _stateId = stateId;
     }
 
     /**
@@ -58,10 +58,10 @@ internal class SLTChunkAssetRule {
     }
 
     /**
-     * The The state identifiers.
+     * The The state identifier.
      */
-    public function get stateIds():Array {
-        return _stateIds;
+    public function get stateId():String {
+        return _stateId;
     }
 }
 }

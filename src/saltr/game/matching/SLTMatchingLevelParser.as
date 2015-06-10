@@ -104,7 +104,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             var excludedAssetNodes:Array = rootNode.matchingRuleProperties.excludedAssets as Array;
             var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
             for each (var excludedAssetNode:Object in excludedAssetNodes) {
-                excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetNode.assetId, [excludedAssetNode.stateId], assetMap));
+                excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetNode.assetId, excludedAssetNode.stateId, assetMap));
             }
             matchingRuleProperties.excludedAssets = excludedMatchAssets;
         }

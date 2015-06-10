@@ -10,18 +10,18 @@ package saltr.game {
  */
 public class SLTAssetInstance {
     protected var _token:String;
-    protected var _states:Vector.<SLTAssetState>;
+    protected var _state:SLTAssetState;
     protected var _properties:Object;
 
     /**
      * Class constructor.
      * @param token The unique identifier of the asset.
-     * @param states The current instance states.
+     * @param state The current instance state.
      * @param properties The current instance properties.
      */
-    public function SLTAssetInstance(token:String, states:Vector.<SLTAssetState>, properties:Object) {
+    public function SLTAssetInstance(token:String, state:SLTAssetState, properties:Object) {
         _token = token;
-        _states = states;
+        _state = state;
         _properties = properties
     }
 
@@ -35,8 +35,8 @@ public class SLTAssetInstance {
     /**
      * The current instance states.
      */
-    public function get states():Vector.<SLTAssetState> {
-        return _states;
+    public function get state():SLTAssetState {
+        return _state;
     }
 
     /**
