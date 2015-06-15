@@ -235,16 +235,6 @@ public class SLTSaltrMobile {
             throw new Error("deviceId field is required and can't be null.");
         }
 
-        //anakonda
-        if (SLTUtils.getDictionarySize(_appData.defaultFeatures) == 0) {
-            throw new Error("Features should be defined.");
-        }
-
-        //anakonda
-        if (_levelData.levelPacks.length == 0) {
-            throw new Error("Levels should be imported.");
-        }
-
         var cachedData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
         if (cachedData == null) {
             _appData.initEmpty();
