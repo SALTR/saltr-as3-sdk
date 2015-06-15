@@ -382,7 +382,6 @@ public class SLTSaltrMobile {
             return;
         }
 
-        //anakonda
         if (levelType != SLTLevel.LEVEL_TYPE_NONE) {
             try {
                 _levelData.initWithData(result.data);
