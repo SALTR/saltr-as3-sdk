@@ -51,7 +51,6 @@ public class SLTSaltrMobile {
     private var _started:Boolean;
     private var _isSynced:Boolean;
     private var _useNoLevels:Boolean;
-    private var _useNoFeatures:Boolean;
     private var _dialogController:SLTMobileDialogController;
 
     private var _appData:SLTAppData;
@@ -74,7 +73,6 @@ public class SLTSaltrMobile {
         _deviceId = deviceId;
         _isLoading = false;
         _useNoLevels = false;
-        _useNoFeatures = false;
         _heartBeatTimerStarted = false;
 
         _devMode = false;
@@ -111,13 +109,6 @@ public class SLTSaltrMobile {
      */
     public function set useNoLevels(value:Boolean):void {
         _useNoLevels = value;
-    }
-
-    /**
-     * The feature using state.
-     */
-    public function set useNoFeatures(value:Boolean):void {
-        _useNoFeatures = value;
     }
 
     /**
@@ -242,10 +233,6 @@ public class SLTSaltrMobile {
      * @param required The required state of the feature.
      */
     public function defineFeature(token:String, properties:Object, required:Boolean = false):void {
-        if (_useNoFeatures) {
-            return;
-        }
-
         if (_started == false) {
             _appData.defineFeature(token, properties, required);
         } else {
@@ -261,7 +248,8 @@ public class SLTSaltrMobile {
             throw new Error("deviceId field is required and can't be null.");
         }
 
-        if (SLTUtils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
+        //anakonda
+        if (SLTUtils.getDictionarySize(_appData.defaultFeatures) == 0) {
             throw new Error("Features should be defined.");
         }
 
@@ -492,7 +480,7 @@ public class SLTSaltrMobile {
             devMode: _devMode,
             deviceId: _deviceId,
             socialId: _socialId,
-            developerFeatures: _appData.developerFeatures
+            defaultFeatures: _appData.defaultFeatures
         };
         var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SYNC, true);
         syncApiCall.call(params, syncApiCallback);

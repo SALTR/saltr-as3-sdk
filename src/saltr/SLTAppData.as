@@ -24,7 +24,7 @@ public class SLTAppData {
         return _activeFeatures;
     }
 
-    public function get developerFeatures():Dictionary {
+    public function get defaultFeatures():Dictionary {
         return _defaultFeatures;
     }
 

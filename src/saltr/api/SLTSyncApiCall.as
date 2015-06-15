@@ -23,11 +23,11 @@ public class SLTSyncApiCall extends SLTApiCall {
         urlVars.action = SLTConfig.ACTION_DEV_SYNC_DATA;
 
         var featureList:Array = [];
-        for (var i:String in _params.developerFeatures) {
-            var feature:SLTFeature = _params.developerFeatures[i];
+        for (var i:String in _params.defaultFeatures) {
+            var feature:SLTFeature = _params.defaultFeatures[i];
             featureList.push({token: feature.token, properties: feature.properties});
         }
-        args.developerFeatures = featureList;
+        args.defaultFeatures = featureList;
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
         return urlVars;
     }
