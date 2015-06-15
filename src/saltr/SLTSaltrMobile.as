@@ -50,7 +50,6 @@ public class SLTSaltrMobile {
     private var _autoRegisterDevice:Boolean;
     private var _started:Boolean;
     private var _isSynced:Boolean;
-    private var _useNoLevels:Boolean;
     private var _dialogController:SLTMobileDialogController;
 
     private var _appData:SLTAppData;
@@ -72,7 +71,6 @@ public class SLTSaltrMobile {
         _clientKey = clientKey;
         _deviceId = deviceId;
         _isLoading = false;
-        _useNoLevels = false;
         _heartBeatTimerStarted = false;
 
         _devMode = false;
@@ -102,13 +100,6 @@ public class SLTSaltrMobile {
     public function set repository(value:ISLTRepository):void {
         _repository = value;
         _levelUpdater.repository = _repository;
-    }
-
-    /**
-     * The levels using state.
-     */
-    public function set useNoLevels(value:Boolean):void {
-        _useNoLevels = value;
     }
 
     /**
@@ -207,10 +198,6 @@ public class SLTSaltrMobile {
      * @param path The path of the levels.
      */
     public function importLevels(path:String = null):void {
-        if (_useNoLevels) {
-            return;
-        }
-
         if (!_started) {
             var applicationData:Object = null;
             if (null == path) {
@@ -253,7 +240,8 @@ public class SLTSaltrMobile {
             throw new Error("Features should be defined.");
         }
 
-        if (_levelData.levelPacks.length == 0 && _useNoLevels == false) {
+        //anakonda
+        if (_levelData.levelPacks.length == 0) {
             throw new Error("Levels should be imported.");
         }
 
@@ -404,7 +392,8 @@ public class SLTSaltrMobile {
             return;
         }
 
-        if (!_useNoLevels && levelType != SLTLevel.LEVEL_TYPE_NONE) {
+        //anakonda
+        if (levelType != SLTLevel.LEVEL_TYPE_NONE) {
             try {
                 _levelData.initWithData(result.data);
             } catch (e:Error) {
