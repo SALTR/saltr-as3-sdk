@@ -10,13 +10,13 @@ use namespace saltr_internal;
 public class SLTAppData {
 
     private var _activeFeatures:Dictionary;
-    private var _developerFeatures:Dictionary;
+    private var _defaultFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
 
 
     public function SLTAppData() {
         _activeFeatures = new Dictionary();
-        _developerFeatures = new Dictionary();
+        _defaultFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
@@ -25,7 +25,7 @@ public class SLTAppData {
     }
 
     public function get developerFeatures():Dictionary {
-        return _developerFeatures;
+        return _defaultFeatures;
     }
 
     public function get experiments():Vector.<SLTExperiment> {
@@ -45,7 +45,7 @@ public class SLTAppData {
         if (activeFeature != null) {
             return activeFeature.properties;
         } else {
-            var devFeature:SLTFeature = _developerFeatures[token];
+            var devFeature:SLTFeature = _defaultFeatures[token];
             if (devFeature != null && devFeature.required) {
                 return devFeature.properties;
             }
@@ -55,15 +55,15 @@ public class SLTAppData {
 
     public function defineFeature(token:String, properties:Object, required:Boolean):void {
         if (validateToken(token)) {
-            _developerFeatures[token] = new SLTFeature(token, properties, required);
+            _defaultFeatures[token] = new SLTFeature(token, properties, required);
         } else {
             throw new Error("Developer feature's token value is incorrect.");
         }
     }
 
     public function initEmpty():void {
-        for (var i:String in _developerFeatures) {
-            _activeFeatures[i] = _developerFeatures[i];
+        for (var i:String in _defaultFeatures) {
+            _activeFeatures[i] = _defaultFeatures[i];
         }
     }
 
