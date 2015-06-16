@@ -1,4 +1,4 @@
-Saltr: Changelog
+SALTR AS3 SDK Changelog
 ===================
 
 version 1.3.7 - 2015-06-02
