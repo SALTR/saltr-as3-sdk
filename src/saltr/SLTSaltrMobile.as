@@ -60,6 +60,8 @@ public class SLTSaltrMobile {
     private var _apiFactory:SLTApiFactory;
     private var _levelUpdater:SLTMobileLevelUpdater;
 
+    private var _contentRoot:String;
+
     /**
      * Class constructor.
      * @param flashStage The flash stage.
@@ -87,6 +89,8 @@ public class SLTSaltrMobile {
 
         _apiFactory = new SLTApiFactory();
         _levelUpdater = new SLTMobileLevelUpdater(_repository, _apiFactory, _requestIdleTimeout);
+
+        _contentRoot = SLTConfig.DEFAULT_CONTENT_ROOT;
     }
 
     public function set apiFactory(value:SLTApiFactory):void {
@@ -122,6 +126,13 @@ public class SLTSaltrMobile {
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
         _levelUpdater.requestIdleTimeout = _requestIdleTimeout;
+    }
+
+    /**
+     * The content root.
+     */
+    public function set contentRoot(value:String):void {
+        _contentRoot = value;
     }
 
     /**
@@ -194,22 +205,29 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * Imports level from provided path.
-     * @param path The path of the levels.
+     * Defines game levels by token.
+     * @param token The token of "game level" feature.
      */
-    public function importLevels(path:String = null):void {
+    public function defineGameLevels(token:String):void {
+        if(!SLTUtils.validateFeatureToken(token)) {
+            throw new Error("Token value passed to 'defineGameLevels()' is incorrect.");
+        }
         if (!_started) {
-            var applicationData:Object = null;
-            if (null == path) {
-                path = SLTConfig.LOCAL_LEVELPACK_PACKAGE_URL;
-                applicationData = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
+            // load feature from cache
+            var featureContainer:Object = getCachedAppData();
+            var feature:Object = null;
+            if(null != featureContainer) {
+                feature = SLTDeserializer.getFeature(featureContainer, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
             }
-            if (null == applicationData) {
-                applicationData = _repository.getObjectFromApplication(path);
+
+            // if not cached load from application
+            if(null == feature) {
+                featureContainer = getLevelDataFromApplication(token);
+                feature = SLTDeserializer.getFeature(featureContainer, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
             }
-            _levelData.initWithData(applicationData);
+            //_levelData.initWithData()//anakonda
         } else {
-            throw new Error("Method 'importLevels()' should be called before 'start()' only.");
+            throw new Error("Method 'defineGameLevels()' should be called before 'start()' only.");
         }
     }
 
@@ -517,6 +535,14 @@ public class SLTSaltrMobile {
         if (!result.success) {
             stopHeartbeat();
         }
+    }
+
+    private function getCachedAppData():Object {
+        return _repository.getObjectFromCache(SLTUtils.getCachedAppDataUrl());
+    }
+
+    private function getLevelDataFromApplication(token:String):Object {
+        return _repository.getObjectFromApplication(SLTUtils.getLevelDataFromApplicationUrl(_contentRoot, token));
     }
 
     //TODO @TIGR fix this

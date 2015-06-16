@@ -11,9 +11,9 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTFeature {
-    private var _token:String;
-    private var _properties:Object;
-    private var _required:Boolean;
+    protected var _token:String;
+    protected var _properties:Object;
+    protected var _required:Boolean;
 
     public function SLTFeature(token:String, properties:Object = null, required:Boolean = false) {
         _token = token;

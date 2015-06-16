@@ -3,10 +3,12 @@
  */
 
 package saltr.utils {
+import flash.desktop.NativeApplication;
 import flash.utils.Dictionary;
 import flash.utils.describeType;
 import flash.utils.getQualifiedClassName;
 
+import saltr.SLTConfig;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -119,6 +121,28 @@ public class SLTUtils {
             }
             return objectClone;
         }
+    }
+
+    saltr_internal static function getAppVersion():String {
+        var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
+        var ns:Namespace = applicationDescriptor.namespace();
+        return applicationDescriptor.ns::versionNumber[0].toString();
+    }
+
+    saltr_internal static function getCachedAppDataUrl():String {
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, getAppVersion());
+    }
+
+    saltr_internal static function getLevelDataFromApplicationUrl(contentRoot:String, token:String):String {
+        return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, getAppVersion(), token);
+    }
+
+    saltr_internal static function validateFeatureToken(token:String):Boolean {
+        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
+        if (null == token || "" == token || -1 != token.search(pattern)) {
+            return false;
+        }
+        return true;
     }
 }
 }

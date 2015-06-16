@@ -92,5 +92,21 @@ internal class SLTDeserializer {
         }
         return features;
     }
+
+    public static function getFeature(rootNode:Object, featureToken:String, featureType:String):Object {
+        var feature:Object = null;
+        var featureNodes:Array = rootNode.features as Array;
+        if (null != featureNodes) {
+            var len:int = featureNodes.length;
+            for (var i:int = 0, len:int = len; i < len; ++i) {
+                var featureNode:Object = featureNodes[i];
+                if (featureToken == featureNode.token && featureType == featureNode.featureType) {
+                    feature = featureNode.properties;
+                    break;
+                }
+            }
+        }
+        return feature;
+    }
 }
 }

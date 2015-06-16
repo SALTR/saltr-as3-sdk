@@ -5,6 +5,8 @@
 package saltr {
 import flash.utils.Dictionary;
 
+import saltr.utils.SLTUtils;
+
 use namespace saltr_internal;
 
 public class SLTAppData {
@@ -54,10 +56,10 @@ public class SLTAppData {
     }
 
     public function defineFeature(token:String, properties:Object, required:Boolean):void {
-        if (validateToken(token)) {
+        if (SLTUtils.validateFeatureToken(token)) {
             _defaultFeatures[token] = new SLTFeature(token, properties, required);
         } else {
-            throw new Error("Developer feature's token value is incorrect.");
+            throw new Error("Default feature's token value is incorrect.");
         }
     }
 
@@ -74,14 +76,6 @@ public class SLTAppData {
         } catch (e:Error) {
             throw new Error("AppData parse error");
         }
-    }
-
-    private function validateToken(token:String):Boolean {
-        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
-        if (null == token || "" == token || -1 != token.search(pattern)) {
-            return false;
-        }
-        return true;
     }
 }
 }
