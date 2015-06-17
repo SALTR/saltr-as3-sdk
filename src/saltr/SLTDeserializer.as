@@ -6,8 +6,11 @@ package saltr {
 
 import flash.utils.Dictionary;
 
+import saltr.SLTConfig;
+
 import saltr.game.SLTLevel;
-import saltr.game.SLTLevelPack;
+
+use namespace saltr_internal;
 
 internal class SLTDeserializer {
 
@@ -36,58 +39,70 @@ internal class SLTDeserializer {
         return experiments;
     }
 
-    public static function decodeLevels(rootNode:Object):Vector.<SLTLevelPack> {
-        var levelPackNodes:Array = rootNode.levelPacks as Array;
-        var levelType:String = SLTLevel.LEVEL_TYPE_MATCHING;
-
-        if (rootNode.hasOwnProperty("levelType")) {
-            levelType = rootNode.levelType;
+    public static function decodeLevels(rootNode:Object):Vector.<SLTLevel> {
+        var levelsNode:Array = rootNode.properties.levels as Array;
+        var levels:Vector.<SLTLevel> = new <SLTLevel>[];
+        for (var j:int = 0, len2:int = levelsNode.length; j < len2; ++j) {
+            var levelNode:Object = levelsNode[j];
+            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version);
         }
+        return levels;
 
-        var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
-        var index:int = -1;
-        if (levelPackNodes != null) {
-            //TODO @GSAR: remove this sort when SALTR confirms correct ordering
-            levelPackNodes.sort(sortByIndex);
-
-            for (var i:int = 0, len:int = levelPackNodes.length; i < len; ++i) {
-                var levelPackNode:Object = levelPackNodes[i];
-                var levelNodes:Array = levelPackNode.levels;
-
-                //TODO @GSAR: remove this sort when SALTR confirms correct ordering
-                levelNodes.sort(sortByIndex);
-
-                var levels:Vector.<SLTLevel> = new <SLTLevel>[];
-                var packIndex:int = levelPackNode.index;
-                for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
-                    ++index;
-                    var levelNode:Object = levelNodes[j];
-
-                    //TODO @GSAR: later, leave localIndex only!
-                    var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
-                    levels.push(new SLTLevel(levelNode.id, levelNode.variationId, levelType, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
-                }
-                levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
-            }
-        }
-        return levelPacks;
+//        var levelPackNodes:Array = rootNode.levelPacks as Array;
+//        var levelType:String = SLTLevel.LEVEL_TYPE_MATCHING;
+//
+//        if (rootNode.hasOwnProperty("levelType")) {
+//            levelType = rootNode.levelType;
+//        }
+//
+//        var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
+//        var index:int = -1;
+//        if (levelPackNodes != null) {
+//            //TODO @GSAR: remove this sort when SALTR confirms correct ordering
+//            levelPackNodes.sort(sortByIndex);
+//
+//            for (var i:int = 0, len:int = levelPackNodes.length; i < len; ++i) {
+//                var levelPackNode:Object = levelPackNodes[i];
+//                var levelNodes:Array = levelPackNode.levels;
+//
+//                //TODO @GSAR: remove this sort when SALTR confirms correct ordering
+//                levelNodes.sort(sortByIndex);
+//
+//                var levels:Vector.<SLTLevel> = new <SLTLevel>[];
+//                var packIndex:int = levelPackNode.index;
+//                for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
+//                    ++index;
+//                    var levelNode:Object = levelNodes[j];
+//
+//                    //TODO @GSAR: later, leave localIndex only!
+//                    var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
+//                    levels.push(new SLTLevel(levelNode.id, levelNode.variationId, levelType, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
+//                }
+//                levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
+//            }
+//        }
+//        return levelPacks;
     }
 
-    public static function decodeFeatures(rootNode:Object):Dictionary {
+    public static function decodeGenericFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {
             var featureNode:Object;
             var token:String;
+            var type:String;
             var properties:Object;
             var required:Boolean;
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 featureNode = featureNodes[i];
                 token = featureNode.token;
+                type = featureNode.type;
                 //TODO @GSAR: remove "data" check later when API versioning is done.
                 properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
                 required = featureNode.required;
-                features[token] = new SLTFeature(token, properties, required);
+                if(SLTConfig.FEATURE_TYPE_GENERIC == type) {
+                    features[token] = new SLTFeature(token, type, properties, required);
+                }
             }
         }
         return features;
@@ -101,7 +116,7 @@ internal class SLTDeserializer {
             for (var i:int = 0, len:int = len; i < len; ++i) {
                 var featureNode:Object = featureNodes[i];
                 if (featureToken == featureNode.token && featureType == featureNode.featureType) {
-                    feature = featureNode.properties;
+                    feature = featureNode;
                     break;
                 }
             }

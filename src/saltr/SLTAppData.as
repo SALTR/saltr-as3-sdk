@@ -71,7 +71,7 @@ public class SLTAppData {
 
     public function initWithData(data:Object):void {
         try {
-            _activeFeatures = SLTDeserializer.decodeFeatures(data);
+            _activeFeatures = SLTDeserializer.decodeGenericFeatures(data);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
             throw new Error("AppData parse error");

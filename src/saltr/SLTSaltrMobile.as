@@ -138,9 +138,9 @@ public class SLTSaltrMobile {
     /**
      * The level packs.
      */
-    public function get levelPacks():Vector.<SLTLevelPack> {
-        return _levelData.levelPacks;
-    }
+//    public function get levelPacks():Vector.<SLTLevelPack> {
+//        return _levelData.levelPacks;
+//    }
 
     /**
      * All levels.
@@ -184,9 +184,9 @@ public class SLTSaltrMobile {
      * @param index The global index of the level pack.
      * @return SLTLevelPack The level pack instance specified by index.
      */
-    public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
-        return _levelData.getPackByLevelGlobalIndex(index);
-    }
+//    public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
+//        return _levelData.getPackByLevelGlobalIndex(index);
+//    }
 
     /**
      * Provides active feature tokens.
@@ -206,26 +206,26 @@ public class SLTSaltrMobile {
 
     /**
      * Defines game levels by token.
-     * @param token The token of "game level" feature.
+     * @param token The token of "GameLevels" feature.
      */
     public function defineGameLevels(token:String):void {
-        if(!SLTUtils.validateFeatureToken(token)) {
+        if (!SLTUtils.validateFeatureToken(token)) {
             throw new Error("Token value passed to 'defineGameLevels()' is incorrect.");
         }
         if (!_started) {
             // load feature from cache
             var featureContainer:Object = getCachedAppData();
             var feature:Object = null;
-            if(null != featureContainer) {
+            if (null != featureContainer) {
                 feature = SLTDeserializer.getFeature(featureContainer, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
             }
 
             // if not cached load from application
-            if(null == feature) {
+            if (null == feature) {
                 featureContainer = getLevelDataFromApplication(token);
                 feature = SLTDeserializer.getFeature(featureContainer, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
             }
-            //_levelData.initWithData()//anakonda
+            _levelData.initWithData(feature);
         } else {
             throw new Error("Method 'defineGameLevels()' should be called before 'start()' only.");
         }
@@ -420,7 +420,7 @@ public class SLTSaltrMobile {
 
         _levelUpdater.updateOutdatedLevelContents(_levelData.allLevels);
 
-        trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
+        trace("[SALTR] AppData load success. Levels loaded: " + _levelData.allLevels.length);
     }
 
     private function appDataLoadFailCallback(status:SLTStatus):void {
