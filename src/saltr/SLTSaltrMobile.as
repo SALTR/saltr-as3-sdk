@@ -253,7 +253,7 @@ public class SLTSaltrMobile {
             throw new Error("deviceId field is required and can't be null.");
         }
 
-        var cachedData:Object = _repository.getObjectFromCache(SLTConfig.APP_DATA_URL_CACHE);
+        var cachedData:Object = getCachedAppData();
         if (cachedData == null) {
             _appData.initEmpty();
         } else {
@@ -410,7 +410,7 @@ public class SLTSaltrMobile {
 
         }
 
-        _repository.cacheObject(SLTConfig.APP_DATA_URL_CACHE, "0", result.data);
+        _repository.cacheObject(SLTUtils.getCachedAppDataUrl(), "0", result.data);
 
         _connectSuccessCallback();
 
