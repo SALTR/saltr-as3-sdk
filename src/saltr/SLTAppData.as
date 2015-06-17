@@ -55,9 +55,9 @@ public class SLTAppData {
         return null;
     }
 
-    public function defineFeature(token:String, properties:Object, required:Boolean):void {
+    public function defineGenericFeature(token:String, properties:Object, required:Boolean):void {
         if (SLTUtils.validateFeatureToken(token)) {
-            _defaultFeatures[token] = new SLTFeature(token, properties, required);
+            _defaultFeatures[token] = new SLTFeature(token, SLTConfig.FEATURE_TYPE_GENERIC, properties, required);
         } else {
             throw new Error("Default feature's token value is incorrect.");
         }

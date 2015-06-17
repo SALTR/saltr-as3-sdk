@@ -232,16 +232,16 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * Define feature.
+     * Define generic feature.
      * @param token The unique identifier of the feature.
      * @param properties The properties of the feature.
      * @param required The required state of the feature.
      */
-    public function defineFeature(token:String, properties:Object, required:Boolean = false):void {
+    public function defineGenericFeature(token:String, properties:Object, required:Boolean = false):void {
         if (_started == false) {
-            _appData.defineFeature(token, properties, required);
+            _appData.defineGenericFeature(token, properties, required);
         } else {
-            throw new Error("Method 'defineFeature()' should be called before 'start()' only.");
+            throw new Error("Method 'defineGenericFeature()' should be called before 'start()' only.");
         }
     }
 
