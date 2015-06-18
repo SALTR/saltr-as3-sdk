@@ -6,19 +6,17 @@ package saltr {
 
 import flash.utils.Dictionary;
 
-import saltr.SLTConfig;
-
 import saltr.game.SLTLevel;
 
 use namespace saltr_internal;
 
-internal class SLTDeserializer {
+public class SLTDeserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {
         return p1.index - p2.index;
     }
 
-    public static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
+    saltr_internal static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
         var experimentNodes:Array = rootNode.experiments as Array;
         if (experimentNodes != null) {
@@ -39,7 +37,7 @@ internal class SLTDeserializer {
         return experiments;
     }
 
-    public static function decodeLevels(rootNode:Object):Vector.<SLTLevel> {
+    saltr_internal static function decodeLevels(rootNode:Object):Vector.<SLTLevel> {
         var levelsNode:Array = rootNode.properties.levels as Array;
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var j:int = 0, len2:int = levelsNode.length; j < len2; ++j) {
@@ -84,7 +82,7 @@ internal class SLTDeserializer {
 //        return levelPacks;
     }
 
-    public static function decodeGenericFeatures(rootNode:Object):Dictionary {
+    saltr_internal static function decodeGenericFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {
@@ -100,7 +98,7 @@ internal class SLTDeserializer {
                 //TODO @GSAR: remove "data" check later when API versioning is done.
                 properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
                 required = featureNode.required;
-                if(SLTConfig.FEATURE_TYPE_GENERIC == type) {
+                if (SLTConfig.FEATURE_TYPE_GENERIC == type) {
                     features[token] = new SLTFeature(token, type, properties, required);
                 }
             }
@@ -108,7 +106,7 @@ internal class SLTDeserializer {
         return features;
     }
 
-    public static function getFeature(rootNode:Object, featureToken:String, featureType:String):Object {
+    saltr_internal static function getFeature(rootNode:Object, featureToken:String, featureType:String):Object {
         var feature:Object = null;
         var featureNodes:Array = rootNode.features as Array;
         if (null != featureNodes) {
@@ -122,6 +120,26 @@ internal class SLTDeserializer {
             }
         }
         return feature;
+    }
+
+    /*
+     Provides cached level version from level_versions.json
+     rootNode - level_versions.json
+     globalIndex - The level global identifier
+     */
+    saltr_internal static function getCachedLevelVersion(rootNode:Object, globalIndex:int):String {
+        var version:String = null;
+        var container:Array = rootNode as Array;
+        if (null != container) {
+            for (var i:int = 0; i < container.length; ++i) {
+                var cachedLevelNode:Object = container[i];
+                if (globalIndex == cachedLevelNode.globalIndex) {
+                    version = cachedLevelNode.version;
+                    break;
+                }
+            }
+        }
+        return version;
     }
 }
 }

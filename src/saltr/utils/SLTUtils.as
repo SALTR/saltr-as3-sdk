@@ -129,14 +129,6 @@ public class SLTUtils {
         return applicationDescriptor.ns::versionNumber[0].toString();
     }
 
-    saltr_internal static function getCachedAppDataUrl():String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, getAppVersion());
-    }
-
-    saltr_internal static function getLevelDataFromApplicationUrl(contentRoot:String, token:String):String {
-        return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, getAppVersion(), token);
-    }
-
     saltr_internal static function validateFeatureToken(token:String):Boolean {
         var pattern:RegExp = /[^a-zA-Z0-9._-]/;
         if (null == token || "" == token || -1 != token.search(pattern)) {

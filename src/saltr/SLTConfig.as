@@ -34,7 +34,7 @@ public class SLTConfig {
 
     saltr_internal static const LOCAL_LEVEL_DATA_URL_TEMPLATE:String = "{0}/app_{1}/features/{2}/level_data.json";
     saltr_internal static const LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE:String = "saltr/pack_{0}/level_{1}.json";
-    saltr_internal static const LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE:String = "pack_{0}_level_{1}.json";
+    //saltr_internal static const LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE:String = "pack_{0}_level_{1}.json";
 
     saltr_internal static const RESULT_SUCCEED:String = "SUCCEED";
     saltr_internal static const RESULT_ERROR:String = "FAILED";

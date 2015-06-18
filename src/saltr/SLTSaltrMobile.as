@@ -410,7 +410,7 @@ public class SLTSaltrMobile {
 
         }
 
-        _repository.cacheObject(SLTUtils.getCachedAppDataUrl(), "0", result.data);
+        _repository.cacheObject(SLTMobileRepository.getCachedAppDataUrl(), "0", result.data);
 
         _connectSuccessCallback();
 
@@ -538,11 +538,11 @@ public class SLTSaltrMobile {
     }
 
     private function getCachedAppData():Object {
-        return _repository.getObjectFromCache(SLTUtils.getCachedAppDataUrl());
+        return _repository.getObjectFromCache(SLTMobileRepository.getCachedAppDataUrl());
     }
 
     private function getLevelDataFromApplication(token:String):Object {
-        return _repository.getObjectFromApplication(SLTUtils.getLevelDataFromApplicationUrl(_contentRoot, token));
+        return _repository.getObjectFromApplication(SLTMobileRepository.getLevelDataFromApplicationUrl(_contentRoot, token));
     }
 
     //TODO @TIGR fix this

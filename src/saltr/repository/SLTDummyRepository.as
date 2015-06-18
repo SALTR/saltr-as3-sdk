@@ -42,11 +42,12 @@ public class SLTDummyRepository implements ISLTRepository {
     }
 
     /**
-     * Provides the object's version from cache.
-     * @param name The name of the object.
-     * @return The empty value.
+     * Provides the cached level version.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param globalId The global identifier of the cached level.
+     * @return The version of the cached level.
      */
-    public function getObjectVersionFromCache(name:String):String {
+    public function getCachedLevelVersion(gameLevelsFeatureToken:String, globalId:int):String {
         return "";
     }
 

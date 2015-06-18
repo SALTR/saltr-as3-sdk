@@ -7,6 +7,15 @@ import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
 
+import saltr.SLTConfig;
+import saltr.SLTDeserializer;
+import saltr.saltr_internal;
+import saltr.utils.SLTUtils;
+
+import saltr.utils.SLTUtils;
+
+use namespace saltr_internal;
+
 /**
  * The SLTMobileRepository class represents the mobile repository.
  */
@@ -17,6 +26,17 @@ public class SLTMobileRepository implements ISLTRepository {
     private var _cacheDirectory:File;
     private var _fileStream:FileStream;
 
+    saltr_internal static function getCachedAppDataUrl():String {
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, SLTUtils.getAppVersion());
+    }
+
+    saltr_internal static function getLevelDataFromApplicationUrl(contentRoot:String, token:String):String {
+        return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, SLTUtils.getAppVersion(), token);
+    }
+
+    saltr_internal static function getCachedLevelVersionsUrl(gameLevelsFeatureToken:String):String {
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_VERSIONS_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken);
+    }
 
     /**
      * Class constructor.
@@ -63,17 +83,28 @@ public class SLTMobileRepository implements ISLTRepository {
     }
 
     /**
-     * Provides the object's version from cache.
-     * @param name The name of the object.
-     * @return The version of the requested object.
+     * Provides the cached level version.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param globalIndex The global identifier of the cached level.
+     * @return The version of the cached level.
      */
-    public function getObjectVersionFromCache(name:String):String {
-        var file:File = _cacheDirectory.resolvePath(name.replace(".", "") + "_VERSION_");
-        var obj:Object = getInternal(file);
-        if (obj == null) {
-            return null;
+    public function getCachedLevelVersion(gameLevelsFeatureToken:String, globalIndex:int):String {
+        var version:String = null;
+        var cachedLevelFileName:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
+        var cachedLevelFile:File = _cacheDirectory.resolvePath(cachedLevelFileName);
+        if(cachedLevelFile.exists) {
+            var cachedLevelVersions:Object = getObjectFromCache(getCachedLevelVersionsUrl(gameLevelsFeatureToken));
+            if(null != cachedLevelVersions) {
+                version = SLTDeserializer.getCachedLevelVersion(cachedLevelVersions, globalIndex);
+            }
         }
-        return obj["_VERSION_"];
+        return version;
+//        var file:File = _cacheDirectory.resolvePath(name.replace(".", "") + "_VERSION_");
+//        var obj:Object = getInternal(file);
+//        if (obj == null) {
+//            return null;
+//        }
+//        return obj["_VERSION_"];
     }
 
     /**
