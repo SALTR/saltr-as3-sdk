@@ -136,32 +136,33 @@ public class SLTLevel {
      * Updates the content of the level.
      */
     public function updateContent(rootNode:Object):void {
-        _properties = rootNode["properties"];
-
-        var parser:SLTLevelParser = getParser(_levelType);
-        if (parser != null) {
-            try {
-                _assetMap = parser.parseLevelAssets(rootNode);
-            }
-            catch (e:Error) {
-                throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
-            }
-
-            try {
-                _boards = parser.parseLevelContent(rootNode, _assetMap);
-            }
-            catch (e:Error) {
-                throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
-            }
-
-            if (_boards != null) {
-                regenerateAllBoards();
-                _contentReady = true;
-            }
-        } else {
-            // no parser was found for current level type
-            new SLTStatusLevelsParserMissing();
-        }
+        //TODO: @TIGR implement
+//        _properties = rootNode["properties"];
+//
+//        var parser:SLTLevelParser = getParser(_levelType);
+//        if (parser != null) {
+//            try {
+//                _assetMap = parser.parseLevelAssets(rootNode);
+//            }
+//            catch (e:Error) {
+//                throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
+//            }
+//
+//            try {
+//                _boards = parser.parseLevelContent(rootNode, _assetMap);
+//            }
+//            catch (e:Error) {
+//                throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
+//            }
+//
+//            if (_boards != null) {
+//                regenerateAllBoards();
+//                _contentReady = true;
+//            }
+//        } else {
+//            // no parser was found for current level type
+//            new SLTStatusLevelsParserMissing();
+//        }
 
     }
 

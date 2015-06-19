@@ -10,6 +10,12 @@ package saltr.repository {
 public interface ISLTRepository {
 
     /**
+     * Defines the local content root.
+     * @param contentRoot The content root url.
+     */
+    function setLocalContentRoot(contentRoot:String):void;
+
+    /**
      * Provides an object from storage.
      * @param name The name of the object.
      * @return The requested object.
@@ -17,19 +23,20 @@ public interface ISLTRepository {
     function getObjectFromStorage(name:String):Object;
 
     /**
-     * Provides an object from cache.
-     * @param fileName The name of the object.
-     * @return The requested object.
+     * Provides an level object from cache.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param globalIndex The global identifier of the cached level.
+     * @return The requested level from cache.
      */
-    function getObjectFromCache(fileName:String):Object;
+    function getLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object;
 
     /**
      * Provides the cached level version.
      * @param gameLevelsFeatureToken The GameLevels feature token
-     * @param globalId The global identifier of the cached level.
+     * @param globalIndex The global identifier of the cached level.
      * @return The version of the cached level.
      */
-    function getCachedLevelVersion(gameLevelsFeatureToken:String, globalId:int):String;
+    function getLevelVersionFromCache(gameLevelsFeatureToken:String, globalIndex:int):String;
 
     /**
      * Stores an object.
@@ -39,19 +46,25 @@ public interface ISLTRepository {
     function saveObject(name:String, object:Object):void;
 
     /**
-     * Caches an object.
-     * @param name The name of the object.
-     * @param version The version of the object.
-     * @param object The object to store.
+     * Caches an level content.
+     * @param featureToken The "GameLevels" feature token the level belong to.
+     * @param version The version of the level.
+     * @param object The level to store.
      */
-    function cacheObject(name:String, version:String, object:Object):void;
+    function cacheLevelContent(featureToken:String, version:String, object:Object):void;
 
     /**
-     * Provides an object from application.
-     * @param fileName The name of the object.
-     * @return The requested object.
+     * Caches an application data.
+     * @param object The object to store.
      */
-    function getObjectFromApplication(fileName:String):Object;
+    function cacheAppData(object:Object):void;
 
+    /**
+     * Provides an level object from application.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param globalIndex The global identifier of the cached level.
+     * @return The requested level from application.
+     */
+    function getLevelFromApplication(gameLevelsFeatureToken:String, globalIndex:int):Object;
 }
 }

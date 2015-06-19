@@ -12,8 +12,6 @@ import saltr.SLTDeserializer;
 import saltr.saltr_internal;
 import saltr.utils.SLTUtils;
 
-import saltr.utils.SLTUtils;
-
 use namespace saltr_internal;
 
 /**
@@ -25,8 +23,9 @@ public class SLTMobileRepository implements ISLTRepository {
     private var _applicationDirectory:File;
     private var _cacheDirectory:File;
     private var _fileStream:FileStream;
+    private var _localContentRoot:String;
 
-    saltr_internal static function getCachedAppDataUrl():String {
+    private static function getCachedAppDataUrl():String {
         return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, SLTUtils.getAppVersion());
     }
 
@@ -46,9 +45,18 @@ public class SLTMobileRepository implements ISLTRepository {
         _storageDirectory = File.applicationStorageDirectory;
         _cacheDirectory = File.cacheDirectory;
         _fileStream = new FileStream();
+        _localContentRoot = SLTConfig.DEFAULT_CONTENT_ROOT;
 
 //        trace("storageDirectory: " + _storageDirectory.nativePath);
 //        trace("cacheDir: " + _cacheDirectory.nativePath);
+    }
+
+    /**
+     * Defines the local content root.
+     * @param contentRoot The content root url.
+     */
+    public function setLocalContentRoot(contentRoot:String):void {
+        _localContentRoot = contentRoot;
     }
 
     /**
@@ -62,24 +70,25 @@ public class SLTMobileRepository implements ISLTRepository {
     }
 
     /**
-     * Provides an object from application.
-     * @param fileName The name of the object.
-     * @return The requested object.
+     * Provides an level object from application.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param globalIndex The global identifier of the cached level.
+     * @return The requested level from application.
      */
-    public function getObjectFromApplication(fileName:String):Object {
-        var file:File = _applicationDirectory.resolvePath(fileName);
-        return getInternal(file);
+    public function getLevelFromApplication(gameLevelsFeatureToken:String, globalIndex:int):Object {
+        var fileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
+        return getObjectFromApplication(fileName);
     }
 
     /**
-     * Provides an object from cache.
-     * @param fileName The name of the object.
-     * @return The requested object.
+     * Provides an level object from cache.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param globalIndex The global identifier of the cached level.
+     * @return The requested level from cache.
      */
-    public function getObjectFromCache(fileName:String):Object {
-        var file:File = _cacheDirectory.resolvePath(fileName);
-        return getInternal(file);
-
+    public function getLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object {
+        var cachedLevelFileName:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
+        return getObjectFromCache(cachedLevelFileName);
     }
 
     /**
@@ -88,13 +97,13 @@ public class SLTMobileRepository implements ISLTRepository {
      * @param globalIndex The global identifier of the cached level.
      * @return The version of the cached level.
      */
-    public function getCachedLevelVersion(gameLevelsFeatureToken:String, globalIndex:int):String {
+    public function getLevelVersionFromCache(gameLevelsFeatureToken:String, globalIndex:int):String {
         var version:String = null;
         var cachedLevelFileName:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
         var cachedLevelFile:File = _cacheDirectory.resolvePath(cachedLevelFileName);
-        if(cachedLevelFile.exists) {
+        if (cachedLevelFile.exists) {
             var cachedLevelVersions:Object = getObjectFromCache(getCachedLevelVersionsUrl(gameLevelsFeatureToken));
-            if(null != cachedLevelVersions) {
+            if (null != cachedLevelVersions) {
                 version = SLTDeserializer.getCachedLevelVersion(cachedLevelVersions, globalIndex);
             }
         }
@@ -107,17 +116,36 @@ public class SLTMobileRepository implements ISLTRepository {
 //        return obj["_VERSION_"];
     }
 
+//    /**
+//     * Caches an object.
+//     * @param name The name of the object.
+//     * @param version The version of the object.
+//     * @param object The object to store.
+//     */
+//    public function cacheObject(fileName:String, version:String, object:Object):void {
+//        var file:File = _cacheDirectory.resolvePath(fileName);
+//        saveInternal(file, object);
+//        file = _cacheDirectory.resolvePath(fileName.replace(".", "") + "_VERSION_");
+//        saveInternal(file, {_VERSION_: version});
+//    }
+
     /**
-     * Caches an object.
-     * @param name The name of the object.
-     * @param version The version of the object.
+     * Caches an level content.
+     * @param featureToken The "GameLevels" feature token the level belong to.
+     * @param version The version of the level.
+     * @param object The level to store.
+     */
+    public function cacheLevelContent(featureToken:String, version:String, object:Object):void {
+        //
+    }
+
+    /**
+     * Caches an application data.
      * @param object The object to store.
      */
-    public function cacheObject(fileName:String, version:String, object:Object):void {
-        var file:File = _cacheDirectory.resolvePath(fileName);
+    public function cacheAppData(object:Object):void {
+        var file:File = _cacheDirectory.resolvePath(getCachedAppDataUrl());
         saveInternal(file, object);
-        file = _cacheDirectory.resolvePath(fileName.replace(".", "") + "_VERSION_");
-        saveInternal(file, {_VERSION_: version});
     }
 
     /**
@@ -155,6 +183,17 @@ public class SLTMobileRepository implements ISLTRepository {
         catch (error:Error) {
             trace("[MobileStorageEngine] : error while saving object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
         }
+    }
+
+    private function getObjectFromCache(fileName:String):Object {
+        var file:File = _cacheDirectory.resolvePath(fileName);
+        return getInternal(file);
+
+    }
+
+    private function getObjectFromApplication(fileName:String):Object {
+        var file:File = _applicationDirectory.resolvePath(fileName);
+        return getInternal(file);
     }
 }
 }

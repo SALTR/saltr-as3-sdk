@@ -11,18 +11,16 @@ import saltr.api.SLTApiCall;
 import saltr.api.SLTApiCallResult;
 import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
-import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
-import saltr.status.SLTStatusLevelsParseError;
 import saltr.utils.SLTMobileDeviceInfo;
-import saltr.utils.SLTMobileLevelUpdater;
 import saltr.utils.SLTUtils;
 import saltr.utils.dialog.SLTMobileDialogController;
+import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
 use namespace saltr_internal;
 
@@ -57,9 +55,7 @@ public class SLTSaltrMobile {
     private var _heartbeatTimer:Timer;
     private var _heartBeatTimerStarted:Boolean;
     private var _apiFactory:SLTApiFactory;
-    private var _levelUpdater:SLTMobileLevelUpdater;
-
-    private var _contentRoot:String;
+    private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
 
     /**
      * Class constructor.
@@ -86,9 +82,7 @@ public class SLTSaltrMobile {
         _appData = new SLTAppData();
 
         _apiFactory = new SLTApiFactory();
-        _levelUpdater = new SLTMobileLevelUpdater(_repository, _apiFactory, _requestIdleTimeout);
-
-        _contentRoot = SLTConfig.DEFAULT_CONTENT_ROOT;
+        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repository, _apiFactory, _requestIdleTimeout);
     }
 
     public function set apiFactory(value:SLTApiFactory):void {
@@ -127,10 +121,11 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * The content root.
+     * Defines the local content root.
+     * @param contentRoot The content root url.
      */
-    public function set contentRoot(value:String):void {
-        _contentRoot = value;
+    public function setLocalContentRoot(contentRoot:String):void {
+        _repository.setLocalContentRoot(contentRoot);
     }
 
     /**
@@ -298,11 +293,12 @@ public class SLTSaltrMobile {
 
     /**
      * Initialize level content.
+     * @param gameLevelsFeatureToken The "GameLevels" feature token
      * @param sltLevel The level.
      * @return TRUE if success, FALSE otherwise.
      */
-    public function initLevelContent(sltLevel:SLTLevel):Boolean {
-        var content:Object = _levelUpdater.loadLevelContentInternally(sltLevel);
+    public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
+        var content:Object = loadLevelContentInternally(gameLevelsFeatureToken, sltLevel);
         if (null != content) {
             sltLevel.updateContent(content);
             return true;
@@ -413,7 +409,7 @@ public class SLTSaltrMobile {
 //
 //        }
 
-        _repository.cacheObject(SLTMobileRepository.getCachedAppDataUrl(), "0", result.data);
+        _repository.cacheAppData(result.data);
 
         _connectSuccessCallback();
 
@@ -421,7 +417,8 @@ public class SLTSaltrMobile {
             startHeartbeat();
         }
 
-        _levelUpdater.updateOutdatedLevelContents(_appData.gameLevelsFeatures);
+        _levelUpdater.init(_appData.gameLevelsFeatures);
+        _levelUpdater.update();
 
         //trace("[SALTR] AppData load success. Levels loaded: " + _levelData.allLevels.length);
     }
@@ -545,7 +542,20 @@ public class SLTSaltrMobile {
     }
 
     private function getLevelDataFromApplication(token:String):Object {
-        return _repository.getObjectFromApplication(SLTMobileRepository.getLevelDataFromApplicationUrl(_contentRoot, token));
+        return _repository.getObjectFromApplication(SLTMobileRepository.getLevelDataFromApplicationUrl(token));
+    }
+
+    private function loadLevelContentInternally(gameLevelsFeatureToken:String, level:SLTLevel):Object {
+        var content:Object = _repository.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
+        if (content == null) {
+            content = loadLevelContentFromDisk(gameLevelsFeatureToken, sltLevel);
+        }
+        return content;
+    }
+
+    private function loadLevelContentFromDisk(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Object {
+        var url:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
+        return _repository.getObjectFromApplication(url);
     }
 
     //TODO @TIGR fix this
