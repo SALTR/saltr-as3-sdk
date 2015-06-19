@@ -3,6 +3,7 @@
  */
 package saltr.utils {
 import flash.events.TimerEvent;
+import flash.utils.Dictionary;
 import flash.utils.Timer;
 
 import saltr.SLTConfig;
@@ -49,7 +50,7 @@ public class SLTMobileLevelUpdater {
         _requestIdleTimeout = value;
     }
 
-    public function updateOutdatedLevelContents(allLevels:Vector.<SLTLevel>):void {
+    public function updateOutdatedLevelContents(gameLevelsFeatures:Dictionary):void {
         if (_isInProcess) {
             return;
         }

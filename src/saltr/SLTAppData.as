@@ -13,12 +13,14 @@ public class SLTAppData {
 
     private var _activeFeatures:Dictionary;
     private var _defaultFeatures:Dictionary;
+    private var _gameLevelsFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
 
 
     public function SLTAppData() {
         _activeFeatures = new Dictionary();
         _defaultFeatures = new Dictionary();
+        _gameLevelsFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
@@ -28,6 +30,10 @@ public class SLTAppData {
 
     public function get defaultFeatures():Dictionary {
         return _defaultFeatures;
+    }
+
+    public function get gameLevelsFeatures():Dictionary {
+        return _gameLevelsFeatures;
     }
 
     public function get experiments():Vector.<SLTExperiment> {
@@ -53,6 +59,22 @@ public class SLTAppData {
             }
         }
         return null;
+    }
+
+    public function getGameLevelsProperties(token:String):SLTLevelData {
+        var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
+        if(null != gameLevelsFeature) {
+            return gameLevelsFeature.properties as SLTLevelData;
+        }
+        return null;
+    }
+
+    public function defineGameLevelsFeature(token:String, properties:SLTLevelData):void {
+        if (SLTUtils.validateFeatureToken(token)) {
+            _gameLevelsFeatures[token] = new SLTFeature(token, SLTConfig.FEATURE_TYPE_GAME_LEVELS, properties, true);
+        } else {
+            throw new Error("GameLevels feature's token value is incorrect.");
+        }
     }
 
     public function defineGenericFeature(token:String, properties:Object, required:Boolean):void {
