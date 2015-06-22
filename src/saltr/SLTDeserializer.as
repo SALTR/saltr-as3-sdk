@@ -38,11 +38,12 @@ public class SLTDeserializer {
     }
 
     saltr_internal static function decodeLevels(rootNode:Object):Vector.<SLTLevel> {
-        var levelsNode:Array = rootNode.properties.levels as Array;
+        var levelsNode:Array = rootNode.levels as Array;
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var j:int = 0, len2:int = levelsNode.length; j < len2; ++j) {
             var levelNode:Object = levelsNode[j];
             var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version);
+            levels.push(level);
         }
         return levels;
 
@@ -82,6 +83,32 @@ public class SLTDeserializer {
 //        return levelPacks;
     }
 
+    saltr_internal static function decodeGameLevelsFeatures(rootNode:Object):Dictionary {
+        var features:Dictionary = new Dictionary();
+        var featureNodes:Array = rootNode.features as Array;
+        if (featureNodes != null) {
+            var featureNode:Object;
+            var token:String;
+            var type:String;
+            var properties:Object;
+            var required:Boolean;
+            for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
+                featureNode = featureNodes[i];
+                token = featureNode.token;
+                type = featureNode.type;
+                //TODO @GSAR: remove "data" check later when API versioning is done.
+                properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
+                required = featureNode.required;
+                if (SLTConfig.FEATURE_TYPE_GAME_LEVELS == type) {
+                    var levelData:SLTLevelData = new SLTLevelData();
+                    levelData.initWithData(properties);
+                    features[token] = new SLTFeature(token, type, levelData, required);
+                }
+            }
+        }
+        return features;
+    }
+
     saltr_internal static function decodeGenericFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
@@ -113,7 +140,7 @@ public class SLTDeserializer {
             var len:int = featureNodes.length;
             for (var i:int = 0, len:int = len; i < len; ++i) {
                 var featureNode:Object = featureNodes[i];
-                if (featureToken == featureNode.token && featureType == featureNode.featureType) {
+                if (featureToken == featureNode.token && featureType == featureNode.type) {
                     feature = featureNode;
                     break;
                 }

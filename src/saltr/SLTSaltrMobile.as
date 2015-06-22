@@ -211,18 +211,20 @@ public class SLTSaltrMobile {
         if (!_started) {
             var levelData:SLTLevelData = new SLTLevelData();
             // load feature from cache
-            var featureContainer:Object = getCachedAppData();
-            var feature:Object = null;
-            if (null != featureContainer) {
-                feature = SLTDeserializer.getFeature(featureContainer, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+            var cachedAppData:Object = getCachedAppData();
+            var gameLevels:Object = null;
+            if (null != cachedAppData) {
+                var feature:Object = SLTDeserializer.getFeature(cachedAppData, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+                if(null != feature) {
+                    gameLevels = feature.properties;
+                }
             }
 
             // if not cached load from application
-            if (null == feature) {
-                featureContainer = getLevelDataFromApplication(token);
-                feature = SLTDeserializer.getFeature(featureContainer, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+            if (null == gameLevels) {
+                gameLevels = getLevelDataFromApplication(token);
             }
-            levelData.initWithData(feature);
+            levelData.initWithData(gameLevels);
             _appData.defineGameLevelsFeature(token, levelData);
         } else {
             throw new Error("Method 'defineGameLevels()' should be called before 'start()' only.");
@@ -305,7 +307,6 @@ public class SLTSaltrMobile {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -538,24 +539,19 @@ public class SLTSaltrMobile {
     }
 
     private function getCachedAppData():Object {
-        return _repository.getObjectFromCache(SLTMobileRepository.getCachedAppDataUrl());
+        return _repository.getAppDataFromCache();
     }
 
     private function getLevelDataFromApplication(token:String):Object {
-        return _repository.getObjectFromApplication(SLTMobileRepository.getLevelDataFromApplicationUrl(token));
+        return _repository.getLevelDataFromApplication(token);
     }
 
     private function loadLevelContentInternally(gameLevelsFeatureToken:String, level:SLTLevel):Object {
         var content:Object = _repository.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
         if (content == null) {
-            content = loadLevelContentFromDisk(gameLevelsFeatureToken, sltLevel);
+            content = _repository.getLevelFromApplication(gameLevelsFeatureToken, level.globalIndex);
         }
         return content;
-    }
-
-    private function loadLevelContentFromDisk(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Object {
-        var url:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_PACKAGE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-        return _repository.getObjectFromApplication(url);
     }
 
     //TODO @TIGR fix this

@@ -30,7 +30,7 @@ public class SLTMobileRepository implements ISLTRepository {
     }
 
     saltr_internal static function getLevelDataFromApplicationUrl(contentRoot:String, token:String):String {
-        return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, SLTUtils.getAppVersion(), token);
+        return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, token);
     }
 
     saltr_internal static function getCachedLevelVersionsUrl(gameLevelsFeatureToken:String):String {
@@ -70,13 +70,30 @@ public class SLTMobileRepository implements ISLTRepository {
     }
 
     /**
+     * Provides the cached application data.
+     * @return The cached application data.
+     */
+    public function getAppDataFromCache():Object {
+        return getObjectFromCache(getCachedAppDataUrl());
+    }
+
+    /**
+     * Provides the level_data.json from application.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @return The requested level_data.json from application.
+     */
+    public function getLevelDataFromApplication(gameLevelsFeatureToken:String):Object {
+        return getObjectFromApplication(getLevelDataFromApplicationUrl(_localContentRoot, gameLevelsFeatureToken));
+    }
+
+    /**
      * Provides an level object from application.
      * @param gameLevelsFeatureToken The GameLevels feature token
      * @param globalIndex The global identifier of the cached level.
      * @return The requested level from application.
      */
     public function getLevelFromApplication(gameLevelsFeatureToken:String, globalIndex:int):Object {
-        var fileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
+        var fileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, gameLevelsFeatureToken, globalIndex);
         return getObjectFromApplication(fileName);
     }
 

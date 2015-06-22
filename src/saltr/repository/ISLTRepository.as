@@ -23,6 +23,12 @@ public interface ISLTRepository {
     function getObjectFromStorage(name:String):Object;
 
     /**
+     * Provides the cached application data.
+     * @return The cached application data.
+     */
+    function getAppDataFromCache():Object;
+
+    /**
      * Provides an level object from cache.
      * @param gameLevelsFeatureToken The GameLevels feature token
      * @param globalIndex The global identifier of the cached level.
@@ -58,6 +64,13 @@ public interface ISLTRepository {
      * @param object The object to store.
      */
     function cacheAppData(object:Object):void;
+
+    /**
+     * Provides the level_data.json from application.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @return The requested level_data.json from application.
+     */
+    function getLevelDataFromApplication(gameLevelsFeatureToken:String):Object;
 
     /**
      * Provides an level object from application.

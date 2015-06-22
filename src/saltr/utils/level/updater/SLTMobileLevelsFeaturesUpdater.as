@@ -13,6 +13,7 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
     }
 
     public function init(gameLevelsFeatures:Dictionary):void {
+        var a = 90;
     }
 
     public function update():void {

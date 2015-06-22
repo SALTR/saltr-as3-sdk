@@ -36,6 +36,14 @@ public class SLTDummyRepository implements ISLTRepository {
     }
 
     /**
+     * Provides the cached application data.
+     * @return The cached application data.
+     */
+    public function getAppDataFromCache():Object {
+        return null;
+    }
+
+    /**
      * Provides an level object from cache.
      * @param gameLevelsFeatureToken The GameLevels feature token
      * @param globalIndex The global identifier of the cached level.
@@ -77,6 +85,15 @@ public class SLTDummyRepository implements ISLTRepository {
      * @param object The object to store.
      */
     public function cacheAppData(object:Object):void {
+    }
+
+    /**
+     * Provides the level_data.json from application.
+     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @return The requested level_data.json from application.
+     */
+    public function getLevelDataFromApplication(gameLevelsFeatureToken:String):Object {
+        return null;
     }
 
     /**

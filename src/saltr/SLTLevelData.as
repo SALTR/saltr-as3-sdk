@@ -6,6 +6,8 @@ package saltr {
 import saltr.game.SLTLevel;
 import saltr.game.SLTLevelPack;
 
+use namespace saltr_internal;
+
 public class SLTLevelData {
 
     private var _levels:Vector.<SLTLevel>;

@@ -24,6 +24,8 @@ public class SLTLevel {
     private var _contentReady:Boolean;
     private var _assetMap:Dictionary;
 
+    private var _levelType:String;
+
     /**
      * Specifies that there is no level specified for the game.
      */
@@ -32,29 +34,29 @@ public class SLTLevel {
     /**
      * Specifies the level type for matching game.
      */
-    public static const LEVEL_TYPE_MATCHING:String = "matching";
+    public static const LEVEL_TYPE_MATCHING:String = "matrix";
 
     /**
      * Specifies the level type for Canvas2D game.
      */
-    public static const LEVEL_TYPE_2DCANVAS:String = "canvas2D";
+    public static const LEVEL_TYPE_2DCANVAS:String = "2d";
 
     /**
      * Provides the level parser for the given level type.
      * @param levelType The type of the level.
      * @return The level type corresponding level parser.
      */
-//    private static function getParser(levelType:String):SLTLevelParser {
-//        switch (levelType) {
-//            case LEVEL_TYPE_MATCHING:
-//                return SLTMatchingLevelParser.getInstance();
-//                break;
-//            case LEVEL_TYPE_2DCANVAS:
-//                return SLT2DLevelParser.getInstance();
-//                break;
-//        }
-//        return null;
-//    }
+    private static function getParser(levelType:String):SLTLevelParser {
+        switch (levelType) {
+            case LEVEL_TYPE_MATCHING:
+                return SLTMatchingLevelParser.getInstance();
+                break;
+            case LEVEL_TYPE_2DCANVAS:
+                return SLT2DLevelParser.getInstance();
+                break;
+        }
+        return null;
+    }
 
     /**
      * Class constructor.
@@ -72,6 +74,7 @@ public class SLTLevel {
         //_properties = properties;
         _version = version;
         _contentReady = false;
+        _levelType = LEVEL_TYPE_MATCHING;
     }
 
     /**
@@ -137,32 +140,32 @@ public class SLTLevel {
      */
     public function updateContent(rootNode:Object):void {
         //TODO: @TIGR implement
-//        _properties = rootNode["properties"];
-//
-//        var parser:SLTLevelParser = getParser(_levelType);
-//        if (parser != null) {
-//            try {
-//                _assetMap = parser.parseLevelAssets(rootNode);
-//            }
-//            catch (e:Error) {
-//                throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
-//            }
-//
-//            try {
-//                _boards = parser.parseLevelContent(rootNode, _assetMap);
-//            }
-//            catch (e:Error) {
-//                throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
-//            }
-//
-//            if (_boards != null) {
-//                regenerateAllBoards();
-//                _contentReady = true;
-//            }
-//        } else {
-//            // no parser was found for current level type
-//            new SLTStatusLevelsParserMissing();
-//        }
+        _properties = rootNode["properties"];
+
+        var parser:SLTLevelParser = getParser(_levelType);
+        if (parser != null) {
+            try {
+                _assetMap = parser.parseLevelAssets(rootNode);
+            }
+            catch (e:Error) {
+                throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
+            }
+
+            try {
+                _boards = parser.parseLevelContent(rootNode, _assetMap);
+            }
+            catch (e:Error) {
+                throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
+            }
+
+            if (_boards != null) {
+                regenerateAllBoards();
+                _contentReady = true;
+            }
+        } else {
+            // no parser was found for current level type
+            new SLTStatusLevelsParserMissing();
+        }
 
     }
 
