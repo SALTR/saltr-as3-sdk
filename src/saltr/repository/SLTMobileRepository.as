@@ -41,6 +41,28 @@ public class SLTMobileRepository implements ISLTRepository {
         return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
     }
 
+    private static function isCurrentAppVersionCacheDirExists(cacheDirectory:File):Boolean {
+        var dir:File = cacheDirectory.resolvePath(SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_CONTENT_ROOT_URL_TEMPLATE, SLTUtils.getAppVersion()));
+        return dir.exists;
+    }
+
+    private static function cleanupCache(cacheDirectory:File):void {
+        var rootDir:File = cacheDirectory.resolvePath(SLTConfig.DEFAULT_CONTENT_ROOT);
+        if (rootDir.exists) {
+            var contents:Array = rootDir.getDirectoryListing();
+            var currentAppCacheName:String = "app_" + SLTUtils.getAppVersion();
+            for (var i:uint = 0; i < contents.length; i++) {
+                var contentName:String = contents[i].name;
+                if (currentAppCacheName != contentName && 0 == contentName.indexOf("app_")) {
+                    var dir:File = rootDir.resolvePath(contents[i].name);
+                    if (dir.isDirectory) {
+                        dir.deleteDirectory(true);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Class constructor.
      */
