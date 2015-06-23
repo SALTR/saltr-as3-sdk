@@ -95,7 +95,7 @@ public class SLTDeserializer {
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 featureNode = featureNodes[i];
                 token = featureNode.token;
-                type = featureNode.type;
+                type = featureNode.featureType;
                 //TODO @GSAR: remove "data" check later when API versioning is done.
                 properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
                 required = featureNode.required;
@@ -121,7 +121,7 @@ public class SLTDeserializer {
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 featureNode = featureNodes[i];
                 token = featureNode.token;
-                type = featureNode.type;
+                type = featureNode.featureType;
                 //TODO @GSAR: remove "data" check later when API versioning is done.
                 properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
                 required = featureNode.required;

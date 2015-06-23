@@ -53,11 +53,12 @@ public interface ISLTRepository {
 
     /**
      * Caches an level content.
-     * @param featureToken The "GameLevels" feature token the level belong to.
+     * @param gameLevelsFeatureToken The "GameLevels" feature token the level belong to.
+     * @param globalIndex The global index of the level.
      * @param version The version of the level.
      * @param object The level to store.
      */
-    function cacheLevelContent(featureToken:String, version:String, object:Object):void;
+    function cacheLevelContent(gameLevelsFeatureToken:String, globalIndex:int, version:String, object:Object):void;
 
     /**
      * Caches an application data.

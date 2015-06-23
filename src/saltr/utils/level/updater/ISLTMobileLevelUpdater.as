@@ -4,5 +4,6 @@
 package saltr.utils.level.updater {
 public interface ISLTMobileLevelUpdater {
     function update():void;
+    function updateCompleted():Boolean;
 }
 }

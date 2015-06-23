@@ -48,6 +48,10 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
         }
     }
 
+    public function updateCompleted():Boolean {
+        return !_isInProcess;
+    }
+
     override protected function resetUpdateProcess():void {
         _outdatedLevels.length = 0;
         _updatedLevelCount = 0;
@@ -130,7 +134,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private function cacheLevelContent(level:SLTLevel, content:Object):void {
 //        var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
 //        _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
-        _repository.cacheLevelContent(_featureToken, level.version, content);
+        _repository.cacheLevelContent(_featureToken, level.globalIndex, level.version, content);
     }
 }
 }
