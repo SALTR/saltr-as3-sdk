@@ -46,65 +46,24 @@ public class SLTDeserializer {
 
         var levelsNode:Array = rootNode.levels as Array;
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
-        for (var j:int = 0, len2:int = levelsNode.length; j < len2; ++j) {
-            var levelNode:Object = levelsNode[j];
+        for (var i:int = 0, length:int = levelsNode.length; i < length; ++i) {
+            var levelNode:Object = levelsNode[i];
             var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version, levelType);
             levels.push(level);
         }
         return levels;
-
-//        var levelPackNodes:Array = rootNode.levelPacks as Array;
-//        var levelType:String = SLTLevel.LEVEL_TYPE_MATCHING;
-//
-//        if (rootNode.hasOwnProperty("levelType")) {
-//            levelType = rootNode.levelType;
-//        }
-//
-//        var levelPacks:Vector.<SLTLevelPack> = new <SLTLevelPack>[];
-//        var index:int = -1;
-//        if (levelPackNodes != null) {
-//            //TODO @GSAR: remove this sort when SALTR confirms correct ordering
-//            levelPackNodes.sort(sortByIndex);
-//
-//            for (var i:int = 0, len:int = levelPackNodes.length; i < len; ++i) {
-//                var levelPackNode:Object = levelPackNodes[i];
-//                var levelNodes:Array = levelPackNode.levels;
-//
-//                //TODO @GSAR: remove this sort when SALTR confirms correct ordering
-//                levelNodes.sort(sortByIndex);
-//
-//                var levels:Vector.<SLTLevel> = new <SLTLevel>[];
-//                var packIndex:int = levelPackNode.index;
-//                for (var j:int = 0, len2:int = levelNodes.length; j < len2; ++j) {
-//                    ++index;
-//                    var levelNode:Object = levelNodes[j];
-//
-//                    //TODO @GSAR: later, leave localIndex only!
-//                    var localIndex:int = levelNode.hasOwnProperty("localIndex") ? levelNode.localIndex : levelNode.index;
-//                    levels.push(new SLTLevel(levelNode.id, levelNode.variationId, levelType, index, localIndex, packIndex, levelNode.url, levelNode.properties, levelNode.version));
-//                }
-//                levelPacks.push(new SLTLevelPack(levelPackNode.token, packIndex, levels));
-//            }
-//        }
-//        return levelPacks;
     }
 
     saltr_internal static function decodeGameLevelsFeatures(rootNode:Object):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {
-            var featureNode:Object;
-            var token:String;
-            var type:String;
-            var properties:Object;
-            var required:Boolean;
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
-                featureNode = featureNodes[i];
-                token = featureNode.token;
-                type = featureNode.featureType;
-                //TODO @GSAR: remove "data" check later when API versioning is done.
-                properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
-                required = featureNode.required;
+                var featureNode:Object = featureNodes[i];
+                var token:String = featureNode.token;
+                var type:String = featureNode.featureType;
+                var properties:Object = featureNode.properties;
+                var required : Boolean = featureNode.required;
                 if (SLTConfig.FEATURE_TYPE_GAME_LEVELS == type) {
                     var levelData:SLTLevelData = new SLTLevelData();
                     levelData.initWithData(properties);
@@ -119,18 +78,12 @@ public class SLTDeserializer {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {
-            var featureNode:Object;
-            var token:String;
-            var type:String;
-            var properties:Object;
-            var required:Boolean;
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
-                featureNode = featureNodes[i];
-                token = featureNode.token;
-                type = featureNode.featureType;
-                //TODO @GSAR: remove "data" check later when API versioning is done.
-                properties = featureNode.hasOwnProperty("data") ? featureNode.data : featureNode.properties;
-                required = featureNode.required;
+                var featureNode:Object = featureNodes[i];
+                var token:String = featureNode.token;
+                var type:String = featureNode.featureType;
+                var properties:Object = featureNode.properties;
+                var required:Boolean = featureNode.required;
                 if (SLTConfig.FEATURE_TYPE_GENERIC == type) {
                     features[token] = new SLTFeature(token, type, properties, required);
                 }

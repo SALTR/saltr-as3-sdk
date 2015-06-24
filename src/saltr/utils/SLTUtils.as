@@ -8,7 +8,6 @@ import flash.utils.Dictionary;
 import flash.utils.describeType;
 import flash.utils.getQualifiedClassName;
 
-import saltr.SLTConfig;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;

@@ -129,29 +129,6 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * The level packs.
-     */
-//    public function get levelPacks():Vector.<SLTLevelPack> {
-//        return _levelData.levelPacks;
-//    }
-
-    /**
-     *  Provides all levels by given "GameLevels" feature token.
-     * @param token The "GameLevels" feature token.
-     */
-    public function getAllLevels(token:String):Vector.<SLTLevel> {
-        return _appData.getGameLevelsProperties(token).allLevels;
-    }
-
-    /**
-     *  Provides the total levels number by given "GameLevels" feature token.
-     * @param token The "GameLevels" feature token.
-     */
-    public function getAllLevelsCount(token:String):uint {
-        return _appData.getGameLevelsProperties(token).allLevelsCount;
-    }
-
-    /**
      * The experiments.
      */
     public function get experiments():Vector.<SLTExperiment> {
@@ -164,25 +141,6 @@ public class SLTSaltrMobile {
     public function set socialId(socialId:String):void {
         _socialId = socialId;
     }
-
-    /**
-     * Provides the level by provided global index.
-     * @param token The "GameLevels" feature token.
-     * @param index The global index of the level.
-     * @return SLTLevel The level instance specified by index.
-     */
-    public function getLevelByGlobalIndex(token:String, index:int):SLTLevel {
-        return _appData.getGameLevelsProperties(token).getLevelByGlobalIndex(index);
-    }
-
-    /**
-     * Provides the level pack by provided global index.
-     * @param index The global index of the level pack.
-     * @return SLTLevelPack The level pack instance specified by index.
-     */
-//    public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
-//        return _levelData.getPackByLevelGlobalIndex(index);
-//    }
 
     /**
      * Provides active feature tokens.
@@ -201,13 +159,19 @@ public class SLTSaltrMobile {
     }
 
     /**
+     * Provides the game level feature properties by provided token.
+     * @param token The unique identifier of the feature
+     * @return Object The feature's properties.
+     */
+    public function getGameLevelFeatureProperties(token:String) : SLTLevelData {
+        return _appData.getGameLevelsProperties(token);
+    }
+
+    /**
      * Defines game levels by token.
      * @param token The token of "GameLevels" feature.
      */
     public function defineGameLevels(token:String):void {
-        if (!SLTUtils.validateFeatureToken(token)) {
-            throw new Error("Token value passed to 'defineGameLevels()' is incorrect.");
-        }
         if (!_started) {
             var levelData:SLTLevelData = new SLTLevelData();
             // load feature from cache
@@ -225,7 +189,7 @@ public class SLTSaltrMobile {
                 gameLevels = getLevelDataFromApplication(token);
             }
             levelData.initWithData(gameLevels);
-            _appData.defineGameLevelsFeature(token, levelData);
+            _appData.defineFeature(token, levelData, SLTConfig.FEATURE_TYPE_GAME_LEVELS, true);
         } else {
             throw new Error("Method 'defineGameLevels()' should be called before 'start()' only.");
         }
@@ -239,7 +203,7 @@ public class SLTSaltrMobile {
      */
     public function defineGenericFeature(token:String, properties:Object, required:Boolean = false):void {
         if (_started == false) {
-            _appData.defineGenericFeature(token, properties, required);
+            _appData.defineFeature(token, properties, SLTConfig.FEATURE_TYPE_GENERIC, required);
         } else {
             throw new Error("Method 'defineGenericFeature()' should be called before 'start()' only.");
         }
@@ -399,17 +363,6 @@ public class SLTSaltrMobile {
             _connectFailCallback(new SLTStatusAppDataParseError());
             return;
         }
-
-//        if (levelType != SLTLevel.LEVEL_TYPE_NONE) {
-//            try {
-//                _levelData.initWithData(result.data);
-//            } catch (e:Error) {
-//                _connectFailCallback(new SLTStatusLevelsParseError());
-//                return;
-//            }
-//
-//        }
-
         _repository.cacheAppData(result.data);
 
         _connectSuccessCallback();
@@ -420,8 +373,6 @@ public class SLTSaltrMobile {
 
         _levelUpdater.init(_appData.gameLevelsFeatures);
         _levelUpdater.update();
-
-        //trace("[SALTR] AppData load success. Levels loaded: " + _levelData.allLevels.length);
     }
 
     private function appDataLoadFailCallback(status:SLTStatus):void {
@@ -553,10 +504,5 @@ public class SLTSaltrMobile {
         }
         return content;
     }
-
-    //TODO @TIGR fix this
-//    public function doCallbackTest(f:Function):void {
-//        _apiFactory.getCall("heartbeat",true).call(f);
-//    }
 }
 }

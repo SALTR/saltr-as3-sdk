@@ -24,10 +24,6 @@ public class SLTAppData {
         _experiments = new <SLTExperiment>[];
     }
 
-    public function get activeFeatures():Dictionary {
-        return _activeFeatures;
-    }
-
     public function get defaultFeatures():Dictionary {
         return _defaultFeatures;
     }
@@ -63,25 +59,24 @@ public class SLTAppData {
 
     public function getGameLevelsProperties(token:String):SLTLevelData {
         var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
-        if(null != gameLevelsFeature) {
+        if (null != gameLevelsFeature) {
             return gameLevelsFeature.properties as SLTLevelData;
         }
         return null;
     }
 
-    public function defineGameLevelsFeature(token:String, properties:SLTLevelData):void {
-        if (SLTUtils.validateFeatureToken(token)) {
-            _gameLevelsFeatures[token] = new SLTFeature(token, SLTConfig.FEATURE_TYPE_GAME_LEVELS, properties, true);
-        } else {
-            throw new Error("GameLevels feature's token value is incorrect.");
-        }
-    }
 
-    public function defineGenericFeature(token:String, properties:Object, required:Boolean):void {
-        if (SLTUtils.validateFeatureToken(token)) {
-            _defaultFeatures[token] = new SLTFeature(token, SLTConfig.FEATURE_TYPE_GENERIC, properties, required);
-        } else {
-            throw new Error("Default feature's token value is incorrect.");
+    public function defineFeature(token:String, properties:*, type:String, required:Boolean):void {
+        if (!SLTUtils.validateFeatureToken(token)) {
+            throw new Error("feature's token value is incorrect.");
+        }
+
+        var feature:SLTFeature = new SLTFeature(token, type, properties, required);
+        if (type == SLTConfig.FEATURE_TYPE_GENERIC) {
+            _defaultFeatures[token] = feature;
+        }
+        else if (type == SLTConfig.FEATURE_TYPE_GAME_LEVELS) {
+            _gameLevelsFeatures[token] = feature;
         }
     }
 

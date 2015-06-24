@@ -72,7 +72,6 @@ public class SLTLevel {
         _localIndex = localIndex;
         _packIndex = packIndex;
         _contentUrl = contentUrl;
-        //_properties = properties;
         _version = version;
         _contentReady = false;
         _levelType = levelType;
@@ -140,7 +139,6 @@ public class SLTLevel {
      * Updates the content of the level.
      */
     public function updateContent(rootNode:Object):void {
-        //TODO: @TIGR implement
         _properties = rootNode["properties"];
 
         var parser:SLTLevelParser = getParser(_levelType);

@@ -11,14 +11,14 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTFeature {
-    protected var _token:String;
-    protected var _type:String;
-    protected var _properties:Object;
-    protected var _required:Boolean;
+    private var _token:String;
+    private var _type:String;
+    private var _properties:Object;
+    private var _required:Boolean;
 
     public function SLTFeature(token:String, type:String, properties:Object = null, required:Boolean = false) {
         _token = token;
-        _type:type;
+        _type = type;
         _properties = properties;
         _required = required;
     }
