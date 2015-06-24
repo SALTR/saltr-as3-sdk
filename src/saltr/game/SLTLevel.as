@@ -65,8 +65,9 @@ public class SLTLevel {
      * @param packIndex The index of the pack the level is in.
      * @param contentUrl The content URL of the level.
      * @param version The current version of the level.
+     * @param levelType The type of the level.
      */
-    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String) {
+    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String, levelType:String) {
         _globalIndex = globalIndex;
         _localIndex = localIndex;
         _packIndex = packIndex;
@@ -74,7 +75,7 @@ public class SLTLevel {
         //_properties = properties;
         _version = version;
         _contentReady = false;
-        _levelType = LEVEL_TYPE_MATCHING;
+        _levelType = levelType;
     }
 
     /**
