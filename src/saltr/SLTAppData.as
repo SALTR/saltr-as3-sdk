@@ -88,8 +88,8 @@ public class SLTAppData {
 
     public function initWithData(data:Object):void {
         try {
-            _gameLevelsFeatures = SLTDeserializer.decodeGameLevelsFeatures(data);
-            _activeFeatures = SLTDeserializer.decodeGenericFeatures(data);
+            _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+            _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
             throw new Error("AppData parse error");

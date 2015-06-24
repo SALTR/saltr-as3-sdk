@@ -54,38 +54,22 @@ public class SLTDeserializer {
         return levels;
     }
 
-    saltr_internal static function decodeGameLevelsFeatures(rootNode:Object):Dictionary {
+    saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 var featureNode:Object = featureNodes[i];
                 var token:String = featureNode.token;
-                var type:String = featureNode.featureType;
-                var properties:Object = featureNode.properties;
-                var required : Boolean = featureNode.required;
-                if (SLTConfig.FEATURE_TYPE_GAME_LEVELS == type) {
-                    var levelData:SLTLevelData = new SLTLevelData();
-                    levelData.initWithData(properties);
-                    features[token] = new SLTFeature(token, type, levelData, required);
-                }
-            }
-        }
-        return features;
-    }
-
-    saltr_internal static function decodeGenericFeatures(rootNode:Object):Dictionary {
-        var features:Dictionary = new Dictionary();
-        var featureNodes:Array = rootNode.features as Array;
-        if (featureNodes != null) {
-            for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
-                var featureNode:Object = featureNodes[i];
-                var token:String = featureNode.token;
-                var type:String = featureNode.featureType;
+                var featureType:String = featureNode.featureType;
                 var properties:Object = featureNode.properties;
                 var required:Boolean = featureNode.required;
-                if (SLTConfig.FEATURE_TYPE_GENERIC == type) {
-                    features[token] = new SLTFeature(token, type, properties, required);
+                if (SLTConfig.FEATURE_TYPE_GAME_LEVELS == decodeFeatureType && SLTConfig.FEATURE_TYPE_GAME_LEVELS == featureType) {
+                    var levelData:SLTLevelData = new SLTLevelData();
+                    levelData.initWithData(properties);
+                    features[token] = new SLTFeature(token, featureType, levelData, required);
+                } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
+                    features[token] = new SLTFeature(token, featureType, properties, required);
                 }
             }
         }
