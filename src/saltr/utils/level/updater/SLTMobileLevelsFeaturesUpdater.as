@@ -2,6 +2,7 @@
  * Created by TIGR on 6/19/2015.
  */
 package saltr.utils.level.updater {
+import flash.events.Event;
 import flash.events.TimerEvent;
 import flash.utils.Dictionary;
 import flash.utils.Timer;
@@ -24,6 +25,9 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
     }
 
     public function init(gameLevelsFeatures:Dictionary):void {
+        if (_isInProcess) {
+            return;
+        }
         for (var key:Object in gameLevelsFeatures) {
             var feature:SLTFeature = gameLevelsFeatures[key];
             var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
@@ -63,18 +67,23 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
     }
 
     private function levelUpdateTimerHandler(event:TimerEvent):void {
-        var updateCompleted:Boolean = true;
+        var isUpdated:Boolean = true;
         for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
             if (false == _gameLevelGroups[i].updateCompleted()) {
-                updateCompleted = false;
+                isUpdated = false;
                 break;
             }
         }
 
-        if (updateCompleted) {
-            stopLevelUpdateTimer();
-            _isInProcess = false;
+        if (isUpdated) {
+            stopUpdating();
         }
+    }
+
+    private function stopUpdating():void {
+        stopLevelUpdateTimer();
+        resetUpdateProcess();
+        dispatchEvent(new Event(Event.COMPLETE));
     }
 }
 }

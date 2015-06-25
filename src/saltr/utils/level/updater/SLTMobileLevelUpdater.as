@@ -2,13 +2,15 @@
  * Created by TIGR on 6/19/2015.
  */
 package saltr.utils.level.updater {
+import flash.events.EventDispatcher;
+
 import saltr.api.SLTApiFactory;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-public class SLTMobileLevelUpdater {
+public class SLTMobileLevelUpdater extends EventDispatcher {
     saltr_internal static const LEVEL_UPDATE_TIMER_DELAY:Number = 30000;
     saltr_internal static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
 

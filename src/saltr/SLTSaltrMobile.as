@@ -273,23 +273,20 @@ public class SLTSaltrMobile {
         }
     }
 
-    public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback : Function):void {
-        var result : Boolean = initLevelContent(gameLevelsFeatureToken, sltLevel);
-        callback(result);
+    public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):Boolean {
+        connect(successCallback, failCallback, null, null);
 
-//        connect(successCallback,failCallback,null,null);
-//
-//        function successCallback() : void {
-//            _levelUpdater.addEventListener(Event.COMPLETE, function(e:Event):void {
-//                initLevelContent(gameLevelsFeatureToken,sltLevel);
-//
-//                callback(true);
-//            });
-//        }
-//
-//        function failCallback():void {
-//            callback(false);
-//        }
+        function successCallback():void {
+            _levelUpdater.addEventListener(Event.COMPLETE, function (e:Event):void {
+                initLevelContent(gameLevelsFeatureToken, sltLevel);
+
+                callback(true);
+            });
+        }
+
+        function failCallback():void {
+            callback(false);
+        }
     }
 
     /**
