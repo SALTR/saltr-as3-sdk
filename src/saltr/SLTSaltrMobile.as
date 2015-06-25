@@ -273,7 +273,7 @@ public class SLTSaltrMobile {
         }
     }
 
-    public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback : Function):Boolean {
+    public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback : Function):void {
         var result : Boolean = initLevelContent(gameLevelsFeatureToken, sltLevel);
         callback(result);
 
