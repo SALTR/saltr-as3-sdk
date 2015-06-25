@@ -4,6 +4,7 @@
 
 package saltr {
 import flash.display.Stage;
+import flash.events.Event;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
@@ -270,6 +271,25 @@ public class SLTSaltrMobile {
         } else {
             return false;
         }
+    }
+
+    public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback : Function):Boolean {
+        var result : Boolean = initLevelContent(gameLevelsFeatureToken, sltLevel);
+        callback(result);
+
+//        connect(successCallback,failCallback,null,null);
+//
+//        function successCallback() : void {
+//            _levelUpdater.addEventListener(Event.COMPLETE, function(e:Event):void {
+//                initLevelContent(gameLevelsFeatureToken,sltLevel);
+//
+//                callback(true);
+//            });
+//        }
+//
+//        function failCallback():void {
+//            callback(false);
+//        }
     }
 
     /**
