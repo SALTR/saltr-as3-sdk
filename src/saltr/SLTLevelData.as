@@ -4,7 +4,6 @@
 
 package saltr {
 import saltr.game.SLTLevel;
-import saltr.game.SLTLevelPack;
 
 use namespace saltr_internal;
 
@@ -25,12 +24,12 @@ public class SLTLevelData {
     }
 
     public function getLevelByGlobalIndex(index:int):SLTLevel {
-        if(index < 0 || index >= _levels.length) {
+        if (index < 0 || index >= _levels.length) {
             return null;
         }
-        for(var i:int = 0, len:int = _levels.length; i < len; ++i) {
+        for (var i:int = 0, len:int = _levels.length; i < len; ++i) {
             var level:SLTLevel = _levels[i];
-            if(index == level.globalIndex) {
+            if (index == level.globalIndex) {
                 return level;
             }
         }
