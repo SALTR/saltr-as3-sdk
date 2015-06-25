@@ -11,14 +11,13 @@ import saltr.api.SLTApiCall;
 import saltr.api.SLTApiCallResult;
 import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
-import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
+import saltr.repository.SLTRepositoryStorageManager;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.utils.SLTMobileDeviceInfo;
-import saltr.utils.SLTUtils;
 import saltr.utils.dialog.SLTMobileDialogController;
 import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
@@ -38,7 +37,7 @@ public class SLTSaltrMobile {
     private var _clientKey:String;
     private var _isLoading:Boolean;
 
-    private var _repository:ISLTRepository;
+    private var _repositoryStorageManager:SLTRepositoryStorageManager;
 
     private var _connectSuccessCallback:Function;
     private var _connectFailCallback:Function;
@@ -76,13 +75,13 @@ public class SLTSaltrMobile {
         _isSynced = false;
         _requestIdleTimeout = 0;
 
-        _repository = new SLTMobileRepository();
+        _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
         _dialogController = new SLTMobileDialogController(_flashStage, addDeviceToSALTR);
 
         _appData = new SLTAppData();
 
         _apiFactory = new SLTApiFactory();
-        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repository, _apiFactory, _requestIdleTimeout);
+        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
     }
 
     public function set apiFactory(value:SLTApiFactory):void {
@@ -91,11 +90,11 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * The repository.
+     * The repository storage manager.
      */
-    public function set repository(value:ISLTRepository):void {
-        _repository = value;
-        _levelUpdater.repository = _repository;
+    public function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
+        _repositoryStorageManager = value;
+        _levelUpdater.repositoryStorageManager = _repositoryStorageManager;
     }
 
     /**
@@ -125,7 +124,7 @@ public class SLTSaltrMobile {
      * @param contentRoot The content root url.
      */
     public function setLocalContentRoot(contentRoot:String):void {
-        _repository.setLocalContentRoot(contentRoot);
+        _repositoryStorageManager.setLocalContentRoot(contentRoot);
     }
 
     /**
@@ -163,7 +162,7 @@ public class SLTSaltrMobile {
      * @param token The unique identifier of the feature
      * @return Object The feature's properties.
      */
-    public function getGameLevelFeatureProperties(token:String) : SLTLevelData {
+    public function getGameLevelFeatureProperties(token:String):SLTLevelData {
         return _appData.getGameLevelsProperties(token);
     }
 
@@ -179,7 +178,7 @@ public class SLTSaltrMobile {
             var gameLevels:Object = null;
             if (null != cachedAppData) {
                 var feature:Object = SLTDeserializer.getFeature(cachedAppData, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
-                if(null != feature) {
+                if (null != feature) {
                     gameLevels = feature.properties;
                 }
             }
@@ -363,7 +362,7 @@ public class SLTSaltrMobile {
             _connectFailCallback(new SLTStatusAppDataParseError());
             return;
         }
-        _repository.cacheAppData(result.data);
+        _repositoryStorageManager.cacheAppData(result.data);
 
         _connectSuccessCallback();
 
@@ -490,17 +489,17 @@ public class SLTSaltrMobile {
     }
 
     private function getCachedAppData():Object {
-        return _repository.getAppDataFromCache();
+        return _repositoryStorageManager.getAppDataFromCache();
     }
 
     private function getLevelDataFromApplication(token:String):Object {
-        return _repository.getLevelDataFromApplication(token);
+        return _repositoryStorageManager.getLevelDataFromApplication(token);
     }
 
     private function loadLevelContentInternally(gameLevelsFeatureToken:String, level:SLTLevel):Object {
-        var content:Object = _repository.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
+        var content:Object = _repositoryStorageManager.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
         if (content == null) {
-            content = _repository.getLevelFromApplication(gameLevelsFeatureToken, level.globalIndex);
+            content = _repositoryStorageManager.getLevelFromApplication(gameLevelsFeatureToken, level.globalIndex);
         }
         return content;
     }

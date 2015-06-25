@@ -5,14 +5,12 @@ package saltr.utils.level.updater {
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.SLTConfig;
 import saltr.api.SLTApiCall;
 import saltr.api.SLTApiCallResult;
 import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
-import saltr.repository.ISLTRepository;
+import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
-import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
 
@@ -25,8 +23,8 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private var _levelUpdateTimer:Timer;
     private var _allLevels:Vector.<SLTLevel>;
 
-    public function SLTMobileLevelGroupUpdater(repository:ISLTRepository, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
-        super(repository, apiFactory, requestIdleTimeout);
+    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
+        super(repositoryStorageManager, apiFactory, requestIdleTimeout);
         _outdatedLevels = new Vector.<SLTLevel>();
         resetUpdateProcess();
     }
@@ -71,7 +69,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     }
 
     private function getCachedLevelVersion(level:SLTLevel):String {
-        return _repository.getLevelVersionFromCache(_featureToken, level.globalIndex);
+        return _repositoryStorageManager.getLevelVersionFromCache(_featureToken, level.globalIndex);
     }
 
     private function startLevelUpdateTimer():void {
@@ -132,9 +130,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     }
 
     private function cacheLevelContent(level:SLTLevel, content:Object):void {
-//        var cachedFileName:String = SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_CACHE_URL_TEMPLATE, sltLevel.packIndex, sltLevel.localIndex);
-//        _repository.cacheObject(cachedFileName, String(sltLevel.version), content);
-        _repository.cacheLevelContent(_featureToken, level.globalIndex, level.version, content);
+        _repositoryStorageManager.cacheLevelContent(_featureToken, level.globalIndex, level.version, content);
     }
 }
 }

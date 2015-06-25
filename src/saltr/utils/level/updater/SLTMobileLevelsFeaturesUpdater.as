@@ -7,9 +7,8 @@ import flash.utils.Dictionary;
 import flash.utils.Timer;
 
 import saltr.SLTFeature;
-
 import saltr.api.SLTApiFactory;
-import saltr.repository.ISLTRepository;
+import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -18,16 +17,16 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
     private var _gameLevelGroups:Vector.<SLTMobileLevelGroupUpdater>;
     private var _levelUpdateTimer:Timer;
 
-    public function SLTMobileLevelsFeaturesUpdater(repository:ISLTRepository, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
-        super(repository, apiFactory, requestIdleTimeout);
+    public function SLTMobileLevelsFeaturesUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
+        super(repositoryStorageManager, apiFactory, requestIdleTimeout);
         _gameLevelGroups = new Vector.<SLTMobileLevelGroupUpdater>();
         resetUpdateProcess();
     }
 
     public function init(gameLevelsFeatures:Dictionary):void {
-        for(var key:Object in gameLevelsFeatures) {
+        for (var key:Object in gameLevelsFeatures) {
             var feature:SLTFeature = gameLevelsFeatures[key];
-            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repository, _apiFactory, _requestIdleTimeout);
+            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
             groupUpdater.init(feature.token, feature.properties.allLevels);
             _gameLevelGroups.push(groupUpdater);
         }
@@ -38,7 +37,7 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
             return;
         }
         _isInProcess = true;
-        for(var i:int=0; i<_gameLevelGroups.length; ++i) {
+        for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
             _gameLevelGroups[i].update();
         }
         startLevelUpdateTimer();
@@ -65,14 +64,14 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
 
     private function levelUpdateTimerHandler(event:TimerEvent):void {
         var updateCompleted:Boolean = true;
-        for(var i:int =0; i<_gameLevelGroups.length; ++i) {
-            if(false == _gameLevelGroups[i].updateCompleted()) {
+        for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
+            if (false == _gameLevelGroups[i].updateCompleted()) {
                 updateCompleted = false;
                 break;
             }
         }
 
-        if(updateCompleted) {
+        if (updateCompleted) {
             stopLevelUpdateTimer();
             _isInProcess = false;
         }

@@ -3,7 +3,7 @@
  */
 package saltr.utils.level.updater {
 import saltr.api.SLTApiFactory;
-import saltr.repository.ISLTRepository;
+import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -13,12 +13,12 @@ public class SLTMobileLevelUpdater {
     saltr_internal static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
 
     protected var _isInProcess:Boolean;
-    protected var _repository:ISLTRepository;
+    protected var _repositoryStorageManager:SLTRepositoryStorageManager;
     protected var _apiFactory:SLTApiFactory;
     protected var _requestIdleTimeout:int;
 
-    public function SLTMobileLevelUpdater(repository:ISLTRepository, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
-        _repository = repository;
+    public function SLTMobileLevelUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
+        _repositoryStorageManager = repositoryStorageManager;
         _apiFactory = apiFactory;
         _requestIdleTimeout = requestIdleTimeout;
     }
@@ -27,8 +27,8 @@ public class SLTMobileLevelUpdater {
         _apiFactory = value;
     }
 
-    public function set repository(value:ISLTRepository):void {
-        _repository = value;
+    public function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
+        _repositoryStorageManager = value;
     }
 
     public function set requestIdleTimeout(value:int):void {

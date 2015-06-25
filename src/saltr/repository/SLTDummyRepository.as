@@ -8,59 +8,22 @@ package saltr.repository {
  */
 public class SLTDummyRepository implements ISLTRepository {
 
-//    private var _applicationDirectory:File;
-//    private var _fileStream:FileStream;
-
-    /**
-     * Class constructor.
-     */
-    public function SLTDummyRepository() {
-//        _applicationDirectory = File.applicationDirectory;
-//        _fileStream = new FileStream();
-    }
-
-    /**
-     * Defines the local content root.
-     * @param contentRoot The content root url.
-     */
-    public function setLocalContentRoot(contentRoot:String):void {
-    }
-
     /**
      * Provides an object from storage.
      * @param name The name of the object.
-     * @return <code>null</code> value.
+     * @return The requested object.
      */
     public function getObjectFromStorage(name:String):Object {
         return null;
     }
 
     /**
-     * Provides the cached application data.
-     * @return The cached application data.
+     * Provides an object from cache.
+     * @param fileName The name of the object.
+     * @return The requested object.
      */
-    public function getAppDataFromCache():Object {
+    public function getObjectFromCache(fileName:String):Object {
         return null;
-    }
-
-    /**
-     * Provides an level object from cache.
-     * @param gameLevelsFeatureToken The GameLevels feature token
-     * @param globalIndex The global identifier of the cached level.
-     * @return The requested level from cache.
-     */
-    public function getLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object {
-        return null;
-    }
-
-    /**
-     * Provides the cached level version.
-     * @param gameLevelsFeatureToken The GameLevels feature token
-     * @param globalIndex The global identifier of the cached level.
-     * @return The version of the cached level.
-     */
-    public function getLevelVersionFromCache(gameLevelsFeatureToken:String, globalIndex:int):String {
-        return "";
     }
 
     /**
@@ -72,55 +35,20 @@ public class SLTDummyRepository implements ISLTRepository {
     }
 
     /**
-     * Caches an level content.
-     * @param gameLevelsFeatureToken The "GameLevels" feature token the level belong to.
-     * @param globalIndex The global index of the level.
-     * @param version The version of the level.
-     * @param object The level to store.
-     */
-    public function cacheLevelContent(gameLevelsFeatureToken:String, globalIndex:int, version:String, object:Object):void {
-    }
-
-    /**
-     * Caches an application data.
+     * Caches an object.
+     * @param name The name of the object.
      * @param object The object to store.
      */
-    public function cacheAppData(object:Object):void {
+    public function cacheObject(name:String, object:Object):void {
     }
 
     /**
-     * Provides the level_data.json from application.
-     * @param gameLevelsFeatureToken The GameLevels feature token
-     * @return The requested level_data.json from application.
+     * Provides an object from application.
+     * @param fileName The name of the object.
+     * @return The requested object.
      */
-    public function getLevelDataFromApplication(gameLevelsFeatureToken:String):Object {
+    public function getObjectFromApplication(fileName:String):Object {
         return null;
     }
-
-    /**
-     * Provides an level object from application.
-     * @param gameLevelsFeatureToken The GameLevels feature token
-     * @param globalIndex The global identifier of the cached level.
-     * @return The requested level from application.
-     */
-    public function getLevelFromApplication(gameLevelsFeatureToken:String, globalIndex:int):Object {
-        return null;
-    }
-
-//    private function getInternal(file:File):Object {
-//        try {
-//            if (!file.exists) {
-//                return null;
-//            }
-//            _fileStream.open(file, FileMode.READ);
-//            var stringData:String = _fileStream.readUTFBytes(_fileStream.bytesAvailable);
-//            _fileStream.close();
-//            return stringData ? JSON.parse(stringData) : null;
-//        }
-//        catch (error:Error) {
-//            trace("[MobileStorageEngine] : error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
-//        }
-//        return null;
-//    }
 }
 }
