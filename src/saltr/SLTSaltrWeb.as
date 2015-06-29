@@ -11,7 +11,6 @@ import saltr.api.SLTApiCall;
 import saltr.api.SLTApiCallResult;
 import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
-import saltr.game.SLTLevelPack;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTDummyRepository;
 import saltr.status.SLTStatus;
@@ -141,13 +140,6 @@ public class SLTSaltrWeb {
     }
 
     /**
-     * The level packs.
-     */
-    public function get levelPacks():Vector.<SLTLevelPack> {
-        return _levelData.levelPacks;
-    }
-
-    /**
      * All levels.
      */
     public function get allLevels():Vector.<SLTLevel> {
@@ -175,15 +167,6 @@ public class SLTSaltrWeb {
      */
     public function getLevelByGlobalIndex(index:int):SLTLevel {
         return _levelData.getLevelByGlobalIndex(index);
-    }
-
-    /**
-     * Provides the level pack by provided global index.
-     * @param index The global index of the level pack.
-     * @return SLTLevelPack The level pack instance specified by index.
-     */
-    public function getPackByLevelGlobalIndex(index:int):SLTLevelPack {
-        return _levelData.getPackByLevelGlobalIndex(index);
     }
 
     /**
@@ -226,32 +209,29 @@ public class SLTSaltrWeb {
      * @param required The required state of the feature.
      */
     public function defineFeature(token:String, properties:Object, required:Boolean = false):void {
-        if (_useNoFeatures) {
-            return;
-        }
-
-        if (_started == false) {
-            _appData.defineFeature(token, properties, required);
-        } else {
-            throw new Error("Method 'defineFeature()' should be called before 'start()' only.");
-        }
+//        if (_useNoFeatures) {
+//            return;
+//        }
+//
+//        if (_started == false) {
+//            _appData.defineFeature(token, properties, required);
+//        } else {
+//            throw new Error("Method 'defineFeature()' should be called before 'start()' only.");
+//        }
     }
 
     /**
      * Starts the instance.
      */
     public function start():void {
-        if (_socialId == null) {
-            throw new Error("socialId field is required and can't be null.");
-        }
-        if (SLTUtils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
-            throw new Error("Features should be defined.");
-        }
-//        if (_levelData.levelPacks.length == 0 && _useNoLevels == false) {
-//            throw new Error("Levels should be imported.");
+//        if (_socialId == null) {
+//            throw new Error("socialId field is required and can't be null.");
 //        }
-        _appData.initEmpty();
-        _started = true;
+//        if (SLTUtils.getDictionarySize(_appData.developerFeatures) == 0 && _useNoFeatures == false) {
+//            throw new Error("Features should be defined.");
+//        }
+//        _appData.initEmpty();
+//        _started = true;
     }
 
     /**
@@ -431,7 +411,6 @@ public class SLTSaltrWeb {
         if (!_heartBeatTimerStarted) {
             startHeartbeat();
         }
-        trace("[SALTR] AppData load success. LevelPacks loaded: " + _levelData.levelPacks.length);
     }
 
     private function appDataLoadFailCallback(status:SLTStatus):void {
@@ -482,14 +461,14 @@ public class SLTSaltrWeb {
     }
 
     private function sync():void {
-        var params:Object = {
-            clientKey: _clientKey,
-            devMode: _devMode,
-            socialId: _socialId,
-            developerFeatures: _appData.developerFeatures
-        };
-        var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SYNC, false);
-        syncApiCall.call(params, syncApiCallback);
+//        var params:Object = {
+//            clientKey: _clientKey,
+//            devMode: _devMode,
+//            socialId: _socialId,
+//            developerFeatures: _appData.developerFeatures
+//        };
+//        var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SYNC, false);
+//        syncApiCall.call(params, syncApiCallback);
     }
 
     private function syncApiCallback(result:SLTApiCallResult):void {

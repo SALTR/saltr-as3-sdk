@@ -50,25 +50,26 @@ public class FlexUnitRunner extends Sprite {
     public function currentRunTestSuite():Array {
         var testsToRun:Array = new Array();
         testsToRun.push(SLTSaltrMobileTest);
-        testsToRun.push(SLTImportLevelsMobileTest);
-        testsToRun.push(SLTStartTest);
-        testsToRun.push(SLTAppDataTest);
-        testsToRun.push(SLTLevelDataTest);
-        testsToRun.push(SLTCellTest);
-        testsToRun.push(SLTCellsTest);
-        testsToRun.push(SLTSaltrMobileTestWithConnection);
-        //testsToRun.push(SLTLoadLevelContentMobileTest);
-        testsToRun.push(SLTLevelTest);
-        testsToRun.push(SLT2DAssetInstanceTest);
-        testsToRun.push(SLTAddPropertiesApiCallTest);
-        testsToRun.push(SLTAppDataApiCallTest);
-        testsToRun.push(SLTHeartbeatApiCallTest);
-        testsToRun.push(SLTLevelContentApiCallTest);
-        testsToRun.push(SLTRegisterDeviceApiCallTest);
-        testsToRun.push(SLTRegisterUserApiCallTest);
-        testsToRun.push(SLTSendLevelEndApiCallTest);
-        testsToRun.push(SLTSyncApiCallTest);
-        testsToRun.push(SLTSaltrWebTest);
+
+//        testsToRun.push(SLTImportLevelsMobileTest);
+//        testsToRun.push(SLTStartTest);
+//        testsToRun.push(SLTAppDataTest);
+//        testsToRun.push(SLTLevelDataTest);
+//        testsToRun.push(SLTCellTest);
+//        testsToRun.push(SLTCellsTest);
+//        testsToRun.push(SLTSaltrMobileTestWithConnection);
+//        //testsToRun.push(SLTLoadLevelContentMobileTest);
+//        testsToRun.push(SLTLevelTest);
+//        testsToRun.push(SLT2DAssetInstanceTest);
+//        testsToRun.push(SLTAddPropertiesApiCallTest);
+//        testsToRun.push(SLTAppDataApiCallTest);
+//        testsToRun.push(SLTHeartbeatApiCallTest);
+//        testsToRun.push(SLTLevelContentApiCallTest);
+//        testsToRun.push(SLTRegisterDeviceApiCallTest);
+//        testsToRun.push(SLTRegisterUserApiCallTest);
+//        testsToRun.push(SLTSendLevelEndApiCallTest);
+//        testsToRun.push(SLTSyncApiCallTest);
+//        testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }
 }
