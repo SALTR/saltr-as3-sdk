@@ -352,7 +352,11 @@
             }
         }
     ],
-    "experiments": [],
+    "experiments": [{
+        "token": "EXP1",
+        "partition": "A",
+        "type": "feature"
+    }],
     "segments": [
         "77"
     ],

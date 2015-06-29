@@ -9,13 +9,14 @@ import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
 import saltr.repository.SLTMobileRepository;
+import saltr.repository.SLTRepositoryStorageManager;
 
 /**
 * The SLTStartTest class contain the saltr.start() method tests
 */
 public class SLTStartTest {
-    [Embed(source="../../../build/tests/saltr/app_data.json", mimeType="application/octet-stream")]
-    private static const AppDataJson:Class;
+    [Embed(source="../../../build/tests/saltr/app_data_cache.json", mimeType="application/octet-stream")]
+    private static const AppDataCacheJson:Class;
 
     private var clientKey:String = "";
     private var deviceId:String = "";
@@ -45,58 +46,33 @@ public class SLTStartTest {
     }
 
     /**
-     * startWithNoDeveloperFeaturesCheck.
-     * The intent of this test is to check the start() without defined developer features. An error should be thrown.
-     */
-    [Test(expects="Error")]
-    public function startWithNoDeveloperFeaturesCheck():void {
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.start();
-    }
-
-    /**
-     * startWithMissingLevelsCheck.
-     * The intent of this test is to check the start() without imported levels. An error should be thrown.
-     */
-//    [Test(expects="Error")]
-//    public function startWithMissingLevelsCheck():void {
-//        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-//        _saltr.useNoFeatures = true;
-//        _saltr.start();
-//    }
-
-    /**
      * startWithAppDataInitEmptyCheck.
      * The intent of this test is to check the start() which will call appdata.initEmpty().
      */
-//    [Test]
-//    public function startWithAppDataInitEmptyCheck():void {
-//        stub(mobileRepository).method("getObjectFromCache").returns(null);
-//        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-//        _saltr.repository = mobileRepository;
-//        _saltr.useNoFeatures = true;
-//        _saltr.useNoLevels = true;
-//        _saltr.start();
-//        var testPassed:Boolean = true;
-//        if (0 != _saltr.experiments.length || 0 != _saltr.getActiveFeatureTokens().length || null != _saltr.getFeatureProperties("token")) {
-//            testPassed = false;
-//        }
-//        assertEquals(true, testPassed);
-//    }
+    [Test]
+    public function startWithAppDataInitEmptyCheck():void {
+        stub(mobileRepository).method("getObjectFromCache").returns(null);
+        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.start();
+        var testPassed:Boolean = true;
+        if (0 != _saltr.experiments.length || 0 != _saltr.getActiveFeatureTokens().length || null != _saltr.getFeatureProperties("token")) {
+            testPassed = false;
+        }
+        assertEquals(true, testPassed);
+    }
 
     /**
      * startWithAppDataInitWithDataCheck.
      * The intent of this test is to check the start() which will call appdata.initWithData().
      */
-//    [Test]
-//    public function startWithAppDataInitWithDataCheck():void {
-//        stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new AppDataJson()));
-//        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-//        _saltr.repository = mobileRepository;
-//        _saltr.useNoFeatures = true;
-//        _saltr.useNoLevels = true;
-//        _saltr.start();
-//        assertEquals(1, _saltr.experiments.length);
-//    }
+    [Test]
+    public function startWithAppDataInitWithDataCheck():void {
+        stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new AppDataCacheJson()));
+        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.start();
+        assertEquals(1, _saltr.experiments.length);
+    }
 }
 }
