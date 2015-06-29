@@ -1,0 +1,362 @@
+{
+    "features": [
+        {
+            "token": "GAME_LEVELS",
+            "properties": {
+                "levels" : [
+                    {
+                        "id": 275707,
+                        "localIndex": 0,
+                        "globalIndex": 0,
+                        "packIndex": 0,
+                        "index": 0,
+                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310067_536.json",
+                        "version": 6,
+                        "variationVersion": 536,
+                        "properties": {
+                            "movesCount": "-1",
+                            "levelType": "rescue_objective",
+                            "objectives": {
+                                "rescue-pig": "5"
+                            },
+                            "star_milestones": "300,500,700",
+                            "boosts": {
+                                "BOOST_COLOR_REMOVER": false,
+                                "BOOST_MAGIC_SEED": false,
+                                "BOOST_SHOVEL": false
+                            },
+                            "isMelnSplashDisabled": true,
+                            "isMatchFiveExplosionDisabled": true,
+                            "isMatchFourExplosionDisabled": true,
+                            "isMatchCrossExplosionDisabled": true,
+                            "isFlyingMelonDisabled": true,
+                            "isTutorialDisabled": false,
+                            "tutorial": {
+                                "0": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[1,3],[2,2],[2,3],[3,3],[2,4]]",
+                                    "cellFrom": "[2,2]",
+                                    "cellTo": "[2,3]",
+                                    "balloonPosition": "[0, 660]"
+                                },
+                                "1": {
+                                    "type": "objective_info",
+                                    "id": "tutorial_item_size_info_2",
+                                    "balloonPosition": "[0,300]",
+                                    "pointerOrientation": "bottom"
+                                },
+                                "yy1": {
+                                    "type": "board_info",
+                                    "id": "tutorial_item_size_info_1",
+                                    "cells": "[[3, 5]]",
+                                    "balloonPosition": "[0, 300]"
+                                },
+                                "tt3": {
+                                    "type": "boost_info",
+                                    "id": "tutorial_item_size_info_2",
+                                    "balloonPosition": "[0,300]",
+                                    "pointerOrientation": "top"
+                                }
+                            }
+                        },
+                        "variationId": 310067
+                    },
+                    {
+                        "id": 275708,
+                        "localIndex": 1,
+                        "globalIndex": 1,
+                        "packIndex": 0,
+                        "index": 1,
+                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310068_583.json",
+                        "version": 6,
+                        "variationVersion": 583,
+                        "properties": {
+                            "movesCount": "-1",
+                            "levelType": "rescue_objective",
+                            "objectives": {
+                                "rescue-chick": "8"
+                            },
+                            "star_milestones": "300,500,700",
+                            "boosts": {
+                                "BOOST_COLOR_REMOVER": false,
+                                "BOOST_MAGIC_SEED": false,
+                                "BOOST_SHOVEL": false
+                            },
+                            "isMelnSplashDisabled": true,
+                            "isMatchFiveExplosionDisabled": true,
+                            "isMatchFourExplosionDisabled": false,
+                            "isMatchCrossExplosionDisabled": true,
+                            "isFlyingMelonDisabled": false,
+                            "isTutorialDisabled": false,
+                            "tutorial": {
+                                "0": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[2,3],[3,4],[3,3],[3,2],[3,1]]",
+                                    "cellFrom": "[2,3]",
+                                    "cellTo": "[3,3]",
+                                    "balloonPosition": "[0, 560]"
+                                },
+                                "1": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[3,1],[3,2],[3,3],[3,4]]",
+                                    "cellFrom": "[3,4]",
+                                    "cellTo": "[3,3]",
+                                    "balloonPosition": "[0, 560]"
+                                },
+                                "2": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[1,3],[1,4],[2,3],[2,4],[2,5]]",
+                                    "cellFrom": "[2,5]",
+                                    "cellTo": "[2,4]",
+                                    "balloonPosition": "[0,250]"
+                                },
+                                "3": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[2,4],[3,4],[4,4],[5,4]]",
+                                    "cellFrom": "[2,4]",
+                                    "cellTo": "[3,4]",
+                                    "balloonPosition": "[0,600]"
+                                }
+                            }
+                        },
+                        "variationId": 310068
+                    },
+                    {
+                        "id": 275709,
+                        "localIndex": 2,
+                        "globalIndex": 2,
+                        "packIndex": 0,
+                        "index": 2,
+                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310069_596.json",
+                        "version": 12,
+                        "variationVersion": 596,
+                        "properties": {
+                            "movesCount": "30",
+                            "levelType": "rescue_objective",
+                            "objectives": {
+                                "rescue-pig": "1"
+                            },
+                            "star_milestones": "300,500,700",
+                            "boosts": {
+                                "BOOST_COLOR_REMOVER": false,
+                                "BOOST_MAGIC_SEED": false,
+                                "BOOST_SHOVEL": false
+                            },
+                            "isMelnSplashDisabled": false,
+                            "isMatchFiveExplosionDisabled": true,
+                            "isMatchFourExplosionDisabled": true,
+                            "isMatchCrossExplosionDisabled": false,
+                            "isFlyingMelonDisabled": true,
+                            "isTutorialDisabled": true,
+                            "tutorial": {
+                                "0": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[0,3],[1,3],[2,3],[3,3],[2,2],[2,1]]",
+                                    "cellFrom": "[3,3]",
+                                    "cellTo": "[2,3]",
+                                    "balloonPosition": "[0, 560]"
+                                },
+                                "1": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[2,3],[2,4],[2,5],[2,6]]",
+                                    "cellFrom": "[2,3]",
+                                    "cellTo": "[2,4]",
+                                    "balloonPosition": "[0, 250]"
+                                },
+                                "2": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[5,4],[6,4],[7,4],[6,3],[6,5],[6,6]]",
+                                    "cellFrom": "[6,3]",
+                                    "cellTo": "[6,4]",
+                                    "balloonPosition": "[0,250]"
+                                },
+                                "3": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[3,6],[4,6],[5,6],[6,6]]",
+                                    "cellFrom": "[6,6]",
+                                    "cellTo": "[5,6]",
+                                    "balloonPosition": "[0,250]"
+                                }
+                            }
+                        },
+                        "variationId": 310069
+                    },
+                    {
+                        "id": 275710,
+                        "localIndex": 3,
+                        "globalIndex": 3,
+                        "packIndex": 0,
+                        "index": 3,
+                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310070_508.json",
+                        "version": 6,
+                        "variationVersion": 508,
+                        "properties": {
+                            "movesCount": "18",
+                            "levelType": "rescue_objective",
+                            "objectives": {
+                                "rescue-sheep": "4"
+                            },
+                            "star_milestones": "300,6730,9210",
+                            "boosts": {
+                                "BOOST_COLOR_REMOVER": false,
+                                "BOOST_MAGIC_SEED": false,
+                                "BOOST_SHOVEL": true
+                            },
+                            "isMelnSplashDisabled": true,
+                            "isMatchFiveExplosionDisabled": false,
+                            "isMatchCrossExplosionDisabled": true,
+                            "isFlyingMelonDisabled": true,
+                            "isTutorialDisabled": false,
+                            "tutorial": {
+                                "0": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[1,2],[2,2],[3,2],[4,2],[5,2],[3,3]]",
+                                    "cellFrom": "[3,3]",
+                                    "cellTo": "[3,2]",
+                                    "balloonPosition": "[0, 560]"
+                                },
+                                "1": {
+                                    "type": "board",
+                                    "id": "tutorial_item_size_1",
+                                    "cells": "[[3,2],[2,2]]",
+                                    "cellFrom": "[3,2]",
+                                    "cellTo": "[2,2]",
+                                    "balloonPosition": "[0,560]"
+                                }
+                            }
+                        },
+                        "variationId": 310070
+                    },
+                    {
+                        "id": 275711,
+                        "localIndex": 4,
+                        "globalIndex": 4,
+                        "packIndex": 0,
+                        "index": 4,
+                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310222_480.json",
+                        "version": 16,
+                        "variationVersion": 480,
+                        "properties": {
+                            "movesCount": "15",
+                            "levelType": "rescue_objective",
+                            "objectives": {
+                                "rescue-dog": "4"
+                            },
+                            "star_milestones": "10,6210,7950",
+                            "boosts": {
+                                "BOOST_COLOR_REMOVER": false,
+                                "BOOST_MAGIC_SEED": false,
+                                "BOOST_SHOVEL": false
+                            },
+                            "isMelnSplashDisabled": false,
+                            "isTutorialDisabled": true
+                        },
+                        "variationId": 310222
+                    }
+                ]
+            },
+            "type": "gameLevels"
+        },
+        {
+            "token": "COLLECT_SCROLLING1",
+            "properties": {
+                "bottom-row-limit": 3
+            },
+            "type": "generic"
+        },
+        {
+            "token": "DROPPING_REGULATOR",
+            "properties": {
+                "droppingPhases": "2,2,2"
+            },
+            "type": "generic"
+        },
+        {
+            "token": "SETTINGS",
+            "type": "generic",
+            "properties": {
+                "general": {
+                    "lifeRefillTime": 5
+                },
+                "popups": {
+                    "sendRequestRecurrence": "8",
+                    "showFbConnectAtLevel": "5",
+                    "inboxMessagesLimit": "100",
+                    "invitePopupFriendsLimit": "20",
+                    "sendLivesPopupFriendsLimit": "20",
+                    "showShareReRequestAtLevel": "10"
+                }
+            }
+        },
+        {
+            "token": "LOCAL_NOTIFICATIONS1",
+            "type": "generic",
+            "properties": {
+                "lowIdleTime": 24,
+                "criticalIdleTime": 330,
+                "firstReminder": 21,
+                "mediumIdleTime": 69,
+                "highIdleTime": 165
+            },
+            "featureType": "generic"
+        },
+        {
+            "token": "SCORES",
+            "type": "generic",
+            "properties": {
+                "collectPoints": "10",
+                "autoMatchesPoints": "20",
+                "jamRemoving": "100",
+                "boxRemoving": "50",
+                "iceRemoving": "50",
+                "cactusRemoving": "50",
+                "sandRemoving": "50",
+                "hayRemoving": "50",
+                "rockRemoving": "50",
+                "acornRemoving": "50",
+                "rescueObjectivePoints": "500",
+                "milkRescuePoints": "1000",
+                "melnSplashPoints": "1000",
+                "radialBombExplosion": "200",
+                "colorBombExplosion": "200",
+                "crossBombExplosion": "200",
+                "flyingBombExplosion": "100",
+                "lineBombExplosion": "100"
+            }
+        },
+        {
+            "token": "PRICES",
+            "type": "generic",
+            "properties": {
+                "LIFE_REFILL": {
+                    "price": 100
+                },
+                "OUT_OF_MOVES": {
+                    "price": 50
+                },
+                "SHOVEL": {
+                    "order": 1,
+                    "price": 150,
+                    "packSize": 3
+                }
+            }
+        }
+    ],
+    "experiments": [],
+    "segments": [
+        "77"
+    ],
+    "saltrUserId": "s_100000024783448",
+    "levelType": "matrix",
+    "success": true
+}
