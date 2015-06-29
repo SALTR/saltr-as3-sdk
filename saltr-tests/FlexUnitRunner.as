@@ -60,14 +60,14 @@ public class FlexUnitRunner extends Sprite {
 //        //testsToRun.push(SLTLoadLevelContentMobileTest);
 //        testsToRun.push(SLTLevelTest);
 //        testsToRun.push(SLT2DAssetInstanceTest);
-//        testsToRun.push(SLTAddPropertiesApiCallTest);
-//        testsToRun.push(SLTAppDataApiCallTest);
-//        testsToRun.push(SLTHeartbeatApiCallTest);
-//        testsToRun.push(SLTLevelContentApiCallTest);
-//        testsToRun.push(SLTRegisterDeviceApiCallTest);
-//        testsToRun.push(SLTRegisterUserApiCallTest);
-//        testsToRun.push(SLTSendLevelEndApiCallTest);
-//        testsToRun.push(SLTSyncApiCallTest);
+        testsToRun.push(SLTAddPropertiesApiCallTest);
+        testsToRun.push(SLTAppDataApiCallTest);
+        testsToRun.push(SLTHeartbeatApiCallTest);
+        testsToRun.push(SLTLevelContentApiCallTest);
+        testsToRun.push(SLTRegisterDeviceApiCallTest);
+        testsToRun.push(SLTRegisterUserApiCallTest);
+        testsToRun.push(SLTSendLevelEndApiCallTest);
+        testsToRun.push(SLTSyncApiCallTest);
 //        testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }

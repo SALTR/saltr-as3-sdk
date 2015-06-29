@@ -1,0 +1,11 @@
+{
+    "response": [
+        {
+            "success": false,
+            "error": {
+                "code": "1002",
+                "message": "Cannot find identity based on social or device identifiers."
+            }
+        }
+    ]
+}

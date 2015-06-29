@@ -2,12 +2,16 @@
  * Created by TIGR on 5/12/2015.
  */
 package tests.saltr {
+import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
 import saltr.SLTSaltrWeb;
 import saltr.game.SLTLevel;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 public class SLTSaltrTest {
-    public static const GAME_LEVELS_FEATURE:String = "GAME_LEVELS";
+    public static const GAME_LEVELS_FEATURE:String = SLTConfig.DEFAULT_GAME_LEVELS_FEATURE_TOKEN;
     private var _saltrMobile:SLTSaltrMobile;
     private var _saltrWeb:SLTSaltrWeb;
     private var _isSaltrMobile:Boolean;
