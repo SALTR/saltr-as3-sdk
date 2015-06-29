@@ -11,7 +11,7 @@ import org.flexunit.runner.FlexUnitCore;
 
 import tests.saltr.SLTAppDataTest;
 import tests.saltr.SLTLevelDataTest;
-import tests.saltr.SLTImportLevelsMobileTest;
+import tests.saltr.SLTDefineGameLevelsMobileTest;
 import tests.saltr.SLTLoadLevelContentMobileTest;
 import tests.saltr.SLTSaltrMobileTest;
 import tests.saltr.SLTSaltrMobileTestWithConnection;
@@ -50,8 +50,7 @@ public class FlexUnitRunner extends Sprite {
     public function currentRunTestSuite():Array {
         var testsToRun:Array = new Array();
         testsToRun.push(SLTSaltrMobileTest);
-
-//        testsToRun.push(SLTImportLevelsMobileTest);
+        testsToRun.push(SLTDefineGameLevelsMobileTest);
 //        testsToRun.push(SLTStartTest);
 //        testsToRun.push(SLTAppDataTest);
 //        testsToRun.push(SLTLevelDataTest);
