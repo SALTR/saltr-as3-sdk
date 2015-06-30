@@ -12,7 +12,7 @@ import org.flexunit.runner.FlexUnitCore;
 import tests.saltr.SLTAppDataTest;
 import tests.saltr.SLTLevelDataTest;
 import tests.saltr.SLTDefineGameLevelsMobileTest;
-import tests.saltr.SLTLoadLevelContentMobileTest;
+import tests.saltr.SLTInitLevelContentMobileTest;
 import tests.saltr.SLTSaltrMobileTest;
 import tests.saltr.SLTSaltrMobileTestWithConnection;
 import tests.saltr.SLTSaltrWebTest;
@@ -57,7 +57,7 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTCellTest);
         testsToRun.push(SLTCellsTest);
         testsToRun.push(SLTSaltrMobileTestWithConnection);
-//        //testsToRun.push(SLTLoadLevelContentMobileTest);
+        testsToRun.push(SLTInitLevelContentMobileTest);
         testsToRun.push(SLTLevelTest);
         testsToRun.push(SLT2DAssetInstanceTest);
         testsToRun.push(SLTAddPropertiesApiCallTest);
