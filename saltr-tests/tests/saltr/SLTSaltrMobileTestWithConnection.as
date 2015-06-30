@@ -58,7 +58,7 @@ public class SLTSaltrMobileTestWithConnection {
 
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.apiFactory = apiFactory;
-        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.repository = mobileRepository;
 
         _saltr.defineGenericFeature("SETTINGS", {
             general: {

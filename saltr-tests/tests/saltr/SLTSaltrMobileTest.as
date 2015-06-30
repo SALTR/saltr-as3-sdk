@@ -34,7 +34,7 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
     public function tearUp():void {
         stub(mobileRepository).method("getObjectFromApplication").returns(getJson(new AppDataJson()));
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.repository = mobileRepository;
 
         //defineGameLevels("GAME_LEVELS") in this test it is just a dummy value because of MobileRepository's mocking
         _saltr.defineGameLevels(SLTSaltrTest.GAME_LEVELS_FEATURE);

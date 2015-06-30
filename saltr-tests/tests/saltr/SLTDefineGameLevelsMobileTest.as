@@ -42,7 +42,7 @@ public class SLTDefineGameLevelsMobileTest {
     [Before]
     public function tearUp():void {
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.repository = mobileRepository;
     }
 
     [After]

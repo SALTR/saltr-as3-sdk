@@ -53,7 +53,7 @@ public class SLTStartTest {
     public function startWithAppDataInitEmptyCheck():void {
         stub(mobileRepository).method("getObjectFromCache").returns(null);
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.repository = mobileRepository;
         _saltr.start();
         var testPassed:Boolean = true;
         if (0 != _saltr.experiments.length || 0 != _saltr.getActiveFeatureTokens().length || null != _saltr.getFeatureProperties("token")) {
@@ -70,7 +70,7 @@ public class SLTStartTest {
     public function startWithAppDataInitWithDataCheck():void {
         stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new AppDataCacheJson()));
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.repositoryStorageManager = new SLTRepositoryStorageManager(mobileRepository);
+        _saltr.repository = mobileRepository;
         _saltr.start();
         assertEquals(1, _saltr.experiments.length);
     }

@@ -12,6 +12,7 @@ import saltr.api.SLTApiCall;
 import saltr.api.SLTApiCallResult;
 import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
+import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.status.SLTStatus;
@@ -91,10 +92,10 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * The repository storage manager.
+     * The repository.
      */
-    public function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
-        _repositoryStorageManager = value;
+    public function set repository(value:ISLTRepository):void {
+        _repositoryStorageManager = new SLTRepositoryStorageManager(value);
         _levelUpdater.repositoryStorageManager = _repositoryStorageManager;
     }
 
