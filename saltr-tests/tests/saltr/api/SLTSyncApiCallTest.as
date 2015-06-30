@@ -148,24 +148,24 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
     }
 
     override protected function getCorrectMobileCallParams():Object {
-        var devFeatures:Dictionary = new Dictionary();
-        devFeatures["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, {"bottom-row-limit": 3}, true);
+        var features:Dictionary = new Dictionary();
+        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, {"bottom-row-limit": 3}, true);
         return {
             clientKey: "clientKey",
             deviceId: "deviceId",
             devMode: true,
-            developerFeatures: devFeatures
+            defaultFeatures: features
         };
     }
 
     override protected function getCorrectWebCallParams():Object {
-        var devFeatures:Dictionary = new Dictionary();
-        devFeatures["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, {"bottom-row-limit": 3}, true);
+        var features:Dictionary = new Dictionary();
+        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, {"bottom-row-limit": 3}, true);
         return {
             clientKey: "clientKey",
             socialId: "socialId",
             devMode: true,
-            developerFeatures: devFeatures
+            defaultFeatures: features
         };
     }
 }
