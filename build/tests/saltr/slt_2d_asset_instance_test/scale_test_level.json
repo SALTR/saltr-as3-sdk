@@ -1,0 +1,77 @@
+{
+    "boards": {
+        "UNTITLED_1": {
+            "layers": [
+                {
+                    "layerId": "default",
+                    "token": "default",
+                    "assets": [
+                        {
+                            "assetId": 174,
+                            "x": 189,
+                            "y": 11,
+                            "scaleX": 1,
+                            "scaleY": 1.286,
+                            "rotation": 0,
+                            "stateId": 308,
+                            "state": 308,
+                            "positions": []
+                        },
+                        {
+                            "assetId": 174,
+                            "x": 434,
+                            "y": 53,
+                            "scaleX": 1.528,
+                            "scaleY": 1,
+                            "rotation": 0,
+                            "stateId": 308,
+                            "state": 308,
+                            "positions": []
+                        }
+                    ]
+                },
+                {
+                    "layerId": "aaa",
+                    "token": "aaa",
+                    "assets": []
+                }
+            ],
+            "position": [
+                100,
+                100
+            ],
+            "properties": {},
+            "width": 1000,
+            "height": 300
+        }
+    },
+    "assetStates": {
+        "308": "default",
+        "309": "green"
+    },
+    "assets": {
+        "174": {
+            "token": "Blue",
+            "states": {
+                "308": {
+                    "pivotX": 0,
+                    "pivotY": 0,
+                    "height": 199,
+                    "token": "default",
+                    "width": 199,
+                    "properties": {}
+                },
+                "309": {
+                    "pivotX": 0.5,
+                    "pivotY": 0.5,
+                    "height": 199,
+                    "token": "green",
+                    "width": 199,
+                    "properties": {}
+                }
+            },
+            "properties": {}
+        }
+    },
+    "properties": {}
+}
