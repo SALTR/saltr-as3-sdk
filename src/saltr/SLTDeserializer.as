@@ -61,7 +61,7 @@ public class SLTDeserializer {
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 var featureNode:Object = featureNodes[i];
                 var token:String = featureNode.token;
-                var featureType:String = featureNode.featureType;
+                var featureType:String = featureNode.type;
                 var properties:Object = featureNode.properties;
                 var required:Boolean = featureNode.required;
                 if (SLTConfig.FEATURE_TYPE_GAME_LEVELS == decodeFeatureType && SLTConfig.FEATURE_TYPE_GAME_LEVELS == featureType) {
