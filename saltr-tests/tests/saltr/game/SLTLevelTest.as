@@ -26,10 +26,7 @@ public class SLTLevelTest {
 
     [Before]
     public function tearUp():void {
-        var levelProperties:Object = {
-            "movesCount": "18"
-        };
-        _level = new SLTLevel("225045", "246970", "matching", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_MATCHING);
     }
 
     [After]
