@@ -42,6 +42,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
         if (_outdatedLevels.length > 0) {
             _levelIndexToUpdate = 0;
             _isInProcess = true;
+            startNextLevelsUpdate();
             startLevelUpdateTimer();
         }
     }
