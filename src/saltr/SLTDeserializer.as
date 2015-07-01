@@ -83,8 +83,7 @@ public class SLTDeserializer {
         var feature:Object = null;
         var featureNodes:Array = rootNode.features as Array;
         if (null != featureNodes) {
-            var len:int = featureNodes.length;
-            for (var i:int = 0, len:int = len; i < len; ++i) {
+            for (var i:int = 0; i < featureNodes.length; ++i) {
                 var featureNode:Object = featureNodes[i];
                 if (featureToken == featureNode.token && featureType == featureNode.type) {
                     feature = featureNode;

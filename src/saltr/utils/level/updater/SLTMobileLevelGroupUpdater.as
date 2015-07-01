@@ -56,7 +56,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     override protected function resetUpdateProcess():void {
         _outdatedLevels.length = 0;
         _updatedLevelCount = 0;
-        _levelIndexToUpdate = -1;
+        _levelIndexToUpdate = 0;
         super.resetUpdateProcess();
     }
 
