@@ -86,6 +86,9 @@ public class SLTSaltrMobile {
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
     }
 
+    /**
+     * The API factory.
+     */
     public function set apiFactory(value:SLTApiFactory):void {
         _apiFactory = value;
         _levelUpdater.apiFactory = _apiFactory;
@@ -162,7 +165,7 @@ public class SLTSaltrMobile {
     /**
      * Provides the game level feature properties by provided token.
      * @param token The unique identifier of the feature
-     * @return Object The feature's properties.
+     * @return SLTLevelData The level data object.
      */
     public function getGameLevelFeatureProperties(token:String):SLTLevelData {
         return _appData.getGameLevelsProperties(token);
