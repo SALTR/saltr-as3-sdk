@@ -14,6 +14,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implements ISLTMobileLevelUpdater {
     private var _gameLevelGroups:Vector.<SLTMobileLevelGroupUpdater>;
     private var _levelUpdateTimer:Timer;

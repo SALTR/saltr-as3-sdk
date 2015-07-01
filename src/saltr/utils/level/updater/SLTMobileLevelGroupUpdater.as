@@ -14,7 +14,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
-
+/**
+ * @private
+ */
 public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements ISLTMobileLevelUpdater {
     private var _featureToken:String;
     private var _outdatedLevels:Vector.<SLTLevel>;

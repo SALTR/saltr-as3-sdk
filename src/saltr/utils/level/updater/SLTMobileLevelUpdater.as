@@ -10,6 +10,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTMobileLevelUpdater extends EventDispatcher {
     saltr_internal static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
     saltr_internal static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;

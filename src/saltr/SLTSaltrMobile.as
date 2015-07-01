@@ -277,6 +277,12 @@ public class SLTSaltrMobile {
         }
     }
 
+    /**
+     * Initialize level content with latest data from saltr.
+     * @param gameLevelsFeatureToken The "GameLevels" feature token
+     * @param sltLevel The level.
+     * @param callback The callback function. Called when level initialization completed.
+     */
     public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
         connect(successCallback, failCallback, null, null);
 
