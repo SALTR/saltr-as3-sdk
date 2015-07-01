@@ -9,6 +9,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTHeartbeatApiCall extends SLTApiCall {
     public function SLTHeartbeatApiCall(isMobile:Boolean = true) {
         super(isMobile);

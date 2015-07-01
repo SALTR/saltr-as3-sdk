@@ -10,6 +10,9 @@ import saltr.game.SLTLevel;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTDeserializer {
 
     private static function sortByIndex(p1:Object, p2:Object):int {
