@@ -288,6 +288,7 @@ public class SLTSaltrMobile {
 
         function successCallback():void {
             _levelUpdater.addEventListener(Event.COMPLETE, function (e:Event):void {
+                e.target.removeEventListener(Event.COMPLETE, arguments.callee);
                 initLevelContent(gameLevelsFeatureToken, sltLevel);
 
                 callback(true);
