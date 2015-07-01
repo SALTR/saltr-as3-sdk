@@ -9,6 +9,9 @@ import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTAppData {
 
     private var _activeFeatures:Dictionary;
@@ -24,19 +27,19 @@ public class SLTAppData {
         _experiments = new <SLTExperiment>[];
     }
 
-    public function get defaultFeatures():Dictionary {
+    saltr_internal function get defaultFeatures():Dictionary {
         return _defaultFeatures;
     }
 
-    public function get gameLevelsFeatures():Dictionary {
+    saltr_internal function get gameLevelsFeatures():Dictionary {
         return _gameLevelsFeatures;
     }
 
-    public function get experiments():Vector.<SLTExperiment> {
+    saltr_internal function get experiments():Vector.<SLTExperiment> {
         return _experiments;
     }
 
-    public function getActiveFeatureTokens():Vector.<String> {
+    saltr_internal function getActiveFeatureTokens():Vector.<String> {
         var tokens:Vector.<String> = new Vector.<String>();
         for each(var feature:SLTFeature in _activeFeatures) {
             tokens.push(feature.token);
@@ -44,7 +47,7 @@ public class SLTAppData {
         return tokens;
     }
 
-    public function getFeatureProperties(token:String):Object {
+    saltr_internal function getFeatureProperties(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
         if (activeFeature != null) {
             return activeFeature.properties;
@@ -57,7 +60,7 @@ public class SLTAppData {
         return null;
     }
 
-    public function getGameLevelsProperties(token:String):SLTLevelData {
+    saltr_internal function getGameLevelsProperties(token:String):SLTLevelData {
         var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
         if (null != gameLevelsFeature) {
             return gameLevelsFeature.properties as SLTLevelData;
@@ -66,7 +69,7 @@ public class SLTAppData {
     }
 
 
-    public function defineFeature(token:String, properties:*, type:String, required:Boolean):void {
+    saltr_internal function defineFeature(token:String, properties:*, type:String, required:Boolean):void {
         if (!SLTUtils.validateFeatureToken(token)) {
             throw new Error("feature's token value is incorrect.");
         }
@@ -80,13 +83,13 @@ public class SLTAppData {
         }
     }
 
-    public function initEmpty():void {
+    saltr_internal function initEmpty():void {
         for (var i:String in _defaultFeatures) {
             _activeFeatures[i] = _defaultFeatures[i];
         }
     }
 
-    public function initWithData(data:Object):void {
+    saltr_internal function initWithData(data:Object):void {
         try {
             _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
             _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC);
