@@ -96,10 +96,9 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
 
     private function startNextLevelsUpdate():void {
         for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
-            var levelIndexToUpdate:int = _levelIndexToUpdate + 1;
-            if (levelIndexToUpdate < _outdatedLevels.length) {
-                _levelIndexToUpdate = levelIndexToUpdate;
+            if (_levelIndexToUpdate < _outdatedLevels.length) {
                 loadLevelContentFromSaltr(_outdatedLevels[_levelIndexToUpdate]);
+                ++_levelIndexToUpdate;
             } else {
                 return;
             }
