@@ -19,6 +19,7 @@ import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
+import saltr.utils.SLTLogger;
 import saltr.utils.SLTMobileDeviceInfo;
 import saltr.utils.dialog.SLTMobileDialogController;
 import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
@@ -57,6 +58,7 @@ public class SLTSaltrMobile {
     private var _heartBeatTimerStarted:Boolean;
     private var _apiFactory:SLTApiFactory;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
+    private var _logger:SLTLogger;
 
     /**
      * Class constructor.
@@ -65,6 +67,7 @@ public class SLTSaltrMobile {
      * @param deviceId The device unique identifier.
      */
     public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String) {
+        _logger = SLTLogger.getInstance();
         _flashStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
@@ -107,6 +110,7 @@ public class SLTSaltrMobile {
      */
     public function set devMode(value:Boolean):void {
         _devMode = value;
+        _logger.debug = _devMode;
     }
 
     /**
