@@ -57,6 +57,11 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
         return _isInProcess;
     }
 
+    override protected function resetUpdateProcess():void {
+        _gameLevelGroups.length = 0;
+        super.resetUpdateProcess();
+    }
+
     private function startLevelUpdateTimer():void {
         stopLevelUpdateTimer();
         _levelUpdateTimer = new Timer(SLTMobileLevelUpdater.LEVEL_UPDATE_TIMER_DELAY);
