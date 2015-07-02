@@ -11,6 +11,7 @@ import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
+import saltr.utils.SLTLogger;
 
 use namespace saltr_internal;
 
@@ -39,8 +40,10 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
 
     public function update():void {
         if (_isInProcess) {
+            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: "+_featureToken+", not executed _isInProcess = true");
             return;
         }
+        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: "+_featureToken+", _outdatedLevels.length: "+_outdatedLevels.length);
         if (_outdatedLevels.length > 0) {
             _levelIndexToUpdate = 0;
             _isInProcess = true;
@@ -127,6 +130,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
             ++_updatedLevelCount;
             if (_updatedLevelCount >= _outdatedLevels.length) {
                 resetUpdateProcess();
+                SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: "+_featureToken+", updateCompleted = "+updateCompleted());
             }
         }
     }

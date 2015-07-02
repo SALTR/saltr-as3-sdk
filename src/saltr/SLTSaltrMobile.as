@@ -291,8 +291,10 @@ public class SLTSaltrMobile {
         connect(successCallback, failCallback, null, null);
 
         function successCallback():void {
+            SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest connect() success callback called");
             _levelUpdater.addEventListener(Event.COMPLETE, function (e:Event):void {
                 e.target.removeEventListener(Event.COMPLETE, arguments.callee);
+                SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest _levelUpdater _complete event received");
                 initLevelContent(gameLevelsFeatureToken, sltLevel);
 
                 callback(true);
@@ -300,6 +302,7 @@ public class SLTSaltrMobile {
         }
 
         function failCallback():void {
+            SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest() fail callback called");
             callback(false);
         }
     }
@@ -380,6 +383,7 @@ public class SLTSaltrMobile {
 
     //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
     private function appDataLoadSuccessCallback(result:SLTApiCallResult):void {
+        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadSuccessCallback() called");
         _isLoading = false;
 
         if (_devMode && !_isSynced) {
@@ -407,6 +411,7 @@ public class SLTSaltrMobile {
     }
 
     private function appDataLoadFailCallback(status:SLTStatus):void {
+        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
         _isLoading = false;
         if (status.statusCode == SLTStatus.API_ERROR) {
             _connectFailCallback(new SLTStatusAppDataLoadFail());
@@ -454,6 +459,7 @@ public class SLTSaltrMobile {
     }
 
     private function sync():void {
+        SLTLogger.getInstance().log("SLTSaltrMobile.sync() called");
         var params:Object = {
             clientKey: _clientKey,
             devMode: _devMode,

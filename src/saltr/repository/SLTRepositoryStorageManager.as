@@ -7,6 +7,7 @@ import flash.filesystem.File;
 import saltr.SLTConfig;
 import saltr.SLTDeserializer;
 import saltr.saltr_internal;
+import saltr.utils.SLTLogger;
 import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
@@ -165,6 +166,7 @@ public class SLTRepositoryStorageManager {
      * @param object The object to store.
      */
     saltr_internal function cacheAppData(object:Object):void {
+        SLTLogger.getInstance().log("SLTRepositoryStorageManager.cacheAppData() called");
         _repository.cacheObject(getCachedAppDataUrl(), object);
     }
 
