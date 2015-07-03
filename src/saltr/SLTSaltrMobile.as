@@ -303,6 +303,7 @@ public class SLTSaltrMobile {
 
         function failCallback():void {
             SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest() fail callback called");
+            initLevelContent(gameLevelsFeatureToken, sltLevel);
             callback(false);
         }
     }
