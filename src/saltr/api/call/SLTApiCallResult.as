@@ -1,4 +1,4 @@
-package saltr.api {
+package saltr.api.call {
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 

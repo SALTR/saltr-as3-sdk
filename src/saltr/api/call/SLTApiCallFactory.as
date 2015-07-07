@@ -1,8 +1,10 @@
 /**
  * Created by daal on 4/13/15.
  */
-package saltr.api {
-public class SLTApiFactory {
+package saltr.api.call {
+import saltr.api.*;
+
+public class SLTApiCallFactory {
     public static const API_CALL_ADD_PROPERTIES:String = "AddProperties";
     public static const API_CALL_APP_DATA:String = "AppData";
     public static const API_CALL_HEARTBEAT:String = "Heartbeat";

@@ -12,8 +12,8 @@ import org.flexunit.asserts.assertEquals;
 import saltr.SLTConfig;
 
 import saltr.SLTFeature;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallResult;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -33,7 +33,7 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
     public var resource:SLTResourceMock;
 
     public function SLTSyncApiCallTest() {
-        super(SLTApiFactory.API_CALL_SYNC);
+        super(SLTApiCallFactory.API_CALL_SYNC);
     }
 
     [Before]

@@ -2,9 +2,9 @@
  * Created by TIGR on 5/8/2015.
  */
 package tests.saltr.api {
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCall;
+import saltr.api.call.SLTApiCallResult;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.resource.SLTResource;
 import saltr.saltr_internal;
 
@@ -14,11 +14,11 @@ public class SLTApiCallTest {
     protected var _call:SLTApiCall;
     private var _callName:String;
 
-    private var _apiFactory:SLTApiFactory;
+    private var _apiFactory:SLTApiCallFactory;
 
     public function SLTApiCallTest(callName:String) {
         _callName = callName;
-        _apiFactory = new SLTApiFactory();
+        _apiFactory = new SLTApiCallFactory();
     }
 
     protected function createCallMobile():void {

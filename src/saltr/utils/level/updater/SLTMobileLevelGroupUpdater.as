@@ -5,9 +5,10 @@ package saltr.utils.level.updater {
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCall;
+import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.SLTApiCallLevelContentResult;
+import saltr.api.handler.SLTLevelContentApiCallHandler;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -26,10 +27,13 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private var _levelUpdateTimer:Timer;
     private var _allLevels:Vector.<SLTLevel>;
 
-    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
+    private var _levelContentHandler:SLTLevelContentApiCallHandler;
+
+    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         super(repositoryStorageManager, apiFactory, requestIdleTimeout);
         _outdatedLevels = new Vector.<SLTLevel>();
         resetUpdateProcess();
+        initApiCallHandlers();
     }
 
     public function init(featureToken:String, allLevels:Vector.<SLTLevel>):void {
@@ -40,10 +44,10 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
 
     public function update():void {
         if (_isInProcess) {
-            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: "+_featureToken+", not executed _isInProcess = true");
+            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: " + _featureToken + ", not executed _isInProcess = true");
             return;
         }
-        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: "+_featureToken+", _outdatedLevels.length: "+_outdatedLevels.length);
+        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: " + _featureToken + ", _outdatedLevels.length: " + _outdatedLevels.length);
         if (_outdatedLevels.length > 0) {
             _levelIndexToUpdate = 0;
             _isInProcess = true;
@@ -117,26 +121,30 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
      */
     private function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
         var params:Object = {
-            levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
+            sltLevel: sltLevel
         };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_LEVEL_CONTENT, true);
-        levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
-
-        function levelContentApiCallback(result:SLTApiCallResult):void {
-            var content:Object = result.data;
-            if (result.success) {
-                cacheLevelContent(sltLevel, content);
-            }
-            ++_updatedLevelCount;
-            if (_updatedLevelCount >= _outdatedLevels.length) {
-                resetUpdateProcess();
-                SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: "+_featureToken+", updateCompleted = "+updateCompleted());
-            }
-        }
+        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
+        levelContentApiCall.call(params, _levelContentHandler, _requestIdleTimeout);
     }
 
     private function cacheLevelContent(level:SLTLevel, content:Object):void {
         _repositoryStorageManager.cacheLevelContent(_featureToken, level.globalIndex, level.version, content);
+    }
+
+    private function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
+        var content:Object = result.data;
+        if (result.success) {
+            cacheLevelContent(result.level, content);
+        }
+        ++_updatedLevelCount;
+        if (_updatedLevelCount >= _outdatedLevels.length) {
+            resetUpdateProcess();
+            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + updateCompleted());
+        }
+    }
+
+    private function initApiCallHandlers():void {
+        _levelContentHandler = new SLTLevelContentApiCallHandler(processLevelContentLoaded);
     }
 }
 }

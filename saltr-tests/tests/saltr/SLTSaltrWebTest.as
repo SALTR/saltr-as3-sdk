@@ -9,7 +9,7 @@
 //
 //import saltr.SLTSaltrWeb;
 //import saltr.api.SLTApiCallResult;
-//import saltr.api.SLTApiFactory;
+//import saltr.api.SLTApiCallFactory;
 //import saltr.game.SLTLevel;
 //import saltr.saltr_internal;
 //
@@ -33,7 +33,7 @@
 //    [Rule]
 //    public var mocks:MockolateRule = new MockolateRule();
 //    [Mock(type="nice")]
-//    public var apiFactory:SLTApiFactory;
+//    public var apiFactory:SLTApiCallFactory;
 //    [Mock(type="nice")]
 //    public var apiCallGeneralMock:ApiCallMock;
 //    [Mock(type="nice")]

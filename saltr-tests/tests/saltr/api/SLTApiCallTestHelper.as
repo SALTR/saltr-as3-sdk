@@ -4,8 +4,8 @@
 package tests.saltr.api {
 import flash.net.URLVariables;
 
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
+import saltr.api.call.SLTApiCall;
+import saltr.api.call.SLTApiCallResult;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;

@@ -11,8 +11,8 @@ import saltr.SLTConfig;
 
 import saltr.SLTExperiment;
 import saltr.SLTSaltrMobile;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallResult;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -39,7 +39,7 @@ public class SLTSaltrMobileTestWithConnection {
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
     [Mock(type="nice")]
-    public var apiFactory:SLTApiFactory;
+    public var apiFactory:SLTApiCallFactory;
     [Mock(type="nice")]
     public var apiCallMock:ApiCallMock;
 

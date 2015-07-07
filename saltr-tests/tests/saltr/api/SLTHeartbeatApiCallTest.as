@@ -8,8 +8,8 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTConfig;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallResult;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -29,7 +29,7 @@ public class SLTHeartbeatApiCallTest extends SLTApiCallTest {
     public var resource:SLTResourceMock;
 
     public function SLTHeartbeatApiCallTest() {
-        super(SLTApiFactory.API_CALL_HEARTBEAT);
+        super(SLTApiCallFactory.API_CALL_HEARTBEAT);
     }
 
     [Before]

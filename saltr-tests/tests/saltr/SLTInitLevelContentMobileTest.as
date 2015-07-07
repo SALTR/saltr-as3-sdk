@@ -8,7 +8,7 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
@@ -34,7 +34,7 @@ public class SLTInitLevelContentMobileTest {
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
     [Mock(type="nice")]
-    public var apiFactory:SLTApiFactory;
+    public var apiFactory:SLTApiCallFactory;
     [Mock(type="nice")]
     public var apiCallGeneralMock:ApiCallMock;
     [Mock(type="nice")]

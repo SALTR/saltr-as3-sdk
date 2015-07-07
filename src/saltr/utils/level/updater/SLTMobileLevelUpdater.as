@@ -4,7 +4,7 @@
 package saltr.utils.level.updater {
 import flash.events.EventDispatcher;
 
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
@@ -19,16 +19,16 @@ public class SLTMobileLevelUpdater extends EventDispatcher {
 
     protected var _isInProcess:Boolean;
     protected var _repositoryStorageManager:SLTRepositoryStorageManager;
-    protected var _apiFactory:SLTApiFactory;
+    protected var _apiFactory:SLTApiCallFactory;
     protected var _requestIdleTimeout:int;
 
-    public function SLTMobileLevelUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
+    public function SLTMobileLevelUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
         _apiFactory = apiFactory;
         _requestIdleTimeout = requestIdleTimeout;
     }
 
-    public function set apiFactory(value:SLTApiFactory):void {
+    public function set apiFactory(value:SLTApiCallFactory):void {
         _apiFactory = value;
     }
 

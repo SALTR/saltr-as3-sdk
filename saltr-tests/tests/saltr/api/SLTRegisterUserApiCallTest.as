@@ -7,8 +7,8 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallResult;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -28,7 +28,7 @@ public class SLTRegisterUserApiCallTest extends SLTApiCallTest {
     public var resource:SLTResourceMock;
 
     public function SLTRegisterUserApiCallTest() {
-        super(SLTApiFactory.API_CALL_REGISTER_USER);
+        super(SLTApiCallFactory.API_CALL_REGISTER_USER);
     }
 
     [Before]

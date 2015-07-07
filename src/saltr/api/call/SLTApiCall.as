@@ -1,6 +1,10 @@
-package saltr.api {
+package saltr.api.call {
+import saltr.api.*;
+
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
+
+import saltr.api.handler.ISLTApiCallHandler;
 
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
@@ -19,7 +23,7 @@ public class SLTApiCall {
 
     protected var _url:String;
     protected var _params:Object;
-    protected var _callback:Function;
+    protected var _handler:ISLTApiCallHandler;
     protected var _isMobile:Boolean;
     protected var _client:String;
 
@@ -44,9 +48,9 @@ public class SLTApiCall {
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(params:Object, callback:Function, timeout:int = 0):void {
+    saltr_internal function call(params:Object, handler:ISLTApiCallHandler, timeout:int = 0):void {
         _params = params;
-        _callback = callback;
+        _handler = handler;
         var validationResult:Object = validateParams();
         if (validationResult.isValid == false) {
             returnValidationFailedResult(validationResult.message);
@@ -60,7 +64,7 @@ public class SLTApiCall {
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.success = false;
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, message);
-        _callback(apiCallResult);
+        _handler.handle(apiCallResult);
     }
 
     private function doCall(urlVars:URLVariables, timeout:int):void {
@@ -90,14 +94,14 @@ public class SLTApiCall {
 
         apiCallResult.success = success;
         resource.dispose();
-        _callback(apiCallResult);
+        _handler.handle(apiCallResult);
     }
 
     saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         resource.dispose();
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
-        _callback(apiCallResult);
+        _handler.handle(apiCallResult);
     }
 
 

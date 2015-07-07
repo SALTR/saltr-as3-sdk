@@ -8,7 +8,7 @@ import flash.utils.Dictionary;
 import flash.utils.Timer;
 
 import saltr.SLTFeature;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 import saltr.utils.SLTLogger;
@@ -22,7 +22,7 @@ public class SLTMobileLevelsFeaturesUpdater extends SLTMobileLevelUpdater implem
     private var _gameLevelGroups:Vector.<SLTMobileLevelGroupUpdater>;
     private var _levelUpdateTimer:Timer;
 
-    public function SLTMobileLevelsFeaturesUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
+    public function SLTMobileLevelsFeaturesUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         super(repositoryStorageManager, apiFactory, requestIdleTimeout);
         _gameLevelGroups = new Vector.<SLTMobileLevelGroupUpdater>();
         resetUpdateProcess();

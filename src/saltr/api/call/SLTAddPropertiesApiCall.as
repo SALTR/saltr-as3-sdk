@@ -1,7 +1,6 @@
-/**
- * Created by TIGR on 3/30/2015.
- */
-package saltr.api {
+package saltr.api.call {
+import saltr.api.*;
+
 import flash.net.URLVariables;
 
 import saltr.SLTConfig;
@@ -12,8 +11,9 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTHeartbeatApiCall extends SLTApiCall {
-    public function SLTHeartbeatApiCall(isMobile:Boolean = true) {
+public class SLTAddPropertiesApiCall extends SLTApiCall {
+
+    public function SLTAddPropertiesApiCall(isMobile:Boolean = true):void {
         super(isMobile);
     }
 
@@ -21,7 +21,10 @@ public class SLTHeartbeatApiCall extends SLTApiCall {
         _url = SLTConfig.SALTR_API_URL;
         var urlVars:URLVariables = new URLVariables();
         var args:Object = buildDefaultArgs();
-        urlVars.action = SLTConfig.ACTION_HEARTBEAT;
+        urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
+        args.basicProperties = _params.basicProperties;
+        args.customProperties = _params.customProperties;
+
         urlVars.args = JSON.stringify(args, removeEmptyAndNullsJSONReplacer);
         return urlVars;
     }
