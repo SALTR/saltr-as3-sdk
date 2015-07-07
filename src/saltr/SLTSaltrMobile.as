@@ -256,7 +256,7 @@ public class SLTSaltrMobile {
         if (canGetAppData()) {
             _connectSuccessCallback = successCallback;
             _connectFailCallback = failCallback;
-            getAppData(_connectHandler, customProperties);
+            getAppData(_connectHandler, basicProperties, customProperties);
         } else {
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
         }
@@ -421,45 +421,6 @@ public class SLTSaltrMobile {
         }
     }
 
-    private function connectSuccessHandler(data:Object):void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.processConnected() called");
-        _isLoading = false;
-        if (_devMode && !_isSynced) {
-            sync();
-        }
-
-        //var levelType:String = result.data.levelType;
-
-        try {
-            _appData.initWithData(data);
-        } catch (e:Error) {
-            _connectFailCallback(new SLTStatusAppDataParseError());
-            return;
-        }
-
-        _repositoryStorageManager.cacheAppData(data);
-
-        _connectSuccessCallback();
-
-        if (!_heartBeatTimerStarted) {
-            startHeartbeat();
-        }
-
-        _levelUpdater.init(_appData.gameLevelsFeatures);
-        _levelUpdater.update();
-    }
-
-    private function connectFailHandler(status:SLTStatus):void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
-        _isLoading = false;
-
-        if (status.statusCode == SLTStatus.API_ERROR) {
-            _connectFailCallback(new SLTStatusAppDataLoadFail());
-        } else {
-            _connectFailCallback(status);
-        }
-    }
-
     private function startHeartbeat():void {
         stopHeartbeat();
         _heartbeatTimer = new Timer(SLTConfig.HEARTBEAT_TIMER_DELAY);
@@ -529,6 +490,43 @@ public class SLTSaltrMobile {
         };
         var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, callHandler, _requestIdleTimeout);
+    }
+
+    private function connectSuccessHandler(data:Object):void {
+        SLTLogger.getInstance().log("SLTSaltrMobile.processConnected() called");
+        _isLoading = false;
+        if (_devMode && !_isSynced) {
+            sync();
+        }
+        //var levelType:String = result.data.levelType;
+        try {
+            _appData.initWithData(data);
+        } catch (e:Error) {
+            _connectFailCallback(new SLTStatusAppDataParseError());
+            return;
+        }
+
+        _repositoryStorageManager.cacheAppData(data);
+
+        _connectSuccessCallback();
+
+        if (!_heartBeatTimerStarted) {
+            startHeartbeat();
+        }
+
+        _levelUpdater.init(_appData.gameLevelsFeatures);
+        _levelUpdater.update();
+    }
+
+    private function connectFailHandler(status:SLTStatus):void {
+        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
+        _isLoading = false;
+
+        if (status.statusCode == SLTStatus.API_ERROR) {
+            _connectFailCallback(new SLTStatusAppDataLoadFail());
+        } else {
+            _connectFailCallback(status);
+        }
     }
 
 //    private function initLevelContentFromSaltrCallback(result:SLTApiCallResult):void {
