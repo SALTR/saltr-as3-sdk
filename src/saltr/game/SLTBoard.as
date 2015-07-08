@@ -2,6 +2,8 @@
  * Created by GSAR on 7/6/14.
  */
 package saltr.game {
+import flash.utils.Dictionary;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -13,15 +15,17 @@ public class SLTBoard {
 
     protected var _properties:Object;
     protected var _layers:Vector.<SLTBoardLayer>;
+    private var _checkpoints:Dictionary;
 
     /**
      * Class constructor.
      * @param layers The layers of the board.
      * @param properties The board associated properties.
      */
-    public function SLTBoard(layers:Vector.<SLTBoardLayer>, properties:Object) {
+    public function SLTBoard(layers:Vector.<SLTBoardLayer>, properties:Object, checkpoints:Dictionary) {
         _properties = properties;
         _layers = layers;
+        _checkpoints = checkpoints;
     }
 
     /**
@@ -36,6 +40,14 @@ public class SLTBoard {
      */
     public function get layers():Vector.<SLTBoardLayer> {
         return _layers;
+    }
+
+    /**
+     * Provides the checkpoint.
+     * @param token The checkpoint's token.
+     */
+    public function getCheckpoint(token:String):SLTCheckpoint {
+        return _checkpoints[token];
     }
 
     /**

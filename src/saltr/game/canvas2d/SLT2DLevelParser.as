@@ -5,6 +5,7 @@ package saltr.game.canvas2d {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAssetState;
+import saltr.game.SLTCheckPointParser;
 import saltr.game.SLTLevelParser;
 import saltr.saltr_internal;
 
@@ -70,7 +71,7 @@ public class SLT2DLevelParser extends SLTLevelParser {
         var height:Number = boardNode.hasOwnProperty("height") ? boardNode.height : 0;
 
         var config:SLT2DBoardConfig = new SLT2DBoardConfig(layers, boardNode, assetMap);
-        return new SLT2DBoard(config, boardProperties);
+        return new SLT2DBoard(config, boardProperties, SLTCheckPointParser.parseCheckpoints(boardNode));
     }
 
     private function parseLayer(layerNode:Object, index:int, assetMap:Dictionary):SLT2DBoardLayer {
