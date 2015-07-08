@@ -5,10 +5,8 @@ package saltr.utils.level.updater {
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTApiCallFactory;
 import saltr.api.call.SLTApiCallLevelContentResult;
-import saltr.api.handler.SLTLevelContentApiCallHandler;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -27,13 +25,10 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private var _levelUpdateTimer:Timer;
     private var _allLevels:Vector.<SLTLevel>;
 
-    private var _levelContentHandler:SLTLevelContentApiCallHandler;
-
     public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         super(repositoryStorageManager, apiFactory, requestIdleTimeout);
         _outdatedLevels = new Vector.<SLTLevel>();
         resetUpdateProcess();
-        initApiCallHandlers();
     }
 
     public function init(featureToken:String, allLevels:Vector.<SLTLevel>):void {
@@ -107,7 +102,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private function startNextLevelsUpdate():void {
         for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             if (_levelIndexToUpdate < _outdatedLevels.length) {
-                loadLevelContentFromSaltr(_outdatedLevels[_levelIndexToUpdate]);
+                loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate]);
                 ++_levelIndexToUpdate;
             } else {
                 return;
@@ -115,36 +110,13 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
         }
     }
 
-    /**
-     * Loads the level content.
-     * @param sltLevel The level.
-     */
-    private function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
-        var params:Object = {
-            sltLevel: sltLevel
-        };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
-        levelContentApiCall.call(params, _levelContentHandler, _requestIdleTimeout);
-    }
-
-    private function cacheLevelContent(level:SLTLevel, content:Object):void {
-        _repositoryStorageManager.cacheLevelContent(_featureToken, level.globalIndex, level.version, content);
-    }
-
-    private function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
-        var content:Object = result.data;
-        if (result.success) {
-            cacheLevelContent(result.level, content);
-        }
+    override protected function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
+        super.processLevelContentLoaded(result);
         ++_updatedLevelCount;
         if (_updatedLevelCount >= _outdatedLevels.length) {
             resetUpdateProcess();
             SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + updateCompleted());
         }
-    }
-
-    private function initApiCallHandlers():void {
-        _levelContentHandler = new SLTLevelContentApiCallHandler(processLevelContentLoaded);
     }
 }
 }

@@ -35,6 +35,7 @@ public class SLTLevelContentApiCall extends SLTApiCall {
         var apiCallResult:SLTApiCallLevelContentResult = new SLTApiCallLevelContentResult();
         apiCallResult.success = content != null;
         apiCallResult.data = content;
+        apiCallResult.featureToken = _params.featureToken;
         apiCallResult.level = _params.sltLevel;
         _handler.handle(apiCallResult);
     }
@@ -42,7 +43,8 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     private function validateLevelContentUrl():Object {
         var level:SLTLevel = _params.sltLevel;
         var contentURL:String = level.contentUrl;
-        if (level == null || contentURL == null || contentURL == "") {
+        var featureToken:String = _params.featureToken;
+        if (level == null || contentURL == null || contentURL == "" || featureToken == null || featureToken == "") {
             return {isValid: false, message: "Incomplete SLTLevel passed."};
         }
         return {isValid: true};

@@ -11,6 +11,7 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTApiCallLevelContentResult extends SLTApiCallResult {
+    private var _featureToken:String;
     private var _level:SLTLevel;
 
     public function SLTApiCallLevelContentResult() {
@@ -22,6 +23,14 @@ public class SLTApiCallLevelContentResult extends SLTApiCallResult {
 
     saltr_internal function set level(value:SLTLevel):void {
         _level = value;
+    }
+
+    saltr_internal function get featureToken():String {
+        return _featureToken;
+    }
+
+    saltr_internal function set featureToken(value:String):void {
+        _featureToken = value;
     }
 }
 }

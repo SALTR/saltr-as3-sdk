@@ -4,7 +4,11 @@
 package saltr.utils.level.updater {
 import flash.events.EventDispatcher;
 
+import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.SLTApiCallLevelContentResult;
+import saltr.api.handler.SLTLevelContentApiCallHandler;
+import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
@@ -22,10 +26,13 @@ public class SLTMobileLevelUpdater extends EventDispatcher {
     protected var _apiFactory:SLTApiCallFactory;
     protected var _requestIdleTimeout:int;
 
+    private var _levelContentHandler:SLTLevelContentApiCallHandler;
+
     public function SLTMobileLevelUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
         _apiFactory = apiFactory;
         _requestIdleTimeout = requestIdleTimeout;
+        initApiCallHandlers();
     }
 
     public function set apiFactory(value:SLTApiCallFactory):void {
@@ -40,8 +47,36 @@ public class SLTMobileLevelUpdater extends EventDispatcher {
         _requestIdleTimeout = value;
     }
 
+    /**
+     * Loads the level content.
+     * @param sltLevel The level.
+     */
+    public function loadLevelContentFromSaltr(featureToken:String, sltLevel:SLTLevel):void {
+        var params:Object = {
+            featureToken: featureToken,
+            sltLevel: sltLevel
+        };
+        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
+        levelContentApiCall.call(params, _levelContentHandler, _requestIdleTimeout);
+    }
+
     protected function resetUpdateProcess():void {
         _isInProcess = false;
+    }
+
+    protected function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
+        var content:Object = result.data;
+        if (result.success) {
+            cacheLevelContent(result.featureToken, result.level, content);
+        }
+    }
+
+    private function cacheLevelContent(featureToken:String, level:SLTLevel, content:Object):void {
+        _repositoryStorageManager.cacheLevelContent(featureToken, level.globalIndex, level.version, content);
+    }
+
+    private function initApiCallHandlers():void {
+        _levelContentHandler = new SLTLevelContentApiCallHandler(processLevelContentLoaded);
     }
 }
 }
