@@ -70,8 +70,8 @@ public class SLTSaltrMobile {
     private var _addDeviceToSaltrHandler:SLTApiCallHandler;
     private var _syncHandler:SLTApiCallHandler;
     private var _heartbeatHandler:SLTApiCallHandler;
-    private var _connectHandler:SLTApiCallHandler;
-    private var _initLevelContentFromSaltrHandler:SLTApiCallHandler;
+    private var _appDataConnectHandler:SLTApiCallHandler;
+    private var _appDataInitLevelHandler:SLTApiCallHandler;
 
     /**
      * Class constructor.
@@ -274,7 +274,7 @@ public class SLTSaltrMobile {
         if (canGetAppData()) {
             _connectSuccessCallback = successCallback;
             _connectFailCallback = failCallback;
-            getAppData(_connectHandler, basicProperties, customProperties);
+            getAppData(_appDataConnectHandler, basicProperties, customProperties);
         } else {
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
         }
@@ -315,7 +315,7 @@ public class SLTSaltrMobile {
 
         if (canGetAppData()) {
             _initLevelContentFromSaltrData = new InitLevelContentFromSaltrData(gameLevelsFeatureToken, sltLevel, callback);
-            getAppData(_initLevelContentFromSaltrHandler, null, null);
+            getAppData(_appDataInitLevelHandler, null, null);
         } else {
             callback(initLevelContentLocally(gameLevelsFeatureToken, sltLevel));
         }
@@ -496,7 +496,7 @@ public class SLTSaltrMobile {
         appDataCall.call(params, callHandler, _requestIdleTimeout);
     }
 
-    private function connectSuccessHandler(data:Object):void {
+    private function appDataConnectSuccessHandler(data:Object):void {
         SLTLogger.getInstance().log("SLTSaltrMobile.connectSuccessHandler() called");
         if (processNewAppData(data)) {
             _connectSuccessCallback();
@@ -530,7 +530,7 @@ public class SLTSaltrMobile {
         return true;
     }
 
-    private function connectFailHandler(status:SLTStatus):void {
+    private function appDataConnectFailHandler(status:SLTStatus):void {
         SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
         _isLoading = false;
 
@@ -541,13 +541,13 @@ public class SLTSaltrMobile {
         }
     }
 
-    private function initLevelContentFromSaltrSuccessHandler(data:Object):void {
+    private function appDataInitLevelSuccessHandler(data:Object):void {
         _isLoading = false;
         if (processNewAppData(data)) {
             var newLevel:SLTLevel = getGameLevelFeatureProperties(_initLevelContentFromSaltrData.gameLevelsFeatureToken).getLevelByGlobalIndex(_initLevelContentFromSaltrData.level.globalIndex);
             _levelContentLoader.loadLevelContentFromSaltr(_initLevelContentFromSaltrData.gameLevelsFeatureToken, newLevel);
         } else {
-            initLevelContentFromSaltrFailed();
+            handleInitLevelContentFromSaltrFailed();
         }
     }
 
@@ -557,16 +557,16 @@ public class SLTSaltrMobile {
             _levelContentLoader.cacheLevelContent(result.featureToken, result.level, content);
             initLevelContentFromSaltrSuccessed(content);
         } else {
-            initLevelContentFromSaltrFailed();
+            handleInitLevelContentFromSaltrFailed();
         }
     }
 
-    private function initLevelContentFromSaltrFailHandler(status:SLTStatus):void {
+    private function appDataInitLevelFailHandler(status:SLTStatus):void {
         _isLoading = false;
-        initLevelContentFromSaltrFailed();
+        handleInitLevelContentFromSaltrFailed();
     }
 
-    private function initLevelContentFromSaltrFailed():void {
+    private function handleInitLevelContentFromSaltrFailed():void {
         _initLevelContentFromSaltrData.callback(initLevelContentLocally(_initLevelContentFromSaltrData.gameLevelsFeatureToken, _initLevelContentFromSaltrData.level));
     }
 
@@ -581,8 +581,8 @@ public class SLTSaltrMobile {
         _addDeviceToSaltrHandler = new SLTApiCallHandler("[Saltr] Dev adding new device has succeed.", "[Saltr] Dev adding new device has failed.", addDeviceToSaltrSuccessHandler, addDeviceToSaltrFailHandler);
         _syncHandler = new SLTApiCallHandler("[Saltr] Dev feature Sync has successed", "[Saltr] Dev feature Sync has failed", syncSuccessHandler, syncFailHandler);
         _heartbeatHandler = new SLTApiCallHandler(null, null, null, heartbeatFailHandler);
-        _connectHandler = new SLTApiCallHandler(null, null, connectSuccessHandler, connectFailHandler);
-        _initLevelContentFromSaltrHandler = new SLTApiCallHandler(null, null, initLevelContentFromSaltrSuccessHandler, initLevelContentFromSaltrFailHandler);
+        _appDataConnectHandler = new SLTApiCallHandler(null, null, appDataConnectSuccessHandler, appDataConnectFailHandler);
+        _appDataInitLevelHandler = new SLTApiCallHandler(null, null, appDataInitLevelSuccessHandler, appDataInitLevelFailHandler);
     }
 }
 }
