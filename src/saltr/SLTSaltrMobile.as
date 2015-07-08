@@ -9,6 +9,7 @@ import flash.utils.Timer;
 
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.SLTApiCallLevelContentResult;
 import saltr.api.handler.ISLTApiCallHandler;
 import saltr.api.handler.SLTApiCallHandler;
 import saltr.game.SLTLevel;
@@ -22,6 +23,7 @@ import saltr.status.SLTStatusAppDataParseError;
 import saltr.utils.SLTLogger;
 import saltr.utils.SLTMobileDeviceInfo;
 import saltr.utils.dialog.SLTMobileDialogController;
+import saltr.utils.level.updater.SLTMobileLevelContentLoader;
 import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
 use namespace saltr_internal;
@@ -60,6 +62,7 @@ public class SLTSaltrMobile {
     private var _heartBeatTimerStarted:Boolean;
     private var _apiFactory:SLTApiCallFactory;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
+    private var _levelContentLoader:SLTMobileLevelContentLoader;
     private var _logger:SLTLogger;
 
     private var _addPropertiesHandler:SLTApiCallHandler;
@@ -100,6 +103,8 @@ public class SLTSaltrMobile {
 
         _apiFactory = new SLTApiCallFactory();
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
+        _levelContentLoader = new SLTMobileLevelContentLoader(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
+        _levelContentLoader.callback = processLevelContentFromSaltrLoaded;
     }
 
     /**
@@ -108,6 +113,7 @@ public class SLTSaltrMobile {
     public function set apiFactory(value:SLTApiCallFactory):void {
         _apiFactory = value;
         _levelUpdater.apiFactory = _apiFactory;
+        _levelContentLoader.apiFactory = _apiFactory;
     }
 
     /**
@@ -116,6 +122,7 @@ public class SLTSaltrMobile {
     public function set repository(value:ISLTRepository):void {
         _repositoryStorageManager = new SLTRepositoryStorageManager(value);
         _levelUpdater.repositoryStorageManager = _repositoryStorageManager;
+        _levelContentLoader.repositoryStorageManager = _repositoryStorageManager;
     }
 
     /**
@@ -146,6 +153,7 @@ public class SLTSaltrMobile {
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
         _levelUpdater.requestIdleTimeout = _requestIdleTimeout;
+        _levelContentLoader.requestIdleTimeout = _requestIdleTimeout;
     }
 
     /**
@@ -536,7 +544,18 @@ public class SLTSaltrMobile {
     private function initLevelContentFromSaltrSuccessHandler(data:Object):void {
         _isLoading = false;
         if (processNewAppData(data)) {
-            //anakonda
+            var newLevel:SLTLevel = getGameLevelFeatureProperties(_initLevelContentFromSaltrData.gameLevelsFeatureToken).getLevelByGlobalIndex(_initLevelContentFromSaltrData.level.globalIndex);
+            _levelContentLoader.loadLevelContentFromSaltr(_initLevelContentFromSaltrData.gameLevelsFeatureToken, newLevel);
+        } else {
+            initLevelContentFromSaltrFailed();
+        }
+    }
+
+    private function processLevelContentFromSaltrLoaded(result:SLTApiCallLevelContentResult):void {
+        var content:Object = result.data;
+        if (result.success) {
+            _levelContentLoader.cacheLevelContent(result.featureToken, result.level, content);
+            initLevelContentFromSaltrSuccessed(content);
         } else {
             initLevelContentFromSaltrFailed();
         }
@@ -549,6 +568,11 @@ public class SLTSaltrMobile {
 
     private function initLevelContentFromSaltrFailed():void {
         _initLevelContentFromSaltrData.callback(initLevelContentLocally(_initLevelContentFromSaltrData.gameLevelsFeatureToken, _initLevelContentFromSaltrData.level));
+    }
+
+    private function initLevelContentFromSaltrSuccessed(content:Object):void {
+        _initLevelContentFromSaltrData.level.updateContent(content);
+        _initLevelContentFromSaltrData.callback(true);
     }
 
     private function initApiCallHandlers():void {

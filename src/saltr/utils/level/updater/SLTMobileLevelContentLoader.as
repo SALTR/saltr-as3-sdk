@@ -30,6 +30,18 @@ public class SLTMobileLevelContentLoader {
         initApiCallHandlers();
     }
 
+    public function set apiFactory(value:SLTApiCallFactory):void {
+        _apiFactory = value;
+    }
+
+    public function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
+        _repositoryStorageManager = value;
+    }
+
+    public function set requestIdleTimeout(value:int):void {
+        _requestIdleTimeout = value;
+    }
+
     public function set callback(value:Function):void {
         _callback = value;
     }
