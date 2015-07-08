@@ -547,7 +547,7 @@ public class SLTSaltrMobile {
             var newLevel:SLTLevel = getGameLevelFeatureProperties(_initLevelContentFromSaltrData.gameLevelsFeatureToken).getLevelByGlobalIndex(_initLevelContentFromSaltrData.level.globalIndex);
             _levelContentLoader.loadLevelContentFromSaltr(_initLevelContentFromSaltrData.gameLevelsFeatureToken, newLevel);
         } else {
-            handleInitLevelContentFromSaltrFailed();
+            handleInitLevelContentFromSaltrFail();
         }
     }
 
@@ -555,22 +555,22 @@ public class SLTSaltrMobile {
         var content:Object = result.data;
         if (result.success) {
             _levelContentLoader.cacheLevelContent(result.featureToken, result.level, content);
-            initLevelContentFromSaltrSuccessed(content);
+            handleInitLevelContentFromSaltrSuccess(content);
         } else {
-            handleInitLevelContentFromSaltrFailed();
+            handleInitLevelContentFromSaltrFail();
         }
     }
 
     private function appDataInitLevelFailHandler(status:SLTStatus):void {
         _isLoading = false;
-        handleInitLevelContentFromSaltrFailed();
+        handleInitLevelContentFromSaltrFail();
     }
 
-    private function handleInitLevelContentFromSaltrFailed():void {
+    private function handleInitLevelContentFromSaltrFail():void {
         _initLevelContentFromSaltrData.callback(initLevelContentLocally(_initLevelContentFromSaltrData.gameLevelsFeatureToken, _initLevelContentFromSaltrData.level));
     }
 
-    private function initLevelContentFromSaltrSuccessed(content:Object):void {
+    private function handleInitLevelContentFromSaltrSuccess(content:Object):void {
         _initLevelContentFromSaltrData.level.updateContent(content);
         _initLevelContentFromSaltrData.callback(true);
     }
