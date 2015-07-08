@@ -17,16 +17,22 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements ISLTMobileLevelUpdater {
+public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
+    saltr_internal static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
+    private static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
+
     private var _featureToken:String;
     private var _outdatedLevels:Vector.<SLTLevel>;
     private var _updatedLevelCount:uint;
     private var _levelIndexToUpdate:int;
     private var _levelUpdateTimer:Timer;
     private var _allLevels:Vector.<SLTLevel>;
+    private var _levelContentLoader:SLTMobileLevelContentLoader;
+    private var _isInProcess:Boolean;
 
     public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
-        super(repositoryStorageManager, apiFactory, requestIdleTimeout);
+        _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, apiFactory, requestIdleTimeout);
+        _levelContentLoader.callback = processLevelContentLoaded;
         _outdatedLevels = new Vector.<SLTLevel>();
         resetUpdateProcess();
     }
@@ -55,11 +61,11 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
         return !_isInProcess;
     }
 
-    override protected function resetUpdateProcess():void {
+    private function resetUpdateProcess():void {
         _outdatedLevels.length = 0;
         _updatedLevelCount = 0;
         _levelIndexToUpdate = 0;
-        super.resetUpdateProcess();
+        _isInProcess = false;
     }
 
     private function getOutdatedLevels():Vector.<SLTLevel> {
@@ -74,12 +80,12 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     }
 
     private function getCachedLevelVersion(level:SLTLevel):String {
-        return _repositoryStorageManager.getLevelVersionFromCache(_featureToken, level.globalIndex);
+        return _levelContentLoader.getCachedLevelVersion(_featureToken, level);
     }
 
     private function startLevelUpdateTimer():void {
         stopLevelUpdateTimer();
-        _levelUpdateTimer = new Timer(SLTMobileLevelUpdater.LEVEL_UPDATE_TIMER_DELAY);
+        _levelUpdateTimer = new Timer(LEVEL_UPDATE_TIMER_DELAY);
         _levelUpdateTimer.addEventListener(TimerEvent.TIMER, levelUpdateTimerHandler);
         _levelUpdateTimer.start();
     }
@@ -102,7 +108,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private function startNextLevelsUpdate():void {
         for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             if (_levelIndexToUpdate < _outdatedLevels.length) {
-                loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate]);
+                _levelContentLoader.loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate]);
                 ++_levelIndexToUpdate;
             } else {
                 return;
@@ -110,8 +116,11 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
         }
     }
 
-    override protected function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
-        super.processLevelContentLoaded(result);
+    private function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
+        var content:Object = result.data;
+        if (result.success) {
+            _levelContentLoader.cacheLevelContent(result.featureToken, result.level, content);
+        }
         ++_updatedLevelCount;
         if (_updatedLevelCount >= _outdatedLevels.length) {
             resetUpdateProcess();
