@@ -1,14 +1,17 @@
 /**
-* Created by TIGR on 4/18/2015.
-*/
+ * Created by TIGR on 4/18/2015.
+ */
 package tests.saltr {
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTLevelData;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
-* The LevelDataTest class contain the LevelData method tests.
-*/
+ * The LevelDataTest class contain the LevelData method tests.
+ */
 public class SLTLevelDataTest {
     [Embed(source="../../../build/tests/saltr/level_data.json", mimeType="application/octet-stream")]
     private static const LevelDataJson:Class;

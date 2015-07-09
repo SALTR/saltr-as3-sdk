@@ -10,12 +10,11 @@ import org.flexunit.listeners.AirCIListener;
 import org.flexunit.runner.FlexUnitCore;
 
 import tests.saltr.SLTAppDataTest;
-import tests.saltr.SLTLevelDataTest;
 import tests.saltr.SLTDefineGameLevelsMobileTest;
 import tests.saltr.SLTInitLevelContentMobileTest;
+import tests.saltr.SLTLevelDataTest;
 import tests.saltr.SLTSaltrMobileTest;
 import tests.saltr.SLTSaltrMobileTestWithConnection;
-import tests.saltr.SLTSaltrWebTest;
 import tests.saltr.SLTStartTest;
 import tests.saltr.api.SLTAddPropertiesApiCallTest;
 import tests.saltr.api.SLTAppDataApiCallTest;
@@ -27,8 +26,10 @@ import tests.saltr.api.SLTSendLevelEndApiCallTest;
 import tests.saltr.api.SLTSyncApiCallTest;
 import tests.saltr.game.SLTLevelTest;
 import tests.saltr.game.canvas2d.SLT2DAssetInstanceTest;
+import tests.saltr.game.canvas2d.SLT2DBoardTest;
 import tests.saltr.game.matching.SLTCellTest;
 import tests.saltr.game.matching.SLTCellsTest;
+import tests.saltr.game.matching.SLTMatchingBoardTest;
 
 public class FlexUnitRunner extends Sprite {
 
@@ -56,10 +57,12 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTLevelDataTest);
         testsToRun.push(SLTCellTest);
         testsToRun.push(SLTCellsTest);
+        testsToRun.push(SLTMatchingBoardTest);
         testsToRun.push(SLTSaltrMobileTestWithConnection);
         testsToRun.push(SLTInitLevelContentMobileTest);
         testsToRun.push(SLTLevelTest);
         testsToRun.push(SLT2DAssetInstanceTest);
+        testsToRun.push(SLT2DBoardTest);
         testsToRun.push(SLTAddPropertiesApiCallTest);
         testsToRun.push(SLTAppDataApiCallTest);
         testsToRun.push(SLTHeartbeatApiCallTest);
