@@ -64,6 +64,7 @@ public class SLT2DBoardTest {
             }
         }
         assertEquals(1, checkpoints.length);
+        assertEquals(215, checkpoints[0].position);
     }
 }
 }
