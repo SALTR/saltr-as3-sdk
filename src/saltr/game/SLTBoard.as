@@ -51,6 +51,17 @@ public class SLTBoard {
     }
 
     /**
+     * Provides the checkpoints.
+     */
+    public function getCheckpoints():Vector.<SLTCheckpoint> {
+        var checkpointVector:Vector.<SLTCheckpoint> = new Vector.<SLTCheckpoint>();
+        for each(var checkpoint:SLTCheckpoint in _checkpoints) {
+            checkpointVector.push(checkpoint);
+        }
+        return checkpointVector;
+    }
+
+    /**
      * Regenerates the content of the board.
      */
     public function regenerate():void {

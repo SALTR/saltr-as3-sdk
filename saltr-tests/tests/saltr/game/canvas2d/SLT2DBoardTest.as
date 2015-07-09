@@ -30,8 +30,7 @@ public class SLT2DBoardTest {
 
     /**
      * checkpointTest.
-     * The intent of this test is to check the updateContent method.
-     * Correct input data provided. ContentReady expected.
+     * The intent of this test is to check the getCheckpoint method.
      */
     [Test]
     public function checkpointTest():void {
@@ -47,6 +46,24 @@ public class SLT2DBoardTest {
         assertNotNull(checkpoint);
         assertEquals(SLTCheckpoint.CHECKPOINT_ORIENTATION_HORIZONTAL, checkpoint.orientation);
         assertEquals(215, checkpoint.position);
+    }
+
+    /**
+     * checkpointsTest.
+     * The intent of this test is to check the getCheckpoints method.
+     */
+    [Test]
+    public function checkpointsTest():void {
+        var checkpoints:Vector.<SLTCheckpoint>;
+        if (false == _level.contentReady) {
+            _level.updateContent(JSON.parse(new LevelDataJson()));
+            if (true == _level.contentReady) {
+                var board:SLT2DBoard = _level.getBoard("Board") as SLT2DBoard;
+                checkpoints = board.getCheckpoints();
+
+            }
+        }
+        assertEquals(1, checkpoints.length);
     }
 }
 }
