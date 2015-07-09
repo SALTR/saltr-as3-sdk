@@ -8,6 +8,9 @@ import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTCheckPointParser {
     public function SLTCheckPointParser() {
     }
