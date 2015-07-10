@@ -6,10 +6,10 @@ import flash.events.TimerEvent;
 import flash.utils.Timer;
 
 import saltr.api.call.SLTApiCallFactory;
-import saltr.api.call.SLTApiCallLevelContentResult;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 import saltr.utils.SLTLogger;
 
 use namespace saltr_internal;
@@ -32,7 +32,6 @@ public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
 
     public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, apiFactory, requestIdleTimeout);
-        _levelContentLoader.callback = processLevelContentLoaded;
         _outdatedLevels = new Vector.<SLTLevel>();
         resetUpdateProcess();
     }
@@ -108,7 +107,7 @@ public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
     private function startNextLevelsUpdate():void {
         for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             if (_levelIndexToUpdate < _outdatedLevels.length) {
-                _levelContentLoader.loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate]);
+                _levelContentLoader.loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate], loadLevelSuccessHandler, loadLevelFailHandler);
                 ++_levelIndexToUpdate;
             } else {
                 return;
@@ -116,11 +115,16 @@ public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
         }
     }
 
-    private function processLevelContentLoaded(result:SLTApiCallLevelContentResult):void {
-        var content:Object = result.data;
-        if (result.success) {
-            _levelContentLoader.cacheLevelContent(result.featureToken, result.level, content);
-        }
+    private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:Object):void {
+        _levelContentLoader.cacheLevelContent(featureToken, sltLevel, data);
+        manageUpdateProcess();
+    }
+
+    private function loadLevelFailHandler(featureToken:String, sltLevel:SLTLevel, status:SLTStatus):void {
+        manageUpdateProcess();
+    }
+
+    private function manageUpdateProcess():void {
         ++_updatedLevelCount;
         if (_updatedLevelCount >= _outdatedLevels.length) {
             resetUpdateProcess();

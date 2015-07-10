@@ -1,10 +1,6 @@
 package saltr.api.call {
-import saltr.api.*;
-
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
-
-import saltr.api.handler.ISLTApiCallHandler;
 
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
@@ -23,7 +19,8 @@ public class SLTApiCall {
 
     protected var _url:String;
     protected var _params:Object;
-    protected var _handler:ISLTApiCallHandler;
+    protected var _successHandler:Function;
+    protected var _failHandler:Function;
     protected var _isMobile:Boolean;
     protected var _client:String;
 
@@ -48,9 +45,10 @@ public class SLTApiCall {
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(params:Object, handler:ISLTApiCallHandler, timeout:int = 0):void {
+    saltr_internal function call(params:Object, successHandler:Function = null, failHandler:Function = null, timeout:int = 0):void {
         _params = params;
-        _handler = handler;
+        _successHandler = successHandler;
+        _failHandler = failHandler;
         var validationResult:Object = validateParams();
         if (validationResult.isValid == false) {
             returnValidationFailedResult(validationResult.message);
@@ -64,7 +62,7 @@ public class SLTApiCall {
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.success = false;
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, message);
-        _handler.handle(apiCallResult);
+        handleResult(apiCallResult);
     }
 
     private function doCall(urlVars:URLVariables, timeout:int):void {
@@ -94,14 +92,14 @@ public class SLTApiCall {
 
         apiCallResult.success = success;
         resource.dispose();
-        _handler.handle(apiCallResult);
+        handleResult(apiCallResult);
     }
 
     saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         resource.dispose();
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
-        _handler.handle(apiCallResult);
+        handleResult(apiCallResult);
     }
 
 
@@ -159,6 +157,18 @@ public class SLTApiCall {
         args.client = _client;
         args.devMode = _params.devMode;
         return args;
+    }
+
+    internal function handleResult(result:SLTApiCallResult):void {
+        if (result.success) {
+            if (_successHandler) {
+                _successHandler(result.data);
+            }
+        } else {
+            if (_failHandler) {
+                _failHandler(result.status);
+            }
+        }
     }
 }
 }
