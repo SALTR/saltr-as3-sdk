@@ -3,6 +3,8 @@
  */
 
 package saltr.game.matching {
+import flash.utils.Dictionary;
+
 import saltr.game.SLTBoard;
 import saltr.saltr_internal;
 
@@ -18,9 +20,10 @@ public class SLTMatchingBoard extends SLTBoard {
      * Class constructor.
      * @param config The board configuration.
      * @param properties The board associated properties.
+     * @param checkpoints The board checkpoints.
      */
-    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, properties:Object) {
-        super(config.layers, properties);
+    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, properties:Object, checkpoints:Dictionary) {
+        super(config.layers, properties, checkpoints);
         _config = config;
     }
 
