@@ -2,6 +2,8 @@
  * Created by TIGR on 6/19/2015.
  */
 package saltr.utils.level.updater {
+import flash.events.Event;
+import flash.events.EventDispatcher;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
@@ -17,7 +19,7 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
+public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     saltr_internal static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
     private static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
 
@@ -54,10 +56,6 @@ public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
             startNextLevelsUpdate();
             startLevelUpdateTimer();
         }
-    }
-
-    public function updateCompleted():Boolean {
-        return !_isInProcess;
     }
 
     private function resetUpdateProcess():void {
@@ -128,7 +126,8 @@ public class SLTMobileLevelGroupUpdater implements ISLTMobileLevelUpdater {
         ++_updatedLevelCount;
         if (_updatedLevelCount >= _outdatedLevels.length) {
             resetUpdateProcess();
-            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + updateCompleted());
+            dispatchEvent(new Event(Event.COMPLETE));
+            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + !_isInProcess);
         }
     }
 }

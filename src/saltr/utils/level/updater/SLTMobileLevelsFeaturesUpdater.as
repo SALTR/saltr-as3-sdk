@@ -4,9 +4,7 @@
 package saltr.utils.level.updater {
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.events.TimerEvent;
 import flash.utils.Dictionary;
-import flash.utils.Timer;
 
 import saltr.SLTFeature;
 import saltr.api.call.SLTApiCallFactory;
@@ -19,13 +17,13 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher implements ISLTMobileLevelUpdater {
+public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
     private var _apiFactory:SLTApiCallFactory;
     private var _requestIdleTimeout:int;
     private var _gameLevelGroups:Vector.<SLTMobileLevelGroupUpdater>;
-    private var _levelUpdateTimer:Timer;
     private var _isInProcess:Boolean;
+    private var _updatedGroupCount:uint;
 
     public function SLTMobileLevelsFeaturesUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
@@ -68,53 +66,26 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher implements I
         _isInProcess = true;
         for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
             _gameLevelGroups[i].update();
+            _gameLevelGroups[i].addEventListener(Event.COMPLETE, groupUpdatedHandler)
         }
-        startLevelUpdateTimer();
-    }
-
-    public function updateCompleted():Boolean {
-        return _isInProcess;
     }
 
     private function resetUpdateProcess():void {
+        for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
+            _gameLevelGroups[i].removeEventListener(Event.COMPLETE, groupUpdatedHandler)
+        }
         _gameLevelGroups.length = 0;
+        _updatedGroupCount = 0;
         _isInProcess = false;
     }
 
-    private function startLevelUpdateTimer():void {
-        stopLevelUpdateTimer();
-        _levelUpdateTimer = new Timer(SLTMobileLevelGroupUpdater.LEVEL_UPDATE_TIMER_DELAY);
-        _levelUpdateTimer.addEventListener(TimerEvent.TIMER, levelUpdateTimerHandler);
-        _levelUpdateTimer.start();
-    }
-
-    private function stopLevelUpdateTimer():void {
-        if (null != _levelUpdateTimer) {
-            _levelUpdateTimer.stop();
-            _levelUpdateTimer.removeEventListener(TimerEvent.TIMER, levelUpdateTimerHandler);
-            _levelUpdateTimer = null;
+    private function groupUpdatedHandler(event:Event):void {
+        ++_updatedGroupCount;
+        if (_gameLevelGroups.length == _updatedGroupCount) {
+            resetUpdateProcess();
+            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater updateCompleted.");
+            dispatchEvent(new Event(Event.COMPLETE));
         }
-    }
-
-    private function levelUpdateTimerHandler(event:TimerEvent):void {
-        var isUpdated:Boolean = true;
-        for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
-            if (false == _gameLevelGroups[i].updateCompleted()) {
-                isUpdated = false;
-                break;
-            }
-        }
-
-        if (isUpdated) {
-            stopUpdating();
-        }
-    }
-
-    private function stopUpdating():void {
-        stopLevelUpdateTimer();
-        resetUpdateProcess();
-        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater updateCompleted.");
-        dispatchEvent(new Event(Event.COMPLETE));
     }
 }
 }
