@@ -43,7 +43,7 @@ public class SLTSaltrMobile {
 
     private var _connectSuccessCallback:Function;
     private var _connectFailCallback:Function;
-    private var _initLevelContentFromSaltrData:InitLevelContentFromSaltrData;
+    private var _levelContentFromSaltrData:LevelContentFromSaltrData;
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
@@ -300,7 +300,7 @@ public class SLTSaltrMobile {
         }
 
         if (canGetAppData()) {
-            _initLevelContentFromSaltrData = new InitLevelContentFromSaltrData(gameLevelsFeatureToken, sltLevel, callback);
+            _levelContentFromSaltrData = new LevelContentFromSaltrData(gameLevelsFeatureToken, sltLevel, callback);
             getAppData(appDataInitLevelSuccessHandler, appDataInitLevelFailHandler, null, null);
         } else {
             callback(initLevelContentLocally(gameLevelsFeatureToken, sltLevel));
@@ -550,8 +550,8 @@ public class SLTSaltrMobile {
     private function appDataInitLevelSuccessHandler(data:Object):void {
         _isLoading = false;
         if (processNewAppData(data)) {
-            var newLevel:SLTLevel = getGameLevelFeatureProperties(_initLevelContentFromSaltrData.gameLevelsFeatureToken).getLevelByGlobalIndex(_initLevelContentFromSaltrData.level.globalIndex);
-            _levelContentLoader.loadLevelContentFromSaltr(_initLevelContentFromSaltrData.gameLevelsFeatureToken, newLevel, loadLevelFromSaltrSuccessHandler, loadLevelFromSaltrFailHandler);
+            var newLevel:SLTLevel = getGameLevelFeatureProperties(_levelContentFromSaltrData.gameLevelsFeatureToken).getLevelByGlobalIndex(_levelContentFromSaltrData.level.globalIndex);
+            _levelContentLoader.loadLevelContentFromSaltr(_levelContentFromSaltrData.gameLevelsFeatureToken, newLevel, loadLevelFromSaltrSuccessHandler, loadLevelFromSaltrFailHandler);
         } else {
             handleInitLevelContentFromSaltrFail();
         }
@@ -572,24 +572,24 @@ public class SLTSaltrMobile {
     }
 
     private function handleInitLevelContentFromSaltrFail():void {
-        _initLevelContentFromSaltrData.callback(initLevelContentLocally(_initLevelContentFromSaltrData.gameLevelsFeatureToken, _initLevelContentFromSaltrData.level));
+        _levelContentFromSaltrData.callback(initLevelContentLocally(_levelContentFromSaltrData.gameLevelsFeatureToken, _levelContentFromSaltrData.level));
     }
 
     private function handleInitLevelContentFromSaltrSuccess(content:Object):void {
-        _initLevelContentFromSaltrData.level.updateContent(content);
-        _initLevelContentFromSaltrData.callback(true);
+        _levelContentFromSaltrData.level.updateContent(content);
+        _levelContentFromSaltrData.callback(true);
     }
 }
 }
 
 import saltr.game.SLTLevel;
 
-internal class InitLevelContentFromSaltrData {
+internal class LevelContentFromSaltrData {
     private var _gameLevelsFeatureToken:String;
     private var _level:SLTLevel;
     private var _callback:Function;
 
-    public function InitLevelContentFromSaltrData(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    public function LevelContentFromSaltrData(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
         _gameLevelsFeatureToken = gameLevelsFeatureToken;
         _level = sltLevel;
         _callback = callback;
