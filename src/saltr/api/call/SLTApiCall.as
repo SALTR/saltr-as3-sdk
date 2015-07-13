@@ -19,8 +19,8 @@ public class SLTApiCall {
 
     protected var _url:String;
     protected var _params:Object;
-    protected var _successHandler:Function;
-    protected var _failHandler:Function;
+    protected var _successCallback:Function;
+    protected var _failCallback:Function;
     protected var _isMobile:Boolean;
     protected var _client:String;
 
@@ -45,10 +45,10 @@ public class SLTApiCall {
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(params:Object, successHandler:Function = null, failHandler:Function = null, timeout:int = 0):void {
+    saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {
         _params = params;
-        _successHandler = successHandler;
-        _failHandler = failHandler;
+        _successCallback = successCallback;
+        _failCallback = failCallback;
         var validationResult:Object = validateParams();
         if (validationResult.isValid == false) {
             returnValidationFailedResult(validationResult.message);
@@ -161,12 +161,12 @@ public class SLTApiCall {
 
     internal function handleResult(result:SLTApiCallResult):void {
         if (result.success) {
-            if (_successHandler) {
-                _successHandler(result.data);
+            if (_successCallback) {
+                _successCallback(result.data);
             }
         } else {
-            if (_failHandler) {
-                _failHandler(result.status);
+            if (_failCallback) {
+                _failCallback(result.status);
             }
         }
     }
