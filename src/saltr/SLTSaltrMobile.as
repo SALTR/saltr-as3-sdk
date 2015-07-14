@@ -4,6 +4,7 @@
 
 package saltr {
 import flash.display.Stage;
+import flash.events.Event;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
@@ -20,7 +21,6 @@ import saltr.status.SLTStatusAppDataParseError;
 import saltr.utils.SLTLogger;
 import saltr.utils.SLTMobileDeviceInfo;
 import saltr.utils.dialog.SLTMobileDialogController;
-import saltr.utils.level.updater.SLTMobileLevelContentLoader;
 import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
 use namespace saltr_internal;
@@ -43,11 +43,10 @@ public class SLTSaltrMobile {
 
     private var _connectSuccessCallback:Function;
     private var _connectFailCallback:Function;
-    private var _levelContentFromSaltrData:LevelContentFromSaltrData;
+    private var _dedicatedLevelData:DedicatedLevelData;
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
-    private var _asyncLevelLoading:Boolean;
     private var _autoRegisterDevice:Boolean;
     private var _started:Boolean;
     private var _isSynced:Boolean;
@@ -59,7 +58,6 @@ public class SLTSaltrMobile {
     private var _heartBeatTimerStarted:Boolean;
     private var _apiFactory:SLTApiCallFactory;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
-    private var _levelContentLoader:SLTMobileLevelContentLoader;
     private var _logger:SLTLogger;
 
     /**
@@ -77,7 +75,6 @@ public class SLTSaltrMobile {
         _heartBeatTimerStarted = false;
 
         _devMode = false;
-        _asyncLevelLoading = true;
         _autoRegisterDevice = true;
         _started = false;
         _isSynced = false;
@@ -90,7 +87,6 @@ public class SLTSaltrMobile {
 
         _apiFactory = new SLTApiCallFactory();
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
-        _levelContentLoader = new SLTMobileLevelContentLoader(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
     }
 
     /**
@@ -99,7 +95,6 @@ public class SLTSaltrMobile {
     public function set apiFactory(value:SLTApiCallFactory):void {
         _apiFactory = value;
         _levelUpdater.apiFactory = _apiFactory;
-        _levelContentLoader.apiFactory = _apiFactory;
     }
 
     /**
@@ -108,7 +103,6 @@ public class SLTSaltrMobile {
     public function set repository(value:ISLTRepository):void {
         _repositoryStorageManager = new SLTRepositoryStorageManager(value);
         _levelUpdater.repositoryStorageManager = _repositoryStorageManager;
-        _levelContentLoader.repositoryStorageManager = _repositoryStorageManager;
     }
 
     /**
@@ -117,13 +111,6 @@ public class SLTSaltrMobile {
     public function set devMode(value:Boolean):void {
         _devMode = value;
         _logger.debug = _devMode;
-    }
-
-    public function set asyncLevelLoading(value:Boolean):void {
-        if (!_devMode && !value) {
-            throw new Error("asyncLevelLoading can be disabled in 'dev mode' only.");
-        }
-        _asyncLevelLoading = value;
     }
 
     /**
@@ -139,7 +126,6 @@ public class SLTSaltrMobile {
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
         _levelUpdater.requestIdleTimeout = _requestIdleTimeout;
-        _levelContentLoader.requestIdleTimeout = _requestIdleTimeout;
     }
 
     /**
@@ -295,12 +281,9 @@ public class SLTSaltrMobile {
         if (!_devMode) {
             throw new Error("Method 'initLevelContentFromSaltr' should be called in 'dev mode' only.");
         }
-        if (_asyncLevelLoading) {
-            throw new Error("Method 'initLevelContentFromSaltr' should be called with 'asyncLevelLoading' state disabled only.");
-        }
 
         if (canGetAppData()) {
-            _levelContentFromSaltrData = new LevelContentFromSaltrData(gameLevelsFeatureToken, sltLevel, callback);
+            _dedicatedLevelData = new DedicatedLevelData(gameLevelsFeatureToken, sltLevel, callback);
             getAppData(appDataInitLevelSuccessHandler, appDataInitLevelFailHandler, null, null);
         } else {
             callback(initLevelContentLocally(gameLevelsFeatureToken, sltLevel));
@@ -506,6 +489,7 @@ public class SLTSaltrMobile {
         SLTLogger.getInstance().log("SLTSaltrMobile.connectSuccessHandler() called");
         _isLoading = false;
         if (processNewAppData(data)) {
+            _levelUpdater.update(_appData.gameLevelsFeatures);
             _connectSuccessCallback();
         } else {
             _connectFailCallback(new SLTStatusAppDataParseError());
@@ -528,11 +512,6 @@ public class SLTSaltrMobile {
         if (!_heartBeatTimerStarted) {
             startHeartbeat();
         }
-
-        if (_asyncLevelLoading) {
-            _levelUpdater.init(_appData.gameLevelsFeatures);
-            _levelUpdater.update();
-        }
         return true;
     }
 
@@ -550,46 +529,40 @@ public class SLTSaltrMobile {
     private function appDataInitLevelSuccessHandler(data:Object):void {
         _isLoading = false;
         if (processNewAppData(data)) {
-            var newLevel:SLTLevel = getGameLevelFeatureProperties(_levelContentFromSaltrData.gameLevelsFeatureToken).getLevelByGlobalIndex(_levelContentFromSaltrData.level.globalIndex);
-            _levelContentLoader.loadLevelContentFromSaltr(_levelContentFromSaltrData.gameLevelsFeatureToken, newLevel, loadLevelFromSaltrSuccessHandler, loadLevelFromSaltrFailHandler);
+            var newLevel:SLTLevel = getGameLevelFeatureProperties(_dedicatedLevelData.gameLevelsFeatureToken).getLevelByGlobalIndex(_dedicatedLevelData.level.globalIndex);
+            _levelUpdater.addEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
+            _levelUpdater.updateLevel(_dedicatedLevelData.gameLevelsFeatureToken, newLevel);
         } else {
-            handleInitLevelContentFromSaltrFail();
+            updateDedicatedLevelContent();
         }
     }
 
-    private function loadLevelFromSaltrSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:Object):void {
-        _levelContentLoader.cacheLevelContent(featureToken, sltLevel, data);
-        handleInitLevelContentFromSaltrSuccess(data);
-    }
-
-    private function loadLevelFromSaltrFailHandler(featureToken:String, sltLevel:SLTLevel, status:SLTStatus):void {
-        handleInitLevelContentFromSaltrFail();
+    private function dedicatedLevelUpdateCompleteHandler(event:Event):void {
+        _levelUpdater.removeEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
+        updateDedicatedLevelContent();
     }
 
     private function appDataInitLevelFailHandler(status:SLTStatus):void {
         _isLoading = false;
-        handleInitLevelContentFromSaltrFail();
+        updateDedicatedLevelContent();
     }
 
-    private function handleInitLevelContentFromSaltrFail():void {
-        _levelContentFromSaltrData.callback(initLevelContentLocally(_levelContentFromSaltrData.gameLevelsFeatureToken, _levelContentFromSaltrData.level));
+    private function updateDedicatedLevelContent():void {
+        _dedicatedLevelData.callback(initLevelContentLocally(_dedicatedLevelData.gameLevelsFeatureToken, _dedicatedLevelData.level));
     }
 
-    private function handleInitLevelContentFromSaltrSuccess(content:Object):void {
-        _levelContentFromSaltrData.level.updateContent(content);
-        _levelContentFromSaltrData.callback(true);
-    }
+
 }
 }
 
 import saltr.game.SLTLevel;
 
-internal class LevelContentFromSaltrData {
+internal class DedicatedLevelData {
     private var _gameLevelsFeatureToken:String;
     private var _level:SLTLevel;
     private var _callback:Function;
 
-    public function LevelContentFromSaltrData(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    public function DedicatedLevelData(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
         _gameLevelsFeatureToken = gameLevelsFeatureToken;
         _level = sltLevel;
         _callback = callback;

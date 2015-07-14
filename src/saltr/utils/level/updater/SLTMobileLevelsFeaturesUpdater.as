@@ -8,6 +8,7 @@ import flash.utils.Dictionary;
 
 import saltr.SLTFeature;
 import saltr.api.call.SLTApiCallFactory;
+import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 import saltr.utils.SLTLogger;
@@ -45,29 +46,56 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
         _requestIdleTimeout = value;
     }
 
-    public function init(gameLevelsFeatures:Dictionary):void {
+    public function update(gameLevelsFeatures:Dictionary):void {
         if (_isInProcess) {
-            return;
+            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.update() called, _isInProcess = true");
+            cancel();
         }
+        initWithFeatures(gameLevelsFeatures);
+        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.update() called. _gameLevelGroups.length: " + _gameLevelGroups.length);
+        startUpdate();
+    }
+
+    public function updateLevel(gameLevelsFeatureToken:String, level:SLTLevel):void {
+        if (_isInProcess) {
+            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.updateLevel() called, _isInProcess = true");
+            cancel();
+        }
+        initWithLevel(gameLevelsFeatureToken, level);
+        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.updateLevel() called. _gameLevelGroups.length: " + _gameLevelGroups.length);
+        startUpdate();
+    }
+
+    private function startUpdate():void {
+        if (_gameLevelGroups.length > 0) {
+            _isInProcess = true;
+            for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
+                _gameLevelGroups[i].addEventListener(Event.COMPLETE, groupUpdatedHandler);
+                _gameLevelGroups[i].update();
+            }
+        }
+    }
+
+    private function initWithFeatures(gameLevelsFeatures:Dictionary):void {
         for (var key:Object in gameLevelsFeatures) {
             var feature:SLTFeature = gameLevelsFeatures[key];
-            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
-            groupUpdater.init(feature.token, feature.properties.allLevels);
+            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout, feature.token, feature.properties.allLevels);
             _gameLevelGroups.push(groupUpdater);
         }
     }
 
-    public function update():void {
-        if (_isInProcess) {
-            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.SLTMobile() called, not executed _isInProcess = true");
-            return;
-        }
-        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.SLTMobile() called. _gameLevelGroups.length: " + _gameLevelGroups.length);
-        _isInProcess = true;
+    private function initWithLevel(featureToken:String, level:SLTLevel):void {
+        var levels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+        levels.push(level);
+        var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout, featureToken, levels);
+        _gameLevelGroups.push(groupUpdater);
+    }
+
+    private function cancel():void {
         for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
-            _gameLevelGroups[i].update();
-            _gameLevelGroups[i].addEventListener(Event.COMPLETE, groupUpdatedHandler)
+            _gameLevelGroups[i].cancel();
         }
+        resetUpdateProcess();
     }
 
     private function resetUpdateProcess():void {

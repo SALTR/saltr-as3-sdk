@@ -31,14 +31,13 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     private var _allLevels:Vector.<SLTLevel>;
     private var _levelContentLoader:SLTMobileLevelContentLoader;
     private var _isInProcess:Boolean;
+    private var _isCancelled:Boolean;
 
-    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
+    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory,
+                                               requestIdleTimeout:int, featureToken:String, allLevels:Vector.<SLTLevel>) {
         _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, apiFactory, requestIdleTimeout);
-        _outdatedLevels = new Vector.<SLTLevel>();
+        _isCancelled = false;
         resetUpdateProcess();
-    }
-
-    public function init(featureToken:String, allLevels:Vector.<SLTLevel>):void {
         _featureToken = featureToken;
         _allLevels = allLevels;
         _outdatedLevels = getOutdatedLevels();
@@ -46,7 +45,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
 
     public function update():void {
         if (_isInProcess) {
-            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: " + _featureToken + ", not executed _isInProcess = true");
+            throw new Error("SLTMobileLevelGroupUpdater is in processing.");
             return;
         }
         SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: " + _featureToken + ", _outdatedLevels.length: " + _outdatedLevels.length);
@@ -55,11 +54,21 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
             _isInProcess = true;
             startNextLevelsUpdate();
             startLevelUpdateTimer();
+        } else {
+            updateCompleted();
         }
     }
 
+    public function cancel():void {
+        _isCancelled = true;
+        stopLevelUpdateTimer();
+        resetUpdateProcess();
+    }
+
     private function resetUpdateProcess():void {
-        _outdatedLevels.length = 0;
+        if(_outdatedLevels) {
+            _outdatedLevels.length = 0;
+        }
         _updatedLevelCount = 0;
         _levelIndexToUpdate = 0;
         _isInProcess = false;
@@ -114,21 +123,31 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     }
 
     private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:Object):void {
+        if (_isCancelled) {
+            return;
+        }
         _levelContentLoader.cacheLevelContent(featureToken, sltLevel, data);
         manageUpdateProcess();
     }
 
     private function loadLevelFailHandler(featureToken:String, sltLevel:SLTLevel, status:SLTStatus):void {
+        if (_isCancelled) {
+            return;
+        }
         manageUpdateProcess();
     }
 
     private function manageUpdateProcess():void {
         ++_updatedLevelCount;
         if (_updatedLevelCount >= _outdatedLevels.length) {
-            resetUpdateProcess();
-            dispatchEvent(new Event(Event.COMPLETE));
-            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + !_isInProcess);
+            updateCompleted();
         }
+    }
+
+    private function updateCompleted():void {
+        resetUpdateProcess();
+        dispatchEvent(new Event(Event.COMPLETE));
+        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + !_isInProcess);
     }
 }
 }
