@@ -114,6 +114,14 @@ public class SLTSaltrMobile {
     }
 
     /**
+     * The verbose logging state.
+     * Note: This works only in development mode
+     */
+    public function set verboseLogging(value:Boolean):void {
+        _logger.verboseLogging = value;
+    }
+
+    /**
      * The device automatically registration state.
      */
     public function set autoRegisterDevice(value:Boolean):void {
@@ -239,6 +247,7 @@ public class SLTSaltrMobile {
      * Establishes the connection to Saltr server.
      */
     public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
+        SLTLogger.getInstance().log("Method 'connect()' called.");
         if (!_started) {
             throw new Error("Method 'connect()' should be called after 'start()' only.");
         }
@@ -248,6 +257,7 @@ public class SLTSaltrMobile {
             _connectFailCallback = failCallback;
             getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, basicProperties, customProperties);
         } else {
+            SLTLogger.getInstance().log("Connect failed. Concurrent load accrues.");
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
         }
     }
@@ -387,7 +397,6 @@ public class SLTSaltrMobile {
     }
 
     private function sync():void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.sync() called");
         var params:Object = {
             clientKey: _clientKey,
             devMode: _devMode,
@@ -397,15 +406,16 @@ public class SLTSaltrMobile {
         };
         var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SYNC, true);
         syncApiCall.call(params, syncSuccessHandler, syncFailHandler);
+        SLTLogger.getInstance().log("sync() called.");
     }
 
     private function syncSuccessHandler(data:Object):void {
-        trace("[Saltr] Dev feature Sync has successed");
+        SLTLogger.getInstance().log("Sync call succeed.");
         _isSynced = true;
     }
 
     private function syncFailHandler(status:SLTStatus):void {
-        trace("[Saltr] Dev feature Sync has failed");
+        SLTLogger.getInstance().log("Sync call failed. Status code: "+status.statusCode);
         if (status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
             registerDevice();
         }
@@ -483,10 +493,11 @@ public class SLTSaltrMobile {
         };
         var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
+        SLTLogger.getInstance().log("New app data requested.");
     }
 
     private function appDataConnectSuccessHandler(data:Object):void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.connectSuccessHandler() called");
+        SLTLogger.getInstance().log("New app data request from connect() succeed.");
         _isWaitingForAppData = false;
         if (processNewAppData(data)) {
             _levelUpdater.update(_appData.gameLevelsFeatures);
@@ -504,6 +515,7 @@ public class SLTSaltrMobile {
         try {
             _appData.initWithData(data);
         } catch (e:Error) {
+            SLTLogger.getInstance().log("New app data process failed.");
             return false;
         }
 
@@ -512,11 +524,12 @@ public class SLTSaltrMobile {
         if (!_heartBeatTimerStarted) {
             startHeartbeat();
         }
+        SLTLogger.getInstance().log("New app data processed.");
         return true;
     }
 
     private function appDataConnectFailHandler(status:SLTStatus):void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
+        SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: "+status.statusCode);
         _isWaitingForAppData = false;
 
         if (status.statusCode == SLTStatus.API_ERROR) {

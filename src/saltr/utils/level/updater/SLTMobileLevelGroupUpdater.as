@@ -44,11 +44,11 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     }
 
     public function update():void {
+        SLTLogger.getInstance().log("Game levels group update called. featureToken: " + _featureToken + ", outdated Levels length: " + _outdatedLevels.length);
         if (_isInProcess) {
             throw new Error("SLTMobileLevelGroupUpdater is in processing.");
             return;
         }
-        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: " + _featureToken + ", _outdatedLevels.length: " + _outdatedLevels.length);
         if (_outdatedLevels.length > 0) {
             _levelIndexToUpdate = 0;
             _isInProcess = true;
@@ -145,9 +145,10 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     }
 
     private function updateCompleted():void {
+        var updatedLevelCount:uint = _updatedLevelCount;
         resetUpdateProcess();
+        SLTLogger.getInstance().log("Game levels group update completed. featureToken: " + _featureToken + ", updated level count: " + updatedLevelCount);
         dispatchEvent(new Event(Event.COMPLETE));
-        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: " + _featureToken + ", updateCompleted = " + !_isInProcess);
     }
 }
 }

@@ -47,26 +47,25 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     }
 
     public function update(gameLevelsFeatures:Dictionary):void {
+        SLTLogger.getInstance().log("Game level features update called.");
         if (_isInProcess) {
-            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.update() called, _isInProcess = true");
             cancel();
         }
         initWithFeatures(gameLevelsFeatures);
-        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.update() called. _gameLevelGroups.length: " + _gameLevelGroups.length);
         startUpdate();
     }
 
     public function updateLevel(gameLevelsFeatureToken:String, level:SLTLevel):void {
+        SLTLogger.getInstance().log("Update dedicated game level called.");
         if (_isInProcess) {
-            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.updateLevel() called, _isInProcess = true");
             cancel();
         }
         initWithLevel(gameLevelsFeatureToken, level);
-        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater.updateLevel() called. _gameLevelGroups.length: " + _gameLevelGroups.length);
         startUpdate();
     }
 
     private function startUpdate():void {
+        SLTLogger.getInstance().log("Game level features update started.");
         if (_gameLevelGroups.length > 0) {
             _isInProcess = true;
             for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
@@ -82,6 +81,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
             var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout, feature.token, feature.properties.allLevels);
             _gameLevelGroups.push(groupUpdater);
         }
+        SLTLogger.getInstance().log("Game level features initialized with game levels features. Level group count to update: " + _gameLevelGroups.length);
     }
 
     private function initWithLevel(featureToken:String, level:SLTLevel):void {
@@ -89,6 +89,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
         levels.push(level);
         var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout, featureToken, levels);
         _gameLevelGroups.push(groupUpdater);
+        SLTLogger.getInstance().log("Game level features initialized with dedicated level.");
     }
 
     private function cancel():void {
@@ -96,6 +97,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
             _gameLevelGroups[i].cancel();
         }
         resetUpdateProcess();
+        SLTLogger.getInstance().log("Game level features previews update cancelled.");
     }
 
     private function resetUpdateProcess():void {
@@ -109,6 +111,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
 
     private function groupUpdatedHandler(event:Event):void {
         ++_updatedGroupCount;
+        SLTLogger.getInstance().log("Game level features one group update completed. TotalGroupCount: " + _gameLevelGroups.length + " UpdatedGroupCount: " + _updatedGroupCount);
         if (_gameLevelGroups.length == _updatedGroupCount) {
             updateCompleted();
         }
@@ -116,8 +119,8 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
 
     private function updateCompleted():void {
         resetUpdateProcess();
+        SLTLogger.getInstance().log("Game levels update completed.");
         dispatchEvent(new Event(Event.COMPLETE));
-        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater updateCompleted.");
     }
 }
 }

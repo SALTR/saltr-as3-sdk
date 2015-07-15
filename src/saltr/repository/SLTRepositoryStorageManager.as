@@ -166,8 +166,8 @@ public class SLTRepositoryStorageManager {
      * @param object The object to store.
      */
     saltr_internal function cacheAppData(object:Object):void {
-        SLTLogger.getInstance().log("SLTRepositoryStorageManager.cacheAppData() called");
         _repository.cacheObject(getCachedAppDataUrl(), object);
+        SLTLogger.getInstance().log("App data cached");
     }
 
     /**
