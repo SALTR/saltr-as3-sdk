@@ -37,7 +37,7 @@ public class SLTSaltrMobile {
     private var _socialId:String;
     private var _deviceId:String;
     private var _clientKey:String;
-    private var _isLoading:Boolean;
+    private var _isWaitingForAppData:Boolean;
 
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
 
@@ -71,7 +71,7 @@ public class SLTSaltrMobile {
         _flashStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
-        _isLoading = false;
+        _isWaitingForAppData = false;
         _heartBeatTimerStarted = false;
 
         _devMode = false;
@@ -282,11 +282,11 @@ public class SLTSaltrMobile {
             throw new Error("Method 'initLevelContentFromSaltr' should be called in 'dev mode' only.");
         }
 
+        _dedicatedLevelData = new DedicatedLevelData(gameLevelsFeatureToken, sltLevel, callback);
         if (canGetAppData()) {
-            _dedicatedLevelData = new DedicatedLevelData(gameLevelsFeatureToken, sltLevel, callback);
             getAppData(appDataInitLevelSuccessHandler, appDataInitLevelFailHandler, null, null);
         } else {
-            callback(initLevelContentLocally(gameLevelsFeatureToken, sltLevel));
+            updateDedicatedLevelContent();
         }
     }
 
@@ -463,15 +463,15 @@ public class SLTSaltrMobile {
     }
 
     private function canGetAppData():Boolean {
-        return !_isLoading;
+        return !_isWaitingForAppData;
     }
 
     private function getAppData(successHandler:Function, failHandler:Function, basicProperties:Object = null, customProperties:Object = null):void {
-        if (_isLoading) {
+        if (_isWaitingForAppData) {
             throw new Error("getAppData() is in processing.");
             return;
         }
-        _isLoading = true;
+        _isWaitingForAppData = true;
 
         var params:Object = {
             clientKey: _clientKey,
@@ -487,7 +487,7 @@ public class SLTSaltrMobile {
 
     private function appDataConnectSuccessHandler(data:Object):void {
         SLTLogger.getInstance().log("SLTSaltrMobile.connectSuccessHandler() called");
-        _isLoading = false;
+        _isWaitingForAppData = false;
         if (processNewAppData(data)) {
             _levelUpdater.update(_appData.gameLevelsFeatures);
             _connectSuccessCallback();
@@ -517,7 +517,7 @@ public class SLTSaltrMobile {
 
     private function appDataConnectFailHandler(status:SLTStatus):void {
         SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
-        _isLoading = false;
+        _isWaitingForAppData = false;
 
         if (status.statusCode == SLTStatus.API_ERROR) {
             _connectFailCallback(new SLTStatusAppDataLoadFail());
@@ -527,7 +527,7 @@ public class SLTSaltrMobile {
     }
 
     private function appDataInitLevelSuccessHandler(data:Object):void {
-        _isLoading = false;
+        _isWaitingForAppData = false;
         if (processNewAppData(data)) {
             var newLevel:SLTLevel = getGameLevelFeatureProperties(_dedicatedLevelData.gameLevelsFeatureToken).getLevelByGlobalIndex(_dedicatedLevelData.level.globalIndex);
             _levelUpdater.addEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
@@ -543,15 +543,13 @@ public class SLTSaltrMobile {
     }
 
     private function appDataInitLevelFailHandler(status:SLTStatus):void {
-        _isLoading = false;
+        _isWaitingForAppData = false;
         updateDedicatedLevelContent();
     }
 
     private function updateDedicatedLevelContent():void {
         _dedicatedLevelData.callback(initLevelContentLocally(_dedicatedLevelData.gameLevelsFeatureToken, _dedicatedLevelData.level));
     }
-
-
 }
 }
 

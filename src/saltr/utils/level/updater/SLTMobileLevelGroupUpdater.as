@@ -20,7 +20,7 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTMobileLevelGroupUpdater extends EventDispatcher {
-    saltr_internal static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
+    private static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
     private static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
 
     private var _featureToken:String;

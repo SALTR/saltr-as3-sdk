@@ -110,10 +110,14 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     private function groupUpdatedHandler(event:Event):void {
         ++_updatedGroupCount;
         if (_gameLevelGroups.length == _updatedGroupCount) {
-            resetUpdateProcess();
-            SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater updateCompleted.");
-            dispatchEvent(new Event(Event.COMPLETE));
+            updateCompleted();
         }
+    }
+
+    private function updateCompleted():void {
+        resetUpdateProcess();
+        dispatchEvent(new Event(Event.COMPLETE));
+        SLTLogger.getInstance().log("SLTMobileLevelsFeaturesUpdater updateCompleted.");
     }
 }
 }
