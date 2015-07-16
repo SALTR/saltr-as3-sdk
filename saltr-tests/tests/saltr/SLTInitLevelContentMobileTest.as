@@ -11,7 +11,6 @@ import saltr.SLTSaltrMobile;
 import saltr.api.call.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
-import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -81,7 +80,7 @@ public class SLTInitLevelContentMobileTest {
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
-            var initResult:Boolean = _saltr.initLevelContent(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
+            var initResult:Boolean = _saltr.initLevelContentLocally(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
             if (true == initResult && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "cached" == level.properties.levelDataFrom) {
                 testPassed = true;
             }
@@ -106,7 +105,7 @@ public class SLTInitLevelContentMobileTest {
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
-            var initResult:Boolean = _saltr.initLevelContent(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
+            var initResult:Boolean = _saltr.initLevelContentLocally(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
             if (true == initResult && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "application" == level.properties.levelDataFrom) {
                 testPassed = true;
             }

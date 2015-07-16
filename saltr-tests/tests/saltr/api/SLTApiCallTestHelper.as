@@ -5,8 +5,8 @@ package tests.saltr.api {
 import flash.net.URLVariables;
 
 import saltr.api.call.SLTApiCall;
-import saltr.api.call.SLTApiCallResult;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -16,15 +16,15 @@ public class SLTApiCallTestHelper {
 
     public static function validateCallParams(call:SLTApiCall, params:Object, action:String):Boolean {
         var isCallSuccess:Boolean = true;
-        var callback:Function = function (result:SLTApiCallResult):void {
-            if (result.success) {
-                isCallSuccess = true;
-            } else {
-                isCallSuccess = false;
-            }
+        var successCallback:Function = function (data:Object):void {
+            isCallSuccess = true;
         };
 
-        call.call(params, callback);
+        var failCallback:Function = function (status:SLTStatus):void {
+            isCallSuccess = false;
+        };
+
+        call.call(params, successCallback, failCallback);
 
         var urlVars:URLVariables = call.buildCall();
         var jsonParsed:Object = JSON.parse(urlVars.args);
