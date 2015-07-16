@@ -97,7 +97,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
             _gameLevelGroups[i].cancel();
         }
         resetUpdateProcess();
-        SLTLogger.getInstance().log("Game level features previews update cancelled.");
+        SLTLogger.getInstance().log("Game level features previous update cancelled.");
     }
 
     private function resetUpdateProcess():void {
