@@ -43,7 +43,7 @@ public class SLTLogger {
 
     saltr_internal function log(message:String):void {
         if (_isDebug && _verboseLogging) {
-            trace("[SLTLogger]: " + message);
+            trace("[SALTR]: " + message);
         }
     }
 }
