@@ -17,6 +17,7 @@ public class ApiCallMock extends SLTApiCall {
     override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {
         _successCallback = successCallback;
         _failCallback = failCallback;
+        _params = params;
         getMockedCallResult();
     }
 
@@ -24,7 +25,7 @@ public class ApiCallMock extends SLTApiCall {
         return false;
     }
 
-    public function getMockSuccessData():Object {
+    public function getMockSuccessData(field:*):Object {
         return new Object();
     }
 
@@ -32,9 +33,13 @@ public class ApiCallMock extends SLTApiCall {
         return new SLTStatus(-1, "");
     }
 
+    public function getParamsFieldName():String {
+        return "";
+    }
+
     private function getMockedCallResult():void {
         if (getMockSuccess()) {
-            _successCallback(getMockSuccessData());
+            _successCallback(getMockSuccessData(_params[getParamsFieldName()]));
         } else {
             _failCallback(getMockFailStatus());
         }

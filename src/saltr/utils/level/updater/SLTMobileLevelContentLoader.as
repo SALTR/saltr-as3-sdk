@@ -50,7 +50,7 @@ public class SLTMobileLevelContentLoader {
         }
 
         var params:Object = {
-            contentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
+            contentUrl: sltLevel.contentUrl
         };
         var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
         levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout);

@@ -6,6 +6,7 @@ import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
+import org.flexunit.asserts.assertNotNull;
 
 import saltr.SLTSaltrMobile;
 import saltr.api.call.SLTApiCallFactory;
@@ -24,6 +25,11 @@ public class SLTInitLevelContentMobileTest {
     [Embed(source="../../../build/tests/saltr/level_0_from_application.json", mimeType="application/octet-stream")]
     private static const LevelDataFromApplicationJson:Class;
 
+    [Embed(source="../../../build/tests/saltr/slt_init_level_content_test/app_data_initial.json", mimeType="application/octet-stream")]
+    private static const AppDataInitialJson:Class;
+    [Embed(source="../../../build/tests/saltr/slt_init_level_content_test/app_data_new.json", mimeType="application/octet-stream")]
+    private static const AppDataNewJson:Class;
+
     private var clientKey:String = "";
     private var deviceId:String = "";
     private var _saltr:SLTSaltrMobile;
@@ -35,17 +41,20 @@ public class SLTInitLevelContentMobileTest {
     [Mock(type="nice")]
     public var apiFactory:SLTApiCallFactory;
     [Mock(type="nice")]
-    public var apiCallGeneralMock:ApiCallMock;
+    public var apiCallAppDataMock:ApiCallMock;
     [Mock(type="nice")]
     public var apiCallLevelContentMock:ApiCallMock;
+    [Mock(type="nice")]
+    public var apiCallSyncMock:ApiCallMock;
 
     public function SLTInitLevelContentMobileTest() {
     }
 
     [Before]
     public function tearUp():void {
-        stub(apiFactory).method("getCall").args("AppData", true).returns(apiCallGeneralMock);
+        stub(apiFactory).method("getCall").args("AppData", true).returns(apiCallAppDataMock);
         stub(apiFactory).method("getCall").args("LevelContent", true).returns(apiCallLevelContentMock);
+        stub(apiFactory).method("getCall").args("Sync", true).returns(apiCallSyncMock);
 
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.apiFactory = apiFactory;
@@ -64,12 +73,12 @@ public class SLTInitLevelContentMobileTest {
     }
 
     /**
-     * initLevelContentTestFromCache
-     * The intent of this test is to check the loadLevelContent function.
+     * initLevelContentLocallyTestFromCache.
+     * The intent of this test is to check the initLevelContentLocally function.
      * Not connected state. Cached data expected.
      */
     [Test]
-    public function initLevelContentTestFromCache():void {
+    public function initLevelContentLocallyTestFromCache():void {
         stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
@@ -89,12 +98,12 @@ public class SLTInitLevelContentMobileTest {
     }
 
     /**
-     * initLevelContentTestFromApplication.
-     * The intent of this test is to check the loadLevelContent function.
+     * initLevelContentLocallyTestFromApplication.
+     * The intent of this test is to check the initLevelContentLocally function.
      * Not connected state. Data from application expected.
      */
     [Test]
-    public function initLevelContentTestFromApplication():void {
+    public function initLevelContentLocallyTestFromApplication():void {
         stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
@@ -111,6 +120,55 @@ public class SLTInitLevelContentMobileTest {
             }
         }
         assertEquals(true, testPassed);
+    }
+
+    /**
+     * initLevelContentFromSaltrTestFromSaltr.
+     * The intent of this test is to check the initLevelContentFromSaltr function.
+     * Data from Saltr expected.
+     */
+    [Test]
+    public function initLevelContentFromSaltrTestFromSaltr():void {
+        _saltr.start();
+
+        stub(apiCallSyncMock).method("getMockSuccess").returns(true);
+        stub(apiCallSyncMock).method("getMockSuccessData").returns(new Object());
+
+        stub(apiCallAppDataMock).method("getMockSuccess").returns(true);
+        stub(apiCallAppDataMock).method("getMockSuccessData").returns(JSON.parse(new AppDataInitialJson()));
+
+        var isConnected:Boolean = false;
+        var failCallback:Function;
+        var successCallback:Function = function ():void {
+            isConnected = true;
+        };
+        _saltr.devMode = true;
+        _saltr.connect(successCallback, failCallback);
+
+        stub(apiCallAppDataMock).method("getMockSuccess").returns(true);
+        stub(apiCallAppDataMock).method("getMockSuccessData").returns(JSON.parse(new AppDataNewJson()));
+
+        stub(apiCallLevelContentMock).method("getParamsFieldName").returns("contentUrl");
+        stub(apiCallLevelContentMock).method("getMockSuccess").returns(true);
+        var contentUrl:String = "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310068_583.json";
+        stub(apiCallLevelContentMock).method("getMockSuccessData").args(contentUrl).returns(JSON.parse(new LevelDataCachedJson()));
+        stub(apiCallLevelContentMock).method("getMockSuccessData").returns(null);
+
+        stub(mobileRepository).method("cacheObject").calls(function ():void {
+            trace("cacheObject");
+        });
+        stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new LevelDataCachedJson()));
+
+        var level:SLTLevel = _saltr.getGameLevelFeatureProperties("GAME_LEVELS").getLevelByGlobalIndex(0);
+
+        var testPassed:Boolean = false;
+        var initLevelCallback:Function = function (success:Boolean):void {
+            if (true == success && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "cached" == level.properties.levelDataFrom) {
+                testPassed = true;
+            }
+        };
+        _saltr.initLevelContentFromSaltr("GAME_LEVELS", level, initLevelCallback);
+        assertEquals(testPassed, true);
     }
 }
 }

@@ -23,7 +23,7 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     }
 
     override saltr_internal function buildCall():URLVariables {
-        _url = _params.contentUrl;
+        _url = _params.contentUrl + "?_time_=" + new Date().getTime();
         return null;
     }
 
