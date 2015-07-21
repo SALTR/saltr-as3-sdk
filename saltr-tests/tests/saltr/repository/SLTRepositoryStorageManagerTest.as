@@ -6,9 +6,6 @@ import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
-import org.hamcrest.collection.array;
-import org.hamcrest.core.anything;
-import org.hamcrest.object.instanceOf;
 
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
@@ -24,13 +21,12 @@ public class SLTRepositoryStorageManagerTest {
     private static const cachedLevelVersionsJson:Class;
 
     private var _storageManager:SLTRepositoryStorageManager;
+    private var _appVersion:String;
 
     [Rule]
     public var mocks:MockolateRule = new MockolateRule();
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
-    [Mock(type="nice")]
-    public var utils:SLTUtils;
 
     public function SLTRepositoryStorageManagerTest() {
     }
@@ -38,7 +34,7 @@ public class SLTRepositoryStorageManagerTest {
     [Before]
     public function tearUp():void {
         _storageManager = new SLTRepositoryStorageManager(mobileRepository);
-        stub(utils).method("getAppVersion").returns("0");
+        _appVersion = SLTUtils.getAppVersion();
     }
 
     [After]
@@ -53,8 +49,8 @@ public class SLTRepositoryStorageManagerTest {
      */
     [Test]
     public function getLevelVersionFromCacheMissingCachedLevelTest():void {
-        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_0/features/GAME_LEVELS/level_0.json").returns(null);
-        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_0/features/GAME_LEVELS/level_versions.json").returns(JSON.parse(new cachedLevelVersionsJson()));
+        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_0.json").returns(null);
+        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_versions.json").returns(JSON.parse(new cachedLevelVersionsJson()));
         var levelVersion:String = _storageManager.getLevelVersionFromCache("GAME_LEVELS", 0);
         assertEquals(null, levelVersion);
     }
@@ -66,8 +62,8 @@ public class SLTRepositoryStorageManagerTest {
      */
     [Test]
     public function getLevelVersionFromCacheMissingLevelVersionsTest():void {
-        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_0/features/GAME_LEVELS/level_0.json").returns(JSON.parse(new LevelDataCachedJson()));
-        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_0/features/GAME_LEVELS/level_versions.json").returns(null);
+        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_0.json").returns(JSON.parse(new LevelDataCachedJson()));
+        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_versions.json").returns(null);
         var levelVersion:String = _storageManager.getLevelVersionFromCache("GAME_LEVELS", 0);
         assertEquals(null, levelVersion);
     }
@@ -82,12 +78,10 @@ public class SLTRepositoryStorageManagerTest {
         var objectToCache:Object = JSON.parse(new LevelDataCachedJson());
         var cachedLevelVersions:Object = JSON.parse(new cachedLevelVersionsJson());
 
-        stub(mobileRepository).method("cacheObject").calls(function():void {
+        stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
-
-        stub(mobileRepository).method("getObjectFromCache").returns(cachedLevelVersions);
-
+        stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_versions.json").returns(cachedLevelVersions);
 
         var testSuccess:Boolean = false;
 
@@ -101,7 +95,6 @@ public class SLTRepositoryStorageManagerTest {
                 break;
             }
         }
-
         assertEquals(true, testSuccess);
     }
 }
