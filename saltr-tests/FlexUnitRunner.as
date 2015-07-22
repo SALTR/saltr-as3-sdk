@@ -31,7 +31,7 @@ import tests.saltr.game.matching.SLTCellTest;
 import tests.saltr.game.matching.SLTCellsTest;
 import tests.saltr.game.matching.SLTMatchingBoardTest;
 import tests.saltr.repository.SLTRepositoryStorageManagerTest;
-import tests.saltr.utils.level.updater.SLTMobileLevelGroupUpdaterTest;
+import tests.saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdaterTest;
 
 public class FlexUnitRunner extends Sprite {
 
@@ -74,7 +74,7 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTSendLevelEndApiCallTest);
         testsToRun.push(SLTSyncApiCallTest);
         testsToRun.push(SLTRepositoryStorageManagerTest);
-        testsToRun.push(SLTMobileLevelGroupUpdaterTest);
+        testsToRun.push(SLTMobileLevelsFeaturesUpdaterTest);
 //        testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }
