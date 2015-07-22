@@ -13,6 +13,7 @@ import org.flexunit.async.Async;
 import saltr.SLTConfig;
 import saltr.SLTDeserializer;
 import saltr.api.call.SLTApiCallFactory;
+import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -48,13 +49,8 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
             trace("cacheObject");
         });
         stub(mobileRepository).method("getObjectFromCache").returns(null);
-        //stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new LevelDataCachedJson()));
-        //stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
 
-        //stub(apiCallLevelContentMock).method("getParamsFieldName").returns("contentUrl");
         stub(apiCallLevelContentMock).method("getMockSuccess").returns(true);
-        //var contentUrl:String = "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310068_583.json";
-        //stub(apiCallLevelContentMock).method("getMockSuccessData").args(contentUrl).returns(JSON.parse(new LevelDataCachedJson()));
         stub(apiCallLevelContentMock).method("getMockSuccessData").returns(JSON.parse(new LevelDataCachedJson()));
 
         stub(apiFactory).method("getCall").args("LevelContent", true).returns(apiCallLevelContentMock);
@@ -76,6 +72,36 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
         var gameLevelsFeatures:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_GAME_LEVELS);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 5000);
         _featuresUpdater.update(gameLevelsFeatures);
+    }
+
+    /**
+     * updateCancelUpdateTest.
+     * The intent of this test is to check the update function.
+     * At first the game levels group with 5 levels provided. At the next step the smaller group of levels provided (number of levels 3).
+     * Expect behaviour is cancel updating of thirst provided group and updating the new group provided.
+     */
+    [Test(async, timeout=1000)]
+    public function updateCancelUpdateTest():void {
+        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+        var gameLevelsFeatures3Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData3LevelsJson()), SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+        Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
+        _featuresUpdater.update(gameLevelsFeatures5Levels);
+        _featuresUpdater.update(gameLevelsFeatures3Levels);
+    }
+
+    /**
+     * updateCancelUpdateTest.
+     * The intent of this test is to check the update function.
+     * At first the game levels group with 5 levels provided. At the next step the single level is provided for update.
+     * Expect behaviour is cancel updating of thirst provided group and updating the new level provided.
+     */
+    [Test(async, timeout=1000)]
+    public function updateCancelUpdateLevelTest():void {
+        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+        Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
+        _featuresUpdater.update(gameLevelsFeatures5Levels);
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_MATCHING);
+        _featuresUpdater.updateLevel("GAME_LEVELS", level);
     }
 }
 }
