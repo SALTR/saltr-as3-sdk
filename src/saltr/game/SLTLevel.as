@@ -127,6 +127,13 @@ public class SLTLevel {
     }
 
     /**
+     * The boards.
+     */
+    public function get boards():Dictionary {
+        return _boards;
+    }
+
+    /**
      * Gets the board by identifier.
      * @param id The board identifier.
      * @return The board with provided identifier.
