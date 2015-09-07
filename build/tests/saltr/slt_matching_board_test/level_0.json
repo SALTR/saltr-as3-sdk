@@ -1197,8 +1197,8 @@
       "rescue-sheep": "2"
     },
     "boosts": {
-      "BOOST_FLYING_BOMB": false,
-      "BOOST_CROSS_FLYING_BOMB": false
+      "BOOST_DRONE": false,
+      "BOOST_CROSS_DRONE": false
     },
     "isTutorialDisabled": true,
     "isMelnSplashDisabled": false
