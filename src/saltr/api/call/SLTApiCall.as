@@ -31,9 +31,9 @@ public class SLTApiCall {
         return undefined;
     }
 
-    internal static function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
+    internal static function getTicket(url:String, vars:URLVariables, timeout:int = 0, method:String = URLRequestMethod.POST):SLTResourceURLTicket {
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
-        ticket.method = URLRequestMethod.POST;
+        ticket.method = method;
         if (timeout > 0) {
             ticket.idleTimeout = timeout;
         }
@@ -66,9 +66,13 @@ public class SLTApiCall {
     }
 
     private function doCall(urlVars:URLVariables, timeout:int):void {
-        var ticket:SLTResourceURLTicket = SLTApiCall.getTicket(_url, urlVars, timeout);
+        var ticket:SLTResourceURLTicket = getURLTicket(urlVars, timeout);
         var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler);
         resource.load();
+    }
+
+    saltr_internal function getURLTicket(urlVars:URLVariables, timeout:int):SLTResourceURLTicket {
+        return SLTApiCall.getTicket(_url, urlVars, timeout);
     }
 
     saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
