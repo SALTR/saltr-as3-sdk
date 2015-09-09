@@ -2,15 +2,16 @@
  * Created by TIGR on 6/19/2015.
  */
 package saltr.utils.level.updater {
+import flash.events.Event;
+import flash.events.EventDispatcher;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 import saltr.utils.SLTLogger;
 
 use namespace saltr_internal;
@@ -18,49 +19,59 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements ISLTMobileLevelUpdater {
+public class SLTMobileLevelGroupUpdater extends EventDispatcher {
+    private static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
+    private static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
+
     private var _featureToken:String;
     private var _outdatedLevels:Vector.<SLTLevel>;
     private var _updatedLevelCount:uint;
     private var _levelIndexToUpdate:int;
     private var _levelUpdateTimer:Timer;
     private var _allLevels:Vector.<SLTLevel>;
+    private var _levelContentLoader:SLTMobileLevelContentLoader;
+    private var _isInProcess:Boolean;
+    private var _isCancelled:Boolean;
 
-    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiFactory, requestIdleTimeout:int) {
-        super(repositoryStorageManager, apiFactory, requestIdleTimeout);
-        _outdatedLevels = new Vector.<SLTLevel>();
+    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory,
+                                               requestIdleTimeout:int, featureToken:String, allLevels:Vector.<SLTLevel>) {
+        _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, apiFactory, requestIdleTimeout);
+        _isCancelled = false;
         resetUpdateProcess();
-    }
-
-    public function init(featureToken:String, allLevels:Vector.<SLTLevel>):void {
         _featureToken = featureToken;
         _allLevels = allLevels;
         _outdatedLevels = getOutdatedLevels();
     }
 
     public function update():void {
+        SLTLogger.getInstance().log("Game levels group update called. featureToken: " + _featureToken + ", outdated Levels length: " + _outdatedLevels.length);
         if (_isInProcess) {
-            SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: "+_featureToken+", not executed _isInProcess = true");
+            throw new Error("SLTMobileLevelGroupUpdater is in processing.");
             return;
         }
-        SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater.update() called. _featureToken: "+_featureToken+", _outdatedLevels.length: "+_outdatedLevels.length);
         if (_outdatedLevels.length > 0) {
             _levelIndexToUpdate = 0;
             _isInProcess = true;
             startNextLevelsUpdate();
             startLevelUpdateTimer();
+        } else {
+            updateCompleted();
         }
     }
 
-    public function updateCompleted():Boolean {
-        return !_isInProcess;
+    public function cancel():void {
+        _isCancelled = true;
+        stopLevelUpdateTimer();
+        resetUpdateProcess();
     }
 
-    override protected function resetUpdateProcess():void {
-        _outdatedLevels.length = 0;
+    private function resetUpdateProcess():void {
+        if(_outdatedLevels) {
+            _outdatedLevels.length = 0;
+        }
         _updatedLevelCount = 0;
         _levelIndexToUpdate = 0;
-        super.resetUpdateProcess();
+        _isInProcess = false;
     }
 
     private function getOutdatedLevels():Vector.<SLTLevel> {
@@ -75,12 +86,12 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     }
 
     private function getCachedLevelVersion(level:SLTLevel):String {
-        return _repositoryStorageManager.getLevelVersionFromCache(_featureToken, level.globalIndex);
+        return _levelContentLoader.getCachedLevelVersion(_featureToken, level);
     }
 
     private function startLevelUpdateTimer():void {
         stopLevelUpdateTimer();
-        _levelUpdateTimer = new Timer(SLTMobileLevelUpdater.LEVEL_UPDATE_TIMER_DELAY);
+        _levelUpdateTimer = new Timer(LEVEL_UPDATE_TIMER_DELAY);
         _levelUpdateTimer.addEventListener(TimerEvent.TIMER, levelUpdateTimerHandler);
         _levelUpdateTimer.start();
     }
@@ -103,7 +114,7 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
     private function startNextLevelsUpdate():void {
         for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             if (_levelIndexToUpdate < _outdatedLevels.length) {
-                loadLevelContentFromSaltr(_outdatedLevels[_levelIndexToUpdate]);
+                _levelContentLoader.loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate], loadLevelSuccessHandler, loadLevelFailHandler);
                 ++_levelIndexToUpdate;
             } else {
                 return;
@@ -111,32 +122,33 @@ public class SLTMobileLevelGroupUpdater extends SLTMobileLevelUpdater implements
         }
     }
 
-    /**
-     * Loads the level content.
-     * @param sltLevel The level.
-     */
-    private function loadLevelContentFromSaltr(sltLevel:SLTLevel):void {
-        var params:Object = {
-            levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
-        };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_LEVEL_CONTENT, true);
-        levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
+    private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:Object):void {
+        if (_isCancelled) {
+            return;
+        }
+        _levelContentLoader.cacheLevelContent(featureToken, sltLevel, data);
+        manageUpdateProcess();
+    }
 
-        function levelContentApiCallback(result:SLTApiCallResult):void {
-            var content:Object = result.data;
-            if (result.success) {
-                cacheLevelContent(sltLevel, content);
-            }
-            ++_updatedLevelCount;
-            if (_updatedLevelCount >= _outdatedLevels.length) {
-                resetUpdateProcess();
-                SLTLogger.getInstance().log("SLTMobileLevelGroupUpdater _featureToken: "+_featureToken+", updateCompleted = "+updateCompleted());
-            }
+    private function loadLevelFailHandler(featureToken:String, sltLevel:SLTLevel, status:SLTStatus):void {
+        if (_isCancelled) {
+            return;
+        }
+        manageUpdateProcess();
+    }
+
+    private function manageUpdateProcess():void {
+        ++_updatedLevelCount;
+        if (_updatedLevelCount >= _outdatedLevels.length) {
+            updateCompleted();
         }
     }
 
-    private function cacheLevelContent(level:SLTLevel, content:Object):void {
-        _repositoryStorageManager.cacheLevelContent(_featureToken, level.globalIndex, level.version, content);
+    private function updateCompleted():void {
+        var updatedLevelCount:uint = _updatedLevelCount;
+        resetUpdateProcess();
+        SLTLogger.getInstance().log("Game levels group update completed. featureToken: " + _featureToken + ", updated level count: " + updatedLevelCount);
+        dispatchEvent(new Event(Event.COMPLETE));
     }
 }
 }

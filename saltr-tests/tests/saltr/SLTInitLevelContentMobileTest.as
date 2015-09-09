@@ -8,10 +8,8 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
-import saltr.api.SLTApiFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
-import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -33,23 +31,13 @@ public class SLTInitLevelContentMobileTest {
     public var mocks:MockolateRule = new MockolateRule();
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
-    [Mock(type="nice")]
-    public var apiFactory:SLTApiFactory;
-    [Mock(type="nice")]
-    public var apiCallGeneralMock:ApiCallMock;
-    [Mock(type="nice")]
-    public var apiCallLevelContentMock:ApiCallMock;
 
     public function SLTInitLevelContentMobileTest() {
     }
 
     [Before]
     public function tearUp():void {
-        stub(apiFactory).method("getCall").args("AppData", true).returns(apiCallGeneralMock);
-        stub(apiFactory).method("getCall").args("LevelContent", true).returns(apiCallLevelContentMock);
-
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
-        _saltr.apiFactory = apiFactory;
         _saltr.repository = mobileRepository;
 
         _saltr.defineGenericFeature("SETTINGS", {
@@ -65,12 +53,12 @@ public class SLTInitLevelContentMobileTest {
     }
 
     /**
-     * initLevelContentTestFromCache
-     * The intent of this test is to check the loadLevelContent function.
+     * initLevelContentLocallyTestFromCache.
+     * The intent of this test is to check the initLevelContentLocally function.
      * Not connected state. Cached data expected.
      */
     [Test]
-    public function initLevelContentTestFromCache():void {
+    public function initLevelContentLocallyTestFromCache():void {
         stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
@@ -81,7 +69,7 @@ public class SLTInitLevelContentMobileTest {
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
-            var initResult:Boolean = _saltr.initLevelContent(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
+            var initResult:Boolean = _saltr.initLevelContentLocally(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
             if (true == initResult && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "cached" == level.properties.levelDataFrom) {
                 testPassed = true;
             }
@@ -90,12 +78,12 @@ public class SLTInitLevelContentMobileTest {
     }
 
     /**
-     * initLevelContentTestFromApplication.
-     * The intent of this test is to check the loadLevelContent function.
+     * initLevelContentLocallyTestFromApplication.
+     * The intent of this test is to check the initLevelContentLocally function.
      * Not connected state. Data from application expected.
      */
     [Test]
-    public function initLevelContentTestFromApplication():void {
+    public function initLevelContentLocallyTestFromApplication():void {
         stub(mobileRepository).method("cacheObject").calls(function ():void {
             trace("cacheObject");
         });
@@ -106,7 +94,7 @@ public class SLTInitLevelContentMobileTest {
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
-            var initResult:Boolean = _saltr.initLevelContent(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
+            var initResult:Boolean = _saltr.initLevelContentLocally(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
             if (true == initResult && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "application" == level.properties.levelDataFrom) {
                 testPassed = true;
             }

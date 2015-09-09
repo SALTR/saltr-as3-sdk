@@ -1,4 +1,4 @@
-package saltr.api {
+package saltr.api.call {
 import flash.net.URLVariables;
 
 import saltr.SLTConfig;
@@ -9,17 +9,18 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTAddPropertiesApiCall extends SLTApiCall {
+public class SLTAppDataApiCall extends SLTApiCall {
 
-    public function SLTAddPropertiesApiCall(isMobile:Boolean = true):void {
+    public function SLTAppDataApiCall(isMobile:Boolean = true) {
         super(isMobile);
     }
 
     override saltr_internal function buildCall():URLVariables {
         _url = SLTConfig.SALTR_API_URL;
         var urlVars:URLVariables = new URLVariables();
+        urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
+
         var args:Object = buildDefaultArgs();
-        urlVars.action = SLTConfig.ACTION_ADD_PROPERTIES;
         args.basicProperties = _params.basicProperties;
         args.customProperties = _params.customProperties;
 

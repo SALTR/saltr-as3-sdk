@@ -1,7 +1,9 @@
-package saltr.api {
+package saltr.api.call {
+import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 
 import saltr.resource.SLTResource;
+import saltr.resource.SLTResourceURLTicket;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -23,8 +25,12 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     }
 
     override saltr_internal function buildCall():URLVariables {
-        _url = _params.levelContentUrl;
+        _url = _params.contentUrl + "?_time_=" + new Date().getTime();
         return null;
+    }
+
+    override saltr_internal function getURLTicket(urlVars:URLVariables, timeout:int):SLTResourceURLTicket {
+        return SLTApiCall.getTicket(_url, urlVars, timeout, URLRequestMethod.GET);
     }
 
     override saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
@@ -32,12 +38,13 @@ public class SLTLevelContentApiCall extends SLTApiCall {
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.success = content != null;
         apiCallResult.data = content;
-        _callback(apiCallResult);
+        handleResult(apiCallResult);
     }
 
     private function validateLevelContentUrl():Object {
-        if (_params.levelContentUrl == null || _params.levelContentUrl == "") {
-            return {isValid: false, message: "Field levelContentUrl is required"};
+        var contentURL:String = _params.contentUrl;
+        if (contentURL == null || contentURL == "") {
+            return {isValid: false, message: "Missing contentUrl."};
         }
         return {isValid: true};
     }

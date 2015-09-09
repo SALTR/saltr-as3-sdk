@@ -8,9 +8,8 @@ import flash.events.Event;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCall;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
@@ -38,12 +37,13 @@ public class SLTSaltrMobile {
     private var _socialId:String;
     private var _deviceId:String;
     private var _clientKey:String;
-    private var _isLoading:Boolean;
+    private var _isWaitingForAppData:Boolean;
 
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
 
     private var _connectSuccessCallback:Function;
     private var _connectFailCallback:Function;
+    private var _dedicatedLevelData:DedicatedLevelData;
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
@@ -56,7 +56,7 @@ public class SLTSaltrMobile {
 
     private var _heartbeatTimer:Timer;
     private var _heartBeatTimerStarted:Boolean;
-    private var _apiFactory:SLTApiFactory;
+    private var _apiFactory:SLTApiCallFactory;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
     private var _logger:SLTLogger;
 
@@ -71,7 +71,7 @@ public class SLTSaltrMobile {
         _flashStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
-        _isLoading = false;
+        _isWaitingForAppData = false;
         _heartBeatTimerStarted = false;
 
         _devMode = false;
@@ -85,14 +85,14 @@ public class SLTSaltrMobile {
 
         _appData = new SLTAppData();
 
-        _apiFactory = new SLTApiFactory();
+        _apiFactory = new SLTApiCallFactory();
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, _apiFactory, _requestIdleTimeout);
     }
 
     /**
      * The API factory.
      */
-    public function set apiFactory(value:SLTApiFactory):void {
+    public function set apiFactory(value:SLTApiCallFactory):void {
         _apiFactory = value;
         _levelUpdater.apiFactory = _apiFactory;
     }
@@ -111,6 +111,14 @@ public class SLTSaltrMobile {
     public function set devMode(value:Boolean):void {
         _devMode = value;
         _logger.debug = _devMode;
+    }
+
+    /**
+     * The verbose logging state.
+     * Note: This works only in development mode
+     */
+    public function set verboseLogging(value:Boolean):void {
+        _logger.verboseLogging = value;
     }
 
     /**
@@ -239,30 +247,19 @@ public class SLTSaltrMobile {
      * Establishes the connection to Saltr server.
      */
     public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
+        SLTLogger.getInstance().log("Method 'connect()' called.");
         if (!_started) {
             throw new Error("Method 'connect()' should be called after 'start()' only.");
         }
 
-        if (_isLoading) {
+        if (canGetAppData()) {
+            _connectSuccessCallback = successCallback;
+            _connectFailCallback = failCallback;
+            getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, basicProperties, customProperties);
+        } else {
+            SLTLogger.getInstance().log("Connect failed. Concurrent load accrues.");
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
-            return;
         }
-
-        _connectSuccessCallback = successCallback;
-        _connectFailCallback = failCallback;
-
-        _isLoading = true;
-
-        var params:Object = {
-            clientKey: _clientKey,
-            deviceId: _deviceId,
-            devMode: _devMode,
-            socialId: _socialId,
-            basicProperties: basicProperties,
-            customProperties: customProperties
-        };
-        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_APP_DATA, true);
-        appDataCall.call(params, appDataApiCallback, _requestIdleTimeout);
     }
 
     /**
@@ -271,7 +268,7 @@ public class SLTSaltrMobile {
      * @param sltLevel The level.
      * @return TRUE if success, FALSE otherwise.
      */
-    public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
+    public function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
         var content:Object = loadLevelContentInternally(gameLevelsFeatureToken, sltLevel);
         if (null != content) {
             sltLevel.updateContent(content);
@@ -287,24 +284,19 @@ public class SLTSaltrMobile {
      * @param sltLevel The level.
      * @param callback The callback function. Called when level initialization completed.
      */
-    public function initLevelContentLatest(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        connect(successCallback, failCallback, null, null);
-
-        function successCallback():void {
-            SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest connect() success callback called");
-            _levelUpdater.addEventListener(Event.COMPLETE, function (e:Event):void {
-                e.target.removeEventListener(Event.COMPLETE, arguments.callee);
-                SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest _levelUpdater _complete event received");
-                initLevelContent(gameLevelsFeatureToken, sltLevel);
-
-                callback(true);
-            });
+    public function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+        if (!_started) {
+            throw new Error("Method 'initLevelContentFromSaltr' should be called after 'start()' only.");
+        }
+        if (!_devMode) {
+            throw new Error("Method 'initLevelContentFromSaltr' should be called in 'dev mode' only.");
         }
 
-        function failCallback():void {
-            SLTLogger.getInstance().log("SLTSaltrMobile.initLevelContentLatest() fail callback called");
-            initLevelContent(gameLevelsFeatureToken, sltLevel);
-            callback(false);
+        _dedicatedLevelData = new DedicatedLevelData(gameLevelsFeatureToken, sltLevel, callback);
+        if (canGetAppData()) {
+            getAppData(appDataInitLevelSuccessHandler, appDataInitLevelFailHandler, null, null);
+        } else {
+            updateDedicatedLevelContent();
         }
     }
 
@@ -325,8 +317,8 @@ public class SLTSaltrMobile {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_ADD_PROPERTIES, true);
-        addPropertiesApiCall.call(params, addPropertiesApiCallback, _requestIdleTimeout);
+        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES, true);
+        addPropertiesApiCall.call(params, addPropertiesSuccessHandler, addPropertiesFailHandler, _requestIdleTimeout);
     }
 
     /**
@@ -362,73 +354,24 @@ public class SLTSaltrMobile {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SEND_LEVEL_END, true);
-        sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
+        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SEND_LEVEL_END, true);
+        sendLevelEndEventApiCall.call(params, sendLevelEndSuccessHandler, sendLevelEndFailHandler);
     }
 
-    private function addPropertiesApiCallback(result:SLTApiCallResult):void {
-        if (result.success) {
-            trace("[addPropertiesApiCallback] success");
-        } else {
-            trace("[addPropertiesApiCallback] error");
-        }
+    private function addPropertiesSuccessHandler(data:Object):void {
+        trace("[addPropertiesApiCallback] success");
     }
 
-    private function appDataApiCallback(result:SLTApiCallResult):void {
-        if (result.success) {
-            appDataLoadSuccessCallback(result);
-        } else {
-            appDataLoadFailCallback(result.status);
-        }
+    private function addPropertiesFailHandler(status:SLTStatus):void {
+        trace("[addPropertiesApiCallback] error");
     }
 
-    //TODO @GSAR: later we need to report the feature set differences by an event or a callback to client;
-    private function appDataLoadSuccessCallback(result:SLTApiCallResult):void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadSuccessCallback() called");
-        _isLoading = false;
-
-        if (_devMode && !_isSynced) {
-            sync();
-        }
-
-        var levelType:String = result.data.levelType;
-
-        try {
-            _appData.initWithData(result.data);
-        } catch (e:Error) {
-            _connectFailCallback(new SLTStatusAppDataParseError());
-            return;
-        }
-        _repositoryStorageManager.cacheAppData(result.data);
-
-        _connectSuccessCallback();
-
-        if (!_heartBeatTimerStarted) {
-            startHeartbeat();
-        }
-
-        _levelUpdater.init(_appData.gameLevelsFeatures);
-        _levelUpdater.update();
+    private function sendLevelEndSuccessHandler(data:Object):void {
+        trace("sendLevelEndSuccessHandler");
     }
 
-    private function appDataLoadFailCallback(status:SLTStatus):void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.appDataLoadFailCallback() called");
-        _isLoading = false;
-        if (status.statusCode == SLTStatus.API_ERROR) {
-            _connectFailCallback(new SLTStatusAppDataLoadFail());
-        } else {
-            _connectFailCallback(status);
-        }
-    }
-
-    protected function addDeviceSuccessHandler():void {
-        trace("[Saltr] Dev adding new device has succeed.");
-        sync();
-    }
-
-    protected function addDeviceFailHandler(result:SLTApiCallResult):void {
-        trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showRegistrationFailStatus(result.status.statusMessage);
+    private function sendLevelEndFailHandler(status:SLTStatus):void {
+        trace("sendLevelEndFailHandler");
     }
 
     private function addDeviceToSALTR(email:String):void {
@@ -439,28 +382,21 @@ public class SLTSaltrMobile {
             deviceInfo: SLTMobileDeviceInfo.getDeviceInfo(),
             devMode: _devMode
         };
-        var apiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_REGISTER_DEVICE, true);
-        apiCall.call(params, registerDeviceApiCallback);
+        var apiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_REGISTER_DEVICE, true);
+        apiCall.call(params, addDeviceToSaltrSuccessHandler, addDeviceToSaltrFailHandler);
     }
 
-    private function registerDeviceApiCallback(result:SLTApiCallResult):void {
-        if (result.success) {
-            addDeviceSuccessHandler();
-        } else {
-            addDeviceFailHandler(result);
-        }
+    private function addDeviceToSaltrSuccessHandler(data:Object):void {
+        trace("[Saltr] Dev adding new device has succeed.");
+        sync();
     }
 
-    private function sendLevelEndApiCallback(result:SLTApiCallResult):void {
-        if (result.success) {
-            trace("sendLevelEndSuccessHandler");
-        } else {
-            trace("sendLevelEndFailHandler");
-        }
+    private function addDeviceToSaltrFailHandler(status:SLTStatus):void {
+        trace("[Saltr] Dev adding new device has failed.");
+        _dialogController.showRegistrationFailStatus(status.statusMessage);
     }
 
     private function sync():void {
-        SLTLogger.getInstance().log("SLTSaltrMobile.sync() called");
         var params:Object = {
             clientKey: _clientKey,
             devMode: _devMode,
@@ -468,28 +404,23 @@ public class SLTSaltrMobile {
             socialId: _socialId,
             defaultFeatures: _appData.defaultFeatures
         };
-        var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_SYNC, true);
-        syncApiCall.call(params, syncApiCallback);
+        var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SYNC, true);
+        syncApiCall.call(params, syncSuccessHandler, syncFailHandler);
+        SLTLogger.getInstance().log("sync() called.");
     }
 
-    private function syncApiCallback(result:SLTApiCallResult):void {
-        if (result.success) {
-            syncSuccessHandler();
-        } else {
-            syncFailHandler(result);
-        }
-    }
-
-    protected function syncSuccessHandler():void {
+    private function syncSuccessHandler(data:Object):void {
+        SLTLogger.getInstance().log("Sync call succeed.");
         _isSynced = true;
     }
 
-    protected function syncFailHandler(result:SLTApiCallResult):void {
-        if (result.status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
+    private function syncFailHandler(status:SLTStatus):void {
+        SLTLogger.getInstance().log("Sync call failed. Status code: "+status.statusCode);
+        if (status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
             registerDevice();
         }
         else {
-            trace("[Saltr] Dev feature Sync has failed. " + result.status.statusMessage);
+            trace(status.statusMessage);
         }
     }
 
@@ -517,14 +448,12 @@ public class SLTSaltrMobile {
             deviceId: _deviceId,
             socialId: _socialId
         };
-        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiFactory.API_CALL_HEARTBEAT, true);
-        heartbeatApiCall.call(params, heartbeatApiCallback);
+        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_HEARTBEAT, true);
+        heartbeatApiCall.call(params, null, heartbeatFailHandler);
     }
 
-    private function heartbeatApiCallback(result:SLTApiCallResult):void {
-        if (!result.success) {
-            stopHeartbeat();
-        }
+    private function heartbeatFailHandler(status:SLTStatus):void {
+        stopHeartbeat();
     }
 
     private function getCachedAppData():Object {
@@ -542,5 +471,123 @@ public class SLTSaltrMobile {
         }
         return content;
     }
+
+    private function canGetAppData():Boolean {
+        return !_isWaitingForAppData;
+    }
+
+    private function getAppData(successHandler:Function, failHandler:Function, basicProperties:Object = null, customProperties:Object = null):void {
+        if (_isWaitingForAppData) {
+            throw new Error("getAppData() is in processing.");
+            return;
+        }
+        _isWaitingForAppData = true;
+
+        var params:Object = {
+            clientKey: _clientKey,
+            deviceId: _deviceId,
+            devMode: _devMode,
+            socialId: _socialId,
+            basicProperties: basicProperties,
+            customProperties: customProperties
+        };
+        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
+        appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
+        SLTLogger.getInstance().log("New app data requested.");
+    }
+
+    private function appDataConnectSuccessHandler(data:Object):void {
+        SLTLogger.getInstance().log("New app data request from connect() succeed.");
+        _isWaitingForAppData = false;
+        if (processNewAppData(data)) {
+            _levelUpdater.update(_appData.gameLevelsFeatures);
+            _connectSuccessCallback();
+        } else {
+            _connectFailCallback(new SLTStatusAppDataParseError());
+        }
+    }
+
+    private function processNewAppData(data:Object):Boolean {
+        if (_devMode && !_isSynced) {
+            sync();
+        }
+        //var levelType:String = result.data.levelType;
+        try {
+            _appData.initWithData(data);
+        } catch (e:Error) {
+            SLTLogger.getInstance().log("New app data process failed.");
+            return false;
+        }
+
+        _repositoryStorageManager.cacheAppData(data);
+
+        if (!_heartBeatTimerStarted) {
+            startHeartbeat();
+        }
+        SLTLogger.getInstance().log("New app data processed.");
+        return true;
+    }
+
+    private function appDataConnectFailHandler(status:SLTStatus):void {
+        SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: "+status.statusCode);
+        _isWaitingForAppData = false;
+
+        if (status.statusCode == SLTStatus.API_ERROR) {
+            _connectFailCallback(new SLTStatusAppDataLoadFail());
+        } else {
+            _connectFailCallback(status);
+        }
+    }
+
+    private function appDataInitLevelSuccessHandler(data:Object):void {
+        _isWaitingForAppData = false;
+        if (processNewAppData(data)) {
+            var newLevel:SLTLevel = getGameLevelFeatureProperties(_dedicatedLevelData.gameLevelsFeatureToken).getLevelByGlobalIndex(_dedicatedLevelData.level.globalIndex);
+            _levelUpdater.addEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
+            _levelUpdater.updateLevel(_dedicatedLevelData.gameLevelsFeatureToken, newLevel);
+        } else {
+            updateDedicatedLevelContent();
+        }
+    }
+
+    private function dedicatedLevelUpdateCompleteHandler(event:Event):void {
+        _levelUpdater.removeEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
+        updateDedicatedLevelContent();
+    }
+
+    private function appDataInitLevelFailHandler(status:SLTStatus):void {
+        _isWaitingForAppData = false;
+        updateDedicatedLevelContent();
+    }
+
+    private function updateDedicatedLevelContent():void {
+        _dedicatedLevelData.callback(initLevelContentLocally(_dedicatedLevelData.gameLevelsFeatureToken, _dedicatedLevelData.level));
+    }
 }
+}
+
+import saltr.game.SLTLevel;
+
+internal class DedicatedLevelData {
+    private var _gameLevelsFeatureToken:String;
+    private var _level:SLTLevel;
+    private var _callback:Function;
+
+    public function DedicatedLevelData(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+        _gameLevelsFeatureToken = gameLevelsFeatureToken;
+        _level = sltLevel;
+        _callback = callback;
+    }
+
+    public function get gameLevelsFeatureToken():String {
+        return _gameLevelsFeatureToken;
+    }
+
+    public function get level():SLTLevel {
+        return _level;
+    }
+
+    public function get callback():Function {
+        return _callback;
+    }
 }

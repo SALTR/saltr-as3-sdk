@@ -11,7 +11,7 @@
 //import saltr.SLTSaltrMobile;
 //
 //import saltr.api.SLTApiCallResult;
-//import saltr.api.SLTApiFactory;
+//import saltr.api.SLTApiCallFactory;
 //import saltr.saltr_internal;
 //import saltr.status.SLTStatus;
 //
@@ -25,7 +25,7 @@
 //    [Mock(type="nice")]
 //    public var _heartbeatMock:ApiCallMock;
 //    [Mock(type="nice")]
-//    public var _apiFactory:SLTApiFactory;
+//    public var _apiFactory:SLTApiCallFactory;
 //    private var _saltr:SLTSaltrMobile;
 //
 //    public function SLTSampleTest() {

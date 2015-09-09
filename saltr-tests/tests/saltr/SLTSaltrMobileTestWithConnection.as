@@ -1,28 +1,24 @@
 /**
-* Created by TIGR on 4/28/2015.
-*/
+ * Created by TIGR on 4/28/2015.
+ */
 package tests.saltr {
 import mockolate.runner.MockolateRule;
 import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTConfig;
-
 import saltr.SLTExperiment;
 import saltr.SLTSaltrMobile;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.repository.SLTMobileRepository;
-import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
 /**
-* The SLTSaltrMobileTestWithConnection class contain the tests which can be performed with saltr.connect()
-*/
+ * The SLTSaltrMobileTestWithConnection class contain the tests which can be performed with saltr.connect()
+ */
 public class SLTSaltrMobileTestWithConnection {
     [Embed(source="../../../build/tests/saltr/app_data_cache.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
@@ -39,7 +35,7 @@ public class SLTSaltrMobileTestWithConnection {
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
     [Mock(type="nice")]
-    public var apiFactory:SLTApiFactory;
+    public var apiFactory:SLTApiCallFactory;
     [Mock(type="nice")]
     public var apiCallMock:ApiCallMock;
 
@@ -92,9 +88,8 @@ public class SLTSaltrMobileTestWithConnection {
      */
     [Test]
     public function connectTestFailCallback():void {
-        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
-        apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
-        stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
+        stub(apiCallMock).method("getMockSuccess").returns(false);
+        stub(apiCallMock).method("getMockFailStatus").returns(new SLTStatus(SLTStatus.API_ERROR, "API call request failed."));
 
         var isFailed:Boolean = false;
         var successCallback:Function;
@@ -114,10 +109,8 @@ public class SLTSaltrMobileTestWithConnection {
      */
     [Test]
     public function connectTestWithSuccess():void {
-        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
-        apiCallResult.data = JSON.parse(new AppDataJson());
-        apiCallResult.success = true;
-        stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
+        stub(apiCallMock).method("getMockSuccess").returns(true);
+        stub(apiCallMock).method("getMockSuccessData").returns(JSON.parse(new AppDataJson()));
 
         var isConnected:Boolean = false;
         var failCallback:Function;

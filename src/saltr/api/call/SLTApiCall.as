@@ -1,4 +1,4 @@
-package saltr.api {
+package saltr.api.call {
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 
@@ -19,7 +19,8 @@ public class SLTApiCall {
 
     protected var _url:String;
     protected var _params:Object;
-    protected var _callback:Function;
+    protected var _successCallback:Function;
+    protected var _failCallback:Function;
     protected var _isMobile:Boolean;
     protected var _client:String;
 
@@ -30,9 +31,9 @@ public class SLTApiCall {
         return undefined;
     }
 
-    internal static function getTicket(url:String, vars:URLVariables, timeout:int = 0):SLTResourceURLTicket {
+    internal static function getTicket(url:String, vars:URLVariables, timeout:int = 0, method:String = URLRequestMethod.POST):SLTResourceURLTicket {
         var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(url, vars);
-        ticket.method = URLRequestMethod.POST;
+        ticket.method = method;
         if (timeout > 0) {
             ticket.idleTimeout = timeout;
         }
@@ -44,9 +45,10 @@ public class SLTApiCall {
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(params:Object, callback:Function, timeout:int = 0):void {
+    saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {
         _params = params;
-        _callback = callback;
+        _successCallback = successCallback;
+        _failCallback = failCallback;
         var validationResult:Object = validateParams();
         if (validationResult.isValid == false) {
             returnValidationFailedResult(validationResult.message);
@@ -60,13 +62,17 @@ public class SLTApiCall {
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.success = false;
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, message);
-        _callback(apiCallResult);
+        handleResult(apiCallResult);
     }
 
     private function doCall(urlVars:URLVariables, timeout:int):void {
-        var ticket:SLTResourceURLTicket = SLTApiCall.getTicket(_url, urlVars, timeout);
+        var ticket:SLTResourceURLTicket = getURLTicket(urlVars, timeout);
         var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler);
         resource.load();
+    }
+
+    saltr_internal function getURLTicket(urlVars:URLVariables, timeout:int):SLTResourceURLTicket {
+        return SLTApiCall.getTicket(_url, urlVars, timeout);
     }
 
     saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
@@ -90,14 +96,14 @@ public class SLTApiCall {
 
         apiCallResult.success = success;
         resource.dispose();
-        _callback(apiCallResult);
+        handleResult(apiCallResult);
     }
 
     saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         resource.dispose();
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
-        _callback(apiCallResult);
+        handleResult(apiCallResult);
     }
 
 
@@ -155,6 +161,18 @@ public class SLTApiCall {
         args.client = _client;
         args.devMode = _params.devMode;
         return args;
+    }
+
+    internal function handleResult(result:SLTApiCallResult):void {
+        if (result.success) {
+            if (_successCallback) {
+                _successCallback(result.data);
+            }
+        } else {
+            if (_failCallback) {
+                _failCallback(result.status);
+            }
+        }
     }
 }
 }

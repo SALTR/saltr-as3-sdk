@@ -8,9 +8,9 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTConfig;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -29,7 +29,7 @@ public class SLTHeartbeatApiCallTest extends SLTApiCallTest {
     public var resource:SLTResourceMock;
 
     public function SLTHeartbeatApiCallTest() {
-        super(SLTApiFactory.API_CALL_HEARTBEAT);
+        super(SLTApiCallFactory.API_CALL_HEARTBEAT);
     }
 
     [Before]
@@ -91,9 +91,10 @@ public class SLTHeartbeatApiCallTest extends SLTApiCallTest {
      */
     [Test]
     public function callRequestCompletedHandlerTest():void {
-        var result:SLTApiCallResult;
+        var successData:Object;
+        var failStatus:SLTStatus;
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseSuccessJson()));
-        assertEquals(true, getMobileCallRequestCompletedResult(result, resource));
+        assertEquals(true, getMobileCallRequestCompletedResult(successData, failStatus, resource));
     }
 
     /**
@@ -102,9 +103,10 @@ public class SLTHeartbeatApiCallTest extends SLTApiCallTest {
      */
     [Test]
     public function callRequestCompletedWithFailHandlerTest():void {
-        var result:SLTApiCallResult;
+        var successData:Object;
+        var failStatus:SLTStatus;
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseFailJson()));
-        assertEquals(false, getMobileCallRequestCompletedResult(result, resource));
+        assertEquals(false, getMobileCallRequestCompletedResult(successData, failStatus, resource));
     }
 
     override protected function getCorrectMobileCallParams():Object {

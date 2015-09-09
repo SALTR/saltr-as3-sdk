@@ -2,9 +2,9 @@
  * Created by daal on 4/15/15.
  */
 package {
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
+import saltr.api.call.SLTApiCall;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -14,12 +14,35 @@ public class ApiCallMock extends SLTApiCall {
         super(isMobile);
     }
 
-    override saltr_internal function call(params:Object, callback:Function, timeout:int = 0):void {
-        callback(getMockedCallResult());
+    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {
+        _successCallback = successCallback;
+        _failCallback = failCallback;
+        _params = params;
+        getMockedCallResult();
     }
 
-    public function getMockedCallResult():SLTApiCallResult {
-        return new SLTApiCallResult();
+    public function getMockSuccess():Boolean {
+        return false;
+    }
+
+    public function getMockSuccessData(field:*):Object {
+        return new Object();
+    }
+
+    public function getMockFailStatus():SLTStatus {
+        return new SLTStatus(-1, "");
+    }
+
+    public function getParamsFieldName():String {
+        return "";
+    }
+
+    private function getMockedCallResult():void {
+        if (getMockSuccess()) {
+            _successCallback(getMockSuccessData(_params[getParamsFieldName()]));
+        } else {
+            _failCallback(getMockFailStatus());
+        }
     }
 }
 }

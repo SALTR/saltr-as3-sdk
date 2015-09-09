@@ -13,6 +13,7 @@ public class SLTLogger {
     private static var INSTANCE:SLTLogger;
 
     private var _isDebug:Boolean;
+    private var _verboseLogging:Boolean;
 
     /**
      * Returns an instance of SLTLogger class.
@@ -29,15 +30,20 @@ public class SLTLogger {
             throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
         }
         _isDebug = false;
+        _verboseLogging = false;
     }
 
     saltr_internal function set debug(value:Boolean):void {
         _isDebug = value;
     }
 
+    saltr_internal function set verboseLogging(value:Boolean):void {
+        _verboseLogging = value;
+    }
+
     saltr_internal function log(message:String):void {
-        if (_isDebug) {
-            trace("SLTLogger: " + message);
+        if (_isDebug && _verboseLogging) {
+            trace("[SALTR]: " + message);
         }
     }
 }

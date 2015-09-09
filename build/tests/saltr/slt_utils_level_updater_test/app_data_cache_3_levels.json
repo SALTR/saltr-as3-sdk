@@ -36,28 +36,6 @@
                         "version": 12,
                         "variationVersion": 596,
                         "variationId": 310069
-                    },
-                    {
-                        "id": 275710,
-                        "localIndex": 3,
-                        "globalIndex": 3,
-                        "packIndex": 0,
-                        "index": 3,
-                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310070_508.json",
-                        "version": 6,
-                        "variationVersion": 508,
-                        "variationId": 310070
-                    },
-                    {
-                        "id": 275711,
-                        "localIndex": 4,
-                        "globalIndex": 4,
-                        "packIndex": 0,
-                        "index": 4,
-                        "url": "https://api.saltr.com/static_data/402e3c45-f934-535f-ae1a-6be2a90b4d2e/levels/310222_480.json",
-                        "version": 16,
-                        "variationVersion": 480,
-                        "variationId": 310222
                     }
                 ]
             },
