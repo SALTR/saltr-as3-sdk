@@ -5,16 +5,19 @@ package tests.saltr {
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTLevelData;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
  * The LevelDataTest class contain the LevelData method tests.
  */
 public class SLTLevelDataTest {
-    [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
-    private static const LevelPacksDataJson:Class;
+    [Embed(source="../../../build/tests/saltr/level_data.json", mimeType="application/octet-stream")]
+    private static const LevelDataJson:Class;
 
-    [Embed(source="../../../build/tests/saltr/level_packs_1_pack.json", mimeType="application/octet-stream")]
-    private static const LevelPackDataWithOnePackJson:Class;
+    [Embed(source="../../../build/tests/saltr/level_data_15_levels.json", mimeType="application/octet-stream")]
+    private static const LevelData15LevelsJson:Class;
 
     private var _levelData:SLTLevelData;
 
@@ -37,7 +40,7 @@ public class SLTLevelDataTest {
      */
     [Test]
     public function initWithCorrectDataTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
+        _levelData.initWithData(JSON.parse(new LevelDataJson()));
         assertEquals(75, _levelData.allLevelsCount);
     }
 
@@ -47,11 +50,11 @@ public class SLTLevelDataTest {
      */
     [Test]
     public function multipleInitWithCorrectDataTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
+        _levelData.initWithData(JSON.parse(new LevelDataJson()));
 
         var testPassed:Boolean = false;
         if (75 == _levelData.allLevelsCount) {
-            _levelData.initWithData(JSON.parse(new LevelPackDataWithOnePackJson()));
+            _levelData.initWithData(JSON.parse(new LevelData15LevelsJson()));
             if (15 == _levelData.allLevelsCount) {
                 testPassed = true;
             }
@@ -91,7 +94,7 @@ public class SLTLevelDataTest {
      */
     [Test]
     public function allLevelsCountTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
+        _levelData.initWithData(JSON.parse(new LevelDataJson()));
         assertEquals(75, _levelData.allLevelsCount);
     }
 
@@ -101,8 +104,8 @@ public class SLTLevelDataTest {
      */
     [Test]
     public function getLevelByCorrectGlobalIndexTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
-        assertEquals(25, _levelData.getLevelByGlobalIndex(25).index);
+        _levelData.initWithData(JSON.parse(new LevelDataJson()));
+        assertEquals(25, _levelData.getLevelByGlobalIndex(25).globalIndex);
     }
 
     /**
@@ -111,7 +114,7 @@ public class SLTLevelDataTest {
      */
     [Test]
     public function getLevelWithNegativeIndexTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
+        _levelData.initWithData(JSON.parse(new LevelDataJson()));
         assertEquals(null, _levelData.getLevelByGlobalIndex(-100));
     }
 
@@ -121,38 +124,8 @@ public class SLTLevelDataTest {
      */
     [Test]
     public function getLevelWithNotExistingIndexTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
+        _levelData.initWithData(JSON.parse(new LevelDataJson()));
         assertEquals(null, _levelData.getLevelByGlobalIndex(1000000));
-    }
-
-    /**
-     * getPackByCorrectLevelGlobalIndexTest.
-     * The intent of this test is to check the getPackByLevelGlobalIndex.
-     */
-    [Test]
-    public function getPackByCorrectLevelGlobalIndexTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
-        assertEquals(1, _levelData.getPackByLevelGlobalIndex(25).index);
-    }
-
-    /**
-     * getPackWithNegativeIndexTest.
-     * The intent of this test is to check the getPackByLevelGlobalIndex with passing negative index value. Null result value expected.
-     */
-    [Test]
-    public function getPackWithNegativeIndexTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
-        assertEquals(null, _levelData.getPackByLevelGlobalIndex(-100));
-    }
-
-    /**
-     * getPackWithNotExistingIndexTest.
-     * The intent of this test is to check the getPackByLevelGlobalIndex with passing not existing index value. Null result value expected.
-     */
-    [Test]
-    public function getPackWithNotExistingIndexTest():void {
-        _levelData.initWithData(JSON.parse(new LevelPacksDataJson()));
-        assertEquals(null, _levelData.getPackByLevelGlobalIndex(1000000));
     }
 }
 }

@@ -5,34 +5,41 @@
 package saltr {
 import flash.utils.Dictionary;
 
+import saltr.utils.SLTUtils;
+
 use namespace saltr_internal;
 
+/**
+ * @private
+ */
 public class SLTAppData {
 
     private var _activeFeatures:Dictionary;
-    private var _developerFeatures:Dictionary;
+    private var _defaultFeatures:Dictionary;
+    private var _gameLevelsFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
 
 
     public function SLTAppData() {
         _activeFeatures = new Dictionary();
-        _developerFeatures = new Dictionary();
+        _defaultFeatures = new Dictionary();
+        _gameLevelsFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
-    public function get activeFeatures():Dictionary {
-        return _activeFeatures;
+    saltr_internal function get defaultFeatures():Dictionary {
+        return _defaultFeatures;
     }
 
-    public function get developerFeatures():Dictionary {
-        return _developerFeatures;
+    saltr_internal function get gameLevelsFeatures():Dictionary {
+        return _gameLevelsFeatures;
     }
 
-    public function get experiments():Vector.<SLTExperiment> {
+    saltr_internal function get experiments():Vector.<SLTExperiment> {
         return _experiments;
     }
 
-    public function getActiveFeatureTokens():Vector.<String> {
+    saltr_internal function getActiveFeatureTokens():Vector.<String> {
         var tokens:Vector.<String> = new Vector.<String>();
         for each(var feature:SLTFeature in _activeFeatures) {
             tokens.push(feature.token);
@@ -40,12 +47,12 @@ public class SLTAppData {
         return tokens;
     }
 
-    public function getFeatureProperties(token:String):Object {
+    saltr_internal function getFeatureProperties(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
         if (activeFeature != null) {
             return activeFeature.properties;
         } else {
-            var devFeature:SLTFeature = _developerFeatures[token];
+            var devFeature:SLTFeature = _defaultFeatures[token];
             if (devFeature != null && devFeature.required) {
                 return devFeature.properties;
             }
@@ -53,35 +60,43 @@ public class SLTAppData {
         return null;
     }
 
-    public function defineFeature(token:String, properties:Object, required:Boolean):void {
-        if (validateToken(token)) {
-            _developerFeatures[token] = new SLTFeature(token, properties, required);
-        } else {
-            throw new Error("Developer feature's token value is incorrect.");
+    saltr_internal function getGameLevelsProperties(token:String):SLTLevelData {
+        var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
+        if (null != gameLevelsFeature) {
+            return gameLevelsFeature.properties as SLTLevelData;
+        }
+        return null;
+    }
+
+
+    saltr_internal function defineFeature(token:String, properties:*, type:String, required:Boolean):void {
+        if (!SLTUtils.validateFeatureToken(token)) {
+            throw new Error("feature's token value is incorrect.");
+        }
+
+        var feature:SLTFeature = new SLTFeature(token, type, properties, required);
+        if (type == SLTConfig.FEATURE_TYPE_GENERIC) {
+            _defaultFeatures[token] = feature;
+        }
+        else if (type == SLTConfig.FEATURE_TYPE_GAME_LEVELS) {
+            _gameLevelsFeatures[token] = feature;
         }
     }
 
-    public function initEmpty():void {
-        for (var i:String in _developerFeatures) {
-            _activeFeatures[i] = _developerFeatures[i];
+    saltr_internal function initEmpty():void {
+        for (var i:String in _defaultFeatures) {
+            _activeFeatures[i] = _defaultFeatures[i];
         }
     }
 
-    public function initWithData(data:Object):void {
+    saltr_internal function initWithData(data:Object):void {
         try {
-            _activeFeatures = SLTDeserializer.decodeFeatures(data);
+            _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+            _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
             throw new Error("AppData parse error");
         }
-    }
-
-    private function validateToken(token:String):Boolean {
-        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
-        if (null == token || "" == token || -1 != token.search(pattern)) {
-            return false;
-        }
-        return true;
     }
 }
 }

@@ -10,12 +10,11 @@ import org.flexunit.listeners.AirCIListener;
 import org.flexunit.runner.FlexUnitCore;
 
 import tests.saltr.SLTAppDataTest;
+import tests.saltr.SLTDefineGameLevelsMobileTest;
+import tests.saltr.SLTInitLevelContentMobileTest;
 import tests.saltr.SLTLevelDataTest;
-import tests.saltr.SLTImportLevelsMobileTest;
-import tests.saltr.SLTLoadLevelContentMobileTest;
 import tests.saltr.SLTSaltrMobileTest;
 import tests.saltr.SLTSaltrMobileTestWithConnection;
-import tests.saltr.SLTSaltrWebTest;
 import tests.saltr.SLTStartTest;
 import tests.saltr.api.SLTAddPropertiesApiCallTest;
 import tests.saltr.api.SLTAppDataApiCallTest;
@@ -27,8 +26,12 @@ import tests.saltr.api.SLTSendLevelEndApiCallTest;
 import tests.saltr.api.SLTSyncApiCallTest;
 import tests.saltr.game.SLTLevelTest;
 import tests.saltr.game.canvas2d.SLT2DAssetInstanceTest;
+import tests.saltr.game.canvas2d.SLT2DBoardTest;
 import tests.saltr.game.matching.SLTCellTest;
 import tests.saltr.game.matching.SLTCellsTest;
+import tests.saltr.game.matching.SLTMatchingBoardTest;
+import tests.saltr.repository.SLTRepositoryStorageManagerTest;
+import tests.saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdaterTest;
 
 public class FlexUnitRunner extends Sprite {
 
@@ -50,16 +53,18 @@ public class FlexUnitRunner extends Sprite {
     public function currentRunTestSuite():Array {
         var testsToRun:Array = new Array();
         testsToRun.push(SLTSaltrMobileTest);
-        testsToRun.push(SLTImportLevelsMobileTest);
+        testsToRun.push(SLTDefineGameLevelsMobileTest);
         testsToRun.push(SLTStartTest);
         testsToRun.push(SLTAppDataTest);
         testsToRun.push(SLTLevelDataTest);
         testsToRun.push(SLTCellTest);
         testsToRun.push(SLTCellsTest);
+        testsToRun.push(SLTMatchingBoardTest);
         testsToRun.push(SLTSaltrMobileTestWithConnection);
-        testsToRun.push(SLTLoadLevelContentMobileTest);
+        testsToRun.push(SLTInitLevelContentMobileTest);
         testsToRun.push(SLTLevelTest);
         testsToRun.push(SLT2DAssetInstanceTest);
+        testsToRun.push(SLT2DBoardTest);
         testsToRun.push(SLTAddPropertiesApiCallTest);
         testsToRun.push(SLTAppDataApiCallTest);
         testsToRun.push(SLTHeartbeatApiCallTest);
@@ -68,7 +73,9 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTRegisterUserApiCallTest);
         testsToRun.push(SLTSendLevelEndApiCallTest);
         testsToRun.push(SLTSyncApiCallTest);
-        testsToRun.push(SLTSaltrWebTest);
+        testsToRun.push(SLTRepositoryStorageManagerTest);
+        testsToRun.push(SLTMobileLevelsFeaturesUpdaterTest);
+//        testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }
 }

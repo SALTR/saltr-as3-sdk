@@ -97,8 +97,8 @@ internal class SLTChunk {
     saltr_internal function addAssetInstanceWithCellIndex(assetDatum:SLTChunkAssetDatum, cellIndex:uint):void {
         var asset:SLTAsset = _assetMap[assetDatum.assetId] as SLTAsset;
         var cell:SLTCell = _chunkCells[cellIndex];
-        var stateIds:Array = assetDatum.stateIds;
-        cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+        var stateId:String = assetDatum.stateId;
+        cell.setAssetInstance(_layerToken, _layerIndex, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties));
     }
 
     saltr_internal function generateAssetData():void {
@@ -165,8 +165,8 @@ internal class SLTChunk {
     private function generateAssetDataByCount(countChunkAssetRules:Vector.<SLTChunkAssetRule>):void {
         for (var i:int = 0, len:int = countChunkAssetRules.length; i < len; ++i) {
             var assetRule:SLTChunkAssetRule = countChunkAssetRules[i];
-            addToAvailableAssetData(getAssetData(assetRule.distributionValue, assetRule.assetId, assetRule.stateIds));
-            addToUniqueInCountAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateIds, _assetMap));
+            addToAvailableAssetData(getAssetData(assetRule.distributionValue, assetRule.assetId, assetRule.stateId));
+            addToUniqueInCountAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateId, _assetMap));
         }
     }
 
@@ -189,16 +189,16 @@ internal class SLTChunk {
                 proportion = assetRule.distributionValue / ratioSum * availableCellsNum;
                 count = proportion; //assigning number to int to floor the value;
                 fractionAssets.push({fraction: proportion - count, assetRule: assetRule});
-                addToAvailableAssetData(getAssetData(count, assetRule.assetId, assetRule.stateIds));
-                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateIds, _assetMap));
+                addToAvailableAssetData(getAssetData(count, assetRule.assetId, assetRule.stateId));
+                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(assetRule.assetId, assetRule.stateId, _assetMap));
             }
 
             fractionAssets.sortOn("fraction", Array.DESCENDING);
             availableCellsNum = _availableCells.length;
 
             for (var k:int = 0; k < availableCellsNum; ++k) {
-                addToAvailableAssetData(getAssetData(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds));
-                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateIds, _assetMap));
+                addToAvailableAssetData(getAssetData(1, fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateId));
+                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(fractionAssets[k].assetRule.assetId, fractionAssets[k].assetRule.stateId, _assetMap));
             }
         }
     }
@@ -217,16 +217,16 @@ internal class SLTChunk {
             for (var i:int = 0; i < len && _availableCells.length > 0; ++i) {
                 chunkAssetRule = randomChunkAssetRules[i];
                 count = i == lastChunkAssetIndex ? _availableCells.length : randomWithin(minAssetCount, maxAssetCount);
-                addToAvailableAssetData(getAssetData(count, chunkAssetRule.assetId, chunkAssetRule.stateIds));
-                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(chunkAssetRule.assetId, chunkAssetRule.stateIds, _assetMap));
+                addToAvailableAssetData(getAssetData(count, chunkAssetRule.assetId, chunkAssetRule.stateId));
+                addToUniqueInAvailableAssetData(new SLTChunkAssetDatum(chunkAssetRule.assetId, chunkAssetRule.stateId, _assetMap));
             }
         }
     }
 
-    private function getAssetData(count:uint, assetId:String, stateIds:Array):Vector.<SLTChunkAssetDatum> {
+    private function getAssetData(count:uint, assetId:String, stateId:String):Vector.<SLTChunkAssetDatum> {
         var assetData:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
         for (var i:int = 0; i < count; ++i) {
-            assetData.push(new SLTChunkAssetDatum(assetId, stateIds, _assetMap));
+            assetData.push(new SLTChunkAssetDatum(assetId, stateId, _assetMap));
             _availableCells.splice(0, 1);
             if (0 == _availableCells.length) {
                 break;

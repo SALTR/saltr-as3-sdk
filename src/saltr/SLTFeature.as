@@ -12,17 +12,23 @@ use namespace saltr_internal;
  */
 public class SLTFeature {
     private var _token:String;
+    private var _type:String;
     private var _properties:Object;
     private var _required:Boolean;
 
-    public function SLTFeature(token:String, properties:Object = null, required:Boolean = false) {
+    public function SLTFeature(token:String, type:String, properties:Object = null, required:Boolean = false) {
         _token = token;
+        _type = type;
         _properties = properties;
         _required = required;
     }
 
     saltr_internal function get token():String {
         return _token;
+    }
+
+    saltr_internal function get type():String {
+        return _type;
     }
 
     saltr_internal function get properties():Object {

@@ -9,8 +9,7 @@ import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTExperiment;
 import saltr.SLTSaltrMobile;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.repository.SLTMobileRepository;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
@@ -21,10 +20,10 @@ use namespace saltr_internal;
  * The SLTSaltrMobileTestWithConnection class contain the tests which can be performed with saltr.connect()
  */
 public class SLTSaltrMobileTestWithConnection {
-    [Embed(source="../../../build/tests/saltr/app_data.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../build/tests/saltr/app_data_cache.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
-    [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../build/tests/saltr/level_data.json", mimeType="application/octet-stream")]
     private static const LevelPacksJson:Class;
 
     private var clientKey:String = "";
@@ -36,7 +35,7 @@ public class SLTSaltrMobileTestWithConnection {
     [Mock(type="nice")]
     public var mobileRepository:SLTMobileRepository;
     [Mock(type="nice")]
-    public var apiFactory:SLTApiFactory;
+    public var apiFactory:SLTApiCallFactory;
     [Mock(type="nice")]
     public var apiCallMock:ApiCallMock;
 
@@ -57,14 +56,14 @@ public class SLTSaltrMobileTestWithConnection {
         _saltr.apiFactory = apiFactory;
         _saltr.repository = mobileRepository;
 
-        _saltr.defineFeature("SETTINGS", {
+        _saltr.defineGenericFeature("SETTINGS", {
             general: {
                 lifeRefillTime: 30
             }
         }, true);
 
         //importLevels() takes as input levels path, in this test it is just a dummy value because of MobileRepository's mocking
-        _saltr.importLevels("");
+        //_saltr.importLevels("");
     }
 
     [After]
@@ -89,9 +88,8 @@ public class SLTSaltrMobileTestWithConnection {
      */
     [Test]
     public function connectTestFailCallback():void {
-        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
-        apiCallResult.status = new SLTStatus(SLTStatus.API_ERROR, "API call request failed.");
-        stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
+        stub(apiCallMock).method("getMockSuccess").returns(false);
+        stub(apiCallMock).method("getMockFailStatus").returns(new SLTStatus(SLTStatus.API_ERROR, "API call request failed."));
 
         var isFailed:Boolean = false;
         var successCallback:Function;
@@ -111,10 +109,8 @@ public class SLTSaltrMobileTestWithConnection {
      */
     [Test]
     public function connectTestWithSuccess():void {
-        var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
-        apiCallResult.data = JSON.parse(new AppDataJson());
-        apiCallResult.success = true;
-        stub(apiCallMock).method("getMockedCallResult").returns(apiCallResult);
+        stub(apiCallMock).method("getMockSuccess").returns(true);
+        stub(apiCallMock).method("getMockSuccessData").returns(JSON.parse(new AppDataJson()));
 
         var isConnected:Boolean = false;
         var failCallback:Function;
@@ -129,7 +125,7 @@ public class SLTSaltrMobileTestWithConnection {
 
         var testPassed:Boolean = true;
         if (false == isConnected || 1 != experiments.length || "EXP1" != experiments[0].token || "feature" != experiments[0].type ||
-                "A" != experiments[0].partition || 75 != _saltr.allLevelsCount || 5 != _saltr.levelPacks.length) {
+                "A" != experiments[0].partition || 5 != _saltr.getGameLevelFeatureProperties(SLTSaltrTest.GAME_LEVELS_FEATURE).allLevelsCount) {
             testPassed = false;
         }
         assertEquals(true, testPassed);

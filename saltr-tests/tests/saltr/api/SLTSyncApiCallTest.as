@@ -9,10 +9,12 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
+import saltr.SLTConfig;
 import saltr.SLTFeature;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.SLTApiCallResult;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -31,7 +33,7 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
     public var resource:SLTResourceMock;
 
     public function SLTSyncApiCallTest() {
-        super(SLTApiFactory.API_CALL_SYNC);
+        super(SLTApiCallFactory.API_CALL_SYNC);
     }
 
     [Before]
@@ -72,14 +74,14 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
     public function mobileCallParamsValidationFailTest():void {
         createCallMobile();
         var isValidParams:Boolean = true;
-        var callback:Function = function (result:SLTApiCallResult):void {
-            if (result.success) {
-                isValidParams = true;
-            } else {
-                isValidParams = false;
-            }
+        var successCallback:Function = function (data:Object):void {
+            isValidParams = true;
         };
-        _call.call(getCorrectWebCallParams(), callback);
+
+        var failCallback:Function = function (status:SLTStatus):void {
+            isValidParams = false;
+        };
+        _call.call(getCorrectWebCallParams(), successCallback, failCallback);
         assertEquals(false, isValidParams);
     }
 
@@ -112,14 +114,14 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
     public function webCallParamsValidationFailTest():void {
         createCallWeb();
         var isValidParams:Boolean = true;
-        var callback:Function = function (result:SLTApiCallResult):void {
-            if (result.success) {
-                isValidParams = true;
-            } else {
-                isValidParams = false;
-            }
+        var successCallback:Function = function (data:Object):void {
+            isValidParams = true;
         };
-        _call.call(getCorrectMobileCallParams(), callback);
+
+        var failCallback:Function = function (status:SLTStatus):void {
+            isValidParams = false;
+        };
+        _call.call(getCorrectMobileCallParams(), successCallback, failCallback);
         assertEquals(false, isValidParams);
     }
 
@@ -129,9 +131,10 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
      */
     [Test]
     public function callRequestCompletedHandlerTest():void {
-        var result:SLTApiCallResult;
+        var successData:Object;
+        var failStatus:SLTStatus;
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseSuccessJson()));
-        assertEquals(true, getMobileCallRequestCompletedResult(result, resource));
+        assertEquals(true, getMobileCallRequestCompletedResult(successData, failStatus, resource));
     }
 
     /**
@@ -140,30 +143,31 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
      */
     [Test]
     public function callRequestCompletedWithFailHandlerTest():void {
-        var result:SLTApiCallResult;
+        var successData:Object;
+        var failStatus:SLTStatus;
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseFailJson()));
-        assertEquals(false, getMobileCallRequestCompletedResult(result, resource));
+        assertEquals(false, getMobileCallRequestCompletedResult(successData, failStatus, resource));
     }
 
     override protected function getCorrectMobileCallParams():Object {
-        var devFeatures:Dictionary = new Dictionary();
-        devFeatures["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", {"bottom-row-limit": 3}, true);
+        var features:Dictionary = new Dictionary();
+        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, {"bottom-row-limit": 3}, true);
         return {
             clientKey: "clientKey",
             deviceId: "deviceId",
             devMode: true,
-            developerFeatures: devFeatures
+            defaultFeatures: features
         };
     }
 
     override protected function getCorrectWebCallParams():Object {
-        var devFeatures:Dictionary = new Dictionary();
-        devFeatures["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", {"bottom-row-limit": 3}, true);
+        var features:Dictionary = new Dictionary();
+        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, {"bottom-row-limit": 3}, true);
         return {
             clientKey: "clientKey",
             socialId: "socialId",
             devMode: true,
-            developerFeatures: devFeatures
+            defaultFeatures: features
         };
     }
 }

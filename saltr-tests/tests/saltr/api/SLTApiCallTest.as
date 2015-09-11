@@ -2,11 +2,11 @@
  * Created by TIGR on 5/8/2015.
  */
 package tests.saltr.api {
-import saltr.api.SLTApiCall;
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCall;
+import saltr.api.call.SLTApiCallFactory;
 import saltr.resource.SLTResource;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -14,11 +14,11 @@ public class SLTApiCallTest {
     protected var _call:SLTApiCall;
     private var _callName:String;
 
-    private var _apiFactory:SLTApiFactory;
+    private var _apiFactory:SLTApiCallFactory;
 
     public function SLTApiCallTest(callName:String) {
         _callName = callName;
-        _apiFactory = new SLTApiFactory();
+        _apiFactory = new SLTApiCallFactory();
     }
 
     protected function createCallMobile():void {
@@ -37,35 +37,38 @@ public class SLTApiCallTest {
         return SLTApiCallTestHelper.validateCallParams(_call, params, actionName);
     }
 
-    protected function getMobileCallRequestCompletedResult(callResult:SLTApiCallResult, resource:SLTResource):Boolean {
+    protected function getMobileCallRequestCompletedResult(successData:Object, failStatus:SLTStatus, resource:SLTResource):Boolean {
         createCallMobile();
         var isCallSuccess:Boolean = false;
-        var callback:Function = function (result:SLTApiCallResult):void {
-            callResult = result;
-            if (result.success) {
-                isCallSuccess = true;
-            } else {
-                isCallSuccess = false;
-            }
+        var successCallback:Function = function (data:Object):void {
+            successData = data;
+            isCallSuccess = true;
         };
-        _call.call(getCorrectMobileCallParams(), callback);
+
+        var failCallback:Function = function (status:SLTStatus):void {
+            failStatus = status;
+            isCallSuccess = false;
+        };
+
+        _call.call(getCorrectMobileCallParams(), successCallback, failCallback);
         _call.callRequestCompletedHandler(resource);
 
         return isCallSuccess;
     }
 
-    protected function getWebCallRequestCompletedResult(callResult:SLTApiCallResult, resource:SLTResource):Boolean {
+    protected function getWebCallRequestCompletedResult(successData:Object, failStatus:SLTStatus, resource:SLTResource):Boolean {
         createCallWeb();
         var isCallSuccess:Boolean = false;
-        var callback:Function = function (result:SLTApiCallResult):void {
-            callResult = result;
-            if (result.success) {
-                isCallSuccess = true;
-            } else {
-                isCallSuccess = false;
-            }
+        var successCallback:Function = function (data:Object):void {
+            successData = data;
+            isCallSuccess = true;
         };
-        _call.call(getCorrectWebCallParams(), callback);
+
+        var failCallback:Function = function (status:SLTStatus):void {
+            failStatus = status;
+            isCallSuccess = false;
+        };
+        _call.call(getCorrectWebCallParams(), successCallback, failCallback);
         _call.callRequestCompletedHandler(resource);
 
         return isCallSuccess;

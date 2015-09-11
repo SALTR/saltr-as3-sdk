@@ -7,9 +7,10 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.api.SLTApiCallResult;
-import saltr.api.SLTApiFactory;
+import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.SLTApiCallResult;
 import saltr.saltr_internal;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -28,7 +29,7 @@ public class SLTRegisterUserApiCallTest extends SLTApiCallTest {
     public var resource:SLTResourceMock;
 
     public function SLTRegisterUserApiCallTest() {
-        super(SLTApiFactory.API_CALL_REGISTER_USER);
+        super(SLTApiCallFactory.API_CALL_REGISTER_USER);
     }
 
     [Before]
@@ -69,14 +70,14 @@ public class SLTRegisterUserApiCallTest extends SLTApiCallTest {
     public function webCallMissingEmailParamValidationFailTest():void {
         createCallMobile();
         var isValidParams:Boolean = true;
-        var callback:Function = function (result:SLTApiCallResult):void {
-            if (result.success) {
-                isValidParams = true;
-            } else {
-                isValidParams = false;
-            }
+        var successCallback:Function = function (data:Object):void {
+            isValidParams = true;
         };
-        _call.call(getWebParamsWithMissingEmail(), callback);
+
+        var failCallback:Function = function (status:SLTStatus):void {
+            isValidParams = false;
+        };
+        _call.call(getWebParamsWithMissingEmail(), successCallback, failCallback);
         assertEquals(false, isValidParams);
     }
 
@@ -86,9 +87,10 @@ public class SLTRegisterUserApiCallTest extends SLTApiCallTest {
      */
     [Test]
     public function callRequestCompletedHandlerTest():void {
-        var result:SLTApiCallResult;
+        var successData:Object;
+        var failStatus:SLTStatus;
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseSuccessJson()));
-        assertEquals(true, getWebCallRequestCompletedResult(result, resource));
+        assertEquals(true, getWebCallRequestCompletedResult(successData, failStatus, resource));
     }
 
     /**
@@ -97,9 +99,10 @@ public class SLTRegisterUserApiCallTest extends SLTApiCallTest {
      */
     [Test]
     public function callRequestCompletedWithFailHandlerTest():void {
-        var result:SLTApiCallResult;
+        var successData:Object;
+        var failStatus:SLTStatus;
         stub(resource).method("getResponseJsonData").returns(JSON.parse(new ResponseFailJson()));
-        assertEquals(false, getWebCallRequestCompletedResult(result, resource));
+        assertEquals(false, getWebCallRequestCompletedResult(successData, failStatus, resource));
     }
 
     override protected function getCorrectWebCallParams():Object {

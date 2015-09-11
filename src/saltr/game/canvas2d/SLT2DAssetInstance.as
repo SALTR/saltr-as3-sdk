@@ -26,7 +26,7 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
     /**
      * Class constructor.
      * @param token The unique identifier of the asset.
-     * @param states The current instance states.
+     * @param state The current instance state.
      * @param properties The current instance properties.
      * @param x The current instance x coordinate.
      * @param y The current instance y coordinate.
@@ -35,7 +35,7 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
      * @param rotation The current instance rotation.
      * @param positions The current instance positions.
      */
-    public function SLT2DAssetInstance(token:String, states:Vector.<SLTAssetState>, properties:Object, x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number, positions:Dictionary) {
+    public function SLT2DAssetInstance(token:String, state:SLTAssetState, properties:Object, x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number, positions:Dictionary) {
         _x = x;
         _y = y;
         _scaleX = scaleX;
@@ -43,7 +43,7 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
         _rotation = rotation;
         _positions = positions;
 
-        super(token, getScaleAppliedStates(states), properties);
+        super(token, getScaleAppliedState(state), properties);
     }
 
     /**
@@ -81,15 +81,11 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
         return _positions[id];
     }
 
-    private function getScaleAppliedStates(states:Vector.<SLTAssetState>):Vector.<SLTAssetState> {
-        var scaleAppliedStates:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
-        for (var i:int = 0; i < states.length; ++i) {
-            var clonedState:SLT2DAssetState = (states[i] as SLT2DAssetState).clone();
-            clonedState.setWidth(clonedState.width * _scaleX);
-            clonedState.setHeight(clonedState.height * _scaleY);
-            scaleAppliedStates.push(clonedState);
-        }
-        return scaleAppliedStates;
+    private function getScaleAppliedState(state:SLTAssetState):SLTAssetState {
+        var clonedState:SLT2DAssetState = (state as SLT2DAssetState).clone();
+        clonedState.setWidth(clonedState.width * _scaleX);
+        clonedState.setHeight(clonedState.height * _scaleY);
+        return clonedState;
     }
 }
 }

@@ -1,0 +1,9 @@
+{"response": [
+    {
+        "success": false,
+        "error": {
+            "code": "2001",
+            "message": "Registration required."
+        }
+    }
+]}

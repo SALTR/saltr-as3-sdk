@@ -1,0 +1,1206 @@
+{
+  "boards": {
+    "appended": {
+      "layers": [
+        {
+          "layerId": "default",
+          "token": "default",
+          "composites": [],
+          "chunks": [
+            {
+              "chunkId": 1,
+              "assets": [
+                {
+                  "assetId": 50763,
+                  "distributionType": "ratio",
+                  "distributionValue": 10000,
+                  "stateId": 65840,
+                  "states": [
+                    65840
+                  ]
+                },
+                {
+                  "assetId": 50759,
+                  "distributionType": "ratio",
+                  "distributionValue": 10000,
+                  "stateId": 65816,
+                  "states": [
+                    65816
+                  ]
+                },
+                {
+                  "assetId": 50761,
+                  "distributionType": "ratio",
+                  "distributionValue": 10000,
+                  "stateId": 65832,
+                  "states": [
+                    65832
+                  ]
+                },
+                {
+                  "assetId": 50762,
+                  "distributionType": "ratio",
+                  "distributionValue": 10000,
+                  "stateId": 65834,
+                  "states": [
+                    65834
+                  ]
+                },
+                {
+                  "assetId": 50754,
+                  "distributionType": "ratio",
+                  "distributionValue": 10000,
+                  "stateId": 65799,
+                  "states": [
+                    65799
+                  ]
+                }
+              ],
+              "cells": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  5,
+                  0
+                ],
+                [
+                  6,
+                  0
+                ],
+                [
+                  7,
+                  0
+                ],
+                [
+                  8,
+                  0
+                ],
+                [
+                  9,
+                  0
+                ],
+                [
+                  10,
+                  0
+                ],
+                [
+                  11,
+                  0
+                ],
+                [
+                  12,
+                  0
+                ],
+                [
+                  13,
+                  0
+                ],
+                [
+                  14,
+                  0
+                ]
+              ]
+            }
+          ],
+          "fixedAssets": []
+        }
+      ],
+      "position": [
+        40,
+        80
+      ],
+      "properties": {},
+      "cellProperties": [],
+      "rows": 1,
+      "cols": 15,
+      "blockedCells": [],
+      "cellSize": [
+        "40",
+        "40"
+      ],
+      "orientation": "BOTTOM_LEFT",
+      "type": "matrix",
+      "checkpoints": []
+    },
+    "main": {
+      "layers": [
+        {
+          "layerId": "overlay",
+          "token": "overlay",
+          "composites": [],
+          "chunks": [],
+          "fixedAssets": [
+            {
+              "assetId": 50760,
+              "stateId": 65822,
+              "states": [
+                65822
+              ],
+              "cells": [
+                [
+                  0,
+                  3
+                ],
+                [
+                  1,
+                  3
+                ],
+                [
+                  2,
+                  3
+                ],
+                [
+                  5,
+                  3
+                ],
+                [
+                  6,
+                  3
+                ],
+                [
+                  7,
+                  3
+                ],
+                [
+                  0,
+                  4
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  5,
+                  4
+                ],
+                [
+                  6,
+                  4
+                ],
+                [
+                  7,
+                  4
+                ],
+                [
+                  0,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ],
+                [
+                  5,
+                  5
+                ],
+                [
+                  6,
+                  5
+                ],
+                [
+                  7,
+                  5
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  3,
+                  6
+                ],
+                [
+                  4,
+                  6
+                ],
+                [
+                  5,
+                  6
+                ],
+                [
+                  2,
+                  7
+                ],
+                [
+                  3,
+                  7
+                ],
+                [
+                  4,
+                  7
+                ],
+                [
+                  5,
+                  7
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "layerId": "default",
+          "token": "default",
+          "composites": [],
+          "chunks": [
+            {
+              "chunkId": 1,
+              "assets": [
+                {
+                  "assetId": 50761,
+                  "distributionType": "ratio",
+                  "distributionValue": 1000,
+                  "stateId": 65832,
+                  "states": [
+                    65832
+                  ]
+                },
+                {
+                  "assetId": 50762,
+                  "distributionType": "ratio",
+                  "distributionValue": 1000,
+                  "stateId": 65834,
+                  "states": [
+                    65834
+                  ]
+                },
+                {
+                  "assetId": 50759,
+                  "distributionType": "ratio",
+                  "distributionValue": 1000,
+                  "stateId": 65816,
+                  "states": [
+                    65816
+                  ]
+                },
+                {
+                  "assetId": 50763,
+                  "distributionType": "ratio",
+                  "distributionValue": 1000,
+                  "stateId": 65840,
+                  "states": [
+                    65840
+                  ]
+                }
+              ],
+              "cells": [
+                [
+                  2,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  5,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ],
+                [
+                  5,
+                  1
+                ],
+                [
+                  6,
+                  1
+                ],
+                [
+                  0,
+                  2
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  2,
+                  2
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  6,
+                  2
+                ],
+                [
+                  7,
+                  2
+                ],
+                [
+                  1,
+                  3
+                ],
+                [
+                  2,
+                  3
+                ],
+                [
+                  5,
+                  3
+                ],
+                [
+                  6,
+                  3
+                ],
+                [
+                  0,
+                  4
+                ],
+                [
+                  4,
+                  4
+                ],
+                [
+                  7,
+                  4
+                ],
+                [
+                  0,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ],
+                [
+                  5,
+                  5
+                ],
+                [
+                  7,
+                  5
+                ],
+                [
+                  5,
+                  6
+                ],
+                [
+                  2,
+                  7
+                ],
+                [
+                  3,
+                  7
+                ],
+                [
+                  4,
+                  7
+                ],
+                [
+                  5,
+                  7
+                ]
+              ]
+            }
+          ],
+          "fixedAssets": [
+            {
+              "assetId": 50754,
+              "stateId": 65799,
+              "states": [
+                65799
+              ],
+              "cells": [
+                [
+                  2,
+                  1
+                ],
+                [
+                  0,
+                  3
+                ],
+                [
+                  4,
+                  3
+                ],
+                [
+                  7,
+                  3
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  5,
+                  4
+                ]
+              ]
+            },
+            {
+              "assetId": 50761,
+              "stateId": 65832,
+              "states": [
+                65832
+              ],
+              "cells": [
+                [
+                  3,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  6,
+                  5
+                ]
+              ]
+            },
+            {
+              "assetId": 50759,
+              "stateId": 65816,
+              "states": [
+                65816
+              ],
+              "cells": [
+                [
+                  3,
+                  1
+                ],
+                [
+                  2,
+                  6
+                ]
+              ]
+            },
+            {
+              "assetId": 50769,
+              "stateId": 65851,
+              "states": [
+                65851
+              ],
+              "cells": [
+                [
+                  1,
+                  4
+                ],
+                [
+                  3,
+                  6
+                ]
+              ]
+            },
+            {
+              "assetId": 50771,
+              "stateId": 65853,
+              "states": [
+                65853
+              ],
+              "cells": [
+                [
+                  6,
+                  4
+                ],
+                [
+                  4,
+                  6
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "position": [
+        40,
+        160
+      ],
+      "properties": {},
+      "cellProperties": [],
+      "rows": 8,
+      "cols": 8,
+      "blockedCells": [
+        [
+          7,
+          7
+        ],
+        [
+          0,
+          7
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "cellSize": [
+        40,
+        40
+      ],
+      "orientation": "TOP_LEFT",
+      "type": "matrix",
+      "checkpoints": [
+        {
+          "orientation": "horizontal",
+          "token": "checkpoint_0",
+          "position": 0,
+          "color": "#ffcc00"
+        },
+        {
+          "orientation": "vertical",
+          "token": "checkpoint_1",
+          "position": 8,
+          "color": "#ff9500"
+        }
+      ]
+    }
+  },
+  "assetStates": {
+    "65819": "cross",
+    "65818": "line_v",
+    "65820": "flying",
+    "65821": "radial",
+    "65822": "ice-1",
+    "65860": "stone_cage-2",
+    "65823": "ice-2",
+    "65824": "ice-3",
+    "65825": "ice-5",
+    "65826": "ice-4",
+    "65827": "ice-6",
+    "65828": "line_v",
+    "505": "pumpkin_5",
+    "506": "tomato_2",
+    "503": "pumpkin_3",
+    "66349": "normal",
+    "65829": "cross",
+    "504": "pumpkin_4",
+    "509": "tomato_5",
+    "507": "tomato_3",
+    "508": "tomato_4",
+    "502": "pumpkin_2",
+    "500": "watermelon_5",
+    "65830": "flying",
+    "65831": "radial",
+    "65834": "normal",
+    "65835": "line_h",
+    "65832": "normal",
+    "65833": "line_h",
+    "65838": "flying",
+    "65839": "radial",
+    "65836": "line_v",
+    "65837": "cross",
+    "65799": "normal",
+    "65795": "jam_double-1",
+    "65796": "jam_double-2",
+    "65797": "sand-1",
+    "65798": "sand-2",
+    "66353": "cross",
+    "66352": "line_h",
+    "66354": "flying",
+    "65848": "stone",
+    "513": "melon_5",
+    "65847": "hay",
+    "512": "melon_4",
+    "66350": "radial",
+    "511": "melon_3",
+    "66351": "line_v",
+    "65849": "jam_single",
+    "510": "melon_2",
+    "452": "pepper_2",
+    "65844": "flying",
+    "65843": "cross",
+    "65846": "color_bomb",
+    "65845": "radial",
+    "65840": "normal",
+    "65803": "flying",
+    "65804": "radial",
+    "65842": "line_v",
+    "65805": "acorn",
+    "65841": "line_h",
+    "65806": "default",
+    "65800": "line_h",
+    "65801": "line_v",
+    "65802": "cross",
+    "65809": "cactus-3",
+    "65808": "cactus-2",
+    "65807": "cactus-1",
+    "499": "watermelon_4",
+    "496": "pepper_5",
+    "495": "pepper_4",
+    "498": "watermelon_3",
+    "497": "watermelon_2",
+    "65859": "stone_cage-1",
+    "65858": "box-5",
+    "494": "pepper_3",
+    "65857": "box-4",
+    "65856": "box-3",
+    "65855": "box-2",
+    "65854": "box-1",
+    "65853": "sheep",
+    "65816": "normal",
+    "65852": "pig",
+    "65817": "line_h",
+    "613": "wood_2",
+    "65851": "dog",
+    "65814": "2x2",
+    "65850": "chick",
+    "65815": "1x2",
+    "65812": "cactus-6",
+    "65813": "2x4",
+    "65810": "cactus-4",
+    "65811": "cactus-5"
+  },
+  "assets": {
+    "50759": {
+      "token": "pumpkin",
+      "states": {
+        "65821": {
+          "token": "radial",
+          "properties": {}
+        },
+        "65819": {
+          "token": "cross",
+          "properties": {}
+        },
+        "65816": {
+          "token": "normal",
+          "properties": {}
+        },
+        "65818": {
+          "token": "line_v",
+          "properties": {}
+        },
+        "65817": {
+          "token": "line_h",
+          "properties": {}
+        },
+        "65820": {
+          "token": "flying",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "51060": {
+      "token": "blueberry",
+      "states": {
+        "66350": {
+          "token": "radial",
+          "properties": {}
+        },
+        "66351": {
+          "token": "line_v",
+          "properties": {}
+        },
+        "66349": {
+          "token": "normal",
+          "properties": {}
+        },
+        "66353": {
+          "token": "cross",
+          "properties": {}
+        },
+        "66352": {
+          "token": "line_h",
+          "properties": {}
+        },
+        "66354": {
+          "token": "flying",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50753": {
+      "token": "sand",
+      "states": {
+        "65797": {
+          "token": "sand-1",
+          "properties": {}
+        },
+        "65798": {
+          "token": "sand-2",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50762": {
+      "token": "pepper",
+      "states": {
+        "65834": {
+          "token": "normal",
+          "properties": {}
+        },
+        "65835": {
+          "token": "line_h",
+          "properties": {}
+        },
+        "65838": {
+          "token": "flying",
+          "properties": {}
+        },
+        "65839": {
+          "token": "radial",
+          "properties": {}
+        },
+        "65836": {
+          "token": "line_v",
+          "properties": {}
+        },
+        "65837": {
+          "token": "cross",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50754": {
+      "token": "melon",
+      "states": {
+        "65803": {
+          "token": "flying",
+          "properties": {}
+        },
+        "65804": {
+          "token": "radial",
+          "properties": {}
+        },
+        "65799": {
+          "token": "normal",
+          "properties": {}
+        },
+        "65800": {
+          "token": "line_h",
+          "properties": {}
+        },
+        "65801": {
+          "token": "line_v",
+          "properties": {}
+        },
+        "65802": {
+          "token": "cross",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50763": {
+      "token": "tomato",
+      "states": {
+        "65840": {
+          "token": "normal",
+          "properties": {}
+        },
+        "65842": {
+          "token": "line_v",
+          "properties": {}
+        },
+        "65841": {
+          "token": "line_h",
+          "properties": {}
+        },
+        "65844": {
+          "token": "flying",
+          "properties": {}
+        },
+        "65843": {
+          "token": "cross",
+          "properties": {}
+        },
+        "65845": {
+          "token": "radial",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50764": {
+      "token": "color_bomb",
+      "states": {
+        "65846": {
+          "token": "color_bomb",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50765": {
+      "token": "hay",
+      "states": {
+        "65847": {
+          "token": "hay",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50752": {
+      "token": "jam_double",
+      "states": {
+        "65795": {
+          "token": "jam_double-1",
+          "properties": {}
+        },
+        "65796": {
+          "token": "jam_double-2",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50766": {
+      "token": "stone",
+      "states": {
+        "65848": {
+          "token": "stone",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50757": {
+      "token": "cactus",
+      "states": {
+        "65812": {
+          "token": "cactus-6",
+          "properties": {}
+        },
+        "65809": {
+          "token": "cactus-3",
+          "properties": {}
+        },
+        "65810": {
+          "token": "cactus-4",
+          "properties": {}
+        },
+        "65808": {
+          "token": "cactus-2",
+          "properties": {}
+        },
+        "65811": {
+          "token": "cactus-5",
+          "properties": {}
+        },
+        "65807": {
+          "token": "cactus-1",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50767": {
+      "token": "jam_single",
+      "states": {
+        "65849": {
+          "token": "jam_single",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50758": {
+      "token": "milk",
+      "states": {
+        "65813": {
+          "token": "2x4",
+          "properties": {}
+        },
+        "65814": {
+          "token": "2x2",
+          "properties": {}
+        },
+        "65815": {
+          "token": "1x2",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50773": {
+      "token": "stone_cage",
+      "states": {
+        "65859": {
+          "token": "stone_cage-1",
+          "properties": {}
+        },
+        "65860": {
+          "token": "stone_cage-2",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50768": {
+      "token": "chick",
+      "states": {
+        "65850": {
+          "token": "chick",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50755": {
+      "token": "acorn",
+      "states": {
+        "65805": {
+          "token": "acorn",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50769": {
+      "token": "dog",
+      "states": {
+        "65851": {
+          "token": "dog",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50756": {
+      "token": "drop",
+      "states": {
+        "65806": {
+          "token": "default",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50771": {
+      "token": "sheep",
+      "states": {
+        "65853": {
+          "token": "sheep",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50772": {
+      "token": "box",
+      "states": {
+        "65858": {
+          "token": "box-5",
+          "properties": {}
+        },
+        "65857": {
+          "token": "box-4",
+          "properties": {}
+        },
+        "65856": {
+          "token": "box-3",
+          "properties": {}
+        },
+        "65855": {
+          "token": "box-2",
+          "properties": {}
+        },
+        "65854": {
+          "token": "box-1",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50770": {
+      "token": "pig",
+      "states": {
+        "65852": {
+          "token": "pig",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50760": {
+      "token": "ice",
+      "states": {
+        "65822": {
+          "token": "ice-1",
+          "properties": {}
+        },
+        "65823": {
+          "token": "ice-2",
+          "properties": {}
+        },
+        "65824": {
+          "token": "ice-3",
+          "properties": {}
+        },
+        "65825": {
+          "token": "ice-5",
+          "properties": {}
+        },
+        "65826": {
+          "token": "ice-4",
+          "properties": {}
+        },
+        "65827": {
+          "token": "ice-6",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    },
+    "50761": {
+      "token": "watermelon",
+      "states": {
+        "65832": {
+          "token": "normal",
+          "properties": {}
+        },
+        "65833": {
+          "token": "line_h",
+          "properties": {}
+        },
+        "65829": {
+          "token": "cross",
+          "properties": {}
+        },
+        "65830": {
+          "token": "flying",
+          "properties": {}
+        },
+        "65831": {
+          "token": "radial",
+          "properties": {}
+        },
+        "65828": {
+          "token": "line_v",
+          "properties": {}
+        }
+      },
+      "properties": {}
+    }
+  },
+  "matchingRuleProperties": {
+    "squareRuleEnabled": true,
+    "matchSize": 3,
+    "includedBoards": [
+      "main"
+    ],
+    "excludedAssets": []
+  },
+  "properties": {
+    "movesCount": "19",
+    "star_milestones": "1800,4710,6650",
+    "levelType": "unfreeze_objective",
+    "objectives": {
+      "rescue-dog": "2",
+      "rescue-sheep": "2"
+    },
+    "boosts": {
+      "BOOST_DRONE": false,
+      "BOOST_CROSS_DRONE": false
+    },
+    "isTutorialDisabled": true,
+    "isMelnSplashDisabled": false
+  }
+}

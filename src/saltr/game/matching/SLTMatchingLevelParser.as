@@ -5,6 +5,7 @@ package saltr.game.matching {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTBoardLayer;
+import saltr.game.SLTCheckPointParser;
 import saltr.game.SLTLevelParser;
 import saltr.saltr_internal;
 
@@ -104,7 +105,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             var excludedAssetNodes:Array = rootNode.matchingRuleProperties.excludedAssets as Array;
             var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
             for each (var excludedAssetNode:Object in excludedAssetNodes) {
-                excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetNode.assetId, [excludedAssetNode.stateId], assetMap));
+                excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetNode.assetId, excludedAssetNode.stateId, assetMap));
             }
             matchingRuleProperties.excludedAssets = excludedMatchAssets;
         }
@@ -136,7 +137,7 @@ public class SLTMatchingLevelParser extends SLTLevelParser {
             layers.push(layer);
         }
         var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap, matchingRuleProperties);
-        var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardProperties);
+        var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardProperties, SLTCheckPointParser.parseCheckpoints(boardNode));
 
         return board;
     }

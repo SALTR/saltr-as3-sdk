@@ -24,13 +24,6 @@ public interface ISLTRepository {
     function getObjectFromCache(fileName:String):Object;
 
     /**
-     * Provides the object's version.
-     * @param name The name of the object.
-     * @return The version of the requested object.
-     */
-    function getObjectVersion(name:String):String;
-
-    /**
      * Stores an object.
      * @param name The name of the object.
      * @param object The object to store.
@@ -40,10 +33,9 @@ public interface ISLTRepository {
     /**
      * Caches an object.
      * @param name The name of the object.
-     * @param version The version of the object.
      * @param object The object to store.
      */
-    function cacheObject(name:String, version:String, object:Object):void;
+    function cacheObject(name:String, object:Object):void;
 
     /**
      * Provides an object from application.
@@ -51,6 +43,5 @@ public interface ISLTRepository {
      * @return The requested object.
      */
     function getObjectFromApplication(fileName:String):Object;
-
 }
 }

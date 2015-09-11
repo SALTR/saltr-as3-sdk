@@ -9,12 +9,13 @@ import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
 import saltr.repository.SLTMobileRepository;
+import saltr.repository.SLTRepositoryStorageManager;
 
 /**
  * The SLTSaltrMobileTest class contain the tests which can be performed without saltr.connect()
  */
 public class SLTSaltrMobileTest extends SLTSaltrTest {
-    [Embed(source="../../../build/tests/saltr/level_packs.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../build/tests/saltr/level_data.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
     [Rule]
@@ -35,8 +36,8 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
         _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
 
-        //importLevels() takes as input levels path, in this test it is just a dummy value because of MobileRepository's mocking
-        _saltr.importLevels("");
+        //defineGameLevels("GAME_LEVELS") in this test it is just a dummy value because of MobileRepository's mocking
+        _saltr.defineGameLevels(SLTSaltrTest.GAME_LEVELS_FEATURE);
         setSaltrMobile(_saltr);
     }
 
@@ -61,7 +62,7 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
      * The intent of this test is to check the define feature.
      */
     [Test]
-    public function defineFeatureTest():void {
+    public function defineGenericFeatureTest():void {
         assertEquals(true, defineFeatureTestPassed());
     }
 
@@ -81,24 +82,6 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
     [Test]
     public function getLevelByGlobalIndexWithInvalidIndex():void {
         assertEquals(true, getLevelByGlobalIndexWithInvalidIndexPassed());
-    }
-
-    /**
-     * getPackByLevelGlobalIndexWithValidIndex
-     * The intent of this test is to get the SLTLevelPack by valid global index.
-     */
-    [Test]
-    public function getPackByLevelGlobalIndexWithValidIndex():void {
-        assertEquals(true, getPackByLevelGlobalIndexWithValidIndexPassed());
-    }
-
-    /**
-     * getPackByLevelGlobalIndexWithInvalidIndex
-     * The intent of this test is to pass incorrect index and get null as a result
-     */
-    [Test]
-    public function getPackByLevelGlobalIndexWithInvalidIndex():void {
-        assertEquals(true, getPackByLevelGlobalIndexWithInvalidIndexPassed());
     }
 
     private function getJson(stringData:String):Object {

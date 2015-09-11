@@ -14,9 +14,7 @@
                             "scaleY": 1.286,
                             "rotation": 0,
                             "stateId": 308,
-                            "states": [
-                                308
-                            ],
+                            "state": 308,
                             "positions": []
                         },
                         {
@@ -27,9 +25,7 @@
                             "scaleY": 1,
                             "rotation": 0,
                             "stateId": 308,
-                            "states": [
-                                308
-                            ],
+                            "state": 308,
                             "positions": []
                         }
                     ]

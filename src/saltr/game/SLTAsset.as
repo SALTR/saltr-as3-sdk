@@ -52,17 +52,10 @@ public class SLTAsset {
 
     /**
      * Returns instance states by provided state identifiers.
-     * @param stateIds The state identifiers.
+     * @param stateId The state identifier.
      */
-    saltr_internal function getInstanceStates(stateIds:Array):Vector.<SLTAssetState> {
-        var states:Vector.<SLTAssetState> = new Vector.<SLTAssetState>();
-        for (var i:int = 0, len:int = stateIds.length; i < len; ++i) {
-            var state:SLTAssetState = _stateMap[stateIds[i]] as SLTAssetState;
-            if (state != null) {
-                states.push(state);
-            }
-        }
-        return states;
+    saltr_internal function getInstanceState(stateId:String):SLTAssetState {
+        return _stateMap[stateId] as SLTAssetState;
     }
 }
 }

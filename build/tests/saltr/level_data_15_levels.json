@@ -1,0 +1,107 @@
+{"levels": [
+    {
+        "localIndex": 0,
+        "globalIndex": 0,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_0.json",
+        "version": 6
+    },
+    {
+        "localIndex": 1,
+        "globalIndex": 1,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_1.json",
+        "version": 6
+    },
+    {
+        "localIndex": 2,
+        "globalIndex": 2,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_2.json",
+        "version": 12
+    },
+    {
+        "localIndex": 3,
+        "globalIndex": 3,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_3.json",
+        "version": 6
+    },
+    {
+        "localIndex": 4,
+        "globalIndex": 4,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_4.json",
+        "version": 16
+    },
+    {
+        "localIndex": 5,
+        "globalIndex": 5,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_5.json",
+        "version": 9
+    },
+    {
+        "localIndex": 6,
+        "globalIndex": 6,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_6.json",
+        "version": 6
+    },
+    {
+        "localIndex": 7,
+        "globalIndex": 7,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_7.json",
+        "version": 6
+    },
+    {
+        "localIndex": 8,
+        "globalIndex": 8,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_8.json",
+        "version": 11
+    },
+    {
+        "localIndex": 9,
+        "globalIndex": 9,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_9.json",
+        "version": 8
+    },
+    {
+        "localIndex": 10,
+        "globalIndex": 10,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_10.json",
+        "version": 6
+    },
+    {
+        "localIndex": 11,
+        "globalIndex": 11,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_11.json",
+        "version": 6
+    },
+    {
+        "localIndex": 12,
+        "globalIndex": 12,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_12.json",
+        "version": 8
+    },
+    {
+        "localIndex": 13,
+        "globalIndex": 13,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_13.json",
+        "version": 13
+    },
+    {
+        "localIndex": 14,
+        "globalIndex": 14,
+        "packIndex": 0,
+        "url": "features/GAME_LEVELS/level_14.json",
+        "version": 8
+    }
+]}

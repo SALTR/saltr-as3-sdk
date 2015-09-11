@@ -14,10 +14,7 @@ use namespace saltr_internal;
 public class SLTLevel {
     protected var _boards:Dictionary;
 
-    private var _id:String;
-    private var _variationId:String;
-    private var _levelType:String;
-    private var _index:int;
+    private var _globalIndex:int;
     private var _localIndex:int;
     private var _packIndex:int;
     private var _contentUrl:String;
@@ -27,6 +24,8 @@ public class SLTLevel {
     private var _contentReady:Boolean;
     private var _assetMap:Dictionary;
 
+    private var _levelType:String;
+
     /**
      * Specifies that there is no level specified for the game.
      */
@@ -35,12 +34,12 @@ public class SLTLevel {
     /**
      * Specifies the level type for matching game.
      */
-    public static const LEVEL_TYPE_MATCHING:String = "matching";
+    public static const LEVEL_TYPE_MATCHING:String = "matrix";
 
     /**
      * Specifies the level type for Canvas2D game.
      */
-    public static const LEVEL_TYPE_2DCANVAS:String = "canvas2D";
+    public static const LEVEL_TYPE_2DCANVAS:String = "2d";
 
     /**
      * Provides the level parser for the given level type.
@@ -61,41 +60,35 @@ public class SLTLevel {
 
     /**
      * Class constructor.
-     * @param id The identifier of the level.
-     * @param variationId The variation identifier of the level.
-     * @param levelType The type of the level.
-     * @param index The global index of the level.
+     * @param globalIndex The global index of the level.
      * @param localIndex The local index of the level in the pack.
      * @param packIndex The index of the pack the level is in.
      * @param contentUrl The content URL of the level.
-     * @param properties The properties of the level.
      * @param version The current version of the level.
+     * @param levelType The type of the level.
      */
-    public function SLTLevel(id:String, variationId:String, levelType:String, index:int, localIndex:int, packIndex:int, contentUrl:String, properties:Object, version:String) {
-        _id = id;
-        _variationId = variationId;
-        _levelType = levelType;
-        _index = index;
+    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String, levelType:String) {
+        _globalIndex = globalIndex;
         _localIndex = localIndex;
         _packIndex = packIndex;
         _contentUrl = contentUrl;
-        _properties = properties;
         _version = version;
         _contentReady = false;
-    }
-
-    /**
-     * The variation identifier of the level.
-     */
-    public function get variationId():String {
-        return _variationId;
+        _levelType = levelType;
     }
 
     /**
      * The global index of the level.
      */
-    public function get index():int {
-        return _index;
+    public function get globalIndex():int {
+        return _globalIndex;
+    }
+
+    /**
+     * The local index of the level in the pack.
+     */
+    public function get localIndex():int {
+        return _localIndex;
     }
 
     /**
@@ -127,17 +120,17 @@ public class SLTLevel {
     }
 
     /**
-     * The local index of the level in the pack.
-     */
-    public function get localIndex():int {
-        return _localIndex;
-    }
-
-    /**
      * The index of the pack the level is in.
      */
     public function get packIndex():int {
         return _packIndex;
+    }
+
+    /**
+     * The boards.
+     */
+    public function get boards():Dictionary {
+        return _boards;
     }
 
     /**

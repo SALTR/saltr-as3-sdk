@@ -21,9 +21,10 @@ public class SLT2DBoard extends SLTBoard {
      * Class constructor.
      * @param config The board configuration.
      * @param properties The board associated properties.
+     * @param checkpoints The board checkpoints.
      */
-    public function SLT2DBoard(config:SLT2DBoardConfig, properties:Object) {
-        super(layers, properties);
+    public function SLT2DBoard(config:SLT2DBoardConfig, properties:Object, checkpoints:Dictionary) {
+        super(layers, properties, checkpoints);
         _config = config;
     }
 

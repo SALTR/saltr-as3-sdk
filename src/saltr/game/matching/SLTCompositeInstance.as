@@ -16,12 +16,12 @@ public class SLTCompositeInstance extends SLTAssetInstance {
     /**
      * Class constructor.
      * @param token The identifier.
-     * @param stateIds The state identifiers.
+     * @param stateId The state identifier.
      * @param properties The properties.
      * @param cells The composed cells.
      */
-    public function SLTCompositeInstance(token:String, stateIds:Vector.<SLTAssetState>, properties:Object, cells:Array) {
-        super(token, stateIds, properties);
+    public function SLTCompositeInstance(token:String, state:SLTAssetState, properties:Object, cells:Array) {
+        super(token, state, properties);
         _cells = cells;
     }
 

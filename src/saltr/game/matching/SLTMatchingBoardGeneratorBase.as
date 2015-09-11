@@ -51,14 +51,14 @@ internal class SLTMatchingBoardGeneratorBase {
         for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
             var assetInstanceNode:Object = assetNodes[i];
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
-            var stateIds:Array = assetInstanceNode.states as Array;
+            var stateId:String = assetInstanceNode.stateId;
             var cellPositions:Array = assetInstanceNode.cells;
 
             for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
                 var position:Array = cellPositions[j];
                 var cell:SLTCell = cells.retrieve(position[0], position[1]);
                 cell.removeAssetInstance(layer.token, layer.index);
-                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceStates(stateIds), asset.properties));
+                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties));
             }
         }
     }

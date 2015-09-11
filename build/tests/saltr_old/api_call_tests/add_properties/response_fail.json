@@ -1,0 +1,11 @@
+{
+    "response": [
+        {
+            "success": false,
+            "error": {
+                "code": "1002",
+                "message": "Command cannot be null or empty"
+            }
+        }
+    ]
+}

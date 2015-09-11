@@ -1,17 +1,21 @@
 /**
- * Created by TIGR on 4/17/2015.
- */
+* Created by TIGR on 4/17/2015.
+*/
 package tests.saltr {
 import org.flexunit.asserts.assertEquals;
 import org.flexunit.asserts.assertFalse;
 
 import saltr.SLTAppData;
+import saltr.SLTConfig;
+import saltr.saltr_internal;
+
+use namespace saltr_internal;
 
 /**
- * The AppDataTest class contain the AppData method tests
- */
+* The AppDataTest class contain the AppData method tests
+*/
 public class SLTAppDataTest {
-    [Embed(source="../../../build/tests/saltr/app_data.json", mimeType="application/octet-stream")]
+    [Embed(source="../../../build/tests/saltr/app_data_cache.json", mimeType="application/octet-stream")]
     private static const AppDataJson:Class;
 
     private var _appData:SLTAppData;
@@ -39,7 +43,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.initEmpty();
         var tokens:Vector.<String> = _appData.getActiveFeatureTokens();
 
@@ -57,12 +61,8 @@ public class SLTAppDataTest {
     [Test]
     public function initWithDataTest():void {
         _appData.initWithData(JSON.parse(new AppDataJson()));
-
-        var testPassed:Boolean = false;
-        if (1 == _appData.experiments.length && 5 == _appData.getActiveFeatureTokens().length) {
-            testPassed = true;
-        }
-        assertEquals(true, testPassed);
+        assertEquals(1, _appData.experiments.length);
+        assertEquals(6, _appData.getActiveFeatureTokens().length);
     }
 
     /**
@@ -75,7 +75,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
     }
 
     /**
@@ -88,7 +88,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
     }
 
     /**
@@ -101,7 +101,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
     }
 
     /**
@@ -114,12 +114,12 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.defineFeature("VALIDATION", {
             general: {
                 validationTimeout: 50
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.initEmpty();
         var tokens:Vector.<String> = _appData.getActiveFeatureTokens();
 
@@ -140,7 +140,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(5, _appData.getFeatureProperties("SETTINGS").general.lifeRefillTime);
     }
@@ -155,7 +155,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, true);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(30, _appData.getFeatureProperties("SETTINGS_DEVELOPER").general.lifeRefillTime);
     }
@@ -170,7 +170,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, false);
+        }, SLTConfig.FEATURE_TYPE_GENERIC, false);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(null, _appData.getFeatureProperties("SETTINGS_DEVELOPER"));
     }

@@ -33,10 +33,7 @@ public class SLT2DAssetInstanceTest {
 
     [Before]
     public function tearUp():void {
-        var levelProperties:Object = {
-            "movesCount": "18"
-        };
-        _level = new SLTLevel("225045", "246970", "canvas2D", 0, 0, 0, "pack_0/level_0.json", levelProperties, "44");
+        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_2DCANVAS);
     }
 
     [After]
@@ -56,10 +53,8 @@ public class SLT2DAssetInstanceTest {
             if (true == _level.contentReady) {
                 var board:SLT2DBoard = _level.getBoard("UNTITLED_1") as SLT2DBoard;
                 var assetInstances:Vector.<SLT2DAssetInstance> = board.getAssetInstancesByLayerId("default");
-                var states_0:Vector.<SLTAssetState> = assetInstances[0].states;
-                var states_1:Vector.<SLTAssetState> = assetInstances[1].states;
-                var state_0:SLT2DAssetState = states_0[0] as SLT2DAssetState;
-                var state_1:SLT2DAssetState = states_1[0] as SLT2DAssetState;
+                var state_0:SLT2DAssetState = assetInstances[0].state as SLT2DAssetState;
+                var state_1:SLT2DAssetState = assetInstances[1].state as SLT2DAssetState;
                 if (STATE_0_WIDTH == state_0.width && STATE_0_HEIGHT == state_0.height && STATE_1_WIDTH == state_1.width && STATE_1_HEIGHT == state_1.height) {
                     testPassed = true;
                 }

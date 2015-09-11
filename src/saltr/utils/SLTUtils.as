@@ -3,6 +3,7 @@
  */
 
 package saltr.utils {
+import flash.desktop.NativeApplication;
 import flash.utils.Dictionary;
 import flash.utils.describeType;
 import flash.utils.getQualifiedClassName;
@@ -119,6 +120,20 @@ public class SLTUtils {
             }
             return objectClone;
         }
+    }
+
+    saltr_internal static function getAppVersion():String {
+        var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
+        var ns:Namespace = applicationDescriptor.namespace();
+        return applicationDescriptor.ns::versionNumber[0].toString();
+    }
+
+    saltr_internal static function validateFeatureToken(token:String):Boolean {
+        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
+        if (null == token || "" == token || -1 != token.search(pattern)) {
+            return false;
+        }
+        return true;
     }
 }
 }
