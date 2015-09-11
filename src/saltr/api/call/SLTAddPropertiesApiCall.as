@@ -1,6 +1,4 @@
 package saltr.api.call {
-import saltr.api.*;
-
 import flash.net.URLVariables;
 
 import saltr.SLTConfig;
