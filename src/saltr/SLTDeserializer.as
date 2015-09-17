@@ -41,17 +41,11 @@ public class SLTDeserializer {
     }
 
     saltr_internal static function decodeLevels(rootNode:Object):Vector.<SLTLevel> {
-        var levelType:String = SLTLevel.LEVEL_TYPE_MATCHING;
-
-        if (rootNode.hasOwnProperty("levelType")) {
-            levelType = rootNode.levelType;
-        }
-
         var levelsNode:Array = rootNode.levels as Array;
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var i:int = 0, length:int = levelsNode.length; i < length; ++i) {
             var levelNode:Object = levelsNode[i];
-            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version, levelType);
+            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version);
             levels.push(level);
         }
         return levels;

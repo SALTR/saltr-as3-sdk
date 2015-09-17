@@ -19,11 +19,11 @@ public class SLTMatchingBoard extends SLTBoard {
     /**
      * Class constructor.
      * @param config The board configuration.
-     * @param properties The board associated properties.
+     * @param propertyObjects The board associated properties.
      * @param checkpoints The board checkpoints.
      */
-    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, properties:Object, checkpoints:Dictionary) {
-        super(config.layers, properties, checkpoints);
+    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, propertyObjects:Dictionary, checkpoints:Dictionary) {
+        super(config.layers, propertyObjects, checkpoints);
         _config = config;
     }
 

@@ -4,7 +4,6 @@
 package saltr.game.canvas2d {
 import saltr.game.SLTAssetState;
 import saltr.saltr_internal;
-import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
 
@@ -21,14 +20,13 @@ public class SLT2DAssetState extends SLTAssetState {
     /**
      * Class constructor.
      * @param token The unique identifier of the state.
-     * @param properties The current state related properties.
      * @param pivotX The X coordinate of the pivot relative to the top left corner, in pixels.
      * @param pivotY The Y coordinate of the pivot relative to the top left corner, in pixels.
      * @param width The width.
      * @param height The height.
      */
-    public function SLT2DAssetState(token:String, properties:Object, pivotX:Number, pivotY:Number, width:Number, height:Number) {
-        super(token, properties);
+    public function SLT2DAssetState(token:String, pivotX:Number, pivotY:Number, width:Number, height:Number) {
+        super(token);
         _pivotX = pivotX;
         _pivotY = pivotY;
         _width = width;
@@ -81,7 +79,7 @@ public class SLT2DAssetState extends SLTAssetState {
      * @private
      */
     saltr_internal function clone():SLT2DAssetState {
-        return new SLT2DAssetState(token, SLTUtils.cloneObject(properties), pivotX, pivotY, width, height);
+        return new SLT2DAssetState(token, pivotX, pivotY, width, height);
     }
 }
 }

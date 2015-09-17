@@ -14,7 +14,7 @@ import saltr.game.SLTAssetInstance;
 public class SLTCell {
     private var _col:int;
     private var _row:int;
-    private var _properties:Object;
+    private var _properties:Dictionary;
     private var _isBlocked:Boolean;
     private var _instancesByLayerId:Dictionary;
     private var _instancesByLayerIndex:Dictionary;
@@ -27,7 +27,7 @@ public class SLTCell {
     public function SLTCell(col:int, row:int) {
         _col = col;
         _row = row;
-        _properties = {};
+        _properties = new Dictionary();
         _isBlocked = false;
         _instancesByLayerId = new Dictionary();
         _instancesByLayerIndex = new Dictionary();
@@ -64,7 +64,7 @@ public class SLTCell {
     /**
      * The properties of the cell.
      */
-    public function get properties():Object {
+    public function get properties():Dictionary {
         return _properties;
     }
 
@@ -85,7 +85,7 @@ public class SLTCell {
     /**
      * @private
      */
-    public function set properties(value:Object):void {
+    public function set properties(value:Dictionary):void {
         _properties = value;
     }
 

@@ -7,19 +7,19 @@ use namespace saltr_internal;
 
 
 internal class SLT2DBoardConfig {
-    private var _layers:Vector.<SLT2DBoardLayer>;
+    private var _layers:Dictionary;
     private var _height:Number;
     private var _width:Number;
     private var _assetMap:Dictionary;
 
-    public function SLT2DBoardConfig(layers:Vector.<SLT2DBoardLayer>, boardNode:Object, assetMap:Dictionary) {
+    public function SLT2DBoardConfig(layers:Dictionary, boardNode:Object, assetMap:Dictionary) {
         _layers = layers;
-        _width = boardNode.width;
-        _height = boardNode.height;
+        _width = boardNode.hasOwnProperty("width") ? boardNode.width : 0;
+        _height = boardNode.hasOwnProperty("height") ? boardNode.height : 0;
         _assetMap = assetMap;
     }
 
-    saltr_internal function get layers():Vector.<SLT2DBoardLayer> {
+    saltr_internal function get layers():Dictionary {
         return _layers;
     }
 

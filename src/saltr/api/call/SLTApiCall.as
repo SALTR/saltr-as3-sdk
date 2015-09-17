@@ -165,11 +165,11 @@ public class SLTApiCall {
 
     internal function handleResult(result:SLTApiCallResult):void {
         if (result.success) {
-            if (_successCallback) {
+            if (null != _successCallback) {
                 _successCallback(result.data);
             }
         } else {
-            if (_failCallback) {
+            if (null != _failCallback) {
                 _failCallback(result.status);
             }
         }

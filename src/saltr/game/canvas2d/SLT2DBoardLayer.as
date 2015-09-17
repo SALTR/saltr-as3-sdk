@@ -12,20 +12,20 @@ use namespace saltr_internal;
  * @private
  */
 internal class SLT2DBoardLayer extends SLTBoardLayer {
-    private var _assets:Array;
+    private var _assetRules:Array;
 
     /**
      * Class constructor.
-     * @param layerId The layer's identifier.
+     * @param token The layer's identifier.
      * @param layerIndex The layer's ordering index.
      */
-    public function SLT2DBoardLayer(layerId:String, layerIndex:int, assets:Array) {
-        super(layerId, layerIndex);
-        _assets = assets;
+    public function SLT2DBoardLayer(token:String, layerIndex:int, assetRules:Array) {
+        super(token, layerIndex);
+        _assetRules = assetRules;
     }
 
-    saltr_internal function get assets():Array {
-        return _assets;
+    saltr_internal function get assetRules():Array {
+        return _assetRules;
     }
 }
 }

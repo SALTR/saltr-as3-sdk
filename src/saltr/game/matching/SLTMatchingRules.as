@@ -7,18 +7,18 @@ import saltr.saltr_internal;
 /**
  * @private
  */
-public class SLTMatchingRuleProperties {
-    public static const MATCHING_RULE_PROPERTIES:String = "matchingRuleProperties";
+public class SLTMatchingRules {
+    public static const MATCHING_RULES:String = "matchingRules";
 
     private var _matchingRuleEnabled:Boolean;
     private var _matchSize:int;
-    private var _squareRuleEnabled:Boolean;
+    private var _squareMatchEnabled:Boolean;
     private var _excludedAssets:Vector.<SLTChunkAssetDatum>;
 
-    public function SLTMatchingRuleProperties() {
+    public function SLTMatchingRules() {
         _matchingRuleEnabled = false;
         _matchSize = 0;
-        _squareRuleEnabled = false;
+        _squareMatchEnabled = false;
         _excludedAssets = null;
     }
 
@@ -38,12 +38,12 @@ public class SLTMatchingRuleProperties {
         _matchSize = value;
     }
 
-    saltr_internal function get squareRuleEnabled():Boolean {
-        return _squareRuleEnabled;
+    saltr_internal function get squareMatchEnabled():Boolean {
+        return _squareMatchEnabled;
     }
 
     saltr_internal function set squareRuleEnabled(value:Boolean):void {
-        _squareRuleEnabled = value;
+        _squareMatchEnabled = value;
     }
 
     saltr_internal function get excludedAssets():Vector.<SLTChunkAssetDatum> {

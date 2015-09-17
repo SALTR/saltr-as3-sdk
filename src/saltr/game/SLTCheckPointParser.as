@@ -18,9 +18,10 @@ public class SLTCheckPointParser {
     saltr_internal static function parseCheckpoints(rootNode:Object):Dictionary {
         var checkpoints:Dictionary = new Dictionary();
         if (rootNode.hasOwnProperty("checkpoints")) {
-            var checkpointsNode:Array = rootNode.checkpoints;
-            for each(var checkpoint:Object in checkpointsNode) {
-                checkpoints[checkpoint.token] = new SLTCheckpoint(checkpoint.token, checkpoint.orientation, checkpoint.position);
+            var checkpointsNode:Object = rootNode.checkpoints;
+            for (var token:String in checkpointsNode) {
+                var checkpointObject:Object = checkpointsNode[token];
+                checkpoints[token] = new SLTCheckpoint(token, checkpointObject.orientation, checkpointObject.position);
             }
         }
         return checkpoints;

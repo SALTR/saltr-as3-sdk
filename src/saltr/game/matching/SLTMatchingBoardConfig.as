@@ -1,25 +1,24 @@
 package saltr.game.matching {
 import flash.utils.Dictionary;
 
-import saltr.game.SLTBoardLayer;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
 
 
 internal class SLTMatchingBoardConfig {
-    private var _matchingRuleProperties:SLTMatchingRuleProperties;
+    private var _matchingRules:SLTMatchingRules;
     private var _blockedCells:Array;
     private var _cellProperties:Array;
     private var _cols:int;
     private var _rows:int;
     private var _cells:SLTCells;
     private var _assetMap:Dictionary;
-    private var _layers:Vector.<SLTBoardLayer>;
+    private var _layers:Dictionary;
 
-    public function SLTMatchingBoardConfig(cells:SLTCells, layers:Vector.<SLTBoardLayer>, boardNode:Object, assetMap:Dictionary, matchingRuleProperties:SLTMatchingRuleProperties) {
+    public function SLTMatchingBoardConfig(cells:SLTCells, layers:Dictionary, boardNode:Object, assetMap:Dictionary, matchingRules:SLTMatchingRules) {
         _assetMap = assetMap;
-        _matchingRuleProperties = matchingRuleProperties;
+        _matchingRules = matchingRules;
         _blockedCells = boardNode.hasOwnProperty("blockedCells") ? boardNode.blockedCells : [];
         _cellProperties = boardNode.hasOwnProperty("cellProperties") ? boardNode.cellProperties : [];
 
@@ -50,28 +49,28 @@ internal class SLTMatchingBoardConfig {
      * The matching rules enabled state.
      */
     saltr_internal function get matchingRulesEnabled():Boolean {
-        return _matchingRuleProperties.matchingRuleEnabled;
+        return _matchingRules.matchingRuleEnabled;
     }
 
     /**
      * The matching size.
      */
     saltr_internal function get matchSize():int {
-        return _matchingRuleProperties.matchSize;
+        return _matchingRules.matchSize;
     }
 
     /**
      * The square matching rules enabled state.
      */
     saltr_internal function get squareMatchingRuleEnabled():Boolean {
-        return _matchingRuleProperties.squareRuleEnabled;
+        return _matchingRules.squareMatchEnabled;
     }
 
     saltr_internal function get excludedMatchAssets():Vector.<SLTChunkAssetDatum> {
-        return _matchingRuleProperties.excludedAssets;
+        return _matchingRules.excludedAssets;
     }
 
-    saltr_internal function get layers():Vector.<SLTBoardLayer> {
+    saltr_internal function get layers():Dictionary {
         return _layers;
     }
 

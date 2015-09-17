@@ -46,7 +46,7 @@ internal class SLTMatchingBoardGeneratorBase {
     }
 
     protected function parseFixedAssets(layer:SLTMatchingBoardLayer, cells:SLTCells, assetMap:Dictionary):void {
-        var assetNodes:Array = layer.fixedAssets;
+        var assetNodes:Array = layer.assetRules;
         //creating fixed asset instances and assigning them to cells where they belong
         for (var i:int = 0, iLen:int = assetNodes.length; i < iLen; ++i) {
             var assetInstanceNode:Object = assetNodes[i];
