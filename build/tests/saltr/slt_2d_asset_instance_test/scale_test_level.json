@@ -1,77 +1,88 @@
 {
     "boards": {
-        "UNTITLED_1": {
-            "layers": [
-                {
-                    "layerId": "default",
-                    "token": "default",
-                    "assets": [
-                        {
-                            "assetId": 174,
-                            "x": 189,
-                            "y": 11,
-                            "scaleX": 1,
-                            "scaleY": 1.286,
-                            "rotation": 0,
-                            "stateId": 308,
-                            "state": 308,
-                            "positions": []
-                        },
-                        {
-                            "assetId": 174,
-                            "x": 434,
-                            "y": 53,
-                            "scaleX": 1.528,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 308,
-                            "state": 308,
-                            "positions": []
-                        }
-                    ]
+        "canvas2d": {
+            "UNTITLED_1": {
+                "layers": {
+                    "default": {
+                        "index": 0,
+                        "assetRules": [
+                            {
+                                "instanceName": "usr-flanFstan",
+                                "assetId": "174",
+                                "x": 189,
+                                "y": 11,
+                                "scaleX": 1,
+                                "scaleY": 1.286,
+                                "rotation": 0,
+                                "stateId": "308"
+                            },
+                            {
+                                "assetId": "174",
+                                "x": 434,
+                                "y": 53,
+                                "scaleX": 1.528,
+                                "scaleY": 1,
+                                "rotation": 0,
+                                "stateId": "308"
+                            }
+                        ]
+                    }
                 },
-                {
-                    "layerId": "aaa",
-                    "token": "aaa",
-                    "assets": []
-                }
-            ],
-            "position": [
-                100,
-                100
-            ],
-            "properties": {},
-            "width": 1000,
-            "height": 300
+                "position": [
+                    100,
+                    100
+                ],
+                "propertyObjects": {
+                    "usr-boardToken1": {
+                        "a": 1
+                    },
+                    "usr-boardToken2": {
+                        "a": 2
+                    }
+                },
+                "width": 1000,
+                "height": 300
+            }
         }
-    },
-    "assetStates": {
-        "308": "default",
-        "309": "green"
     },
     "assets": {
-        "174": {
-            "token": "Blue",
-            "states": {
-                "308": {
-                    "pivotX": 0,
-                    "pivotY": 0,
-                    "height": 199,
-                    "token": "default",
-                    "width": 199,
-                    "properties": {}
-                },
-                "309": {
-                    "pivotX": 0.5,
-                    "pivotY": 0.5,
-                    "height": 199,
-                    "token": "green",
-                    "width": 199,
-                    "properties": {}
+        "canvas2d": {
+            "174": {
+                "token": "Blue",
+                "states": {
+                    "308": {
+                        "token": "default",
+                        "pivotX": 0,
+                        "pivotY": 0,
+                        "height": 199,
+                        "width": 199
+                    },
+                    "309": {
+                        "token": "green",
+                        "pivotX": 0.5,
+                        "pivotY": 0.5,
+                        "height": 199,
+                        "width": 199
+                    }
                 }
-            },
-            "properties": {}
+            }
         }
     },
-    "properties": {}
+    "propertyObjects": {
+        "levelProperty1": {
+            "movesCount": "19",
+            "star_milestones": "1800,4710,6650",
+            "levelType": "unfreeze_objective",
+            "objectives": {
+                "rescue-dog": "2",
+                "rescue-sheep": "2"
+            },
+            "boosts": {
+                "BOOST_DRONE": false,
+                "BOOST_CROSS_DRONE": false
+            },
+            "isTutorialDisabled": true,
+            "isMelnSplashDisabled": false
+        }
+    }
 }

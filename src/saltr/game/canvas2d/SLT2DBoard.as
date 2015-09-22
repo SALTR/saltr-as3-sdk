@@ -54,9 +54,10 @@ public class SLT2DBoard extends SLTBoard {
         _assetInstancesByLayerId = new Dictionary();
         _assetInstancesByLayerIndex = new Dictionary();
 
-        for (var i:uint = 0; i < _config.layers.length; ++i) {
+        for (var layerToken:String in _config.layers) {
+            var layer:SLT2DBoardLayer = _config.layers[layerToken] as SLT2DBoardLayer;
             var generator:SLT2DBoardGenerator = new SLT2DBoardGenerator();
-            generator.generate(_config, _config.layers[i], _assetInstancesByLayerId, _assetInstancesByLayerIndex);
+            generator.generate(_config, layer, _assetInstancesByLayerId, _assetInstancesByLayerIndex);
         }
     }
 }
