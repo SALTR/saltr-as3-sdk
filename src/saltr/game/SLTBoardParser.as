@@ -10,6 +10,14 @@ use namespace saltr_internal;
 
 public class SLTBoardParser {
 
+    saltr_internal static function getBoardsNode(rootNode:Object, type:String):Object {
+        var boardsNode:Object = null;
+        if (rootNode["boards"].hasOwnProperty(type)) {
+            boardsNode = rootNode["boards"][type];
+        }
+        return boardsNode;
+    }
+
     /**
      * Class constructor.
      */
@@ -33,14 +41,6 @@ public class SLTBoardParser {
             }
         }
         return boardProperties;
-    }
-
-    protected final function getBoardsNode(rootNode:Object, type:String):Object {
-        var boardsNode:Object = null;
-        if (rootNode.hasOwnProperty("boards") && rootNode["board"].hasOwnProperty(type)) {
-            boardsNode = rootNode["boards"][type];
-        }
-        return boardsNode;
     }
 }
 }

@@ -5,6 +5,7 @@ package saltr.game.canvas2d {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAssetState;
+import saltr.game.SLTBoard;
 import saltr.game.SLTBoardParser;
 import saltr.game.SLTCheckPointParser;
 import saltr.game.SLTLevelParser;
@@ -41,10 +42,8 @@ public class SLT2DBoardParser extends SLTBoardParser {
      * @return The parsed boards.
      */
     override saltr_internal function parseBoardContent(rootNode:Object, assetMap:Dictionary):Dictionary {
-        var boardNodes:Object = getBoardsNode(rootNode, SLTLevelParser.BOARD_TYPE_CANVAS_2D);
-        if (null == boardNodes) {
-            return null;
-        }
+        var boardNodes:Object = getBoardsNode(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
+
         var boards:Dictionary = new Dictionary();
         for (var boardId:String in boardNodes) {
             var boardNode:Object = boardNodes[boardId];

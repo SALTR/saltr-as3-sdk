@@ -1,752 +1,969 @@
-{"boards": {
-    "main": {
-        "layers": [
-            {
-                "layerId": "default",
-                "token": "default",
-                "composites": [],
-                "chunks": [],
-                "fixedAssets": [
-                    {
-                        "assetId": 42493,
-                        "stateId": 54325,
-                        "states": [54325],
-                        "cells": [
-                            [4, 4],
-                            [1, 1],
-                            [3, 1],
-                            [2, 3],
-                            [2, 4],
-                            [5, 4],
-                            [1, 0],
-                            [4, 2],
-                            [5, 3],
-                            [0, 3],
-                            [1, 5],
-                            [3, 5]
+{
+    "boards": {
+        "matrix": {
+            "appended": {
+                "layers": {
+                    "default": {
+                        "index": 0,
+                        "chunks": [
+                            {
+                                "name": "",
+                                "assetRules": [
+                                    {
+                                        "assetId": "50763",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 10000,
+                                        "stateId": "65840"
+                                    },
+                                    {
+                                        "assetId": "50759",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 10000,
+                                        "stateId": "65816"
+                                    },
+                                    {
+                                        "assetId": "50761",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 10000,
+                                        "stateId": "65832"
+                                    },
+                                    {
+                                        "assetId": "50762",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 10000,
+                                        "stateId": "65834"
+                                    },
+                                    {
+                                        "assetId": "50754",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 10000,
+                                        "stateId": "65799"
+                                    }
+                                ],
+                                "cells": [
+                                    [
+                                        0,
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        0
+                                    ],
+                                    [
+                                        2,
+                                        0
+                                    ],
+                                    [
+                                        3,
+                                        0
+                                    ],
+                                    [
+                                        4,
+                                        0
+                                    ],
+                                    [
+                                        5,
+                                        0
+                                    ],
+                                    [
+                                        6,
+                                        0
+                                    ],
+                                    [
+                                        7,
+                                        0
+                                    ],
+                                    [
+                                        8,
+                                        0
+                                    ],
+                                    [
+                                        9,
+                                        0
+                                    ],
+                                    [
+                                        10,
+                                        0
+                                    ],
+                                    [
+                                        11,
+                                        0
+                                    ],
+                                    [
+                                        12,
+                                        0
+                                    ],
+                                    [
+                                        13,
+                                        0
+                                    ],
+                                    [
+                                        14,
+                                        0
+                                    ]
+                                ]
+                            }
+                        ],
+                        "assetRules": []
+                    }
+                },
+                "propertyObjects": {},
+                "cells": [],
+                "rows": 1,
+                "cols": 15,
+                "cellSize": [
+                    40,
+                    40
+                ],
+                "orientation": "BOTTOM_LEFT"
+            },
+            "main": {
+                "layers": {
+                    "overlay": {
+                        "index": 0,
+                        "chunks": [],
+                        "assetRules": [
+                            {
+                                "assetId": "50760",
+                                "stateId": "65822",
+                                "cells": [
+                                    [
+                                        0,
+                                        3
+                                    ],
+                                    [
+                                        1,
+                                        3
+                                    ],
+                                    [
+                                        2,
+                                        3
+                                    ],
+                                    [
+                                        5,
+                                        3
+                                    ],
+                                    [
+                                        6,
+                                        3
+                                    ],
+                                    [
+                                        7,
+                                        3
+                                    ],
+                                    [
+                                        0,
+                                        4
+                                    ],
+                                    [
+                                        1,
+                                        4
+                                    ],
+                                    [
+                                        2,
+                                        4
+                                    ],
+                                    [
+                                        5,
+                                        4
+                                    ],
+                                    [
+                                        6,
+                                        4
+                                    ],
+                                    [
+                                        7,
+                                        4
+                                    ],
+                                    [
+                                        0,
+                                        5
+                                    ],
+                                    [
+                                        1,
+                                        5
+                                    ],
+                                    [
+                                        2,
+                                        5
+                                    ],
+                                    [
+                                        3,
+                                        5
+                                    ],
+                                    [
+                                        4,
+                                        5
+                                    ],
+                                    [
+                                        5,
+                                        5
+                                    ],
+                                    [
+                                        6,
+                                        5
+                                    ],
+                                    [
+                                        7,
+                                        5
+                                    ],
+                                    [
+                                        2,
+                                        6
+                                    ],
+                                    [
+                                        3,
+                                        6
+                                    ],
+                                    [
+                                        4,
+                                        6
+                                    ],
+                                    [
+                                        5,
+                                        6
+                                    ],
+                                    [
+                                        2,
+                                        7
+                                    ],
+                                    [
+                                        3,
+                                        7
+                                    ],
+                                    [
+                                        4,
+                                        7
+                                    ],
+                                    [
+                                        5,
+                                        7
+                                    ]
+                                ]
+                            }
                         ]
                     },
-                    {
-                        "assetId": 42493,
-                        "stateId": 54324,
-                        "states": [54324],
-                        "cells": [
-                            [2, 0]
-                        ]
-                    },
-                    {
-                        "assetId": 42495,
-                        "stateId": 54338,
-                        "states": [54338],
-                        "cells": [
-                            [0, 2],
-                            [2, 1],
-                            [2, 5],
-                            [3, 4],
-                            [5, 1],
-                            [4, 0],
-                            [3, 3],
-                            [0, 4]
-                        ]
-                    },
-                    {
-                        "assetId": 42497,
-                        "stateId": 54351,
-                        "states": [54351],
-                        "cells": [
-                            [0, 1],
-                            [2, 2],
-                            [1, 4],
-                            [4, 3],
-                            [1, 3],
-                            [4, 5]
-                        ]
-                    },
-                    {
-                        "assetId": 42496,
-                        "stateId": 54346,
-                        "states": [54346],
-                        "cells": [
-                            [3, 0],
-                            [4, 1],
-                            [1, 2],
-                            [5, 2],
-                            [3, 2]
+                    "default": {
+                        "index": 1,
+                        "chunks": [
+                            {
+                                "name": "",
+                                "assetRules": [
+                                    {
+                                        "assetId": "50761",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 1000,
+                                        "stateId": "65832"
+                                    },
+                                    {
+                                        "assetId": "50762",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 1000,
+                                        "stateId": "65834"
+                                    },
+                                    {
+                                        "assetId": "50759",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 1000,
+                                        "stateId": "65816"
+                                    },
+                                    {
+                                        "assetId": "50763",
+                                        "distributionType": "ratio",
+                                        "distributionValue": 1000,
+                                        "stateId": "65840"
+                                    }
+                                ],
+                                "cells": [
+                                    [
+                                        2,
+                                        0
+                                    ],
+                                    [
+                                        3,
+                                        0
+                                    ],
+                                    [
+                                        4,
+                                        0
+                                    ],
+                                    [
+                                        5,
+                                        0
+                                    ],
+                                    [
+                                        1,
+                                        1
+                                    ],
+                                    [
+                                        4,
+                                        1
+                                    ],
+                                    [
+                                        5,
+                                        1
+                                    ],
+                                    [
+                                        6,
+                                        1
+                                    ],
+                                    [
+                                        0,
+                                        2
+                                    ],
+                                    [
+                                        1,
+                                        2
+                                    ],
+                                    [
+                                        2,
+                                        2
+                                    ],
+                                    [
+                                        4,
+                                        2
+                                    ],
+                                    [
+                                        5,
+                                        2
+                                    ],
+                                    [
+                                        6,
+                                        2
+                                    ],
+                                    [
+                                        7,
+                                        2
+                                    ],
+                                    [
+                                        1,
+                                        3
+                                    ],
+                                    [
+                                        2,
+                                        3
+                                    ],
+                                    [
+                                        5,
+                                        3
+                                    ],
+                                    [
+                                        6,
+                                        3
+                                    ],
+                                    [
+                                        0,
+                                        4
+                                    ],
+                                    [
+                                        4,
+                                        4
+                                    ],
+                                    [
+                                        7,
+                                        4
+                                    ],
+                                    [
+                                        0,
+                                        5
+                                    ],
+                                    [
+                                        1,
+                                        5
+                                    ],
+                                    [
+                                        2,
+                                        5
+                                    ],
+                                    [
+                                        4,
+                                        5
+                                    ],
+                                    [
+                                        5,
+                                        5
+                                    ],
+                                    [
+                                        7,
+                                        5
+                                    ],
+                                    [
+                                        5,
+                                        6
+                                    ],
+                                    [
+                                        2,
+                                        7
+                                    ],
+                                    [
+                                        3,
+                                        7
+                                    ],
+                                    [
+                                        4,
+                                        7
+                                    ],
+                                    [
+                                        5,
+                                        7
+                                    ]
+                                ]
+                            }
+                        ],
+                        "assetRules": [
+                            {
+                                "assetId": "50754",
+                                "stateId": "65799",
+                                "cells": [
+                                    [
+                                        2,
+                                        1
+                                    ],
+                                    [
+                                        0,
+                                        3
+                                    ],
+                                    [
+                                        4,
+                                        3
+                                    ],
+                                    [
+                                        7,
+                                        3
+                                    ],
+                                    [
+                                        2,
+                                        4
+                                    ],
+                                    [
+                                        3,
+                                        4
+                                    ],
+                                    [
+                                        5,
+                                        4
+                                    ]
+                                ]
+                            },
+                            {
+                                "assetId": "50761",
+                                "stateId": "65832",
+                                "cells": [
+                                    [
+                                        3,
+                                        2
+                                    ],
+                                    [
+                                        3,
+                                        3
+                                    ],
+                                    [
+                                        3,
+                                        5
+                                    ],
+                                    [
+                                        6,
+                                        5
+                                    ]
+                                ]
+                            },
+                            {
+                                "assetId": "50759",
+                                "stateId": "65816",
+                                "cells": [
+                                    [
+                                        3,
+                                        1
+                                    ],
+                                    [
+                                        2,
+                                        6
+                                    ]
+                                ]
+                            },
+                            {
+                                "assetId": "50769",
+                                "stateId": "65851",
+                                "cells": [
+                                    [
+                                        1,
+                                        4
+                                    ],
+                                    [
+                                        3,
+                                        6
+                                    ]
+                                ]
+                            },
+                            {
+                                "assetId": "50771",
+                                "stateId": "65853",
+                                "cells": [
+                                    [
+                                        6,
+                                        4
+                                    ],
+                                    [
+                                        4,
+                                        6
+                                    ]
+                                ]
+                            }
                         ]
                     }
-                ]
-            }
-        ],
-        "position": [40, 160],
-        "properties": {},
-        "cellProperties": [],
-        "rows": 6,
-        "cols": 6,
-        "blockedCells": [
-            [5, 0],
-            [0, 0],
-            [0, 5],
-            [5, 5]
-        ],
-        "cellSize": [40, 40],
-        "orientation": "TOP_LEFT"
-    },
-    "appended": {
-        "layers": [
-            {
-                "layerId": "default",
-                "token": "default",
-                "composites": [],
-                "chunks": [],
-                "fixedAssets": [
+                },
+                "propertyObjects": {},
+                "rows": 8,
+                "cols": 8,
+                "cells": [
                     {
-                        "assetId": 42493,
-                        "stateId": 54325,
-                        "states": [54325],
-                        "cells": [
-                            [0, 0],
-                            [4, 0],
-                            [2, 0],
-                            [7, 0],
-                            [6, 0],
-                            [9, 0]
-                        ]
+                        "col": 7,
+                        "row": 7,
+                        "isBlocked": true
                     },
                     {
-                        "assetId": 42495,
-                        "stateId": 54338,
-                        "states": [54338],
-                        "cells": [
-                            [5, 0],
-                            [8, 0]
-                        ]
+                        "col": 0,
+                        "row": 7,
+                        "isBlocked": true
                     },
                     {
-                        "assetId": 42497,
-                        "stateId": 54351,
-                        "states": [54351],
-                        "cells": [
-                            [1, 0]
-                        ]
+                        "col": 7,
+                        "row": 6,
+                        "isBlocked": true
                     },
                     {
-                        "assetId": 42496,
-                        "stateId": 54346,
-                        "states": [54346],
-                        "cells": [
-                            [3, 0]
-                        ]
+                        "col": 0,
+                        "row": 6,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 6,
+                        "row": 0,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 7,
+                        "row": 0,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 7,
+                        "row": 1,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 1,
+                        "row": 0,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 0,
+                        "row": 0,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 0,
+                        "row": 1,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 1,
+                        "row": 6,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 1,
+                        "row": 7,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 6,
+                        "row": 7,
+                        "isBlocked": true
+                    },
+                    {
+                        "col": 6,
+                        "row": 6,
+                        "isBlocked": true
                     }
-                ]
+                ],
+                "cellSize": [
+                    40,
+                    40
+                ],
+                "orientation": "TOP_LEFT",
+                "checkpoints": {
+                    "checkpoint_0": {
+                        "orientation": "horizontal",
+                        "position": 0
+                    },
+                    "checkpoint_1": {
+                        "orientation": "vertical",
+                        "position": 8
+                    }
+                }
             }
-        ],
-        "position": [40, 80],
-        "properties": {},
-        "cellProperties": [],
-        "rows": 1,
-        "cols": 10,
-        "blockedCells": [],
-        "cellSize": ["40", "40"],
-        "orientation": "BOTTOM_LEFT"
-    }
-}, "assetStates": {
-    "55421": "default",
-    "54321": "default",
-    "54324": "melon-2",
-    "54325": "melon-1",
-    "54322": "default",
-    "54323": "melon-4",
-    "54328": "melon-6",
-    "54329": "melon-7",
-    "54326": "melon-3",
-    "54327": "melon-5",
-    "54883": "super-pumpkin-7",
-    "54470": "lock_right",
-    "54471": "lock_left",
-    "513": "melon_5",
-    "54333": "pepper-2",
-    "512": "melon_4",
-    "54334": "pepper-5",
-    "511": "melon_3",
-    "54335": "pepper-6",
-    "54473": "lock_down",
-    "510": "melon_2",
-    "54336": "pepper-7",
-    "54472": "lock_up",
-    "54330": "pepper-1",
-    "54331": "pepper-3",
-    "54332": "pepper-4",
-    "54337": "watermelon-4",
-    "54338": "watermelon-1",
-    "54339": "watermelon-2",
-    "499": "watermelon_4",
-    "496": "pepper_5",
-    "495": "pepper_4",
-    "498": "watermelon_3",
-    "497": "watermelon_2",
-    "54346": "pumpkin-1",
-    "54347": "pumpkin-2",
-    "54344": "pumpkin-4",
-    "494": "pepper_3",
-    "54345": "pumpkin-3",
-    "54342": "watermelon-6",
-    "54343": "watermelon-7",
-    "54340": "watermelon-3",
-    "54341": "watermelon-5",
-    "613": "wood_2",
-    "54348": "pumpkin-7",
-    "54349": "pumpkin-5",
-    "54359": "default",
-    "54354": "tomato-4",
-    "54353": "tomato-3",
-    "54352": "tomato-2",
-    "54351": "tomato-1",
-    "54358": "ice-1",
-    "54357": "tomato-7",
-    "54356": "tomato-6",
-    "54355": "tomato-5",
-    "54350": "pumpkin-6",
-    "505": "pumpkin_5",
-    "506": "tomato_2",
-    "503": "pumpkin_3",
-    "504": "pumpkin_4",
-    "509": "tomato_5",
-    "507": "tomato_3",
-    "508": "tomato_4",
-    "54467": "default",
-    "54363": "wood-4",
-    "54362": "wood-3",
-    "54365": "mud-2",
-    "54465": "cactus-6",
-    "54364": "mud-1",
-    "54367": "chick",
-    "54463": "cactus-4",
-    "502": "pumpkin_2",
-    "54366": "default",
-    "54464": "cactus-5",
-    "54369": "dog",
-    "54461": "cactus-2",
-    "500": "watermelon_5",
-    "54368": "pig",
-    "54462": "cactus-3",
-    "54460": "cactus-1",
-    "54360": "wood-1",
-    "54361": "wood-2",
-    "54575": "lock-left",
-    "54576": "lock-up",
-    "54577": "lock-right",
-    "54573": "default",
-    "54574": "lock-down",
-    "54379": "box_1",
-    "54378": "box_2",
-    "54377": "box_1",
-    "54376": "box_1",
-    "54375": "box_2",
-    "54374": "cage-1",
-    "54373": "cage-2",
-    "54371": "sheep",
-    "54372": "default",
-    "452": "pepper_2",
-    "54370": "rabbit",
-    "54384": "box_1",
-    "54380": "box_2",
-    "54381": "box_1",
-    "54382": "box_2",
-    "54383": "box_2"
-}, "assets": {
-    "42509": {
-        "token": "pet_sheep",
-        "states": {
-            "54384": {
-                "token": "box_1",
-                "properties": {}
-            },
-            "54383": {
-                "token": "box_2",
-                "properties": {}
-            }
-        },
-        "properties": {}
+        }
     },
-    "42541": {
-        "token": "cow",
-        "states": {
-            "54467": {
-                "token": "default",
-                "properties": {}
+    "assets": {
+        "matrix": {
+            "50752": {
+                "token": "jam_double",
+                "states": {
+                    "65795": {
+                        "token": "jam_double-1"
+                    },
+                    "65796": {
+                        "token": "jam_double-2"
+                    }
+                }
             },
-            "54473": {
-                "token": "lock_down",
-                "properties": {}
+            "50753": {
+                "token": "sand",
+                "states": {
+                    "65797": {
+                        "token": "sand-1"
+                    },
+                    "65798": {
+                        "token": "sand-2"
+                    }
+                }
             },
-            "54472": {
-                "token": "lock_up",
-                "properties": {}
+            "50754": {
+                "token": "melon",
+                "states": {
+                    "65799": {
+                        "token": "normal"
+                    },
+                    "65800": {
+                        "token": "line_h"
+                    },
+                    "65801": {
+                        "token": "line_v"
+                    },
+                    "65802": {
+                        "token": "cross"
+                    },
+                    "65803": {
+                        "token": "flying"
+                    },
+                    "65804": {
+                        "token": "radial"
+                    }
+                }
             },
-            "54470": {
-                "token": "lock_right",
-                "properties": {}
+            "50755": {
+                "token": "acorn",
+                "states": {
+                    "65805": {
+                        "token": "acorn"
+                    }
+                }
             },
-            "54471": {
-                "token": "lock_left",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42595": {
-        "token": "figure-tile",
-        "states": {
-            "54573": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42539": {
-        "token": "cactus",
-        "states": {
-            "54460": {
-                "token": "cactus-1",
-                "properties": {}
+            "50756": {
+                "token": "drop",
+                "states": {
+                    "65806": {
+                        "token": "default"
+                    }
+                }
             },
-            "54465": {
-                "token": "cactus-6",
-                "properties": {}
+            "50757": {
+                "token": "cactus",
+                "states": {
+                    "65807": {
+                        "token": "cactus-1"
+                    },
+                    "65808": {
+                        "token": "cactus-2"
+                    },
+                    "65809": {
+                        "token": "cactus-3"
+                    },
+                    "65810": {
+                        "token": "cactus-4"
+                    },
+                    "65811": {
+                        "token": "cactus-5"
+                    },
+                    "65812": {
+                        "token": "cactus-6"
+                    }
+                }
             },
-            "54463": {
-                "token": "cactus-4",
-                "properties": {}
+            "50758": {
+                "token": "milk",
+                "states": {
+                    "65813": {
+                        "token": "2x4"
+                    },
+                    "65814": {
+                        "token": "2x2"
+                    },
+                    "65815": {
+                        "token": "1x2"
+                    }
+                }
             },
-            "54464": {
-                "token": "cactus-5",
-                "properties": {}
+            "50759": {
+                "token": "pumpkin",
+                "states": {
+                    "65816": {
+                        "token": "normal"
+                    },
+                    "65817": {
+                        "token": "line_h"
+                    },
+                    "65818": {
+                        "token": "line_v"
+                    },
+                    "65819": {
+                        "token": "cross"
+                    },
+                    "65820": {
+                        "token": "flying"
+                    },
+                    "65821": {
+                        "token": "radial"
+                    }
+                }
             },
-            "54461": {
-                "token": "cactus-2",
-                "properties": {}
+            "50760": {
+                "token": "ice",
+                "states": {
+                    "65822": {
+                        "token": "ice-1"
+                    },
+                    "65823": {
+                        "token": "ice-2"
+                    },
+                    "65824": {
+                        "token": "ice-3"
+                    },
+                    "65825": {
+                        "token": "ice-5"
+                    },
+                    "65826": {
+                        "token": "ice-4"
+                    },
+                    "65827": {
+                        "token": "ice-6"
+                    }
+                }
             },
-            "54462": {
-                "token": "cactus-3",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42596": {
-        "token": "lock",
-        "states": {
-            "54575": {
-                "token": "lock-left",
-                "properties": {}
+            "50761": {
+                "token": "watermelon",
+                "states": {
+                    "65828": {
+                        "token": "line_v"
+                    },
+                    "65829": {
+                        "token": "cross"
+                    },
+                    "65830": {
+                        "token": "flying"
+                    },
+                    "65831": {
+                        "token": "radial"
+                    },
+                    "65832": {
+                        "token": "normal"
+                    },
+                    "65833": {
+                        "token": "line_h"
+                    }
+                }
             },
-            "54576": {
-                "token": "lock-up",
-                "properties": {}
+            "50762": {
+                "token": "pepper",
+                "states": {
+                    "65834": {
+                        "token": "normal"
+                    },
+                    "65835": {
+                        "token": "line_h"
+                    },
+                    "65836": {
+                        "token": "line_v"
+                    },
+                    "65837": {
+                        "token": "cross"
+                    },
+                    "65838": {
+                        "token": "flying"
+                    },
+                    "65839": {
+                        "token": "radial"
+                    }
+                }
             },
-            "54577": {
-                "token": "lock-right",
-                "properties": {}
+            "50763": {
+                "token": "tomato",
+                "states": {
+                    "65840": {
+                        "token": "normal"
+                    },
+                    "65841": {
+                        "token": "line_h"
+                    },
+                    "65842": {
+                        "token": "line_v"
+                    },
+                    "65843": {
+                        "token": "cross"
+                    },
+                    "65844": {
+                        "token": "flying"
+                    },
+                    "65845": {
+                        "token": "radial"
+                    }
+                }
             },
-            "54574": {
-                "token": "lock-down",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42492": {
-        "token": "crow",
-        "states": {
-            "54322": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42491": {
-        "token": "hay",
-        "states": {
-            "54321": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42755": {
-        "token": "pumpkin",
-        "states": {
-            "54883": {
-                "token": "super-pumpkin-7",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42497": {
-        "token": "tomato",
-        "states": {
-            "54354": {
-                "token": "tomato-4",
-                "properties": {}
+            "50764": {
+                "token": "color_bomb",
+                "states": {
+                    "65846": {
+                        "token": "color_bomb"
+                    }
+                }
             },
-            "54353": {
-                "token": "tomato-3",
-                "properties": {}
+            "50765": {
+                "token": "hay",
+                "states": {
+                    "65847": {
+                        "token": "hay"
+                    }
+                }
             },
-            "54352": {
-                "token": "tomato-2",
-                "properties": {}
+            "50766": {
+                "token": "stone",
+                "states": {
+                    "65848": {
+                        "token": "stone"
+                    }
+                }
             },
-            "54351": {
-                "token": "tomato-1",
-                "properties": {}
+            "50767": {
+                "token": "jam_single",
+                "states": {
+                    "65849": {
+                        "token": "jam_single"
+                    }
+                }
             },
-            "54357": {
-                "token": "tomato-7",
-                "properties": {}
-            },
-            "54356": {
-                "token": "tomato-6",
-                "properties": {}
-            },
-            "54355": {
-                "token": "tomato-5",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42498": {
-        "token": "ice",
-        "states": {
-            "54358": {
-                "token": "ice-1",
-                "properties": {}
-            },
-            "54359": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42499": {
-        "token": "wood",
-        "states": {
-            "54363": {
-                "token": "wood-4",
-                "properties": {}
-            },
-            "54362": {
-                "token": "wood-3",
-                "properties": {}
-            },
-            "54360": {
-                "token": "wood-1",
-                "properties": {}
-            },
-            "54361": {
-                "token": "wood-2",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42500": {
-        "token": "mud",
-        "states": {
-            "54365": {
-                "token": "mud-2",
-                "properties": {}
-            },
-            "54364": {
-                "token": "mud-1",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42493": {
-        "token": "melon",
-        "states": {
-            "54324": {
-                "token": "melon-2",
-                "properties": {}
-            },
-            "54325": {
-                "token": "melon-1",
-                "properties": {}
-            },
-            "54323": {
-                "token": "melon-4",
-                "properties": {}
-            },
-            "54328": {
-                "token": "melon-6",
-                "properties": {}
-            },
-            "54329": {
-                "token": "melon-7",
-                "properties": {}
-            },
-            "54326": {
-                "token": "melon-3",
-                "properties": {}
-            },
-            "54327": {
-                "token": "melon-5",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42494": {
-        "token": "pepper",
-        "states": {
-            "54333": {
-                "token": "pepper-2",
-                "properties": {}
-            },
-            "54334": {
-                "token": "pepper-5",
-                "properties": {}
-            },
-            "54335": {
-                "token": "pepper-6",
-                "properties": {}
-            },
-            "54336": {
-                "token": "pepper-7",
-                "properties": {}
-            },
-            "54330": {
-                "token": "pepper-1",
-                "properties": {}
-            },
-            "54331": {
-                "token": "pepper-3",
-                "properties": {}
-            },
-            "54332": {
-                "token": "pepper-4",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42495": {
-        "token": "watermelon",
-        "states": {
-            "54342": {
-                "token": "watermelon-6",
-                "properties": {}
-            },
-            "54343": {
-                "token": "watermelon-7",
-                "properties": {}
-            },
-            "54340": {
-                "token": "watermelon-3",
-                "properties": {}
-            },
-            "54341": {
-                "token": "watermelon-5",
-                "properties": {}
-            },
-            "54337": {
-                "token": "watermelon-4",
-                "properties": {}
-            },
-            "54338": {
-                "token": "watermelon-1",
-                "properties": {}
-            },
-            "54339": {
-                "token": "watermelon-2",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42496": {
-        "token": "pumpkin",
-        "states": {
-            "54346": {
-                "token": "pumpkin-1",
-                "properties": {}
-            },
-            "54347": {
-                "token": "pumpkin-2",
-                "properties": {}
-            },
-            "54344": {
-                "token": "pumpkin-4",
-                "properties": {}
-            },
-            "54345": {
-                "token": "pumpkin-3",
-                "properties": {}
-            },
-            "54350": {
-                "token": "pumpkin-6",
-                "properties": {}
-            },
-            "54348": {
-                "token": "pumpkin-7",
-                "properties": {}
-            },
-            "54349": {
-                "token": "pumpkin-5",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42504": {
-        "token": "cage",
-        "states": {
-            "54374": {
-                "token": "cage-1",
-                "properties": {}
-            },
-            "54373": {
-                "token": "cage-2",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42503": {
-        "token": "stone",
-        "states": {
-            "54372": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42502": {
-        "token": "animal",
-        "states": {
-            "54371": {
-                "token": "sheep",
-                "properties": {}
-            },
-            "54370": {
-                "token": "rabbit",
-                "properties": {}
-            },
-            "54367": {
+            "50768": {
                 "token": "chick",
-                "properties": {}
+                "states": {
+                    "65850": {
+                        "token": "chick"
+                    }
+                }
             },
-            "54369": {
+            "50769": {
                 "token": "dog",
-                "properties": {}
+                "states": {
+                    "65851": {
+                        "token": "dog"
+                    }
+                }
             },
-            "54368": {
+            "50770": {
                 "token": "pig",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42501": {
-        "token": "drop",
-        "states": {
-            "54366": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42508": {
-        "token": "pet_pig",
-        "states": {
-            "54381": {
-                "token": "box_1",
-                "properties": {}
+                "states": {
+                    "65852": {
+                        "token": "pig"
+                    }
+                }
             },
-            "54382": {
-                "token": "box_2",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42507": {
-        "token": "pet_rabbit",
-        "states": {
-            "54380": {
-                "token": "box_2",
-                "properties": {}
+            "50771": {
+                "token": "sheep",
+                "states": {
+                    "65853": {
+                        "token": "sheep"
+                    }
+                }
             },
-            "54379": {
-                "token": "box_1",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "43044": {
-        "token": "super-melon",
-        "states": {
-            "55421": {
-                "token": "default",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42506": {
-        "token": "pet_chick",
-        "states": {
-            "54378": {
-                "token": "box_2",
-                "properties": {}
+            "50772": {
+                "token": "box",
+                "states": {
+                    "65854": {
+                        "token": "box-1"
+                    },
+                    "65855": {
+                        "token": "box-2"
+                    },
+                    "65856": {
+                        "token": "box-3"
+                    },
+                    "65857": {
+                        "token": "box-4"
+                    },
+                    "65858": {
+                        "token": "box-5"
+                    }
+                }
             },
-            "54377": {
-                "token": "box_1",
-                "properties": {}
-            }
-        },
-        "properties": {}
-    },
-    "42505": {
-        "token": "pet_dog",
-        "states": {
-            "54376": {
-                "token": "box_1",
-                "properties": {}
+            "50773": {
+                "token": "stone_cage",
+                "states": {
+                    "65859": {
+                        "token": "stone_cage-1"
+                    },
+                    "65860": {
+                        "token": "stone_cage-2"
+                    }
+                }
             },
-            "54375": {
-                "token": "box_2",
-                "properties": {}
+            "51060": {
+                "token": "blueberry",
+                "states": {
+                    "66349": {
+                        "token": "normal"
+                    },
+                    "66350": {
+                        "token": "radial"
+                    },
+                    "66351": {
+                        "token": "line_v"
+                    },
+                    "66352": {
+                        "token": "line_h"
+                    },
+                    "66353": {
+                        "token": "cross"
+                    },
+                    "66354": {
+                        "token": "flying"
+                    }
+                }
             }
-        },
-        "properties": {}
+        }
+    },
+    "matchingRules": {
+        "squareMatch": true,
+        "matchSize": 3,
+        "includedBoards": [
+            "main"
+        ],
+        "excludedAssets": ["50761"]
+    },
+    "propertyObjects": {
+        "levelProperty1": {
+            "levelDataFrom": "application",
+            "movesCount": "19",
+            "star_milestones": "1800,4710,6650",
+            "levelType": "unfreeze_objective",
+            "objectives": {
+                "rescue-dog": "2",
+                "rescue-sheep": "2"
+            },
+            "boosts": {
+                "BOOST_DRONE": false,
+                "BOOST_CROSS_DRONE": false
+            },
+            "isTutorialDisabled": true,
+            "isMelnSplashDisabled": false
+        }
     }
-}, "properties": {
-    "levelDataFrom": "application",
-    "movesCount": "18",
-    "objectives": {
-        "explode-melon": "2"
-    },
-    "star_milestones": "150,350,1150",
-    "boosts": {
-        "BOOST_COLOR_REMOVER": false,
-        "BOOST_MAGIC_SEED": false,
-        "BOOST_SHOVEL": false
-    },
-    "isMelnSplashDisabled": true,
-    "isMatchFourExplosionDisabled": true,
-    "isMatchCrossExplosionDisabled": true,
-    "isMatchFiveExplosionDisabled": true,
-    "isTutorialDisabled": true
-}}
+}

@@ -8,6 +8,7 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTSaltrMobile;
+import saltr.game.SLTBoard;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 import saltr.saltr_internal;
@@ -65,12 +66,12 @@ public class SLTInitLevelContentMobileTest {
         stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new LevelDataCachedJson()));
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
 
-        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_MATCHING);
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
             var initResult:Boolean = _saltr.initLevelContentLocally(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
-            if (true == initResult && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "cached" == level.properties.levelDataFrom) {
+            if (true == initResult && true == level.contentReady && "default" == level.getBoard(SLTBoard.BOARD_TYPE_MATCHING, "main").layers["default"].token && "cached" == level.properties["levelProperty1"]["levelDataFrom"]) {
                 testPassed = true;
             }
         }
@@ -90,12 +91,12 @@ public class SLTInitLevelContentMobileTest {
         stub(mobileRepository).method("getObjectFromCache").returns(null);
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
 
-        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_MATCHING);
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
             var initResult:Boolean = _saltr.initLevelContentLocally(SLTSaltrTest.GAME_LEVELS_FEATURE, level);
-            if (true == initResult && true == level.contentReady && "default" == level.getBoard("main").layers[0].token && "application" == level.properties.levelDataFrom) {
+            if (true == initResult && true == level.contentReady && "default" == level.getBoard(SLTBoard.BOARD_TYPE_MATCHING, "main").layers["default"].token && "application" == level.properties["levelProperty1"]["levelDataFrom"]) {
                 testPassed = true;
             }
         }

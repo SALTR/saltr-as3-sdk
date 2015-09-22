@@ -65,7 +65,7 @@ public class SLTLevel {
     /**
      * The properties of the level.
      */
-    public function get properties():Object {
+    public function get properties():Dictionary {
         return _properties;
     }
 
@@ -144,16 +144,16 @@ public class SLTLevel {
         _properties = _parser.parseLevelProperties(rootNode);
 
         try {
-            _matrixAssetMap = _parser.parseAssets(rootNode, SLTLevelParser.BOARD_TYPE_MATCHING);
-            _canvas2DAssetMap = _parser.parseAssets(rootNode, SLTLevelParser.BOARD_TYPE_CANVAS_2D);
+            _matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
+            _canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
         }
         catch (e:Error) {
             throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
         }
 
         try {
-            _matrixBoards = _parser.parseBoardContent(rootNode, _matrixAssetMap, SLTLevelParser.BOARD_TYPE_MATCHING);
-            _canvas2DBoards = _parser.parseBoardContent(rootNode, _canvas2DAssetMap, SLTLevelParser.BOARD_TYPE_CANVAS_2D);
+            _matrixBoards = _parser.parseBoardContent(rootNode, _matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
+            _canvas2DBoards = _parser.parseBoardContent(rootNode, _canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
         }
         catch (e:Error) {
             throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
@@ -169,12 +169,12 @@ public class SLTLevel {
     public function regenerateAllBoards():void {
         if (null != _matrixBoards) {
             for (var matrixBoardToken:String in _matrixBoards) {
-                regenerateBoard(SLTLevelParser.BOARD_TYPE_MATCHING, matrixBoardToken);
+                regenerateBoard(SLTBoard.BOARD_TYPE_MATCHING, matrixBoardToken);
             }
         }
         if (null != _canvas2DBoards) {
             for (var canvasBoardtoken:String in _canvas2DBoards) {
-                regenerateBoard(SLTLevelParser.BOARD_TYPE_CANVAS_2D, canvasBoardtoken);
+                regenerateBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, canvasBoardtoken);
             }
         }
     }
@@ -191,11 +191,11 @@ public class SLTLevel {
         }
     }
 
-    private final function getBoard(boardType:String, boardToken:String):SLTBoard {
-        if (boardType == SLTLevelParser.BOARD_TYPE_MATCHING) {
+    public final function getBoard(boardType:String, boardToken:String):SLTBoard {
+        if (boardType == SLTBoard.BOARD_TYPE_MATCHING) {
             return getMatrixBoard(boardToken);
         }
-        if (boardType == SLTLevelParser.BOARD_TYPE_CANVAS_2D) {
+        if (boardType == SLTBoard.BOARD_TYPE_CANVAS_2D) {
             return getCanvas2DBoard(boardToken);
         }
         return null;

@@ -5,6 +5,7 @@ package saltr.game.matching {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAssetState;
+import saltr.game.SLTBoard;
 import saltr.game.SLTBoardParser;
 import saltr.game.SLTCheckPointParser;
 import saltr.game.SLTLevelParser;
@@ -71,10 +72,7 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
      * @return The parsed boards.
      */
     override saltr_internal function parseBoardContent(rootNode:Object, assetMap:Dictionary):Dictionary {
-        var boardNodes:Object = getBoardsNode(rootNode, SLTLevelParser.BOARD_TYPE_MATCHING);
-        if (null == boardNodes) {
-            return null;
-        }
+        var boardNodes:Object = getBoardsNode(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
 
         var matchingRules:SLTMatchingRules = parseMatchingRules(rootNode, assetMap);
         var matchingRuleIncludedBoards:Array = parseMatchingRuleIncludedBoards(rootNode);

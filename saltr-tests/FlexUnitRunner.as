@@ -63,19 +63,21 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTSaltrMobileTestWithConnection);
         testsToRun.push(SLTInitLevelContentMobileTest);
         testsToRun.push(SLTLevelTest);
-        testsToRun.push(SLT2DAssetInstanceTest);
-        testsToRun.push(SLT2DBoardTest);
-        testsToRun.push(SLTAddPropertiesApiCallTest);
-        testsToRun.push(SLTAppDataApiCallTest);
-        testsToRun.push(SLTHeartbeatApiCallTest);
-        testsToRun.push(SLTLevelContentApiCallTest);
-        testsToRun.push(SLTRegisterDeviceApiCallTest);
-        testsToRun.push(SLTRegisterUserApiCallTest);
-        testsToRun.push(SLTSendLevelEndApiCallTest);
-        testsToRun.push(SLTSyncApiCallTest);
-        testsToRun.push(SLTRepositoryStorageManagerTest);
-        testsToRun.push(SLTMobileLevelsFeaturesUpdaterTest);
-//        testsToRun.push(SLTSaltrWebTest);
+//        testsToRun.push(SLT2DAssetInstanceTest);
+//        testsToRun.push(SLT2DBoardTest);
+//        testsToRun.push(SLTAddPropertiesApiCallTest);
+//        testsToRun.push(SLTAppDataApiCallTest);
+//        testsToRun.push(SLTHeartbeatApiCallTest);
+//        testsToRun.push(SLTLevelContentApiCallTest);
+//        testsToRun.push(SLTRegisterDeviceApiCallTest);
+//        testsToRun.push(SLTRegisterUserApiCallTest);
+//        testsToRun.push(SLTSendLevelEndApiCallTest);
+//        testsToRun.push(SLTSyncApiCallTest);
+//        testsToRun.push(SLTRepositoryStorageManagerTest);
+//        testsToRun.push(SLTMobileLevelsFeaturesUpdaterTest);
+
+
+        //testsToRun.push(SLTSaltrWebTest);
         return testsToRun;
     }
 }

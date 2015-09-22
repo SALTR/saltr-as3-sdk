@@ -16,19 +16,7 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTLevelParser {
-
-    /**
-     * Specifies the board type for matching game.
-     */
-    saltr_internal static const BOARD_TYPE_MATCHING:String = "matrix";
-
-    /**
-     * Specifies the board type for Canvas2D game.
-     */
-    saltr_internal static const BOARD_TYPE_CANVAS_2D:String = "canvas2d";
-
     saltr_internal static const NODE_PROPERTY_OBJECTS:String = "propertyObjects";
-    private static const NODE_PROPERTY_LEVEL:String = "level";
 
     private static var INSTANCE:SLTLevelParser;
 
@@ -57,13 +45,12 @@ public class SLTLevelParser {
     }
 
     saltr_internal final function parseLevelProperties(rootNode:Object):Dictionary {
-        if (rootNode.hasOwnProperty(NODE_PROPERTY_OBJECTS) &&
-                rootNode[NODE_PROPERTY_OBJECTS].hasOwnProperty(NODE_PROPERTY_LEVEL)) {
+        if (rootNode.hasOwnProperty(NODE_PROPERTY_OBJECTS)) {
             var properties:Dictionary = new Dictionary();
-            var levelPropertyNodes:Array = rootNode[NODE_PROPERTY_OBJECTS][NODE_PROPERTY_LEVEL];
-            for (var i:int = 0, len:int = levelPropertyNodes.length; i < len; ++i) {
-                var levelPropertyNode:Object = levelPropertyNodes[i];
-                properties[levelPropertyNode.token] = levelPropertyNode.properties;
+            var levelPropertyNodes:Object = rootNode[NODE_PROPERTY_OBJECTS];
+            for (var token:String in levelPropertyNodes) {
+                //var levelPropertyNode:Object = levelPropertyNodes[token];
+                properties[token] = levelPropertyNodes[token];
             }
             return properties;
         }
@@ -87,10 +74,13 @@ public class SLTLevelParser {
      * @return The parsed assets.
      */
     saltr_internal function parseAssets(rootNode:Object, boardType:String):Dictionary {
-        var assetNodes:Object = rootNode["assets"][boardType];
-        var assetMap:Dictionary = new Dictionary();
-        for (var assetId:Object in assetNodes) {
-            assetMap[assetId] = parseAsset(assetNodes[assetId], boardType);
+        var assetMap:Dictionary = null;
+        if (rootNode["assets"].hasOwnProperty(boardType)) {
+            var assetNodes:Object = rootNode["assets"][boardType];
+            assetMap = new Dictionary();
+            for (var assetId:String in assetNodes) {
+                assetMap[assetId] = parseAsset(assetNodes[assetId], boardType);
+            }
         }
         return assetMap;
     }
@@ -130,9 +120,9 @@ public class SLTLevelParser {
     }
 
     private final function getBoardParser(boardType:String):SLTBoardParser {
-        if (BOARD_TYPE_MATCHING == boardType) {
+        if (SLTBoard.BOARD_TYPE_MATCHING == boardType) {
             return _matchingBoardParser;
-        } else if (BOARD_TYPE_CANVAS_2D == boardType) {
+        } else if (SLTBoard.BOARD_TYPE_CANVAS_2D == boardType) {
             return _canvas2dBoardParser;
         } else {
             throw new Error("Board parser missing error");

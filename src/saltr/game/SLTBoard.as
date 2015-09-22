@@ -13,6 +13,16 @@ use namespace saltr_internal;
  */
 public class SLTBoard {
 
+    /**
+     * Specifies the board type for matching game.
+     */
+    public static const BOARD_TYPE_MATCHING:String = "matrix";
+
+    /**
+     * Specifies the board type for Canvas2D game.
+     */
+    public static const BOARD_TYPE_CANVAS_2D:String = "canvas2d";
+
     protected var _propertyObjects:Dictionary;
     protected var _layers:Dictionary;
     private var _checkpoints:Dictionary;
