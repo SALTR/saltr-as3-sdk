@@ -73,8 +73,8 @@ public class FlexUnitRunner extends Sprite {
         testsToRun.push(SLTRegisterUserApiCallTest);
         testsToRun.push(SLTSendLevelEndApiCallTest);
         testsToRun.push(SLTSyncApiCallTest);
-//        testsToRun.push(SLTRepositoryStorageManagerTest);
-//        testsToRun.push(SLTMobileLevelsFeaturesUpdaterTest);
+        testsToRun.push(SLTRepositoryStorageManagerTest);
+        testsToRun.push(SLTMobileLevelsFeaturesUpdaterTest);
 
 
         //testsToRun.push(SLTSaltrWebTest);
