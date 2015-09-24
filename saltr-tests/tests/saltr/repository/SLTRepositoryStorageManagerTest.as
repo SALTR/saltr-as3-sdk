@@ -51,7 +51,8 @@ public class SLTRepositoryStorageManagerTest {
     public function getLevelVersionFromCacheMissingCachedLevelTest():void {
         stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_0.json").returns(null);
         stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_versions.json").returns(JSON.parse(new cachedLevelVersionsJson()));
-        var levelVersion:String = _storageManager.getLevelVersionFromCache("GAME_LEVELS", 0);
+        var cachedLevelVersions:Object = _storageManager.getLevelVersionsFileFromCache("GAME_LEVELS");
+        var levelVersion:String = _storageManager.getLevelVersionFromCache(cachedLevelVersions, "GAME_LEVELS", 0);
         assertEquals(null, levelVersion);
     }
 
@@ -64,7 +65,8 @@ public class SLTRepositoryStorageManagerTest {
     public function getLevelVersionFromCacheMissingLevelVersionsTest():void {
         stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_0.json").returns(JSON.parse(new LevelDataCachedJson()));
         stub(mobileRepository).method("getObjectFromCache").args("saltr/app_" + _appVersion + "/features/GAME_LEVELS/level_versions.json").returns(null);
-        var levelVersion:String = _storageManager.getLevelVersionFromCache("GAME_LEVELS", 0);
+        var cachedLevelVersions:Object = _storageManager.getLevelVersionsFileFromCache("GAME_LEVELS");
+        var levelVersion:String = _storageManager.getLevelVersionFromCache(cachedLevelVersions, "GAME_LEVELS", 0);
         assertEquals(null, levelVersion);
     }
 

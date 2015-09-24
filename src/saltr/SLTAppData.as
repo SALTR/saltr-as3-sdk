@@ -25,7 +25,7 @@ public class SLTAppData {
         _activeFeatures = new Dictionary();
         _defaultFeatures = new Dictionary();
         _gameLevelsFeatures = new Dictionary();
-        _defaultFeatures = new Dictionary();
+        _defaultGameLevelsFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
