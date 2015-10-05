@@ -53,6 +53,21 @@ public class SLTBoard {
     }
 
     /**
+     * Returns layer of board. Null if there is no layer with requested token.
+     * @param token The layer token to search.
+     * @return
+     */
+    public function getLayerByToken(token:String):SLTBoardLayer {
+        for (var i:int = 0, length:int = _layers.length; i < length; i++) {
+            var layer:SLTBoardLayer = _layers[i];
+            if (layer.token == token) {
+                return layer;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Provides the checkpoint.
      * @param token The checkpoint's token.
      */
