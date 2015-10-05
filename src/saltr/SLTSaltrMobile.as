@@ -288,9 +288,6 @@ public class SLTSaltrMobile {
         if (!_started) {
             throw new Error("Method 'initLevelContentFromSaltr' should be called after 'start()' only.");
         }
-        if (!_devMode) {
-            throw new Error("Method 'initLevelContentFromSaltr' should be called in 'dev mode' only.");
-        }
 
         _dedicatedLevelData = new DedicatedLevelData(gameLevelsFeatureToken, sltLevel, callback);
         if (canGetAppData()) {
