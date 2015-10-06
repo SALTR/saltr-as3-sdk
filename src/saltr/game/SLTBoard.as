@@ -58,13 +58,7 @@ public class SLTBoard {
      * @return
      */
     public function getLayerByToken(token:String):SLTBoardLayer {
-        for (var i:int = 0, length:int = _layers.length; i < length; i++) {
-            var layer:SLTBoardLayer = _layers[i];
-            if (layer.token == token) {
-                return layer;
-            }
-        }
-        return null;
+        return _layers[token];
     }
 
     /**
