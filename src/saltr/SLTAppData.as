@@ -17,6 +17,7 @@ public class SLTAppData {
     private var _activeFeatures:Dictionary;
     private var _defaultFeatures:Dictionary;
     private var _gameLevelsFeatures:Dictionary;
+    private var _defaultGameLevelsFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
 
 
@@ -24,6 +25,7 @@ public class SLTAppData {
         _activeFeatures = new Dictionary();
         _defaultFeatures = new Dictionary();
         _gameLevelsFeatures = new Dictionary();
+        _defaultGameLevelsFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
@@ -64,6 +66,11 @@ public class SLTAppData {
         var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
         if (null != gameLevelsFeature) {
             return gameLevelsFeature.properties as SLTLevelData;
+        } else {
+            var defaultGameLevelFeature:SLTFeature = _defaultGameLevelsFeatures[token];
+            if (defaultGameLevelFeature != null) {
+                return defaultGameLevelFeature.properties as SLTLevelData;
+            }
         }
         return null;
     }
@@ -79,13 +86,16 @@ public class SLTAppData {
             _defaultFeatures[token] = feature;
         }
         else if (type == SLTConfig.FEATURE_TYPE_GAME_LEVELS) {
-            _gameLevelsFeatures[token] = feature;
+            _defaultGameLevelsFeatures[token] = feature;
         }
     }
 
     saltr_internal function initEmpty():void {
         for (var i:String in _defaultFeatures) {
             _activeFeatures[i] = _defaultFeatures[i];
+        }
+        for (var i:String in _defaultGameLevelsFeatures) {
+            _gameLevelsFeatures[i] = _defaultGameLevelsFeatures[i];
         }
     }
 

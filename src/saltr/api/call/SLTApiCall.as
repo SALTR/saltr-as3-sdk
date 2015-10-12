@@ -15,7 +15,7 @@ use namespace saltr_internal;
 public class SLTApiCall {
     saltr_internal static const MOBILE_CLIENT:String = "AS3-Mobile";
     saltr_internal static const WEB_CLIENT:String = "AS3-Web";
-    saltr_internal static const API_VERSION:String = "1.1.0";
+    saltr_internal static const API_VERSION:String = "1.8.0";
 
     protected var _url:String;
     protected var _params:Object;
@@ -165,11 +165,11 @@ public class SLTApiCall {
 
     internal function handleResult(result:SLTApiCallResult):void {
         if (result.success) {
-            if (_successCallback) {
+            if (null != _successCallback) {
                 _successCallback(result.data);
             }
         } else {
-            if (_failCallback) {
+            if (null != _failCallback) {
                 _failCallback(result.status);
             }
         }

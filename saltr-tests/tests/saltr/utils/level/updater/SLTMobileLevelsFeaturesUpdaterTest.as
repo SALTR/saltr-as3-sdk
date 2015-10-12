@@ -100,7 +100,7 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
         var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_GAME_LEVELS);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
         _featuresUpdater.update(gameLevelsFeatures5Levels);
-        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_MATCHING);
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
         _featuresUpdater.updateLevel("GAME_LEVELS", level);
     }
 }

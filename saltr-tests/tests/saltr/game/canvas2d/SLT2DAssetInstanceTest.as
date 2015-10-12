@@ -7,6 +7,7 @@ import flash.geom.Point;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.game.SLTAssetState;
+import saltr.game.SLTBoard;
 import saltr.game.SLTLevel;
 import saltr.game.canvas2d.SLT2DAssetInstance;
 import saltr.game.canvas2d.SLT2DAssetState;
@@ -33,7 +34,7 @@ public class SLT2DAssetInstanceTest {
 
     [Before]
     public function tearUp():void {
-        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_2DCANVAS);
+        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
     }
 
     [After]
@@ -51,7 +52,7 @@ public class SLT2DAssetInstanceTest {
         if (false == _level.contentReady) {
             _level.updateContent(JSON.parse(new ScaleTestLevelDataJson()));
             if (true == _level.contentReady) {
-                var board:SLT2DBoard = _level.getBoard("UNTITLED_1") as SLT2DBoard;
+                var board:SLT2DBoard = _level.getBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, "UNTITLED_1") as SLT2DBoard;
                 var assetInstances:Vector.<SLT2DAssetInstance> = board.getAssetInstancesByLayerId("default");
                 var state_0:SLT2DAssetState = assetInstances[0].state as SLT2DAssetState;
                 var state_1:SLT2DAssetState = assetInstances[1].state as SLT2DAssetState;
@@ -73,7 +74,7 @@ public class SLT2DAssetInstanceTest {
         if (false == _level.contentReady) {
             _level.updateContent(JSON.parse(new PositionTestLevelDataJson()));
             if (true == _level.contentReady) {
-                var board:SLT2DBoard = _level.getBoard("Board") as SLT2DBoard;
+                var board:SLT2DBoard = _level.getBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, "Board") as SLT2DBoard;
                 var assetInstances:Vector.<SLT2DAssetInstance> = board.getAssetInstancesByLayerId("default");
 
                 var assetInstance:SLT2DAssetInstance = assetInstances[0];

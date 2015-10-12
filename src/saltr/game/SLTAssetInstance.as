@@ -22,7 +22,7 @@ public class SLTAssetInstance {
     public function SLTAssetInstance(token:String, state:SLTAssetState, properties:Object) {
         _token = token;
         _state = state;
-        _properties = properties
+        _properties = properties;
     }
 
     /**

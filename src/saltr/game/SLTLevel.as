@@ -1,9 +1,6 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
-import saltr.game.canvas2d.SLT2DLevelParser;
-import saltr.game.matching.SLTMatchingLevelParser;
-import saltr.status.SLTStatusLevelsParserMissing;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -12,51 +9,26 @@ use namespace saltr_internal;
  * The SLTLevel class represents the game's level.
  */
 public class SLTLevel {
-    protected var _boards:Dictionary;
+    private var _matrixBoards:Dictionary;
+    private var _canvas2DBoards:Dictionary;
 
     private var _globalIndex:int;
     private var _localIndex:int;
     private var _packIndex:int;
     private var _contentUrl:String;
-    private var _properties:Object;
+    private var _properties:Dictionary;
     private var _version:String;
 
     private var _contentReady:Boolean;
-    private var _assetMap:Dictionary;
+    private var _matrixAssetMap:Dictionary;
+    private var _canvas2DAssetMap:Dictionary;
 
-    private var _levelType:String;
+    private var _parser:SLTLevelParser;
 
     /**
      * Specifies that there is no level specified for the game.
      */
     public static const LEVEL_TYPE_NONE:String = "noLevels";
-
-    /**
-     * Specifies the level type for matching game.
-     */
-    public static const LEVEL_TYPE_MATCHING:String = "matrix";
-
-    /**
-     * Specifies the level type for Canvas2D game.
-     */
-    public static const LEVEL_TYPE_2DCANVAS:String = "2d";
-
-    /**
-     * Provides the level parser for the given level type.
-     * @param levelType The type of the level.
-     * @return The level type corresponding level parser.
-     */
-    private static function getParser(levelType:String):SLTLevelParser {
-        switch (levelType) {
-            case LEVEL_TYPE_MATCHING:
-                return SLTMatchingLevelParser.getInstance();
-                break;
-            case LEVEL_TYPE_2DCANVAS:
-                return SLT2DLevelParser.getInstance();
-                break;
-        }
-        return null;
-    }
 
     /**
      * Class constructor.
@@ -65,16 +37,15 @@ public class SLTLevel {
      * @param packIndex The index of the pack the level is in.
      * @param contentUrl The content URL of the level.
      * @param version The current version of the level.
-     * @param levelType The type of the level.
      */
-    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String, levelType:String) {
+    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String) {
         _globalIndex = globalIndex;
         _localIndex = localIndex;
         _packIndex = packIndex;
         _contentUrl = contentUrl;
         _version = version;
         _contentReady = false;
-        _levelType = levelType;
+        _parser = SLTLevelParser.getInstance();
     }
 
     /**
@@ -94,7 +65,7 @@ public class SLTLevel {
     /**
      * The properties of the level.
      */
-    public function get properties():Object {
+    public function get properties():Dictionary {
         return _properties;
     }
 
@@ -127,72 +98,107 @@ public class SLTLevel {
     }
 
     /**
-     * The boards.
+     * The matrix boards.
      */
-    public function get boards():Dictionary {
-        return _boards;
+    public function get matrixBoards():Dictionary {
+        return _matrixBoards;
     }
 
     /**
-     * Gets the board by identifier.
-     * @param id The board identifier.
+     * The canvas 2D boards.
+     */
+    public function get canvas2DBoards():Dictionary {
+        return _canvas2DBoards;
+    }
+
+    /**
+     * Gets the matrix board by identifier.
+     * @param token The board identifier.
      * @return The board with provided identifier.
      */
-    public function getBoard(id:String):SLTBoard {
-        return _boards[id];
+    public function getMatrixBoard(token:String):SLTBoard {
+        if (null != _matrixBoards) {
+            return _matrixBoards[token];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Gets the canvas 2D board by identifier.
+     * @param token The board identifier.
+     * @return The board with provided identifier.
+     */
+    public function getCanvas2DBoard(token:String):SLTBoard {
+        if (null != _canvas2DBoards) {
+            return _canvas2DBoards[token];
+        } else {
+            return null;
+        }
     }
 
     /**
      * Updates the content of the level.
      */
     public function updateContent(rootNode:Object):void {
-        _properties = rootNode["properties"];
+        _properties = _parser.parseLevelProperties(rootNode);
 
-        var parser:SLTLevelParser = getParser(_levelType);
-        if (parser != null) {
-            try {
-                _assetMap = parser.parseLevelAssets(rootNode);
-            }
-            catch (e:Error) {
-                throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
-            }
-
-            try {
-                _boards = parser.parseLevelContent(rootNode, _assetMap);
-            }
-            catch (e:Error) {
-                throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
-            }
-
-            if (_boards != null) {
-                regenerateAllBoards();
-                _contentReady = true;
-            }
-        } else {
-            // no parser was found for current level type
-            new SLTStatusLevelsParserMissing();
+        try {
+            _matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
+            _canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
+        }
+        catch (e:Error) {
+            throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
         }
 
+        try {
+            _matrixBoards = _parser.parseBoardContent(rootNode, _matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
+            _canvas2DBoards = _parser.parseBoardContent(rootNode, _canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
+        }
+        catch (e:Error) {
+            throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
+        }
+
+        regenerateAllBoards();
+        _contentReady = true;
     }
 
     /**
      * Regenerates contents of all boards.
      */
     public function regenerateAllBoards():void {
-        for each (var board:SLTBoard in _boards) {
-            board.regenerate();
+        if (null != _matrixBoards) {
+            for (var matrixBoardToken:String in _matrixBoards) {
+                regenerateBoard(SLTBoard.BOARD_TYPE_MATCHING, matrixBoardToken);
+            }
+        }
+        if (null != _canvas2DBoards) {
+            for (var canvasBoardtoken:String in _canvas2DBoards) {
+                regenerateBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, canvasBoardtoken);
+            }
         }
     }
 
     /**
      * Regenerates content of the board by identifier.
-     * @param boardId The board identifier.
+     * @param boardType The board type.
+     * @param boardToken The board token.
      */
-    public function regenerateBoard(boardId:String):void {
-        if (_boards != null && _boards[boardId] != null) {
-            var board:SLTBoard = _boards[boardId];
+    public function regenerateBoard(boardType:String, boardToken:String):void {
+        var board:SLTBoard = getBoard(boardType, boardToken);
+        if (null != board) {
             board.regenerate();
         }
+    }
+
+    public final function getBoard(boardType:String, boardToken:String):SLTBoard {
+        if (boardType == SLTBoard.BOARD_TYPE_MATCHING) {
+            return getMatrixBoard(boardToken);
+        }
+        if (boardType == SLTBoard.BOARD_TYPE_CANVAS_2D) {
+            return getCanvas2DBoard(boardToken);
+        }
+        return null;
     }
 
 }

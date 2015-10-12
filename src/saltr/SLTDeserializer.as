@@ -41,17 +41,11 @@ public class SLTDeserializer {
     }
 
     saltr_internal static function decodeLevels(rootNode:Object):Vector.<SLTLevel> {
-        var levelType:String = SLTLevel.LEVEL_TYPE_MATCHING;
-
-        if (rootNode.hasOwnProperty("levelType")) {
-            levelType = rootNode.levelType;
-        }
-
         var levelsNode:Array = rootNode.levels as Array;
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var i:int = 0, length:int = levelsNode.length; i < length; ++i) {
             var levelNode:Object = levelsNode[i];
-            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version, levelType);
+            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version);
             levels.push(level);
         }
         return levels;
@@ -83,7 +77,7 @@ public class SLTDeserializer {
         var feature:Object = null;
         var featureNodes:Array = rootNode.features as Array;
         if (null != featureNodes) {
-            for (var i:int = 0; i < featureNodes.length; ++i) {
+            for (var i:int = 0, length:int = featureNodes.length; i < length; ++i) {
                 var featureNode:Object = featureNodes[i];
                 if (featureToken == featureNode.token && featureType == featureNode.type) {
                     feature = featureNode;
@@ -103,7 +97,7 @@ public class SLTDeserializer {
         var version:String = null;
         var container:Array = rootNode as Array;
         if (null != container) {
-            for (var i:int = 0; i < container.length; ++i) {
+            for (var i:int = 0, length:int = container.length; i < length; ++i) {
                 var cachedLevelNode:Object = container[i];
                 if (globalIndex == cachedLevelNode.globalIndex) {
                     version = cachedLevelNode.version;

@@ -31,7 +31,7 @@ public class SLTUtils {
      * @return Formatted string.
      */
     saltr_internal static function formatString(format:String, ...args):String {
-        for (var i:int = 0; i < args.length; ++i)
+        for (var i:int = 0, length:int = args.length; i < length; ++i)
             format = format.replace(new RegExp("\\{" + i + "\\}", "g"), args[i]);
 
         return format;

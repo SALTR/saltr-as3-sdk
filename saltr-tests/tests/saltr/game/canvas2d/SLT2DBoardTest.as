@@ -5,6 +5,8 @@ package tests.saltr.game.canvas2d {
 import org.flexunit.asserts.assertEquals;
 import org.flexunit.asserts.assertNotNull;
 
+import saltr.game.SLTBoard;
+
 import saltr.game.SLTCheckpoint;
 import saltr.game.SLTLevel;
 import saltr.game.canvas2d.SLT2DBoard;
@@ -20,7 +22,7 @@ public class SLT2DBoardTest {
 
     [Before]
     public function tearUp():void {
-        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44", SLTLevel.LEVEL_TYPE_2DCANVAS);
+        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
     }
 
     [After]
@@ -38,7 +40,7 @@ public class SLT2DBoardTest {
         if (false == _level.contentReady) {
             _level.updateContent(JSON.parse(new LevelDataJson()));
             if (true == _level.contentReady) {
-                var board:SLT2DBoard = _level.getBoard("Board") as SLT2DBoard;
+                var board:SLT2DBoard = _level.getBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, "Board") as SLT2DBoard;
                 checkpoint = board.getCheckpoint("token_1");
 
             }
@@ -58,7 +60,7 @@ public class SLT2DBoardTest {
         if (false == _level.contentReady) {
             _level.updateContent(JSON.parse(new LevelDataJson()));
             if (true == _level.contentReady) {
-                var board:SLT2DBoard = _level.getBoard("Board") as SLT2DBoard;
+                var board:SLT2DBoard = _level.getBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, "Board") as SLT2DBoard;
                 checkpoints = board.getCheckpoints();
 
             }

@@ -20,11 +20,11 @@ public class SLT2DBoard extends SLTBoard {
     /**
      * Class constructor.
      * @param config The board configuration.
-     * @param properties The board associated properties.
+     * @param propertyObjects The board associated properties.
      * @param checkpoints The board checkpoints.
      */
-    public function SLT2DBoard(config:SLT2DBoardConfig, properties:Object, checkpoints:Dictionary) {
-        super(layers, properties, checkpoints);
+    public function SLT2DBoard(config:SLT2DBoardConfig, propertyObjects:Dictionary, checkpoints:Dictionary) {
+        super(config.layers, propertyObjects, checkpoints);
         _config = config;
     }
 
@@ -54,9 +54,10 @@ public class SLT2DBoard extends SLTBoard {
         _assetInstancesByLayerId = new Dictionary();
         _assetInstancesByLayerIndex = new Dictionary();
 
-        for (var i:uint = 0; i < _config.layers.length; ++i) {
+        for (var layerToken:String in _config.layers) {
+            var layer:SLT2DBoardLayer = _config.layers[layerToken] as SLT2DBoardLayer;
             var generator:SLT2DBoardGenerator = new SLT2DBoardGenerator();
-            generator.generate(_config, _config.layers[i], _assetInstancesByLayerId, _assetInstancesByLayerIndex);
+            generator.generate(_config, layer, _assetInstancesByLayerId, _assetInstancesByLayerIndex);
         }
     }
 }

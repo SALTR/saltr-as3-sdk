@@ -13,8 +13,18 @@ use namespace saltr_internal;
  */
 public class SLTBoard {
 
-    protected var _properties:Object;
-    protected var _layers:Vector.<SLTBoardLayer>;
+    /**
+     * Specifies the board type for matching game.
+     */
+    public static const BOARD_TYPE_MATCHING:String = "matrix";
+
+    /**
+     * Specifies the board type for Canvas2D game.
+     */
+    public static const BOARD_TYPE_CANVAS_2D:String = "canvas2d";
+
+    protected var _propertyObjects:Dictionary;
+    protected var _layers:Dictionary;
     private var _checkpoints:Dictionary;
 
     /**
@@ -22,8 +32,8 @@ public class SLTBoard {
      * @param layers The layers of the board.
      * @param properties The board associated properties.
      */
-    public function SLTBoard(layers:Vector.<SLTBoardLayer>, properties:Object, checkpoints:Dictionary) {
-        _properties = properties;
+    public function SLTBoard(layers:Dictionary, propertyObjects:Dictionary, checkpoints:Dictionary) {
+        _propertyObjects = propertyObjects;
         _layers = layers;
         _checkpoints = checkpoints;
     }
@@ -31,15 +41,24 @@ public class SLTBoard {
     /**
      * The board associated properties.
      */
-    public function get properties():Object {
-        return _properties;
+    public function get propertyObjects():Object {
+        return _propertyObjects;
     }
 
     /**
      * The layers of the board.
      */
-    public function get layers():Vector.<SLTBoardLayer> {
+    public function get layers():Dictionary {
         return _layers;
+    }
+
+    /**
+     * Returns layer of board. Null if there is no layer with requested token.
+     * @param token The layer token to search.
+     * @return
+     */
+    public function getLayerByToken(token:String):SLTBoardLayer {
+        return _layers[token];
     }
 
     /**

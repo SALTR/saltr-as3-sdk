@@ -19,11 +19,11 @@ public class SLTMatchingBoard extends SLTBoard {
     /**
      * Class constructor.
      * @param config The board configuration.
-     * @param properties The board associated properties.
+     * @param propertyObjects The board associated properties.
      * @param checkpoints The board checkpoints.
      */
-    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, properties:Object, checkpoints:Dictionary) {
-        super(config.layers, properties, checkpoints);
+    public function SLTMatchingBoard(config:SLTMatchingBoardConfig, propertyObjects:Dictionary, checkpoints:Dictionary) {
+        super(config.layers, propertyObjects, checkpoints);
         _config = config;
     }
 
@@ -49,8 +49,8 @@ public class SLTMatchingBoard extends SLTBoard {
     }
 
     override public function regenerate():void {
-        for (var i:int = 0, len:int = _layers.length; i < len; ++i) {
-            var layer:SLTMatchingBoardLayer = _config.layers[i] as SLTMatchingBoardLayer;
+        for (var layerToken:String in _config.layers) {
+            var layer:SLTMatchingBoardLayer = _config.layers[layerToken] as SLTMatchingBoardLayer;
             var generator:SLTMatchingBoardGeneratorBase = SLTMatchingBoardGeneratorBase.getGenerator(_config, layer);
             generator.generate(_config, layer);
         }

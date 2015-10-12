@@ -67,15 +67,20 @@ public class SLTStatus {
     public static const CLIENT_EXPERIMENTS_PARSE_ERROR:int = 2051;
 
     /**
-     * Specifies the client levels parse error.
+     * Specifies the client board parse error.
      */
-    public static const CLIENT_LEVELS_PARSE_ERROR:int = 2052;
+    public static const CLIENT_BOARD_PARSE_ERROR:int = 2052;
 
 
     /**
      * Specifies the client app data parse error.
      */
     public static const CLIENT_APP_DATA_PARSE_ERROR:int = 2053;
+
+    /**
+     * Specifies the client level parse error.
+     */
+    public static const CLIENT_LEVELS_PARSE_ERROR:int = 2054;
 
     private var _statusCode:int;
     private var _statusMessage:String;

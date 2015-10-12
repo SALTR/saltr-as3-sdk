@@ -1,6 +1,6 @@
 
 //Define output directory for swc and documentation
-def SALTR_SDK_VERSION = "1.3.8"
+def SALTR_SDK_VERSION = "1.3.9"
 def outdir = "saltr-sdk.v."+SALTR_SDK_VERSION
 println "Output directory: "+outdir
 
@@ -65,9 +65,9 @@ configurations.antClassPath.each { File f ->
 //  SDK
 //----------------------------------
 
-def AIR_HOME = 'C:/jenkins_tools/AIRSDK_Compiler_15.0' //System.getenv('AIR_HOME')
+def AIR_HOME = 'C:/jenkins_tools/AIRSDK_Compiler_19.0' //System.getenv('AIR_HOME')
 def FLEX_HOME = 'C:/jenkins_tools/flex_sdk_4.6' //System.getenv('FLEX_HOME')
-def FLASH_PLAYER_EXE = 'C:/jenkins_tools/FLASH_PLAYER/flashplayer_16_sa.exe' // System.getenv('FLASH_PLAYER_EXE')
+def FLASH_PLAYER_EXE = 'C:/jenkins_tools/FLASH_PLAYER/flashplayer_19_sa.exe' // System.getenv('FLASH_PLAYER_EXE')
 ant.FLEX_HOME = FLEX_HOME
 ant.FLASH_PLAYER_EXE = FLASH_PLAYER_EXE
 
@@ -191,13 +191,13 @@ test.dependsOn compileTest
 task generateSaltrDoc << {
     println 'generating SALTR doc'
     exec {
-        executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
+        executable = "C:/jenkins_tools/AIRSDK_Compiler_19.0/bin/aasdoc.bat"
         args = ["-doc-sources",
                 workspace+"/src",
                 "-output",
                 workspace+"/"+outdir+"/doc",
                 "-library-path",
-                "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
+                "C:/jenkins_tools/AIRSDK_Compiler_19.0/frameworks/libs/air",
                 "-main-title", "SALTR SDK Version "+"${SALTR_SDK_VERSION}",
                 "-window-title", "SALTR SDK Version "+"${SALTR_SDK_VERSION}"] }
 }

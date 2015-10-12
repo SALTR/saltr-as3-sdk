@@ -1,513 +1,115 @@
 {
     "boards": {
-        "Board": {
-            "layers": [
-                {
-                    "layerId": "default",
-                    "token": "default",
-                    "assets": [
-                        {
-                            "assetId": 42821,
-                            "x": 663,
-                            "y": 336,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54969,
-                            "states": [
-                                54969
-                            ],
-                            "positions": [
-                                {
-                                    "id": "pointA",
-                                    "x": 399.98685,
-                                    "y": 310.48752
-                                },
-                                {
-                                    "id": "pointB",
-                                    "x": 442,
-                                    "y": 356
-                                }
-                            ]
-                        },
-                        {
-                            "assetId": 42822,
-                            "x": 149.953125,
-                            "y": 491.953125,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54971,
-                            "states": [
-                                54971
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42829,
-                            "x": 1640.9861450195312,
-                            "y": 785.0000381469727,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54982,
-                            "states": [
-                                54982
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42822,
-                            "x": 1185,
-                            "y": 507,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54971,
-                            "states": [
-                                54971
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42822,
-                            "x": 678.4548568725586,
-                            "y": 584.1215281486511,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54971,
-                            "states": [
-                                54971
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42822,
-                            "x": 929.4548568725586,
-                            "y": 582.1215281486511,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54971,
-                            "states": [
-                                54971
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42822,
-                            "x": 403.453125,
-                            "y": 568.109375,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54971,
-                            "states": [
-                                54971
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42822,
-                            "x": 666,
-                            "y": 181,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54970,
-                            "states": [
-                                54970
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42828,
-                            "x": 2038,
-                            "y": 532,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54981,
-                            "states": [
-                                54981
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42821,
-                            "x": 674,
-                            "y": 388,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54969,
-                            "states": [
-                                54969
-                            ],
-                            "positions": []
-                        },
-                        {
-                            "assetId": 42821,
-                            "x": 674,
-                            "y": 438,
-                            "scaleX": 1,
-                            "scaleY": 1,
-                            "rotation": 0,
-                            "stateId": 54969,
-                            "states": [
-                                54969
-                            ],
-                            "positions": []
-                        }
-                    ]
-                }
-            ],
-            "position": [
-                10,
-                30
-            ],
-            "properties": {},
-            "width": 2300,
-            "height": 784
+        "canvas2d": {
+            "Board": {
+                "layers": {
+                    "default": {
+                        "index": 0,
+                        "assetRules": [
+                            {
+                                "instanceName": "usr-flanFstan",
+                                "assetId": "42821",
+                                "x": 663,
+                                "y": 336,
+                                "scaleX": 1,
+                                "scaleY": 1,
+                                "rotation": 0,
+                                "stateId": "54969",
+                                "positions": [
+                                    {
+                                        "id": "pointA",
+                                        "x": 399.98685,
+                                        "y": 310.48752
+                                    },
+                                    {
+                                        "id": "pointB",
+                                        "x": 442,
+                                        "y": 356
+                                    }
+                                ]
+                            },
+                            {
+                                "assetId": "42822",
+                                "x": 149.953125,
+                                "y": 491.953125,
+                                "scaleX": 1,
+                                "scaleY": 1,
+                                "rotation": 0,
+                                "stateId": "54971"
+                            }
+                        ]
+                    }
+                },
+                "position": [
+                    100,
+                    100
+                ],
+                "propertyObjects": {
+                    "usr-boardToken1": {
+                        "a": 1
+                    },
+                    "usr-boardToken2": {
+                        "a": 2
+                    }
+                },
+                "width": 1000,
+                "height": 300
+            }
         }
-    },
-    "assetStates": {
-        "54967": "default",
-        "54968": "slow",
-        "54969": "default",
-        "54970": "down",
-        "54971": "default",
-        "54972": "default",
-        "54973": "upRetracting",
-        "54974": "downRetracting",
-        "54975": "upBlowing",
-        "54976": "downBlowing",
-        "54977": "shrink",
-        "54978": "default",
-        "54979": "default",
-        "54980": "default",
-        "54981": "default",
-        "54982": "default",
-        "54983": "default",
-        "54984": "default",
-        "54985": "stateHotdog",
-        "54986": "statePopcorn",
-        "54987": "stateSoda",
-        "54988": "stateSushi",
-        "54989": "default",
-        "54990": "default",
-        "54991": "default"
     },
     "assets": {
-        "42820": {
-            "token": "speedMod",
-            "states": {
-                "54967": {
-                    "pivotX": 0.00003149408,
-                    "pivotY": 0.00029018734,
-                    "height": 41,
-                    "token": "default",
-                    "width": 126,
-                    "properties": {}
-                },
-                "54968": {
-                    "pivotX": 0.00007086168,
-                    "pivotY": 0.00006456612,
-                    "height": 88,
-                    "token": "slow",
-                    "width": 84,
-                    "properties": {}
+        "canvas2d": {
+            "42821": {
+                "token": "bone",
+                "states": {
+                    "54969": {
+                        "pivotX": 0.00034626038,
+                        "pivotY": 0.00032030212,
+                        "height": 39,
+                        "token": "default",
+                        "width": 38,
+                        "properties": {}
+                    }
                 }
             },
-            "properties": {}
-        },
-        "42821": {
-            "token": "bone",
-            "states": {
-                "54969": {
-                    "pivotX": 0.00034626038,
-                    "pivotY": 0.00032030212,
-                    "height": 39,
-                    "token": "default",
-                    "width": 38,
-                    "properties": {}
+            "42822": {
+                "token": "tube",
+                "states": {
+                    "54970": {
+                        "pivotX": 0.000024112655,
+                        "pivotY": 0.0000021065005,
+                        "height": 689,
+                        "token": "down",
+                        "width": 144,
+                        "properties": {}
+                    },
+                    "54971": {
+                        "pivotX": 0.000024112655,
+                        "pivotY": 0,
+                        "height": 689,
+                        "token": "default",
+                        "width": 144,
+                        "properties": {}
+                    }
                 }
-            },
-            "properties": {}
-        },
-        "42822": {
-            "token": "tube",
-            "states": {
-                "54970": {
-                    "pivotX": 0.000024112655,
-                    "pivotY": 0.0000021065005,
-                    "height": 689,
-                    "token": "down",
-                    "width": 144,
-                    "properties": {}
-                },
-                "54971": {
-                    "pivotX": 0.000024112655,
-                    "pivotY": 0,
-                    "height": 689,
-                    "token": "default",
-                    "width": 144,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42823": {
-            "token": "circle",
-            "states": {
-                "54972": {
-                    "pivotX": 0.0000040932946,
-                    "pivotY": 0.0000037325688,
-                    "height": 366,
-                    "token": "default",
-                    "width": 349,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42824": {
-            "token": "windTube",
-            "states": {
-                "54973": {
-                    "pivotX": 0.00005481849,
-                    "pivotY": 0.000001016194,
-                    "height": 992,
-                    "token": "upRetracting",
-                    "width": 95,
-                    "properties": {}
-                },
-                "54974": {
-                    "pivotX": 0.00005481849,
-                    "pivotY": 0,
-                    "height": 992,
-                    "token": "downRetracting",
-                    "width": 95,
-                    "properties": {}
-                },
-                "54975": {
-                    "pivotX": 0.00005481849,
-                    "pivotY": 0.0000010391111,
-                    "height": 981,
-                    "token": "upBlowing",
-                    "width": 95,
-                    "properties": {}
-                },
-                "54976": {
-                    "pivotX": 0.000058317542,
-                    "pivotY": 0,
-                    "height": 981,
-                    "token": "downBlowing",
-                    "width": 95,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42825": {
-            "token": "mushroom",
-            "states": {
-                "54977": {
-                    "pivotX": 0.01135749,
-                    "pivotY": 0.011363637,
-                    "height": 44,
-                    "token": "shrink",
-                    "width": 43,
-                    "properties": {}
-                },
-                "54978": {
-                    "pivotX": 0.00021701389,
-                    "pivotY": 0.00020399663,
-                    "height": 49,
-                    "token": "default",
-                    "width": 48,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42826": {
-            "token": "egg",
-            "states": {
-                "54979": {
-                    "pivotX": 0.00021701389,
-                    "pivotY": 0.00013216965,
-                    "height": 61,
-                    "token": "default",
-                    "width": 48,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42827": {
-            "token": "heart",
-            "states": {
-                "54980": {
-                    "pivotX": 0.000054253473,
-                    "pivotY": 0.0002362949,
-                    "height": 46,
-                    "token": "default",
-                    "width": 96,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42828": {
-            "token": "cinema",
-            "states": {
-                "54981": {
-                    "pivotX": 0.0000023680857,
-                    "pivotY": 0.000009660528,
-                    "height": 227,
-                    "token": "default",
-                    "width": 459,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42829": {
-            "token": "levelEnd",
-            "states": {
-                "54982": {
-                    "pivotX": 0.00013007283,
-                    "pivotY": 0.0000021929152,
-                    "height": 477,
-                    "token": "default",
-                    "width": 62,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42830": {
-            "token": "Knife",
-            "states": {
-                "54983": {
-                    "pivotX": 0.00003881081,
-                    "pivotY": 2.9225e-7,
-                    "height": 1308,
-                    "token": "default",
-                    "width": 113,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42831": {
-            "token": "coin",
-            "states": {
-                "54984": {
-                    "pivotX": 0.00034626038,
-                    "pivotY": 0.00020399663,
-                    "height": 49,
-                    "token": "default",
-                    "width": 38,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42832": {
-            "token": "checkpoint",
-            "states": {
-                "54985": {
-                    "pivotX": 0.0000052878154,
-                    "pivotY": 0.0000066599177,
-                    "height": 274,
-                    "token": "stateHotdog",
-                    "width": 307,
-                    "properties": {}
-                },
-                "54986": {
-                    "pivotX": 0.0016233594,
-                    "pivotY": 0.0023148148,
-                    "height": 216,
-                    "token": "statePopcorn",
-                    "width": 307,
-                    "properties": {}
-                },
-                "54987": {
-                    "pivotX": 0.0000052878154,
-                    "pivotY": 0.0000063097054,
-                    "height": 281,
-                    "token": "stateSoda",
-                    "width": 307,
-                    "properties": {}
-                },
-                "54988": {
-                    "pivotX": 0.0000052878154,
-                    "pivotY": 0.0000070931037,
-                    "height": 265,
-                    "token": "stateSushi",
-                    "width": 307,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42833": {
-            "token": "stone",
-            "states": {
-                "54989": {
-                    "pivotX": 0.00004326379,
-                    "pivotY": 0.000048058442,
-                    "height": 102,
-                    "token": "default",
-                    "width": 107,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42834": {
-            "token": "movingTube",
-            "states": {
-                "54990": {
-                    "pivotX": 0.00005,
-                    "pivotY": 0.000004647531,
-                    "height": 328,
-                    "token": "default",
-                    "width": 100,
-                    "properties": {}
-                }
-            },
-            "properties": {}
-        },
-        "42835": {
-            "token": "closingTube",
-            "states": {
-                "54991": {
-                    "pivotX": 0.00005,
-                    "pivotY": 6.3983134e-7,
-                    "height": 884,
-                    "token": "default",
-                    "width": 100,
-                    "properties": {}
-                }
-            },
-            "properties": {}
+            }
         }
     },
-    "properties": {
-        "objectives": {
-            "objective_2": {
-                "type": "tryCount",
-                "count": "25"
+    "propertyObjects": {
+        "levelProperty1": {
+            "movesCount": "19",
+            "star_milestones": "1800,4710,6650",
+            "levelType": "unfreeze_objective",
+            "objectives": {
+                "rescue-dog": "2",
+                "rescue-sheep": "2"
             },
-            "objective_3": {
-                "type": "boneCollect",
-                "count": "1"
-            }
-        },
-        "environment": "LA_day"
+            "boosts": {
+                "BOOST_DRONE": false,
+                "BOOST_CROSS_DRONE": false
+            },
+            "isTutorialDisabled": true,
+            "isMelnSplashDisabled": false
+        }
     }
 }

@@ -57,8 +57,12 @@ public class SLTMobileLevelContentLoader {
         SLTLogger.getInstance().log("Level content from Saltr requested. Feature token: " + featureToken + " Global index: " + sltLevel.globalIndex);
     }
 
-    saltr_internal function getCachedLevelVersion(featureToken:String, level:SLTLevel):String {
-        return _repositoryStorageManager.getLevelVersionFromCache(featureToken, level.globalIndex);
+    saltr_internal function getCachedLevelVersion(cachedLevelVersions:Object, featureToken:String, level:SLTLevel):String {
+        return _repositoryStorageManager.getLevelVersionFromCache(cachedLevelVersions, featureToken, level.globalIndex);
+    }
+
+    saltr_internal function getLevelVersionsFileFromCache(featureToken:String):Object {
+        return  _repositoryStorageManager.getLevelVersionsFileFromCache(featureToken);
     }
 
     saltr_internal function cacheLevelContent(featureToken:String, level:SLTLevel, content:Object):void {

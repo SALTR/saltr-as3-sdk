@@ -14,22 +14,22 @@ use namespace saltr_internal;
  */
 internal class SLTMatchingBoardLayer extends SLTBoardLayer {
     private var _chunks:Vector.<SLTChunk>;
-    private var _fixedAssets:Array;
+    private var _assetRules:Array;
 
     /**
      * Class constructor.
-     * @param fixedAssets The fixed assets.
-     * @param layerId The layer's identifier.
+     * @param assetRules The fixed asset rules.
+     * @param token The layer's identifier.
      * @param layerIndex The layer's index.
      */
-    public function SLTMatchingBoardLayer(fixedAssets:Array, layerId:String, layerIndex:int) {
-        super(layerId, layerIndex);
+    public function SLTMatchingBoardLayer(token:String, layerIndex:int, assetRules:Array) {
+        super(token, layerIndex);
         _chunks = new Vector.<SLTChunk>();
-        _fixedAssets = fixedAssets;
+        _assetRules = assetRules;
     }
 
-    saltr_internal function get fixedAssets():Array {
-        return _fixedAssets;
+    saltr_internal function get assetRules():Array {
+        return _assetRules;
     }
 
     saltr_internal function get chunks():Vector.<SLTChunk> {
