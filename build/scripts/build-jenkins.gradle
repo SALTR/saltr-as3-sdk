@@ -1,6 +1,6 @@
 
 //Define output directory for swc and documentation
-def SALTR_SDK_VERSION = "1.3.8"
+def SALTR_SDK_VERSION = "1.3.9"
 def outdir = "saltr-sdk.v."+SALTR_SDK_VERSION
 println "Output directory: "+outdir
 
