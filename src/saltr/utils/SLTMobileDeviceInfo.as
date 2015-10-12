@@ -102,7 +102,7 @@ public class SLTMobileDeviceInfo {
         } else if (null != os.match("iPad") || null != os.match("iPhone") || null != os.match("iPod")) {
             devArr = os.split(" ");
             internalName = devArr.pop();
-            iosDevice = (internalName.indexOf(",") > -1) ? internalName.split(",").removeAt(0) : UNKNOWN_VALUE;
+            iosDevice = (internalName.indexOf(",") > -1) ? internalName.split(",").shift() : UNKNOWN_VALUE;
             iosVersion = devArr.pop();
             deviceInfo.os = "iOS " + iosVersion;
 

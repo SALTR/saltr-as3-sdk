@@ -227,7 +227,7 @@ internal class SLTChunk {
         var assetData:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
         for (var i:int = 0; i < count; ++i) {
             assetData.push(new SLTChunkAssetDatum(assetId, stateId, _assetMap));
-            _availableCells.removeAt(0);
+            _availableCells.splice(0, 1);
             if (0 == _availableCells.length) {
                 break;
             }

@@ -141,7 +141,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             for (var j:uint = 0, assetsLength:int = correctionAssets.length; j < assetsLength; ++j) {
                 appendingResult = appendChunkAssetWithMatchCheck(correctionAssets[j], chunk, matchedCellPosition.col, matchedCellPosition.row);
                 if (appendingResult) {
-                    _matchedAssetPositions.removeAt(i);
+                    _matchedAssetPositions.splice(i, 1);
                     break;
                 }
             }
@@ -180,8 +180,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
                 if (null != assetDatum && "" != assetDatum.assetToken) {
                     appendResult = appendChunkAssetWithMatchCheck(assetDatum, chunk, x, y);
                     if (appendResult) {
-                        chunkAvailableAssetData.removeAt(chunkAssetIndex);
-                        positionCells.removeAt(cellRandomIndex);
+                        chunkAvailableAssetData.splice(chunkAssetIndex, 1);
+                        positionCells.splice(cellRandomIndex, 1);
                         chunkAssetIndex = 0;
                         cellRandomIndex = Math.floor(Math.random() * positionCells.length);
                         removeFromMatchedAssetPosition(x, y);
@@ -193,12 +193,12 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
                 }
                 else {
                     chunkAssetIndex = 0;
-                    positionCells.removeAt(cellRandomIndex);
+                    positionCells.splice(cellRandomIndex, 1);
                     cellRandomIndex = Math.floor(Math.random() * positionCells.length);
                 }
             }
             else {
-                positionCells.removeAt(cellRandomIndex);
+                positionCells.splice(cellRandomIndex, 1);
                 cellRandomIndex = Math.floor(Math.random() * positionCells.length);
             }
         }
@@ -222,7 +222,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         for (var i:uint = 0, length:int = _matchedAssetPositions.length; i < length; ++i) {
             var currentPosition:MatchedAssetPosition = _matchedAssetPositions[i];
             if (x == currentPosition.col && y == currentPosition.row) {
-                _matchedAssetPositions.removeAt(i);
+                _matchedAssetPositions.splice(i, 1);
                 break;
             }
         }

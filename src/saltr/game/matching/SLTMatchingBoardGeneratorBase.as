@@ -71,7 +71,7 @@ internal class SLTMatchingBoardGeneratorBase {
             for (var j:uint = 0, cellsLength:int = chunkCells.length; j < cellsLength; ++j) {
                 var assetDatumRandIndex:int = Math.random() * availableAssetData.length;
                 var assetDatum:SLTChunkAssetDatum = availableAssetData[assetDatumRandIndex];
-                availableAssetData.removeAt(assetDatumRandIndex);
+                availableAssetData.splice(assetDatumRandIndex, 1);
                 chunk.addAssetInstanceWithCellIndex(assetDatum, j);
             }
         }
