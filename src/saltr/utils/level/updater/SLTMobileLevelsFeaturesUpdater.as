@@ -68,7 +68,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
         SLTLogger.getInstance().log("Game level features update started.");
         if (_gameLevelGroups.length > 0) {
             _isInProcess = true;
-            for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
+            for (var i:int = 0, length:int = _gameLevelGroups.length; i < length; ++i) {
                 _gameLevelGroups[i].addEventListener(Event.COMPLETE, groupUpdatedHandler);
                 _gameLevelGroups[i].update();
             }
@@ -93,7 +93,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     }
 
     private function cancel():void {
-        for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
+        for (var i:int = 0, length:int = _gameLevelGroups.length; i < length; ++i) {
             _gameLevelGroups[i].cancel();
         }
         resetUpdateProcess();
@@ -101,7 +101,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     }
 
     private function resetUpdateProcess():void {
-        for (var i:int = 0; i < _gameLevelGroups.length; ++i) {
+        for (var i:int = 0, length:int = _gameLevelGroups.length; i < length; ++i) {
             _gameLevelGroups[i].removeEventListener(Event.COMPLETE, groupUpdatedHandler)
         }
         _gameLevelGroups.length = 0;

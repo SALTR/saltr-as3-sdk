@@ -77,7 +77,7 @@ public class SLTDeserializer {
         var feature:Object = null;
         var featureNodes:Array = rootNode.features as Array;
         if (null != featureNodes) {
-            for (var i:int = 0; i < featureNodes.length; ++i) {
+            for (var i:int = 0, length:int = featureNodes.length; i < length; ++i) {
                 var featureNode:Object = featureNodes[i];
                 if (featureToken == featureNode.token && featureType == featureNode.type) {
                     feature = featureNode;
@@ -97,7 +97,7 @@ public class SLTDeserializer {
         var version:String = null;
         var container:Array = rootNode as Array;
         if (null != container) {
-            for (var i:int = 0; i < container.length; ++i) {
+            for (var i:int = 0, length:int = container.length; i < length; ++i) {
                 var cachedLevelNode:Object = container[i];
                 if (globalIndex == cachedLevelNode.globalIndex) {
                     version = cachedLevelNode.version;

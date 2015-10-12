@@ -25,7 +25,7 @@ internal class SLTMatchingBoardGeneratorBase {
 
     private static function isMatchingRuleEnabledLayer(layer:SLTMatchingBoardLayer):Boolean {
         var matchingRuleEnabled:Boolean = false;
-        for (var i:int = 0; i < layer.chunks.length; ++i) {
+        for (var i:int = 0, length:int = layer.chunks.length; i < length; ++i) {
             var chunk:SLTChunk = layer.chunks[i];
             if (chunk.matchingRuleEnabled) {
                 matchingRuleEnabled = true;
@@ -64,14 +64,14 @@ internal class SLTMatchingBoardGeneratorBase {
     }
 
     protected function fillLayerChunkAssets(chunks:Vector.<SLTChunk>):void {
-        for (var i:uint = 0; i < chunks.length; ++i) {
+        for (var i:uint = 0, chunksLength:int = chunks.length; i < chunksLength; ++i) {
             var chunk:SLTChunk = chunks[i];
             var availableAssetData:Vector.<SLTChunkAssetDatum> = chunk.availableAssetData.concat();
             var chunkCells:Vector.<SLTCell> = chunk.cells.concat();
-            for (var j:uint = 0; j < chunkCells.length; ++j) {
+            for (var j:uint = 0, cellsLength:int = chunkCells.length; j < cellsLength; ++j) {
                 var assetDatumRandIndex:int = Math.random() * availableAssetData.length;
                 var assetDatum:SLTChunkAssetDatum = availableAssetData[assetDatumRandIndex];
-                availableAssetData.splice(assetDatumRandIndex, 1);
+                availableAssetData.removeAt(assetDatumRandIndex);
                 chunk.addAssetInstanceWithCellIndex(assetDatum, j);
             }
         }

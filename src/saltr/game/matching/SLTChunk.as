@@ -149,7 +149,7 @@ internal class SLTChunk {
     }
 
     private function addToAvailableAssetData(assetData:Vector.<SLTChunkAssetDatum>):void {
-        for (var i:int = 0; i < assetData.length; ++i) {
+        for (var i:int = 0, length:int = assetData.length; i < length; ++i) {
             _availableAssetData.push(assetData[i]);
         }
     }
@@ -227,7 +227,7 @@ internal class SLTChunk {
         var assetData:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
         for (var i:int = 0; i < count; ++i) {
             assetData.push(new SLTChunkAssetDatum(assetId, stateId, _assetMap));
-            _availableCells.splice(0, 1);
+            _availableCells.removeAt(0);
             if (0 == _availableCells.length) {
                 break;
             }
@@ -248,7 +248,7 @@ internal class SLTChunk {
 
     private function getCellIndexWithPosition(col:uint, row:uint):int {
         var indexToReturn:int = -1;
-        for (var i:int = 0; i < _chunkCells.length; ++i) {
+        for (var i:int = 0, length:int = _chunkCells.length; i < length; ++i) {
             var cell:SLTCell = _chunkCells[i];
             if (col == cell.col && row == cell.row) {
                 indexToReturn = i;

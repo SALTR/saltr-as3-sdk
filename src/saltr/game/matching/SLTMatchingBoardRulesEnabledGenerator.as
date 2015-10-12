@@ -44,7 +44,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     private function parseMatchingRuleDisabledChunks():void {
         var chunks:Vector.<SLTChunk> = new Vector.<SLTChunk>();
-        for (var i:int = 0; i < _layer.chunks.length; ++i) {
+        for (var i:int = 0, length:int = _layer.chunks.length; i < length; ++i) {
             var chunk:SLTChunk = _layer.chunks[i];
             if (false == chunk.matchingRuleEnabled) {
                 chunks.push(chunk);
@@ -58,7 +58,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     private function getMatchingRuleEnabledChunks(layer:SLTMatchingBoardLayer):Vector.<SLTChunk> {
         var chunks:Vector.<SLTChunk> = new Vector.<SLTChunk>();
-        for (var i:int = 0; i < _layer.chunks.length; ++i) {
+        for (var i:int = 0, length:int = _layer.chunks.length; i < length; ++i) {
             var chunk:SLTChunk = _layer.chunks[i];
             if (chunk.matchingRuleEnabled) {
                 chunks.push(chunk);
@@ -112,7 +112,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     private function fillLayerMissingChunkAssetsWithoutMatchingRules(layer:SLTMatchingBoardLayer):void {
         var correctionAssets:Vector.<SLTChunkAssetDatum> = null;
-        for (var i:uint = 0; i < _matchedAssetPositions.length; ++i) {
+        for (var i:uint = 0, length:int = _matchedAssetPositions.length; i < length; ++i) {
             var matchedCellPosition:MatchedAssetPosition = _matchedAssetPositions[i];
             var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
             if (chunk.uniqueInAvailableAssetData.length > 0) {
@@ -134,14 +134,14 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var appendingResult:Boolean = false;
         var matchedAssetPositions:Vector.<MatchedAssetPosition> = _matchedAssetPositions.concat();
 
-        for (var i:uint = 0; i < matchedAssetPositions.length; ++i) {
+        for (var i:uint = 0, positionsLength:int = matchedAssetPositions.length; i < positionsLength; ++i) {
             var matchedCellPosition:MatchedAssetPosition = matchedAssetPositions[i];
             var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
             correctionAssets = chunk.uniqueInAvailableAssetData;
-            for (var j:uint = 0; j < correctionAssets.length; ++j) {
+            for (var j:uint = 0, assetsLength:int = correctionAssets.length; j < assetsLength; ++j) {
                 appendingResult = appendChunkAssetWithMatchCheck(correctionAssets[j], chunk, matchedCellPosition.col, matchedCellPosition.row);
                 if (appendingResult) {
-                    _matchedAssetPositions.splice(i, 1);
+                    _matchedAssetPositions.removeAt(i);
                     break;
                 }
             }
@@ -154,8 +154,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var assetDatum:SLTChunkAssetDatum;
         var appendResult:Boolean;
 
-        for (var y:int = 0; y < _boardConfig.rows; ++y) {
-            for (var x:int = 0; x < _boardConfig.cols; ++x) {
+        for (var y:int = 0, rows:int = _boardConfig.rows; y < rows; ++y) {
+            for (var x:int = 0, cols:int = _boardConfig.cols; x < cols; ++x) {
                 positionCells.push([x, y]);
             }
         }
@@ -164,8 +164,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var chunkAssetIndex:int = 0;
 
         while (positionCells.length > 0) {
-            x = positionCells[ cellRandomIndex ][ 0 ];
-            y = positionCells[ cellRandomIndex ][ 1 ];
+            x = positionCells[cellRandomIndex][0];
+            y = positionCells[cellRandomIndex][1];
 
             var chunk:SLTChunk = _layer.getChunkWithCellPosition(x, y);
 
@@ -174,14 +174,14 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
                 assetDatum = null;
                 if (chunkAssetIndex < chunkAvailableAssetData.length) {
-                    assetDatum = chunkAvailableAssetData[ chunkAssetIndex ];
+                    assetDatum = chunkAvailableAssetData[chunkAssetIndex];
                 }
 
                 if (null != assetDatum && "" != assetDatum.assetToken) {
                     appendResult = appendChunkAssetWithMatchCheck(assetDatum, chunk, x, y);
                     if (appendResult) {
-                        chunkAvailableAssetData.splice(chunkAssetIndex, 1);
-                        positionCells.splice(cellRandomIndex, 1);
+                        chunkAvailableAssetData.removeAt(chunkAssetIndex);
+                        positionCells.removeAt(cellRandomIndex);
                         chunkAssetIndex = 0;
                         cellRandomIndex = Math.floor(Math.random() * positionCells.length);
                         removeFromMatchedAssetPosition(x, y);
@@ -193,12 +193,12 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
                 }
                 else {
                     chunkAssetIndex = 0;
-                    positionCells.splice(cellRandomIndex, 1);
+                    positionCells.removeAt(cellRandomIndex);
                     cellRandomIndex = Math.floor(Math.random() * positionCells.length);
                 }
             }
             else {
-                positionCells.splice(cellRandomIndex, 1);
+                positionCells.removeAt(cellRandomIndex);
                 cellRandomIndex = Math.floor(Math.random() * positionCells.length);
             }
         }
@@ -206,7 +206,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     private function addMatchedAssetPosition(x:uint, y:uint):void {
         var positionFound:Boolean = false;
-        for (var i:uint = 0; i < _matchedAssetPositions.length; ++i) {
+        for (var i:uint = 0, length:int = _matchedAssetPositions.length; i < length; ++i) {
             var currentPosition:MatchedAssetPosition = _matchedAssetPositions[i];
             if (x == currentPosition.col && y == currentPosition.row) {
                 positionFound = true;
@@ -219,10 +219,10 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function removeFromMatchedAssetPosition(x:uint, y:uint):void {
-        for (var i:uint = 0; i < _matchedAssetPositions.length; ++i) {
+        for (var i:uint = 0, length:int = _matchedAssetPositions.length; i < length; ++i) {
             var currentPosition:MatchedAssetPosition = _matchedAssetPositions[i];
             if (x == currentPosition.col && y == currentPosition.row) {
-                _matchedAssetPositions.splice(i, 1);
+                _matchedAssetPositions.removeAt(i);
                 break;
             }
         }
@@ -240,7 +240,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
             squareMatch = checkSquareMatch(assetDatum.assetToken, col, row);
         }
 
-        for (var i:uint = 0; i < excludedMathAssets.length; ++i) {
+        for (var i:uint = 0, length:int = excludedMathAssets.length; i < length; ++i) {
             if (assetDatum.assetId == excludedMathAssets[i].assetId) {
                 excludedAsset = true;
                 break;
@@ -324,35 +324,35 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         var directionMatchesCount:uint = 0;
         var directions:Array = [
             [
-                [ -1, 0 ],
-                [ -1, -1 ],
-                [ 0, -1 ]
+                [-1, 0],
+                [-1, -1],
+                [0, -1]
             ],
             [
-                [ 0, -1 ],
-                [ 1, -1 ],
-                [ 1, 0 ]
+                [0, -1],
+                [1, -1],
+                [1, 0]
             ],
             [
-                [ 1, 0 ],
-                [ 1, 1 ],
-                [ 0, 1 ]
+                [1, 0],
+                [1, 1],
+                [0, 1]
             ],
             [
-                [ 0, 1 ],
-                [ -1, 1 ],
-                [ -1, 0 ]
+                [0, 1],
+                [-1, 1],
+                [-1, 0]
             ]
         ];
         var direction:Object;
         var hasMatch:Boolean = false;
         var siblingCellAssetToken:String;
 
-        for (var i:uint = 0; i < directions.length; ++i) {
+        for (var i:uint = 0, lengthA:uint = directions.length; i < lengthA; ++i) {
             directionMatchesCount = 0;
-            direction = directions[ i ];
+            direction = directions[i];
 
-            for (var j:uint = 0; j < direction.length; ++j) {
+            for (var j:uint = 0, lengthB:uint = direction.length; j < lengthB; ++j) {
                 siblingCellAssetToken = getAssetTokenAtPosition(_boardConfig.cells, col + direction[j][0], row + direction[j][1], _layer.token);
 
                 if (assetToken == siblingCellAssetToken) {

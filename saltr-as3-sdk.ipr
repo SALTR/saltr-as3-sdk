@@ -154,7 +154,7 @@
       <module fileurl="file://$PROJECT_DIR$/saltr-as3-sdk.iml" filepath="$PROJECT_DIR$/saltr-as3-sdk.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="AIRSDK_Compiler_16.0" project-jdk-type="Flex SDK Type (new)">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="AIRSDK_Compiler_19.0" project-jdk-type="Flex SDK Type (new)">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="VcsDirectoryMappings">

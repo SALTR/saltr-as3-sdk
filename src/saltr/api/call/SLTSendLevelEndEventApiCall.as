@@ -36,11 +36,11 @@ public class SLTSendLevelEndEventApiCall extends SLTApiCall {
     }
 
     private function addLevelEndEventProperties(eventProps:Object, numericArray:Array, textArray:Array):Object {
-        for (var i:int = 0; i < numericArray.length; i++) {
+        for (var i:int = 0, numLength:int = numericArray.length; i < numLength; i++) {
             var key:String = "cD" + (i + 1);
             eventProps[key] = numericArray[i];
         }
-        for (var j:int = 0; j < textArray.length; j++) {
+        for (var j:int = 0, textLength:int = textArray.length; j < length; j++) {
             var key_j:String = "cT" + (j + 1);
             eventProps[key_j] = textArray[j];
         }

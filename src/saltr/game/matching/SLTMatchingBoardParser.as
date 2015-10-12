@@ -31,7 +31,7 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
         }
 
         var cellsArray:Array = boardNode.cells;
-        for (var k:int = 0; k < cellsArray.length; ++k) {
+        for (var k:int = 0, length:int = cellsArray.length; k < length; ++k) {
             var cellObject:Object = cellsArray[k];
             var cell:SLTCell = cells.retrieve(cellObject.col, cellObject.row);
             //blocking check

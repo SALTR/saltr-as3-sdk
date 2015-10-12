@@ -46,7 +46,7 @@ public class SLTRepositoryStorageManager {
         if (rootDir.exists) {
             var contents:Array = rootDir.getDirectoryListing();
             var currentAppCacheName:String = "app_" + SLTUtils.getAppVersion();
-            for (var i:uint = 0; i < contents.length; i++) {
+            for (var i:uint = 0, length:uint = contents.length; i < length; i++) {
                 var contentName:String = contents[i].name;
                 if (currentAppCacheName != contentName && 0 == contentName.indexOf("app_")) {
                     var dir:File = rootDir.resolvePath(contents[i].name);
@@ -122,7 +122,7 @@ public class SLTRepositoryStorageManager {
      * @return The level versioning file from cache, null if not exists.
      */
     saltr_internal function getLevelVersionsFileFromCache(gameLevelsFeatureToken:String):Object {
-        return  _repository.getObjectFromCache(getCachedLevelVersionsUrl(gameLevelsFeatureToken));
+        return _repository.getObjectFromCache(getCachedLevelVersionsUrl(gameLevelsFeatureToken));
     }
 
     /**
@@ -152,7 +152,7 @@ public class SLTRepositoryStorageManager {
         }
 
         var versionUpdated:Boolean = false;
-        for (var i:int = 0; i < cachedLevelVersions.length; ++i) {
+        for (var i:int = 0, length:int = cachedLevelVersions.length; i < length; ++i) {
             var cachedVersion:Object = cachedLevelVersions[i];
             if (globalIndex == cachedVersion.globalIndex) {
                 cachedVersion.version = version;
