@@ -1,6 +1,13 @@
 Saltr: Changelog
 ===================
 
+version 1.3.9 - 2015-10-12
+------------------------
+
+- new feature: the same level can have the both matrix and canvas2d boards.
+- added support for new API 1.8.0 
+- now it's possible to call initLevelContentFromSaltr() method in live mode.
+
 version 1.3.8 - 2015-09-11
 ------------------------
 
