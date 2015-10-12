@@ -61,9 +61,9 @@ configurations.antClassPath.each { File f ->
 //  SDK
 //----------------------------------
 
-def AIR_HOME = 'D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_15.0' //System.getenv('AIR_HOME')
+def AIR_HOME = 'D:/Projects/dev/as/flash-sdk/pc/AIRSDK_Compiler_19.0' //System.getenv('AIR_HOME')
 def FLEX_HOME = 'D:/Projects/dev/as/flash-sdk/pc/flex_sdk_4.6' //System.getenv('FLEX_HOME')
-def FLASH_PLAYER_EXE = 'D:/Projects/dev/as/flash-sdk/pc/FLASH_PLAYER/flashplayer_16_sa.exe' // System.getenv('FLASH_PLAYER_EXE')
+def FLASH_PLAYER_EXE = 'D:/Projects/dev/as/flash-sdk/flashplayers/flashplayer_19_sa.exe' // System.getenv('FLASH_PLAYER_EXE')
 ant.FLEX_HOME = FLEX_HOME
 ant.FLASH_PLAYER_EXE = FLASH_PLAYER_EXE
 
