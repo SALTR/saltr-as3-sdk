@@ -191,13 +191,13 @@ test.dependsOn compileTest
 task generateSaltrDoc << {
     println 'generating SALTR doc'
     exec {
-        executable = "C:/jenkins_tools/AIRSDK_Compiler_15.0/bin/aasdoc.bat"
+        executable = "C:/jenkins_tools/AIRSDK_Compiler_19.0/bin/aasdoc.bat"
         args = ["-doc-sources",
                 workspace+"/src",
                 "-output",
                 workspace+"/"+outdir+"/doc",
                 "-library-path",
-                "C:/jenkins_tools/AIRSDK_Compiler_15.0/frameworks/libs/air",
+                "C:/jenkins_tools/AIRSDK_Compiler_19.0/frameworks/libs/air",
                 "-main-title", "SALTR SDK Version "+"${SALTR_SDK_VERSION}",
                 "-window-title", "SALTR SDK Version "+"${SALTR_SDK_VERSION}"] }
 }
