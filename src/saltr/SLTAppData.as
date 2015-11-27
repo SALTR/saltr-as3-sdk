@@ -85,7 +85,7 @@ public class SLTAppData {
         if (type == SLTConfig.FEATURE_TYPE_GENERIC) {
             _defaultFeatures[token] = feature;
         }
-        else if (type == SLTConfig.FEATURE_TYPE_GAME_LEVELS) {
+        else if (type == SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION) {
             _defaultGameLevelsFeatures[token] = feature;
         }
     }
@@ -101,7 +101,7 @@ public class SLTAppData {
 
     saltr_internal function initWithData(data:Object):void {
         try {
-            _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+            _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
             _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {

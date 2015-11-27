@@ -15,7 +15,7 @@ use namespace saltr_internal;
 public class SLTApiCall {
     saltr_internal static const MOBILE_CLIENT:String = "AS3-Mobile";
     saltr_internal static const WEB_CLIENT:String = "AS3-Web";
-    saltr_internal static const API_VERSION:String = "1.8.0";
+    saltr_internal static const API_VERSION:String = "1.8.1";
 
     protected var _url:String;
     protected var _params:Object;

@@ -50,6 +50,6 @@ public class SLTConfig {
     saltr_internal static const HEARTBEAT_TIMER_DELAY:Number = 30000;
 
     saltr_internal static const FEATURE_TYPE_GENERIC:String = "generic";
-    saltr_internal static const FEATURE_TYPE_GAME_LEVELS:String = "gameLevels";
+    saltr_internal static const FEATURE_TYPE_LEVEL_COLLECTION:String = "levelCollection";
 }
 }

@@ -194,7 +194,7 @@ public class SLTSaltrMobile {
             var cachedAppData:Object = getCachedAppData();
             var gameLevels:Object = null;
             if (null != cachedAppData) {
-                var feature:Object = SLTDeserializer.getFeature(cachedAppData, token, SLTConfig.FEATURE_TYPE_GAME_LEVELS);
+                var feature:Object = SLTDeserializer.getFeature(cachedAppData, token, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
                 if (null != feature) {
                     gameLevels = feature.properties;
                 }
@@ -205,7 +205,7 @@ public class SLTSaltrMobile {
                 gameLevels = getLevelDataFromApplication(token);
             }
             levelData.initWithData(gameLevels);
-            _appData.defineFeature(token, levelData, SLTConfig.FEATURE_TYPE_GAME_LEVELS, true);
+            _appData.defineFeature(token, levelData, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, true);
         } else {
             throw new Error("Method 'defineGameLevels()' should be called before 'start()' only.");
         }
