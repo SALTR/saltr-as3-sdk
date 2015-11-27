@@ -4,6 +4,7 @@
 package saltr.game.matching {
 
 
+import flash.geom.Point;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
@@ -52,14 +53,11 @@ internal class SLTMatchingBoardGeneratorBase {
             var assetInstanceNode:Object = assetNodes[i];
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateId:String = assetInstanceNode.stateId;
-            var cellPositions:Array = assetInstanceNode.cells;
 
-            for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
-                var position:Array = cellPositions[j];
-                var cell:SLTCell = cells.retrieve(position[0], position[1]);
-                cell.removeAssetInstance(layer.token, layer.index);
-                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties));
-            }
+            var cell:SLTCell = cells.retrieve(assetInstanceNode.col, assetInstanceNode.row);
+            cell.removeAssetInstance(layer.token, layer.index);
+            var positions:Dictionary = getAssetInstancePositions(assetInstanceNode);
+            cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, positions));
         }
     }
 
@@ -75,6 +73,18 @@ internal class SLTMatchingBoardGeneratorBase {
                 chunk.addAssetInstanceWithCellIndex(assetDatum, j);
             }
         }
+    }
+
+    private function getAssetInstancePositions(assetInstanceNode:Object):Dictionary {
+        var positions:Dictionary = new Dictionary();
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("positions") ? assetInstanceNode.positions as Array : [];
+        var positionsCount:int = positionsArray.length;
+        for (var i:int = 0; i < positionsCount; ++i) {
+            var positionObject:Object = positionsArray[i];
+            var positionId:String = positionObject.id;
+            positions[positionId] = {col:positionObject.col, row:positionObject.row};
+        }
+        return positions;
     }
 }
 }

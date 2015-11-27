@@ -21,7 +21,6 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
     private var _scaleX:Number;
     private var _scaleY:Number;
     private var _rotation:Number;
-    private var _positions:Dictionary;
 
     /**
      * Class constructor.
@@ -41,9 +40,8 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
         _scaleX = scaleX;
         _scaleY = scaleY;
         _rotation = rotation;
-        _positions = positions;
 
-        super(token, getScaleAppliedState(state), properties);
+        super(token, getScaleAppliedState(state), properties, positions);
     }
 
     /**
@@ -65,13 +63,6 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
      */
     public function get rotation():Number {
         return _rotation;
-    }
-
-    /**
-     * The current instance positions.
-     */
-    public function get positions():Dictionary {
-        return _positions;
     }
 
     /**
