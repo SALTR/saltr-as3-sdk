@@ -4,7 +4,6 @@
 package saltr.game.matching {
 
 
-import flash.geom.Point;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
@@ -56,7 +55,7 @@ internal class SLTMatchingBoardGeneratorBase {
 
             var cell:SLTCell = cells.retrieve(assetInstanceNode.col, assetInstanceNode.row);
             cell.removeAssetInstance(layer.token, layer.index);
-            var positions:Dictionary = getAssetInstancePositions(assetInstanceNode);
+            var positions:Array = getAssetInstancePositions(assetInstanceNode);
             cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, positions));
         }
     }
@@ -75,14 +74,14 @@ internal class SLTMatchingBoardGeneratorBase {
         }
     }
 
-    private function getAssetInstancePositions(assetInstanceNode:Object):Dictionary {
-        var positions:Dictionary = new Dictionary();
-        var positionsArray:Array = assetInstanceNode.hasOwnProperty("positions") ? assetInstanceNode.positions as Array : [];
+    private function getAssetInstancePositions(assetInstanceNode:Object):Array {
+        var positions:Array = [];
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("altPositions") ? assetInstanceNode.positions as Array : [];
         var positionsCount:int = positionsArray.length;
         for (var i:int = 0; i < positionsCount; ++i) {
             var positionObject:Object = positionsArray[i];
-            var positionId:String = positionObject.id;
-            positions[positionId] = {col:positionObject.col, row:positionObject.row};
+            var placeHolder:SLTMatchingAssetPlaceHolder = new SLTMatchingAssetPlaceHolder(positionObject.col, positionObject.row, positionObject.tags);
+            positions.push(placeHolder);
         }
         return positions;
     }

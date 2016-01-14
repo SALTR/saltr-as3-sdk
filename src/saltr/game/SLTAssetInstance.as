@@ -3,8 +3,6 @@
  */
 
 package saltr.game {
-import flash.utils.Dictionary;
-
 /**
  * The SLTAssetInstance class represents the game asset instance placed on board.
  * It holds the unique identifier of the asset and current instance related states and properties.
@@ -13,7 +11,7 @@ public class SLTAssetInstance {
     protected var _token:String;
     protected var _state:SLTAssetState;
     protected var _properties:Object;
-    protected var _positions:Dictionary;
+    protected var _positions:Array;
 
     /**
      * Class constructor.
@@ -21,7 +19,7 @@ public class SLTAssetInstance {
      * @param state The current instance state.
      * @param properties The current instance properties.
      */
-    public function SLTAssetInstance(token:String, state:SLTAssetState, properties:Object, positions:Dictionary = null) {
+    public function SLTAssetInstance(token:String, state:SLTAssetState, properties:Object, positions:Array = null) {
         _token = token;
         _state = state;
         _properties = properties;
@@ -52,7 +50,7 @@ public class SLTAssetInstance {
     /**
      * The current instance positions.
      */
-    public function get positions():Dictionary {
+    public function get positions():Array {
         return _positions;
     }
 

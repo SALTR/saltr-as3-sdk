@@ -2,9 +2,6 @@
  * Created by GSAR on 7/12/14.
  */
 package saltr.game.canvas2d {
-import flash.geom.Point;
-import flash.utils.Dictionary;
-
 import saltr.game.SLTAssetInstance;
 import saltr.game.SLTAssetState;
 import saltr.saltr_internal;
@@ -34,7 +31,7 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
      * @param rotation The current instance rotation.
      * @param positions The current instance positions.
      */
-    public function SLT2DAssetInstance(token:String, state:SLTAssetState, properties:Object, x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number, positions:Dictionary) {
+    public function SLT2DAssetInstance(token:String, state:SLTAssetState, properties:Object, x:Number, y:Number, scaleX:Number, scaleY:Number, rotation:Number, positions:Array) {
         _x = x;
         _y = y;
         _scaleX = scaleX;
@@ -63,13 +60,6 @@ public class SLT2DAssetInstance extends SLTAssetInstance {
      */
     public function get rotation():Number {
         return _rotation;
-    }
-
-    /**
-     * The current instance position by id.
-     */
-    public function getPositionById(id:String):Point {
-        return _positions[id];
     }
 
     private function getScaleAppliedState(state:SLTAssetState):SLTAssetState {
