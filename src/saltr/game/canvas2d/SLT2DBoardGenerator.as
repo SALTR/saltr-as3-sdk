@@ -38,7 +38,7 @@ internal class SLT2DBoardGenerator {
 
     private function getAssetInstancePositions(assetInstanceNode:Object):Array {
         var positions:Array = [];
-        var positionsArray:Array = assetInstanceNode.hasOwnProperty("altPositions") ? assetInstanceNode.positions as Array : [];
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("altPositions") ? assetInstanceNode.altPositions as Array : [];
         var positionsCount:int = positionsArray.length;
         for (var i:int = 0; i < positionsCount; ++i) {
             var positionObject:Object = positionsArray[i];
