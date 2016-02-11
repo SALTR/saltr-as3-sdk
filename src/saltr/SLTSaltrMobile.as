@@ -25,9 +25,6 @@ import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
 use namespace saltr_internal;
 
-//TODO @GSAR: add namespaces in all packages to isolate functionality
-
-//TODO:: @daal add some flushCache method.
 
 /**
  * The SLTSaltrMobile class represents the entry point of mobile SDK.
@@ -47,10 +44,7 @@ public class SLTSaltrMobile {
 
     private var _requestIdleTimeout:int;
     private var _devMode:Boolean;
-    private var _autoRegisterDevice:Boolean;
     private var _started:Boolean;
-    private var _isSynced:Boolean;
-    private var _dialogController:SLTMobileDialogController;
 
     private var _appData:SLTAppData;
 
@@ -75,13 +69,10 @@ public class SLTSaltrMobile {
         _heartBeatTimerStarted = false;
 
         _devMode = false;
-        _autoRegisterDevice = true;
         _started = false;
-        _isSynced = false;
         _requestIdleTimeout = 0;
 
         _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-        _dialogController = new SLTMobileDialogController(_flashStage, addDeviceToSALTR);
 
         _appData = new SLTAppData();
 
@@ -119,13 +110,6 @@ public class SLTSaltrMobile {
      */
     public function set verboseLogging(value:Boolean):void {
         _logger.verboseLogging = value;
-    }
-
-    /**
-     * The device automatically registration state.
-     */
-    public function set autoRegisterDevice(value:Boolean):void {
-        _autoRegisterDevice = value;
     }
 
     /**
@@ -181,48 +165,6 @@ public class SLTSaltrMobile {
      */
     public function getGameLevelFeatureProperties(token:String):SLTLevelData {
         return _appData.getGameLevelsProperties(token);
-    }
-
-    /**
-     * Defines game levels by token.
-     * @param token The token of "GameLevels" feature.
-     */
-    public function defineGameLevels(token:String):void {
-        if (!_started) {
-            var levelData:SLTLevelData = new SLTLevelData();
-            // load feature from cache
-            var cachedAppData:Object = getCachedAppData();
-            var gameLevels:Object = null;
-            if (null != cachedAppData) {
-                var feature:Object = SLTDeserializer.getFeature(cachedAppData, token, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
-                if (null != feature) {
-                    gameLevels = feature.properties;
-                }
-            }
-
-            // if not cached load from application
-            if (null == gameLevels) {
-                gameLevels = getLevelDataFromApplication(token);
-            }
-            levelData.initWithData(gameLevels);
-            _appData.defineFeature(token, levelData, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, true);
-        } else {
-            throw new Error("Method 'defineGameLevels()' should be called before 'start()' only.");
-        }
-    }
-
-    /**
-     * Define generic feature.
-     * @param token The unique identifier of the feature.
-     * @param properties The properties of the feature.
-     * @param required The required state of the feature.
-     */
-    public function defineGenericFeature(token:String, properties:Object, required:Boolean = false):void {
-        if (_started == false) {
-            _appData.defineFeature(token, properties, SLTConfig.FEATURE_TYPE_GENERIC, required);
-        } else {
-            throw new Error("Method 'defineGenericFeature()' should be called before 'start()' only.");
-        }
     }
 
     /**
@@ -319,16 +261,6 @@ public class SLTSaltrMobile {
     }
 
     /**
-     * Opens device registration dialog.
-     */
-    public function registerDevice():void {
-        if (!_started) {
-            throw new Error("Method 'registerDevice()' should be called after 'start()' only.");
-        }
-        _dialogController.showRegistrationDialog();
-    }
-
-    /**
      * Send "level end" event
      * @param variationId The variation identifier.
      * @param endStatus The end status.
@@ -369,56 +301,6 @@ public class SLTSaltrMobile {
 
     private function sendLevelEndFailHandler(status:SLTStatus):void {
         trace("sendLevelEndFailHandler");
-    }
-
-    private function addDeviceToSALTR(email:String):void {
-        var params:Object = {
-            email: email,
-            clientKey: _clientKey,
-            deviceId: _deviceId,
-            deviceInfo: SLTMobileDeviceInfo.getDeviceInfo(),
-            devMode: _devMode
-        };
-        var apiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_REGISTER_DEVICE, true);
-        apiCall.call(params, addDeviceToSaltrSuccessHandler, addDeviceToSaltrFailHandler);
-    }
-
-    private function addDeviceToSaltrSuccessHandler(data:Object):void {
-        trace("[Saltr] Dev adding new device has succeed.");
-        sync();
-    }
-
-    private function addDeviceToSaltrFailHandler(status:SLTStatus):void {
-        trace("[Saltr] Dev adding new device has failed.");
-        _dialogController.showRegistrationFailStatus(status.statusMessage);
-    }
-
-    private function sync():void {
-        var params:Object = {
-            clientKey: _clientKey,
-            devMode: _devMode,
-            deviceId: _deviceId,
-            socialId: _socialId,
-            defaultFeatures: _appData.defaultFeatures
-        };
-        var syncApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SYNC, true);
-        syncApiCall.call(params, syncSuccessHandler, syncFailHandler);
-        SLTLogger.getInstance().log("sync() called.");
-    }
-
-    private function syncSuccessHandler(data:Object):void {
-        SLTLogger.getInstance().log("Sync call succeed.");
-        _isSynced = true;
-    }
-
-    private function syncFailHandler(status:SLTStatus):void {
-        SLTLogger.getInstance().log("Sync call failed. Status code: "+status.statusCode);
-        if (status.statusCode == SLTStatus.REGISTRATION_REQUIRED_ERROR_CODE && _autoRegisterDevice) {
-            registerDevice();
-        }
-        else {
-            trace(status.statusMessage);
-        }
     }
 
     private function startHeartbeat():void {
@@ -505,10 +387,6 @@ public class SLTSaltrMobile {
     }
 
     private function processNewAppData(data:Object):Boolean {
-        if (_devMode && !_isSynced) {
-            sync();
-        }
-        //var levelType:String = result.data.levelType;
         try {
             _appData.initWithData(data);
         } catch (e:Error) {
