@@ -6,6 +6,7 @@ package saltr {
 import flash.display.Stage;
 import flash.events.Event;
 import flash.events.TimerEvent;
+import flash.utils.Dictionary;
 import flash.utils.Timer;
 
 import saltr.api.call.SLTApiCall;
@@ -54,6 +55,8 @@ public class SLTSaltrMobile {
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
     private var _logger:SLTLogger;
 
+    private var _validator:FeatureValidator;
+
     /**
      * Class constructor.
      * @param flashStage The flash stage.
@@ -72,6 +75,7 @@ public class SLTSaltrMobile {
         _started = false;
         _requestIdleTimeout = 0;
 
+        _validator = new FeatureValidator();
         _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
 
         _appData = new SLTAppData();
@@ -165,6 +169,10 @@ public class SLTSaltrMobile {
      */
     public function getGameLevelFeatureProperties(token:String):SLTLevelData {
         return _appData.getGameLevelsProperties(token);
+    }
+
+    public function addValidator(featureToken:String, validator:Function):void {
+        _validator.addValidator(featureToken, validator);
     }
 
     /**
