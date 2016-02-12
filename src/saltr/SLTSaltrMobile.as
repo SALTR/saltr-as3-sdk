@@ -55,7 +55,7 @@ public class SLTSaltrMobile {
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
     private var _logger:SLTLogger;
 
-    private var _validator:FeatureValidator;
+    private var _validator:SLTFeatureValidator;
 
     /**
      * Class constructor.
@@ -75,7 +75,7 @@ public class SLTSaltrMobile {
         _started = false;
         _requestIdleTimeout = 0;
 
-        _validator = new FeatureValidator();
+        _validator = new SLTFeatureValidator();
         _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
 
         _appData = new SLTAppData();

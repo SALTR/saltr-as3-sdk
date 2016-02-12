@@ -4,11 +4,11 @@
 package saltr {
 import flash.utils.Dictionary;
 
-public class FeatureValidator {
+public class SLTFeatureValidator {
 
     private var _validators:Dictionary;
 
-    public function FeatureValidator() {
+    public function SLTFeatureValidator() {
         _validators = new Dictionary()
     }
 
