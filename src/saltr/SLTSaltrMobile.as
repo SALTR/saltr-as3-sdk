@@ -182,7 +182,7 @@ public class SLTSaltrMobile {
         if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
         }
-
+        _appData.initDefaultFeatures({features: getLocalAppData()});
         var cachedData:Object = getCachedAppData();
         if (cachedData == null) {
             _appData.initEmpty();
@@ -347,6 +347,10 @@ public class SLTSaltrMobile {
         return _repositoryStorageManager.getAppDataFromCache();
     }
 
+    private function getLocalAppData():Object {
+        return _repositoryStorageManager.getAppDataFromLocal();
+    }
+
     private function getLevelDataFromApplication(token:String):Object {
         return _repositoryStorageManager.getLevelDataFromApplication(token);
     }
@@ -412,7 +416,7 @@ public class SLTSaltrMobile {
     }
 
     private function appDataConnectFailHandler(status:SLTStatus):void {
-        SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: "+status.statusCode);
+        SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: " + status.statusCode);
         _isWaitingForAppData = false;
 
         if (status.statusCode == SLTStatus.API_ERROR) {

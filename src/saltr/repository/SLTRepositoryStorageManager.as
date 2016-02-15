@@ -24,6 +24,10 @@ public class SLTRepositoryStorageManager {
         return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, SLTUtils.getAppVersion());
     }
 
+    private static function getLocalAppDataUrl():String {
+        return SLTUtils.formatString(SLTConfig.LOCAL_APP_DATA_URL_TEMPLATE);
+    }
+
     private static function getLevelDataFromApplicationUrl(contentRoot:String, token:String):String {
         return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, token);
     }
@@ -86,6 +90,10 @@ public class SLTRepositoryStorageManager {
      */
     saltr_internal function getAppDataFromCache():Object {
         return _repository.getObjectFromCache(getCachedAppDataUrl());
+    }
+
+    saltr_internal function getAppDataFromLocal():Object {
+        return _repository.getObjectFromApplication(getLocalAppDataUrl());
     }
 
     /**

@@ -99,6 +99,15 @@ public class SLTAppData {
         }
     }
 
+    saltr_internal function initDefaultFeatures(data:Object):void {
+        try {
+            _defaultGameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+            _defaultFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC);
+        } catch (e:Error) {
+            throw new Error("AppData parse error");
+        }
+    }
+
     saltr_internal function initWithData(data:Object):void {
         try {
             _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
