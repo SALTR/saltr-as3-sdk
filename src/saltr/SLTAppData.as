@@ -117,5 +117,16 @@ public class SLTAppData {
             throw new Error("AppData parse error");
         }
     }
+
+    saltr_internal function getActiveFeature(token:String):SLTFeature {
+        return _activeFeatures[token];
+    }
+
+    saltr_internal function applyDefaultFeatureToActive(token:String):void {
+        var devFeature:SLTFeature = _defaultFeatures[token];
+        if (devFeature != null && devFeature.required) {
+            _activeFeatures[token] = _defaultFeatures[token];
+        }
+    }
 }
 }

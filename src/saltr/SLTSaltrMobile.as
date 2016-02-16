@@ -401,6 +401,7 @@ public class SLTSaltrMobile {
     private function processNewAppData(data:Object):Boolean {
         try {
             _appData.initWithData(data);
+            validateFeatures();
         } catch (e:Error) {
             SLTLogger.getInstance().log("New app data process failed.");
             return false;
@@ -413,6 +414,17 @@ public class SLTSaltrMobile {
         }
         SLTLogger.getInstance().log("New app data processed.");
         return true;
+    }
+
+    private function validateFeatures():void {
+        var activeFeatureTokens:Vector.<String> = _appData.getActiveFeatureTokens();
+        for (var i:int = 0, length:int = activeFeatureTokens.length; i < length; ++i) {
+            var token:String = activeFeatureTokens[i];
+            var activeFeatureProperties:SLTFeature=_appData.getActiveFeature(token);
+            if (!_validator.validate(activeFeatureProperties)) {
+                _appData.applyDefaultFeatureToActive(token);
+            }
+        }
     }
 
     private function appDataConnectFailHandler(status:SLTStatus):void {
