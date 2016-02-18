@@ -182,7 +182,7 @@ public class SLTSaltrMobile {
         if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
         }
-        _appData.initDefaultFeatures({features: getLocalAppData()});
+        _appData.initDefaultFeatures({features: getAppDataFromApplication()});
         var cachedData:Object = getCachedAppData();
         if (cachedData == null) {
             _appData.initEmpty();
@@ -347,8 +347,8 @@ public class SLTSaltrMobile {
         return _repositoryStorageManager.getAppDataFromCache();
     }
 
-    private function getLocalAppData():Object {
-        return _repositoryStorageManager.getAppDataFromLocal();
+    private function getAppDataFromApplication():Object {
+        return _repositoryStorageManager.getAppDataFromApplication();
     }
 
     private function getLevelDataFromApplication(token:String):Object {

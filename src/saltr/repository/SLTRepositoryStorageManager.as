@@ -24,7 +24,7 @@ public class SLTRepositoryStorageManager {
         return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, SLTUtils.getAppVersion());
     }
 
-    private static function getLocalAppDataUrl():String {
+    private static function getAppDataFromApplicationUrl():String {
         return SLTUtils.formatString(SLTConfig.LOCAL_APP_DATA_URL_TEMPLATE);
     }
 
@@ -92,8 +92,13 @@ public class SLTRepositoryStorageManager {
         return _repository.getObjectFromCache(getCachedAppDataUrl());
     }
 
-    saltr_internal function getAppDataFromLocal():Object {
-        return _repository.getObjectFromApplication(getLocalAppDataUrl());
+
+    /**
+     * Provides the application data wrapped in package.
+     * @return The wrapped in package application data.
+     */
+    saltr_internal function getAppDataFromApplication():Object {
+        return _repository.getObjectFromApplication(getAppDataFromApplicationUrl());
     }
 
     /**
