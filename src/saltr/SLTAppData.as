@@ -29,6 +29,10 @@ public class SLTAppData {
         _experiments = new <SLTExperiment>[];
     }
 
+    saltr_internal function get activeFeatures():Dictionary {
+        return _activeFeatures;
+    }
+
     saltr_internal function get defaultFeatures():Dictionary {
         return _defaultFeatures;
     }
@@ -51,7 +55,7 @@ public class SLTAppData {
 
     saltr_internal function getFeatureProperties(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
-        if (activeFeature != null) {
+        if (activeFeature != null && activeFeature.isValid) {
             return activeFeature.properties;
         } else {
             var devFeature:SLTFeature = _defaultFeatures[token];
@@ -115,17 +119,6 @@ public class SLTAppData {
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
             throw new Error("AppData parse error");
-        }
-    }
-
-    saltr_internal function getActiveFeature(token:String):SLTFeature {
-        return _activeFeatures[token];
-    }
-
-    saltr_internal function applyDefaultFeatureToActive(token:String):void {
-        var devFeature:SLTFeature = _defaultFeatures[token];
-        if (devFeature != null && devFeature.required) {
-            _activeFeatures[token] = _defaultFeatures[token];
         }
     }
 }

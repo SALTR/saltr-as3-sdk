@@ -417,12 +417,10 @@ public class SLTSaltrMobile {
     }
 
     private function validateFeatures():void {
-        var activeFeatureTokens:Vector.<String> = _appData.getActiveFeatureTokens();
-        for (var i:int = 0, length:int = activeFeatureTokens.length; i < length; ++i) {
-            var token:String = activeFeatureTokens[i];
-            var activeFeatureProperties:SLTFeature=_appData.getActiveFeature(token);
-            if (!_validator.validate(activeFeatureProperties)) {
-                _appData.applyDefaultFeatureToActive(token);
+        var activeFeatures : Dictionary = _appData.activeFeatures;
+        for each (var feature : SLTFeature  in activeFeatures) {
+            if (!_validator.validate(feature)) {
+                feature.isValid = false;
             }
         }
     }
