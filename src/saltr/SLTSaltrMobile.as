@@ -205,7 +205,7 @@ public class SLTSaltrMobile {
         if (canGetAppData()) {
             _connectSuccessCallback = successCallback;
             _connectFailCallback = failCallback;
-            getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, basicProperties, customProperties);
+            getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, false, basicProperties, customProperties);
         } else {
             SLTLogger.getInstance().log("Connect failed. Concurrent load accrues.");
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
@@ -241,7 +241,7 @@ public class SLTSaltrMobile {
 
         _dedicatedLevelData = new DedicatedLevelData(gameLevelsFeatureToken, sltLevel, callback);
         if (canGetAppData()) {
-            getAppData(appDataInitLevelSuccessHandler, appDataInitLevelFailHandler, null, null);
+            getAppData(appDataInitLevelSuccessHandler, appDataInitLevelFailHandler);
         } else {
             updateDedicatedLevelContent();
         }
@@ -367,7 +367,7 @@ public class SLTSaltrMobile {
         return !_isWaitingForAppData;
     }
 
-    private function getAppData(successHandler:Function, failHandler:Function, basicProperties:Object = null, customProperties:Object = null):void {
+    private function getAppData(successHandler:Function, failHandler:Function, ping:Boolean = false, basicProperties:Object = null, customProperties:Object = null):void {
         if (_isWaitingForAppData) {
             throw new Error("getAppData() is in processing.");
             return;
@@ -378,6 +378,7 @@ public class SLTSaltrMobile {
             clientKey: _clientKey,
             deviceId: _deviceId,
             devMode: _devMode,
+            ping: ping,
             socialId: _socialId,
             basicProperties: basicProperties,
             customProperties: customProperties
@@ -385,6 +386,16 @@ public class SLTSaltrMobile {
         var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
         SLTLogger.getInstance().log("New app data requested.");
+    }
+
+    public function ping():void {
+        if (canGetAppData()) {
+            getAppData(pingCallback, pingCallback, true);
+        }
+    }
+
+    private function pingCallback(data:Object):void {
+        _isWaitingForAppData = false;
     }
 
     private function appDataConnectSuccessHandler(data:Object):void {
@@ -417,8 +428,8 @@ public class SLTSaltrMobile {
     }
 
     private function validateFeatures():void {
-        var activeFeatures : Dictionary = _appData.activeFeatures;
-        for each (var feature : SLTFeature  in activeFeatures) {
+        var activeFeatures:Dictionary = _appData.activeFeatures;
+        for each (var feature:SLTFeature  in activeFeatures) {
             if (!_validator.validate(feature)) {
                 feature.isValid = false;
             }

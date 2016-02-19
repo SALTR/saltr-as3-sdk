@@ -160,6 +160,7 @@ public class SLTApiCall {
         args.clientKey = _params.clientKey;
         args.client = _client;
         args.devMode = _params.devMode;
+        args.ping = _params.ping;
         return args;
     }
 
