@@ -16,6 +16,8 @@ public class SLTLevel {
     private var _localIndex:int;
     private var _packIndex:int;
     private var _contentUrl:String;
+    private var _levelToken:String;
+    private var _packToken:String;
     private var _properties:Dictionary;
     private var _version:String;
 
@@ -38,11 +40,13 @@ public class SLTLevel {
      * @param contentUrl The content URL of the level.
      * @param version The current version of the level.
      */
-    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String) {
+    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, levelToken:String, packToken:String, version:String) {
         _globalIndex = globalIndex;
         _localIndex = localIndex;
         _packIndex = packIndex;
         _contentUrl = contentUrl;
+        _levelToken = levelToken;
+        _packToken = packToken;
         _version = version;
         _contentReady = false;
         _parser = SLTLevelParser.getInstance();
@@ -74,6 +78,20 @@ public class SLTLevel {
      */
     public function get contentUrl():String {
         return _contentUrl;
+    }
+
+    /**
+     * The level token.
+     */
+    public function get levelToken():String {
+        return _levelToken;
+    }
+
+    /**
+     * The pack token.
+     */
+    public function get packToken():String {
+        return _packToken;
     }
 
     /**

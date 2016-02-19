@@ -16,13 +16,15 @@ public class SLTFeature {
     private var _properties:Object;
     private var _required:Boolean;
     private var _isValid:Boolean;
+    private var _version:String;
 
-    public function SLTFeature(token:String, type:String, properties:Object = null, required:Boolean = false) {
+    public function SLTFeature(token:String, type:String, version:String, properties:Object = null, required:Boolean = false) {
         _token = token;
         _type = type;
         _properties = properties;
         _required = required;
         _isValid = true;
+        _version = version;
     }
 
     saltr_internal function get token():String {
@@ -39,6 +41,10 @@ public class SLTFeature {
 
     saltr_internal function get required():Boolean {
         return _required;
+    }
+
+    saltr_internal function get version():String {
+        return _version;
     }
 
     saltr_internal function toString():String {

@@ -45,13 +45,13 @@ public class SLTDeserializer {
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var i:int = 0, length:int = levelsNode.length; i < length; ++i) {
             var levelNode:Object = levelsNode[i];
-            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.version);
+            var level:SLTLevel = new SLTLevel(levelNode.globalIndex, levelNode.localIndex, levelNode.packIndex, levelNode.url, levelNode.levelToken, levelNode.packToken, levelNode.version);
             levels.push(level);
         }
         return levels;
     }
 
-    saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String):Dictionary {
+    saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary = null):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {
@@ -59,14 +59,21 @@ public class SLTDeserializer {
                 var featureNode:Object = featureNodes[i];
                 var token:String = featureNode.token;
                 var featureType:String = featureNode.type;
-                var properties:Object = featureNode.properties;
+                var version:String = featureNode.version;
+                var canUseExistingFeatureProperties:Boolean = existingFeatures && existingFeatures[token] && existingFeatures[token].version == version;
                 var required:Boolean = featureNode.required;
+
                 if (SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == featureType) {
                     var levelData:SLTLevelData = new SLTLevelData();
-                    levelData.initWithData(properties);
-                    features[token] = new SLTFeature(token, featureType, levelData, required);
+                    if (canUseExistingFeatureProperties) {
+                        levelData = existingFeatures[token].properties;
+                    } else {
+                        levelData.initWithData(JSON.parse(featureNode.properties));
+                    }
+                    features[token] = new SLTFeature(token, featureType, version, levelData, required);
                 } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
-                    features[token] = new SLTFeature(token, featureType, properties, required);
+                    var properties:Object = canUseExistingFeatureProperties ? existingFeatures[token].properties : JSON.parse(featureNode.properties);
+                    features[token] = new SLTFeature(token, featureType, version, properties, required);
                 }
             }
         }
