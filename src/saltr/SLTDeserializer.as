@@ -51,7 +51,34 @@ public class SLTDeserializer {
         return levels;
     }
 
-    saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary = null):Dictionary {
+
+    saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary):void {
+        var featureNodes:Array = rootNode.features as Array;
+        if (featureNodes != null) {
+            for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
+                var featureNode:Object = featureNodes[i];
+                var token:String = featureNode.token;
+                var featureType:String = featureNode.type;
+                var version:String = featureNode.version;
+                var required:Boolean = featureNode.required;
+                var isVersionChanged:Boolean = !existingFeatures[token] || existingFeatures[token].version != version;
+
+                if(isVersionChanged) {
+                    if (SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == featureType) {
+                        var levelData:SLTLevelData = new SLTLevelData();
+                        levelData.initWithData(JSON.parse(featureNode.properties));
+                        existingFeatures[token] = new SLTFeature(token, featureType, version, levelData, required);
+
+                    } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
+                        var properties:Object = JSON.parse(featureNode.properties);
+                        existingFeatures[token] = new SLTFeature(token, featureType, version, properties, required);
+                    }
+                }
+            }
+        }
+    }
+
+    saltr_internal static function decodeFeatures_(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary = null):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
         if (featureNodes != null) {

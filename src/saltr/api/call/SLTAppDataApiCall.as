@@ -21,6 +21,7 @@ public class SLTAppDataApiCall extends SLTApiCall {
         urlVars.action = SLTConfig.ACTION_GET_APP_DATA;
 
         var args:Object = buildDefaultArgs();
+        args.ping = _params.ping;
         args.basicProperties = _params.basicProperties;
         args.customProperties = _params.customProperties;
 

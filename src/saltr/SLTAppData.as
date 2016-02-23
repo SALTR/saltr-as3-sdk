@@ -105,8 +105,8 @@ public class SLTAppData {
 
     saltr_internal function initDefaultFeatures(data:Object):void {
         try {
-            _defaultGameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _defaultGameLevelsFeatures);
-            _defaultFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _defaultFeatures);
+            SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _defaultGameLevelsFeatures);
+            SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _defaultFeatures);
         } catch (e:Error) {
             throw new Error("AppData parse error");
         }
@@ -114,8 +114,8 @@ public class SLTAppData {
 
     saltr_internal function initWithData(data:Object):void {
         try {
-            _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _gameLevelsFeatures);
-            _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _activeFeatures);
+            SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _gameLevelsFeatures);
+            SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _activeFeatures);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
             throw new Error("AppData parse error");
