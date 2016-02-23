@@ -78,35 +78,6 @@ public class SLTDeserializer {
         }
     }
 
-    saltr_internal static function decodeFeatures_(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary = null):Dictionary {
-        var features:Dictionary = new Dictionary();
-        var featureNodes:Array = rootNode.features as Array;
-        if (featureNodes != null) {
-            for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
-                var featureNode:Object = featureNodes[i];
-                var token:String = featureNode.token;
-                var featureType:String = featureNode.type;
-                var version:String = featureNode.version;
-                var canUseExistingFeatureProperties:Boolean = existingFeatures && existingFeatures[token] && existingFeatures[token].version == version;
-                var required:Boolean = featureNode.required;
-
-                if (SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == featureType) {
-                    var levelData:SLTLevelData = new SLTLevelData();
-                    if (canUseExistingFeatureProperties) {
-                        levelData = existingFeatures[token].properties;
-                    } else {
-                        levelData.initWithData(JSON.parse(featureNode.properties));
-                    }
-                    features[token] = new SLTFeature(token, featureType, version, levelData, required);
-                } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
-                    var properties:Object = canUseExistingFeatureProperties ? existingFeatures[token].properties : JSON.parse(featureNode.properties);
-                    features[token] = new SLTFeature(token, featureType, version, properties, required);
-                }
-            }
-        }
-        return features;
-    }
-
     saltr_internal static function getFeature(rootNode:Object, featureToken:String, featureType:String):Object {
         var feature:Object = null;
         var featureNodes:Array = rootNode.features as Array;

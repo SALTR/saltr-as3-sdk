@@ -69,7 +69,8 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
      */
     [Test(async, timeout=10000)]
     public function updateCompleteTest():void {
-        var gameLevelsFeatures:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+        var gameLevelsFeatures:Dictionary = new Dictionary();
+        SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, gameLevelsFeatures);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 5000);
         _featuresUpdater.update(gameLevelsFeatures);
     }
@@ -82,8 +83,10 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
      */
     [Test(async, timeout=1000)]
     public function updateCancelUpdateTest():void {
-        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
-        var gameLevelsFeatures3Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData3LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+        var gameLevelsFeatures5Levels:Dictionary = new Dictionary();
+        var gameLevelsFeatures3Levels:Dictionary = new Dictionary();
+        SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, gameLevelsFeatures5Levels);
+        SLTDeserializer.decodeFeatures(JSON.parse(new AppData3LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, gameLevelsFeatures3Levels);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
         _featuresUpdater.update(gameLevelsFeatures5Levels);
         _featuresUpdater.update(gameLevelsFeatures3Levels);
@@ -97,10 +100,11 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
      */
     [Test(async, timeout=1000)]
     public function updateCancelUpdateLevelTest():void {
-        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+        var gameLevelsFeatures5Levels:Dictionary = new Dictionary();
+        SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, gameLevelsFeatures5Levels);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
         _featuresUpdater.update(gameLevelsFeatures5Levels);
-        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "", "", "44");
         _featuresUpdater.updateLevel("GAME_LEVELS", level);
     }
 }
