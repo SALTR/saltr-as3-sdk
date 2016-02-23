@@ -213,6 +213,15 @@ public class SLTSaltrMobile {
     }
 
     /**
+     * Sends Ping GetAppData call to Saltr.
+     */
+    public function ping():void {
+        if (canGetAppData()) {
+            getAppData(pingCallback, pingCallback, true);
+        }
+    }
+
+    /**
      * Initialize level content.
      * @param gameLevelsFeatureToken The "GameLevels" feature token
      * @param sltLevel The level.
@@ -368,10 +377,6 @@ public class SLTSaltrMobile {
     }
 
     private function getAppData(successHandler:Function, failHandler:Function, ping:Boolean = false, basicProperties:Object = null, customProperties:Object = null):void {
-        if (_isWaitingForAppData) {
-            throw new Error("getAppData() is in processing.");
-            return;
-        }
         _isWaitingForAppData = true;
 
         var params:Object = {
@@ -386,12 +391,6 @@ public class SLTSaltrMobile {
         var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
         SLTLogger.getInstance().log("New app data requested.");
-    }
-
-    public function ping():void {
-        if (canGetAppData()) {
-            getAppData(pingCallback, pingCallback, true);
-        }
     }
 
     private function pingCallback(data:Object):void {
