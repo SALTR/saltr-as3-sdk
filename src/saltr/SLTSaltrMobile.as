@@ -20,8 +20,7 @@ import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.utils.SLTLogger;
-import saltr.utils.SLTMobileDeviceInfo;
-import saltr.utils.dialog.SLTMobileDialogController;
+import saltr.utils.SLTUtils;
 import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
 use namespace saltr_internal;
@@ -56,6 +55,9 @@ public class SLTSaltrMobile {
     private var _logger:SLTLogger;
 
     private var _validator:SLTFeatureValidator;
+
+    private var _basicProperties:SLTBasicProperties;
+    private var _customProperties:Object;
 
     /**
      * Class constructor.
@@ -196,7 +198,7 @@ public class SLTSaltrMobile {
     /**
      * Establishes the connection to Saltr server.
      */
-    public function connect(successCallback:Function, failCallback:Function, basicProperties:Object = null, customProperties:Object = null):void {
+    public function connect(successCallback:Function, failCallback:Function, basicProperties:SLTBasicProperties = null, customProperties:Object = null):void {
         SLTLogger.getInstance().log("Method 'connect()' called.");
         if (!_started) {
             throw new Error("Method 'connect()' should be called after 'start()' only.");
@@ -205,7 +207,13 @@ public class SLTSaltrMobile {
         if (canGetAppData()) {
             _connectSuccessCallback = successCallback;
             _connectFailCallback = failCallback;
-            getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, false, basicProperties, customProperties);
+
+            var updatedBasicProperties:Object = SLTUtils.getChangedProperties(_basicProperties, basicProperties.data);
+            var updatedCustomProperties:Object = SLTUtils.getChangedProperties(_customProperties, customProperties);
+
+            _customProperties = customProperties;
+            _basicProperties = basicProperties;
+            getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, false, updatedBasicProperties, updatedCustomProperties);
         } else {
             SLTLogger.getInstance().log("Connect failed. Concurrent load accrues.");
             failCallback(new SLTStatusAppDataConcurrentLoadRefused());
@@ -217,7 +225,7 @@ public class SLTSaltrMobile {
      */
     public function ping():void {
         if (canGetAppData()) {
-            getAppData(pingCallback, pingCallback, true);
+            getAppData(pingCallback, pingCallback, true, _basicProperties, _customProperties);
         }
     }
 

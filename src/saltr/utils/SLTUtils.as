@@ -135,5 +135,18 @@ public class SLTUtils {
         }
         return true;
     }
+
+    saltr_internal static function getChangedProperties(oldProperties:Object, newProperties:Object):Object {
+        if(newProperties == null) {
+            return null;
+        }
+        var result:Object = {};
+        for (var key in newProperties) {
+            if (oldProperties == null || !oldProperties.hasOwnProperty(key) || oldProperties[key] != newProperties[key]) {
+                result[key] = newProperties[key];
+            }
+        }
+        return result;
+    }
 }
 }
