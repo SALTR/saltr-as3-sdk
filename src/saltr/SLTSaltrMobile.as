@@ -236,9 +236,23 @@ public class SLTSaltrMobile {
     /**
      * Sends Ping GetAppData call to Saltr.
      */
-    public function ping():void {
+    public function ping(successCallback:Function = null, failCallback:Function = null):void {
         if (canGetAppData()) {
-            getAppData(pingCallback, pingCallback, true, _basicProperties, _customProperties);
+            getAppData(pingSuccessCallback, pingFailCallback, true, _basicProperties, _customProperties);
+
+            function pingSuccessCallback(data:Object):void {
+                if (successCallback) {
+                    successCallback(data);
+                }
+                _isWaitingForAppData = false;
+            }
+
+            function pingFailCallback(data:Object):void {
+                if (failCallback) {
+                    failCallback(data);
+                }
+                _isWaitingForAppData = false;
+            }
         }
     }
 
@@ -412,10 +426,6 @@ public class SLTSaltrMobile {
         var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
         SLTLogger.getInstance().log("New app data requested.");
-    }
-
-    private function pingCallback(data:Object):void {
-        _isWaitingForAppData = false;
     }
 
     private function appDataConnectSuccessHandler(data:Object):void {
