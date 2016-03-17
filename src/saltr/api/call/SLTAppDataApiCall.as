@@ -22,6 +22,7 @@ public class SLTAppDataApiCall extends SLTApiCall {
 
         var args:Object = buildDefaultArgs();
         args.ping = _params.ping;
+        args.snapshotId = _params.snapshotId;
         args.basicProperties = _params.basicProperties;
         args.customProperties = _params.customProperties;
 

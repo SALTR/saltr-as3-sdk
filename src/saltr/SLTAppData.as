@@ -5,6 +5,8 @@
 package saltr {
 import flash.utils.Dictionary;
 
+import saltr.game.SLTLevel;
+
 import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
@@ -19,7 +21,7 @@ public class SLTAppData {
     private var _gameLevelsFeatures:Dictionary;
     private var _defaultGameLevelsFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
-
+    private var _snapshotId:String;
 
     public function SLTAppData() {
         _activeFeatures = new Dictionary();
@@ -66,6 +68,10 @@ public class SLTAppData {
         return null;
     }
 
+    saltr_internal function getDefaultGameLevels(token:String):Vector.<SLTLevel> {
+        return _defaultGameLevelsFeatures[token].properties.allLevels;
+    }
+
     saltr_internal function getGameLevelsProperties(token:String):SLTLevelData {
         var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
         if (null != gameLevelsFeature) {
@@ -107,6 +113,7 @@ public class SLTAppData {
         try {
             _defaultGameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _defaultGameLevelsFeatures);
             _defaultFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _defaultFeatures);
+            _snapshotId = data.snapshotId;
         } catch (e:Error) {
             throw new Error("AppData parse error");
         }
@@ -120,6 +127,10 @@ public class SLTAppData {
         } catch (e:Error) {
             throw new Error("AppData parse error");
         }
+    }
+
+    public function get snapshotId():String {
+        return _snapshotId;
     }
 }
 }

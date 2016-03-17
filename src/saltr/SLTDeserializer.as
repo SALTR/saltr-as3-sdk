@@ -69,6 +69,7 @@ public class SLTDeserializer {
                         levelData = existingFeatures[token].properties;
                     } else {
                         levelData.initWithData(JSON.parse(featureNode.properties));
+                        levelData.sortLevel();
                     }
                     features[token] = new SLTFeature(token, featureType, version, levelData, required);
                 } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {

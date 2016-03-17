@@ -69,6 +69,12 @@ public class SLTLevelData {
         }
     }
 
+    saltr_internal function sortLevel():void {
+        _levels.sort(function (level1:SLTLevel, level2:SLTLevel):Number {
+            return level1.globalIndex - level2.globalIndex;
+        })
+    }
+
     private function disposeLevels():void {
         _levels.length = 0;
     }

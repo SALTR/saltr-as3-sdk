@@ -184,7 +184,7 @@ public class SLTSaltrMobile {
         if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
         }
-        _appData.initDefaultFeatures({features: getAppDataFromApplication()});
+        _appData.initDefaultFeatures(getAppDataFromApplication());
         var cachedData:Object = getCachedAppData();
         if (cachedData == null) {
             _appData.initEmpty();
@@ -402,7 +402,8 @@ public class SLTSaltrMobile {
     private function loadLevelContentInternally(gameLevelsFeatureToken:String, level:SLTLevel):Object {
         var content:Object = _repositoryStorageManager.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
         if (content == null) {
-            content = _repositoryStorageManager.getLevelFromApplication(gameLevelsFeatureToken, level.globalIndex);
+            var applicationLevelPath:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[level.globalIndex].contentUrl;
+            content = _repositoryStorageManager.getLevelFromApplication(applicationLevelPath);
         }
         return content;
     }
@@ -421,7 +422,8 @@ public class SLTSaltrMobile {
             ping: ping,
             socialId: _socialId,
             basicProperties: basicProperties,
-            customProperties: customProperties
+            customProperties: customProperties,
+            snapshotId: _appData.snapshotId
         };
         var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);

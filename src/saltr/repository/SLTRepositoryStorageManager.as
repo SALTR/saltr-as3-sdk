@@ -207,8 +207,8 @@ public class SLTRepositoryStorageManager {
      * @param globalIndex The global identifier of the cached level.
      * @return The requested level from application.
      */
-    saltr_internal function getLevelFromApplication(gameLevelsFeatureToken:String, globalIndex:int):Object {
-        return _repository.getObjectFromApplication(SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, gameLevelsFeatureToken, globalIndex));
+    saltr_internal function getLevelFromApplication(path:String):Object {
+        return _repository.getObjectFromApplication(SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, path));
     }
 
 
