@@ -26,16 +26,18 @@ public class SLTBoard {
     protected var _propertyObjects:Dictionary;
     protected var _layers:Dictionary;
     private var _checkpoints:Dictionary;
+    private var _token:String;
 
     /**
      * Class constructor.
      * @param layers The layers of the board.
      * @param properties The board associated properties.
      */
-    public function SLTBoard(layers:Dictionary, propertyObjects:Dictionary, checkpoints:Dictionary) {
+    public function SLTBoard(token:String, layers:Dictionary, propertyObjects:Dictionary, checkpoints:Dictionary) {
         _propertyObjects = propertyObjects;
         _layers = layers;
         _checkpoints = checkpoints;
+        _token = token;
     }
 
     /**
@@ -85,6 +87,10 @@ public class SLTBoard {
      */
     public function regenerate():void {
         throw new Error("Virtual function call: regenerate");
+    }
+
+    public function get token():String {
+        return _token;
     }
 }
 }

@@ -78,13 +78,13 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
         var matchingRuleIncludedBoards:Array = parseMatchingRuleIncludedBoards(rootNode);
 
         var boards:Dictionary = new Dictionary();
-        for (var boardId:String in boardNodes) {
+        for each (var boardNode:Object in boardNodes) {
             var boardRelatedMatchingRules:SLTMatchingRules = new SLTMatchingRules();
-            if (matchingRules.matchingRuleEnabled && -1 != matchingRuleIncludedBoards.indexOf(boardId)) {
+            var boardToken:String = boardNode.token;
+            if (matchingRules.matchingRuleEnabled && -1 != matchingRuleIncludedBoards.indexOf(boardToken)) {
                 boardRelatedMatchingRules = matchingRules;
             }
-            var boardNode:Object = boardNodes[boardId];
-            boards[boardId] = parseLevelBoard(boardRelatedMatchingRules, boardNode, assetMap);
+            boards[boardToken] = parseLevelBoard(boardRelatedMatchingRules, boardNode, assetMap);
         }
         return boards;
     }
@@ -128,7 +128,7 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
             layers[layerToken] = layer;
         }
         var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap, matchingRuleProperties);
-        var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardPropertyObjects, SLTCheckPointParser.parseCheckpoints(boardNode));
+        var board:SLTMatchingBoard = new SLTMatchingBoard(boardNode.token, config, boardPropertyObjects, SLTCheckPointParser.parseCheckpoints(boardNode));
 
         return board;
     }
