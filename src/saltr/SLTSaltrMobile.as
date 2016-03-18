@@ -238,21 +238,9 @@ public class SLTSaltrMobile {
      */
     public function ping(successCallback:Function = null, failCallback:Function = null):void {
         if (canGetAppData()) {
-            getAppData(pingSuccessCallback, pingFailCallback, true, _basicProperties, _customProperties);
-
-            function pingSuccessCallback(data:Object):void {
-                if (successCallback) {
-                    successCallback(data);
-                }
-                _isWaitingForAppData = false;
-            }
-
-            function pingFailCallback(data:Object):void {
-                if (failCallback) {
-                    failCallback(data);
-                }
-                _isWaitingForAppData = false;
-            }
+            _connectSuccessCallback = successCallback;
+            _connectFailCallback = failCallback;
+            getAppData(appDataConnectSuccessHandler, appDataConnectFailHandler, true, _basicProperties, _customProperties);
         }
     }
 
