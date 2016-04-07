@@ -30,7 +30,6 @@ use namespace saltr_internal;
  * The SLTSaltrMobile class represents the entry point of mobile SDK.
  */
 public class SLTSaltrMobile {
-    private var _flashStage:Stage;
     private var _socialId:String;
     private var _deviceId:String;
     private var _clientKey:String;
@@ -61,13 +60,11 @@ public class SLTSaltrMobile {
 
     /**
      * Class constructor.
-     * @param flashStage The flash stage.
      * @param clientKey The client key.
      * @param deviceId The device unique identifier.
      */
-    public function SLTSaltrMobile(flashStage:Stage, clientKey:String, deviceId:String) {
+    public function SLTSaltrMobile(clientKey:String, deviceId:String) {
         _logger = SLTLogger.getInstance();
-        _flashStage = flashStage;
         _clientKey = clientKey;
         _deviceId = deviceId;
         _isWaitingForAppData = false;
