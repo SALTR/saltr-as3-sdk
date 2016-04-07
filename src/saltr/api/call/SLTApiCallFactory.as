@@ -2,6 +2,7 @@
  * Created by daal on 4/13/15.
  */
 package saltr.api.call {
+import saltr.api.call.mobile.SLTMobileAppDataApiCall;
 
 public class SLTApiCallFactory {
     public static const API_CALL_ADD_PROPERTIES:String = "AddProperties";
@@ -17,7 +18,7 @@ public class SLTApiCallFactory {
                 apiCall = new SLTAddPropertiesApiCall(isMobile);
                 break;
             case API_CALL_APP_DATA :
-                apiCall = new SLTAppDataApiCall(isMobile);
+                apiCall = isMobile ? new SLTMobileAppDataApiCall(): new SLTAppDataApiCall(false);
                 break;
             case API_CALL_HEARTBEAT :
                 apiCall = new SLTHeartbeatApiCall(isMobile);
