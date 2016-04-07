@@ -34,9 +34,7 @@ public class SLTWebAppDataApiCall extends SLTAppDataApiCall {
         super(false);
 
         _validator = new SLTFeatureValidator();
-
         _appData = new SLTAppData();
-
         _apiFactory = new SLTApiCallFactory();
     }
 
@@ -44,10 +42,10 @@ public class SLTWebAppDataApiCall extends SLTAppDataApiCall {
         _originalFailCallback = failCallback;
         _originalSuccessCallback = successCallback;
 
-        super.call(params, wrappedSuccessCallbackMainContext, wrappedFailCallbackMainContext, timeout);
+        super.call(params, wrappedSuccessCallback, wrappedFailCallback, timeout);
     }
 
-    private function wrappedSuccessCallbackMainContext(data:Object):void {
+    private function wrappedSuccessCallback(data:Object):void {
         SLTLogger.getInstance().log("New app data request from connect() succeed.");
         if (processNewAppData(data)) {
             _originalSuccessCallback(_appData);
@@ -56,7 +54,7 @@ public class SLTWebAppDataApiCall extends SLTAppDataApiCall {
         }
     }
 
-    private function wrappedFailCallbackMainContext(status:SLTStatus):void {
+    private function wrappedFailCallback(status:SLTStatus):void {
         SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: " + status.statusCode);
 
         if (status.statusCode == SLTStatus.API_ERROR) {
