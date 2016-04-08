@@ -3,10 +3,9 @@
  */
 package saltr {
 import saltr.api.call.SLTApiCall;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
+import saltr.api.call.factory.SLTWebApiCallFactory;
 import saltr.game.SLTLevel;
-import saltr.status.SLTStatus;
-import saltr.utils.SLTLogger;
 
 use namespace saltr_internal;
 
@@ -14,6 +13,8 @@ public class SLTSaltrWebClean extends SLTSaltr {
 
     public function SLTSaltrWebClean(clientKey:String, deviceId:String = null, socialId:String = null) {
         super(clientKey, deviceId, socialId);
+
+        SLTApiCallFactory.factory = new SLTWebApiCallFactory();
     }
 
     override public function start():void {
@@ -26,7 +27,7 @@ public class SLTSaltrWebClean extends SLTSaltr {
     }
 
     override public function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
+        var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
         levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout);
     }
 }

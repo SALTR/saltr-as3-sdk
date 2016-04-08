@@ -3,7 +3,7 @@
  */
 package saltr.utils.level.updater {
 import saltr.api.call.SLTApiCall;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -17,17 +17,11 @@ use namespace saltr_internal;
  */
 public class SLTMobileLevelContentLoader {
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
-    private var _apiFactory:SLTApiCallFactory;
     private var _requestIdleTimeout:int;
 
-    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
+    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, requestIdleTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
-        _apiFactory = apiFactory;
         _requestIdleTimeout = requestIdleTimeout;
-    }
-
-    saltr_internal function set apiFactory(value:SLTApiCallFactory):void {
-        _apiFactory = value;
     }
 
     saltr_internal function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
@@ -52,7 +46,7 @@ public class SLTMobileLevelContentLoader {
         var params:Object = {
             contentUrl: sltLevel.contentUrl
         };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
+        var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
         levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout);
         SLTLogger.getInstance().log("Level content from Saltr requested. Feature token: " + featureToken + " Global index: " + sltLevel.globalIndex);
     }

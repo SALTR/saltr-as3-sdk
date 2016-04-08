@@ -12,7 +12,7 @@ import org.flexunit.async.Async;
 
 import saltr.SLTConfig;
 import saltr.SLTDeserializer;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;

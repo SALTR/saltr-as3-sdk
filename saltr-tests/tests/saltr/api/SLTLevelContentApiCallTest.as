@@ -7,7 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.SLTApiCallResult;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;

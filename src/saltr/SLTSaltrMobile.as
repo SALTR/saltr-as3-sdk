@@ -10,7 +10,7 @@ import flash.utils.Dictionary;
 import flash.utils.Timer;
 
 import saltr.api.call.SLTApiCall;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
@@ -293,7 +293,7 @@ public class SLTSaltrMobile {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES, true);
+        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES);
         addPropertiesApiCall.call(params, addPropertiesSuccessHandler, addPropertiesFailHandler, _requestIdleTimeout);
     }
 
@@ -320,7 +320,7 @@ public class SLTSaltrMobile {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SEND_LEVEL_END, true);
+        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SEND_LEVEL_END);
         sendLevelEndEventApiCall.call(params, sendLevelEndSuccessHandler, sendLevelEndFailHandler);
     }
 
@@ -364,7 +364,7 @@ public class SLTSaltrMobile {
             deviceId: _deviceId,
             socialId: _socialId
         };
-        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_HEARTBEAT, true);
+        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_HEARTBEAT);
         heartbeatApiCall.call(params, null, heartbeatFailHandler);
     }
 
@@ -410,7 +410,7 @@ public class SLTSaltrMobile {
             customProperties: customProperties,
             snapshotId: _appData.snapshotId
         };
-        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, true);
+        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
         SLTLogger.getInstance().log("New app data requested.");
     }

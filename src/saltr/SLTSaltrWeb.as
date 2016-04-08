@@ -9,7 +9,7 @@ import flash.utils.Timer;
 
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTApiCallResult;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTDummyRepository;
@@ -259,7 +259,7 @@ public class SLTSaltrWeb {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, false);
+        var appDataCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_APP_DATA);
 //        appDataCall.call(params, appDataApiCallback, _requestIdleTimeout);
     }
 
@@ -291,7 +291,7 @@ public class SLTSaltrWeb {
             basicProperties: basicProperties,
             customProperties: customProperties
         };
-        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES, false);
+        var addPropertiesApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES);
 //        addPropertiesApiCall.call(params, addPropertiesApiCallback, _requestIdleTimeout);
     }
 
@@ -327,7 +327,7 @@ public class SLTSaltrWeb {
             customTextProperties: customTextProperties
         };
 
-        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SEND_LEVEL_END, false);
+        var sendLevelEndEventApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_SEND_LEVEL_END);
 //        sendLevelEndEventApiCall.call(params, sendLevelEndApiCallback);
     }
 
@@ -339,7 +339,7 @@ public class SLTSaltrWeb {
         var params:Object = {
             levelContentUrl: sltLevel.contentUrl + "?_time_=" + new Date().getTime()
         };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, false);
+        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
 //        levelContentApiCall.call(params, levelContentApiCallback, _requestIdleTimeout);
 
         function levelContentApiCallback(result:SLTApiCallResult):void {
@@ -440,7 +440,7 @@ public class SLTSaltrWeb {
             platform: _platform,
             devMode: _devMode
         };
-        var apiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_REGISTER_USER, false);
+        var apiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_REGISTER_USER);
 //        apiCall.call(params, registerUserApiCallback);
     }
 
@@ -515,7 +515,7 @@ public class SLTSaltrWeb {
             devMode: _devMode,
             socialId: _socialId
         };
-        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_HEARTBEAT, false);
+        var heartbeatApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_HEARTBEAT);
 //        heartbeatApiCall.call(params, heartbeatApiCallback);
     }
 

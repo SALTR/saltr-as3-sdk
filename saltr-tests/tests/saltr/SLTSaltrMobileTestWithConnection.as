@@ -9,7 +9,7 @@ import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTExperiment;
 import saltr.SLTSaltrMobile;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.repository.SLTMobileRepository;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;

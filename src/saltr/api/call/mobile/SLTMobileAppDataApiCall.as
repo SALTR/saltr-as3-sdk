@@ -8,7 +8,7 @@ import flash.utils.Dictionary;
 import saltr.SLTAppData;
 import saltr.SLTFeature;
 import saltr.SLTFeatureValidator;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.SLTAppDataApiCall;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
@@ -31,7 +31,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     private var _originalFailCallback:Function;
     private var _validator:SLTFeatureValidator;
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
-    private var _apiFactory:SLTApiCallFactory;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
     private var _appData:SLTAppData;
 
@@ -46,8 +45,7 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
         _appData = new SLTAppData();
 
-        _apiFactory = new SLTApiCallFactory();
-        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, _apiFactory, 0);
+        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, 0);
     }
 
     override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {

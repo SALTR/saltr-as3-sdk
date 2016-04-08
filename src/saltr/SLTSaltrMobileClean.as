@@ -3,6 +3,7 @@
  */
 
 package saltr {
+import saltr.api.call.factory.SLTMobileApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
