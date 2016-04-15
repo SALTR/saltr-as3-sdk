@@ -3,6 +3,7 @@
  */
 
 package saltr {
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTMobileApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.ISLTRepository;
@@ -29,6 +30,7 @@ public class SLTSaltrMobileClean extends SLTSaltr {
         super(clientKey, deviceId);
         _isWaitingForAppData = false;
 
+        SLTApiCallFactory.factory = new SLTMobileApiCallFactory();
         _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
     }
 
@@ -143,7 +145,7 @@ public class SLTSaltrMobileClean extends SLTSaltr {
         _isWaitingForAppData = false;
 
         var gameLevelsFeatureToken:String = data.gameLevelsFeatureToken;
-        var level:SLTLevel = data.level;
+        var level:SLTLevel = data.sltLevel;
         var callback:Function = data.callback;
         var success:Boolean = initLevelContentLocally(gameLevelsFeatureToken, level);
 

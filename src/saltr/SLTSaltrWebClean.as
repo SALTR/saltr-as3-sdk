@@ -26,9 +26,36 @@ public class SLTSaltrWebClean extends SLTSaltr {
         _started = true;
     }
 
+
+    //TODO::@daal, @arka.... fix this..
     override public function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
-        levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout);
+        if (!_started) {
+            throw new Error("Method 'initLevelContentFromSaltr' should be called after 'start()' only.");
+        }
+
+        var additionalCallParams:Object = {
+            gameLevelsFeatureToken: gameLevelsFeatureToken,
+            sltLevel: sltLevel,
+            callback: callback
+        };
+
+        if (canGetAppData()) {
+            additionalCallParams.context = "secondary";
+            getAppData(appDataInitLevelSuccessHandler, null, false, null, null, additionalCallParams);
+        } else {
+            appDataInitLevelSuccessHandler(additionalCallParams);
+        }
+    }
+
+    private function appDataInitLevelSuccessHandler(data:Object):void {
+        _isWaitingForAppData = false;
+
+        var gameLevelsFeatureToken:String = data.gameLevelsFeatureToken;
+        var level:SLTLevel = data.sltLevel;
+        var callback:Function = data.callback;
+        var success:Boolean = initLevelContentLocally(gameLevelsFeatureToken, level);
+
+        callback(success);
     }
 }
 }

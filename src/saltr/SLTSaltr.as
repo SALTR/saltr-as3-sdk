@@ -259,7 +259,6 @@ public class SLTSaltr implements ISLTSaltr {
         stopHeartbeat();
     }
 
-
     protected function getAppData(successHandler:Function, failHandler:Function, ping:Boolean = false, basicProperties:Object = null, customProperties:Object = null, additionalApiCallParams:Object = null):void {
         _isWaitingForAppData = true;
 

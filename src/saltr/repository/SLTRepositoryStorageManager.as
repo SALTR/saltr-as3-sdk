@@ -2,6 +2,7 @@
  * Created by daal on 6/24/15.
  */
 package saltr.repository {
+import flash.desktop.NativeApplication;
 import flash.filesystem.File;
 
 import saltr.SLTConfig;
@@ -20,8 +21,14 @@ public class SLTRepositoryStorageManager {
     private var _repository:ISLTRepository;
     private var _localContentRoot:String;
 
+    private static function getAppVersion():String {
+        var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
+        var ns:Namespace = applicationDescriptor.namespace();
+        return applicationDescriptor.ns::versionNumber[0].toString();
+    }
+
     private static function getCachedAppDataUrl():String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, SLTUtils.getAppVersion());
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_APP_DATA_URL_TEMPLATE, getAppVersion());
     }
 
     private static function getAppDataFromApplicationUrl():String {
@@ -33,15 +40,15 @@ public class SLTRepositoryStorageManager {
     }
 
     private static function getCachedLevelVersionsUrl(gameLevelsFeatureToken:String):String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_VERSIONS_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken);
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_VERSIONS_URL_TEMPLATE, getAppVersion(), gameLevelsFeatureToken);
     }
 
     private static function getCachedLevelUrl(gameLevelsFeatureToken:String, globalIndex:int):String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, SLTUtils.getAppVersion(), gameLevelsFeatureToken, globalIndex);
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, getAppVersion(), gameLevelsFeatureToken, globalIndex);
     }
 
     private static function isCurrentAppVersionCacheDirExists(cacheDirectory:File):Boolean {
-        var dir:File = cacheDirectory.resolvePath(SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_CONTENT_ROOT_URL_TEMPLATE, SLTUtils.getAppVersion()));
+        var dir:File = cacheDirectory.resolvePath(SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_CONTENT_ROOT_URL_TEMPLATE, getAppVersion()));
         return dir.exists;
     }
 
@@ -49,7 +56,7 @@ public class SLTRepositoryStorageManager {
         var rootDir:File = cacheDirectory.resolvePath(SLTConfig.DEFAULT_CONTENT_ROOT);
         if (rootDir.exists) {
             var contents:Array = rootDir.getDirectoryListing();
-            var currentAppCacheName:String = "app_" + SLTUtils.getAppVersion();
+            var currentAppCacheName:String = "app_" + getAppVersion();
             for (var i:uint = 0, length:uint = contents.length; i < length; i++) {
                 var contentName:String = contents[i].name;
                 if (currentAppCacheName != contentName && 0 == contentName.indexOf("app_")) {

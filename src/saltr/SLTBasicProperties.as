@@ -40,9 +40,9 @@ public dynamic class SLTBasicProperties extends Object {
     /**
      * Class constructor.
      */
-    public function SLTBasicProperties(appVersion:String) {
+    public function SLTBasicProperties(appVersion:String, locale:String) {
         _appVersion = appVersion;
-        _locale = Capabilities.languages[0];
+        _locale = locale;
         _country = "locate";
         _region = "locate";
         _city = "locate";

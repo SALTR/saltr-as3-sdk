@@ -2,23 +2,17 @@
  * Created by daal on 4/7/16.
  */
 package saltr.api.call.web {
-import flash.events.Event;
 import flash.utils.Dictionary;
 
 import saltr.SLTAppData;
 import saltr.SLTFeature;
 import saltr.SLTFeatureValidator;
-import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.SLTAppDataApiCall;
-import saltr.game.SLTLevel;
-import saltr.repository.SLTMobileRepository;
-import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.utils.SLTLogger;
-import saltr.utils.level.updater.SLTMobileLevelsFeaturesUpdater;
 
 use namespace saltr_internal;
 

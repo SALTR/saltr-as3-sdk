@@ -5,7 +5,6 @@ package saltr {
 import saltr.game.SLTLevel;
 
 public interface ISLTSaltr {
-
     function start():void;
     function connect(successCallback:Function, failCallback:Function, basicProperties:SLTBasicProperties, customProperties:Object = null):void;
     function ping(successCallback:Function = null, failCallback:Function = null):void;

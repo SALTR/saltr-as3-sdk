@@ -72,7 +72,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     private function initWithFeatures(gameLevelsFeatures:Dictionary):void {
         for (var key:Object in gameLevelsFeatures) {
             var feature:SLTFeature = gameLevelsFeatures[key];
-            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, SLTApiCallFactory.factory, _requestIdleTimeout, feature.token, feature.properties.allLevels);
+            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _requestIdleTimeout, feature.token, feature.properties.allLevels);
             _gameLevelGroups.push(groupUpdater);
         }
         SLTLogger.getInstance().log("Game level features initialized with game levels features. Level group count to update: " + _gameLevelGroups.length);
@@ -81,7 +81,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     private function initWithLevel(featureToken:String, level:SLTLevel):void {
         var levels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
         levels.push(level);
-        var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, SLTApiCallFactory.factory, _requestIdleTimeout, featureToken, levels);
+        var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(_repositoryStorageManager, _requestIdleTimeout, featureToken, levels);
         _gameLevelGroups.push(groupUpdater);
         SLTLogger.getInstance().log("Game level features initialized with dedicated level.");
     }

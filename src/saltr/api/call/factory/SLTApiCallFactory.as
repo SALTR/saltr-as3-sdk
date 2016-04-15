@@ -4,6 +4,8 @@
 package saltr.api.call.factory {
 import saltr.api.call.*;
 
+import starling.errors.AbstractClassError;
+
 public class SLTApiCallFactory {
     public static const API_CALL_ADD_PROPERTIES:String = "AddProperties";
     public static const API_CALL_APP_DATA:String = "AppData";
@@ -24,7 +26,7 @@ public class SLTApiCallFactory {
 
 
     public function getCall(name:String):SLTApiCall {
-        //abstract...
+        throw new AbstractClassError();
     }
 }
 }

@@ -8,6 +8,7 @@ import org.flexunit.asserts.assertFalse;
 import saltr.SLTAppData;
 import saltr.SLTConfig;
 import saltr.saltr_internal;
+import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
 
@@ -39,7 +40,9 @@ public class SLTAppDataTest {
      */
     [Test]
     public function initEmptyTest():void {
-        _appData.defineFeature("SETTINGS", {
+        var token:String = "SETTINGS";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
@@ -71,7 +74,9 @@ public class SLTAppDataTest {
      */
     [Test(expects="Error")]
     public function defineFeatureTestWithIncorrectToken():void {
-        _appData.defineFeature("SETTINGS INCORRECT", {
+        var token:String = "SETTINGS INCORRECT";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
@@ -84,7 +89,9 @@ public class SLTAppDataTest {
      */
     [Test(expects="Error")]
     public function defineFeatureTestWithNullToken():void {
-        _appData.defineFeature(null, {
+        var token:String = null;
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
@@ -97,7 +104,9 @@ public class SLTAppDataTest {
      */
     [Test(expects="Error")]
     public function defineFeatureTestWithEmptyToken():void {
-        _appData.defineFeature("", {
+        var token:String = "";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
@@ -110,12 +119,17 @@ public class SLTAppDataTest {
      */
     [Test]
     public function getActiveFeatureTokensTest():void {
-        _appData.defineFeature("SETTINGS", {
+        var token:String = "SETTINGS";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
         }, SLTConfig.FEATURE_TYPE_GENERIC, true);
-        _appData.defineFeature("VALIDATION", {
+
+        var token2:String = "VALIDATION";
+        validateFeatureToken(token2);
+        _appData.defineFeature(token2, {
             general: {
                 validationTimeout: 50
             }
@@ -136,7 +150,9 @@ public class SLTAppDataTest {
      */
     [Test]
     public function getFeaturePropertiesWithActiveFeaturesTest():void {
-        _appData.defineFeature("SETTINGS", {
+        var token:String = "SETTINGS";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
@@ -151,7 +167,9 @@ public class SLTAppDataTest {
      */
     [Test]
     public function getFeaturePropertiesWithDeveloperFeaturesTest():void {
-        _appData.defineFeature("SETTINGS_DEVELOPER", {
+        var token:String = "SETTINGS_DEVELOPER";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
@@ -166,13 +184,21 @@ public class SLTAppDataTest {
      */
     [Test]
     public function getFeaturePropertiesWithNullResultTest():void {
-        _appData.defineFeature("SETTINGS_DEVELOPER", {
+        var token:String = "SETTINGS_DEVELOPER";
+        validateFeatureToken(token);
+        _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
             }
         }, SLTConfig.FEATURE_TYPE_GENERIC, false);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(null, _appData.getFeatureProperties("SETTINGS_DEVELOPER"));
+    }
+    
+    private function validateFeatureToken(token:String):void {
+        if (!SLTUtils.validateFeatureToken(token)) {
+            throw new Error("feature's token value is incorrect.");
+        }
     }
 }
 }

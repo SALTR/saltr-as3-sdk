@@ -19,7 +19,6 @@ import saltr.status.SLTStatusAppDataLoadFail;
 import saltr.status.SLTStatusAppDataParseError;
 import saltr.status.SLTStatusLevelContentLoadFail;
 import saltr.status.SLTStatusLevelsParseError;
-import saltr.utils.SLTUtils;
 import saltr.utils.dialog.SLTWebDialogController;
 
 use namespace saltr_internal;
