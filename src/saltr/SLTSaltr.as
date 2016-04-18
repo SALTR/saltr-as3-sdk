@@ -129,6 +129,27 @@ public class SLTSaltr implements ISLTSaltr {
         //abstract...
     }
 
+    public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
+        if (!_started) {
+            throw new Error("Method 'initLevelContent' should be called after 'start()' only.");
+        }
+        sltLevel.contentReady = false;
+
+        if(fromSaltr) {
+            initLevelContentFromSaltr(gameLevelsFeatureToken, sltLevel, callback);
+        }
+        else {
+            initLevelContentLocally(gameLevelsFeatureToken, sltLevel);
+            callback(true);
+        }
+    }
+
+    protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):void {
+    }
+
+    protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    }
+
     /**
      * Establishes the connection to Saltr server.
      */
@@ -153,13 +174,6 @@ public class SLTSaltr implements ISLTSaltr {
 
     protected function updateMissingProperties(basicProperties:SLTBasicProperties):void {
         //abstract....
-    }
-
-    public function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
-        return false;
-    }
-
-    public function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
     }
 
     /**

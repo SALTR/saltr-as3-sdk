@@ -11,6 +11,9 @@ use namespace saltr_internal;
 
 public class SLTSaltrWebClean extends SLTSaltr {
 
+    private var _sltLevel:SLTLevel;
+    private var _callback:Function;
+
     public function SLTSaltrWebClean(clientKey:String, deviceId:String = null, socialId:String = null) {
         super(clientKey, deviceId, socialId);
 
@@ -27,35 +30,30 @@ public class SLTSaltrWebClean extends SLTSaltr {
     }
 
 
-    //TODO::@daal, @arka.... fix this..
-    override public function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        if (!_started) {
-            throw new Error("Method 'initLevelContentFromSaltr' should be called after 'start()' only.");
-        }
-
-        var additionalCallParams:Object = {
-            gameLevelsFeatureToken: gameLevelsFeatureToken,
-            sltLevel: sltLevel,
-            callback: callback
-        };
-
-        if (canGetAppData()) {
-            additionalCallParams.context = "secondary";
-            getAppData(appDataInitLevelSuccessHandler, null, false, null, null, additionalCallParams);
-        } else {
-            appDataInitLevelSuccessHandler(additionalCallParams);
-        }
+    override public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
+        super.initLevelContent(gameLevelsFeatureToken, sltLevel, callback, true);
     }
 
-    private function appDataInitLevelSuccessHandler(data:Object):void {
-        _isWaitingForAppData = false;
 
-        var gameLevelsFeatureToken:String = data.gameLevelsFeatureToken;
-        var level:SLTLevel = data.sltLevel;
-        var callback:Function = data.callback;
-        var success:Boolean = initLevelContentLocally(gameLevelsFeatureToken, level);
+    override protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+        _sltLevel = sltLevel;
+        _callback = callback;
 
-        callback(success);
+        var params:Object = {
+            contentUrl: sltLevel.contentUrl
+        };
+
+        var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
+        levelContentApiCall.call(params, levelContentLoadSuccessCallback, levelContentLoadFailCallback, _requestIdleTimeout);
+    }
+
+    private function levelContentLoadSuccessCallback(data:Object):void {
+        _sltLevel.updateContent(data);
+        _callback(true);
+    }
+
+    private function levelContentLoadFailCallback():void {
+        _callback(false);
     }
 }
 }

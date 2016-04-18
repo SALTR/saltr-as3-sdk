@@ -97,14 +97,15 @@ public class SLTSaltrMobileClean extends SLTSaltr {
      * @param sltLevel The level.
      * @return TRUE if success, FALSE otherwise.
      */
-    override public function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
+    override protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):void {
         var content:Object = loadLevelContentInternally(gameLevelsFeatureToken, sltLevel);
-        if (null != content) {
-            sltLevel.updateContent(content);
-            return true;
-        } else {
-            return false;
+        if(content == null) {
+            throw new Error("[initLevelContentLocally] Level with globalIndex = " + sltLevel.globalIndex + " is missing in '" + gameLevelsFeatureToken+"' game feature");
         }
+        else {
+            sltLevel.updateContent(content);
+        }
+
     }
 
     /**
@@ -113,11 +114,7 @@ public class SLTSaltrMobileClean extends SLTSaltr {
      * @param sltLevel The level.
      * @param callback The callback function. Called when level initialization completed.
      */
-    override public function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        if (!_started) {
-            throw new Error("Method 'initLevelContentFromSaltr' should be called after 'start()' only.");
-        }
-
+    override protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
         var additionalCallParams:Object = {
             gameLevelsFeatureToken: gameLevelsFeatureToken,
             sltLevel: sltLevel,
@@ -147,9 +144,8 @@ public class SLTSaltrMobileClean extends SLTSaltr {
         var gameLevelsFeatureToken:String = data.gameLevelsFeatureToken;
         var level:SLTLevel = data.sltLevel;
         var callback:Function = data.callback;
-        var success:Boolean = initLevelContentLocally(gameLevelsFeatureToken, level);
-
-        callback(success);
+        initLevelContentLocally(gameLevelsFeatureToken, level);
+        callback(true);
     }
 }
 }

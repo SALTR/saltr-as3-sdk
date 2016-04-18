@@ -102,6 +102,14 @@ public class SLTLevel {
     }
 
     /**
+     * Updates contentReady value. For internal use only.
+     * @param contentReady
+     */
+    public function set contentReady(value:Boolean):void {
+        _contentReady = value;
+    }
+
+    /**
      * The current version of the level.
      */
     public function get version():String {
@@ -218,6 +226,5 @@ public class SLTLevel {
         }
         return null;
     }
-
 }
 }
