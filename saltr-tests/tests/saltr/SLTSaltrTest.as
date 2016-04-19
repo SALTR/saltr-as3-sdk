@@ -4,7 +4,7 @@
 package tests.saltr {
 import saltr.SLTConfig;
 import saltr.SLTSaltrMobile;
-import saltr.SLTSaltrWeb;
+import saltr.SLTSaltrWebOld;
 import saltr.game.SLTLevel;
 import saltr.saltr_internal;
 
@@ -13,7 +13,7 @@ use namespace saltr_internal;
 public class SLTSaltrTest {
     public static const GAME_LEVELS_FEATURE:String = SLTConfig.DEFAULT_GAME_LEVELS_FEATURE_TOKEN;
     private var _saltrMobile:SLTSaltrMobile;
-    private var _saltrWeb:SLTSaltrWeb;
+    private var _saltrWeb:SLTSaltrWebOld;
     private var _isSaltrMobile:Boolean;
 
     public function SLTSaltrTest() {
@@ -24,7 +24,7 @@ public class SLTSaltrTest {
         _isSaltrMobile = true;
     }
 
-    protected function setSaltrWeb(saltr:SLTSaltrWeb):void {
+    protected function setSaltrWeb(saltr:SLTSaltrWebOld):void {
         _saltrWeb = saltr;
         _isSaltrMobile = false;
     }
