@@ -2,6 +2,7 @@
  * Created by daal on 4/8/16.
  */
 package saltr.api.call.factory {
+import saltr.SLTAppData;
 import saltr.api.call.SLTAddPropertiesApiCall;
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTHeartbeatApiCall;
@@ -11,14 +12,14 @@ import saltr.api.call.mobile.SLTMobileAppDataApiCall;
 
 public class SLTMobileApiCallFactory extends SLTApiCallFactory {
 
-    override public function getCall(name:String):SLTApiCall {
+    override public function getCall(name:String, appData:SLTAppData = null):SLTApiCall {
         var apiCall:SLTApiCall = null;
         switch (name) {
             case API_CALL_ADD_PROPERTIES :
                 apiCall = new SLTAddPropertiesApiCall();
                 break;
             case API_CALL_APP_DATA :
-                apiCall = new SLTMobileAppDataApiCall();
+                apiCall = new SLTMobileAppDataApiCall(appData);
                 break;
             case API_CALL_HEARTBEAT :
                 apiCall = new SLTHeartbeatApiCall();

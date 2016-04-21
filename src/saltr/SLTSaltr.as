@@ -294,7 +294,7 @@ public class SLTSaltr implements ISLTSaltr {
             }
         }
 
-        var appDataCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_APP_DATA);
+        var appDataCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, _appData);
         appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
         SLTLogger.getInstance().log("New app data requested.");
     }

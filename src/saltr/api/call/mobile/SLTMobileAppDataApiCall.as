@@ -6,9 +6,9 @@ import flash.events.Event;
 import flash.utils.Dictionary;
 
 import saltr.SLTAppData;
+
 import saltr.SLTFeature;
 import saltr.SLTFeatureValidator;
-import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.SLTAppDataApiCall;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
@@ -32,18 +32,14 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     private var _validator:SLTFeatureValidator;
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
-    private var _appData:SLTAppData;
-
 
     private var _dataToSendBackIfSecondaryContext : Object;
 
-    public function SLTMobileAppDataApiCall() {
-        super();
+    public function SLTMobileAppDataApiCall(appData:SLTAppData) {
+        super(appData);
 
         _validator = new SLTFeatureValidator();
         _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-
-        _appData = new SLTAppData();
 
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, 0);
     }

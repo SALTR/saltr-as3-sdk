@@ -2,6 +2,7 @@
  * Created by daal on 4/13/15.
  */
 package saltr.api.call.factory {
+import saltr.SLTAppData;
 import saltr.api.call.*;
 
 import starling.errors.AbstractClassError;
@@ -25,7 +26,7 @@ public class SLTApiCallFactory {
     }
 
 
-    public function getCall(name:String):SLTApiCall {
+    public function getCall(name:String, appData:SLTAppData = null):SLTApiCall {
         throw new AbstractClassError();
     }
 }

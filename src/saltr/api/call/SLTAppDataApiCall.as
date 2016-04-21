@@ -1,6 +1,8 @@
 package saltr.api.call {
 import flash.net.URLVariables;
 
+import saltr.SLTAppData;
+
 import saltr.SLTConfig;
 import saltr.saltr_internal;
 
@@ -10,8 +12,10 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTAppDataApiCall extends SLTApiCall {
+    protected var _appData:SLTAppData;
 
-    public function SLTAppDataApiCall(isMobile:Boolean = true) {
+    public function SLTAppDataApiCall(appData:SLTAppData, isMobile:Boolean = true) {
+        _appData = appData;
         super(isMobile);
     }
 
