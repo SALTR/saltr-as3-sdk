@@ -75,7 +75,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     private function wrappedSuccessCallbackSecondaryContext(data:Object):void {
         if (processNewAppData(data)) {
             var newLevel:SLTLevel = _appData.getGameLevelsProperties(_params.gameLevelsFeatureToken).getLevelByGlobalIndex(_params.sltLevel.globalIndex);
-            _dataToSendBackIfSecondaryContext.sltLevel = newLevel;
             _levelUpdater.addEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
             _levelUpdater.updateLevel(_params.gameLevelsFeatureToken, newLevel);
         } else {
