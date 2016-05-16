@@ -7,7 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 
@@ -34,14 +34,14 @@ public class SLTDefineGameLevelsMobileTest {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     public function SLTDefineGameLevelsMobileTest() {
     }
 
     [Before]
     public function tearUp():void {
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
     }
 

@@ -7,7 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 import saltr.game.SLTBoard;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
@@ -26,7 +26,7 @@ public class SLTInitLevelContentMobileTest {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     [Rule]
     public var mocks:MockolateRule = new MockolateRule();
@@ -38,7 +38,7 @@ public class SLTInitLevelContentMobileTest {
 
     [Before]
     public function tearUp():void {
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
 
         _saltr.defineGenericFeature("SETTINGS", {

@@ -8,7 +8,7 @@ import mockolate.stub;
 import org.flexunit.asserts.assertEquals;
 
 import saltr.SLTExperiment;
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.repository.SLTMobileRepository;
 import saltr.saltr_internal;
@@ -28,7 +28,7 @@ public class SLTSaltrMobileTestWithConnection {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     [Rule]
     public var mocks:MockolateRule = new MockolateRule();
@@ -52,7 +52,7 @@ public class SLTSaltrMobileTestWithConnection {
 
         stub(apiFactory).method("getCall").returns(apiCallMock);
 
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.apiFactory = apiFactory;
         _saltr.repository = mobileRepository;
 

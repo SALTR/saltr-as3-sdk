@@ -7,7 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 
@@ -20,7 +20,7 @@ public class SLTStartTest {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     [Rule]
     public var mocks:MockolateRule = new MockolateRule();
@@ -41,7 +41,7 @@ public class SLTStartTest {
      */
     [Test(expects="Error")]
     public function startWithDeviceIdNullCheck():void {
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, null);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, null);
         _saltr.start();
     }
 
@@ -52,7 +52,7 @@ public class SLTStartTest {
     [Test]
     public function startWithAppDataInitEmptyCheck():void {
         stub(mobileRepository).method("getObjectFromCache").returns(null);
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
         _saltr.start();
         var testPassed:Boolean = true;
@@ -69,7 +69,7 @@ public class SLTStartTest {
     [Test]
     public function startWithAppDataInitWithDataCheck():void {
         stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new AppDataCacheJson()));
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
         _saltr.start();
         assertEquals(1, _saltr.experiments.length);
