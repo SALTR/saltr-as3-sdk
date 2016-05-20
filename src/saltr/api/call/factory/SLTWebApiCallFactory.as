@@ -25,7 +25,7 @@ public class SLTWebApiCallFactory extends SLTApiCallFactory {
                 apiCall = new SLTHeartbeatApiCall(false);
                 break;
             case API_CALL_LEVEL_CONTENT :
-                apiCall = new SLTLevelContentApiCall(false);
+                apiCall = new SLTLevelContentApiCall(false, true);
                 break;
             case API_CALL_SEND_LEVEL_END :
                 apiCall = new SLTSendLevelEndEventApiCall(false);

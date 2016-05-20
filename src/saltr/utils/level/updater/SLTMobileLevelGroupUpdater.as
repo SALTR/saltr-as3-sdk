@@ -7,7 +7,6 @@ import flash.events.EventDispatcher;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -123,7 +122,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
         }
     }
 
-    private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:Object):void {
+    private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:String):void {
         if (_isCancelled) {
             return;
         }

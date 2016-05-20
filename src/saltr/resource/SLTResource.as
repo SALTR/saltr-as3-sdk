@@ -13,6 +13,7 @@ import flash.events.TimerEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.utils.Timer;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -39,7 +40,7 @@ public class SLTResource {
     private var _onFail:Function;
     private var _onProgress:Function;
 
-     /**
+    /**
      * Class constructor.
      * @param id The id of asset.
      * @param ticket The ticket for loading the asset.
@@ -87,12 +88,19 @@ public class SLTResource {
     saltr_internal function get jsonData():Object {
         var json:Object = null;
         try {
-            json = JSON.parse(String(_urlLoader.data));
+            json = JSON.parse(_urlLoader.data);
         }
         catch (e:Error) {
             trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
         }
         return json;
+    }
+
+    /**
+     * The String data.
+     */
+    saltr_internal function get data():String {
+        return _urlLoader.data
     }
 
     /**

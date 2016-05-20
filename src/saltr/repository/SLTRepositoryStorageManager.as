@@ -159,16 +159,16 @@ public class SLTRepositoryStorageManager {
      * @param gameLevelsFeatureToken The "GameLevels" feature token the level belong to.
      * @param globalIndex The global index of the level.
      * @param version The version of the level.
-     * @param object The level to store.
+     * @param content The level to store.
      */
-    saltr_internal function cacheLevelContent(gameLevelsFeatureToken:String, globalIndex:int, version:String, object:Object):void {
+    saltr_internal function cacheLevelContent(gameLevelsFeatureToken:String, globalIndex:int, version:String, content:String):void {
         var cachedLevelFileName:String = getCachedLevelUrl(gameLevelsFeatureToken, globalIndex);
-        _repository.cacheObject(cachedLevelFileName, object);
+        _repository.cacheObject(cachedLevelFileName, content);
         //versions save here
         var cachedLevelVersionsFileName:String = getCachedLevelVersionsUrl(gameLevelsFeatureToken);
         var cachedLevelVersions:Array = _repository.getObjectFromCache(cachedLevelVersionsFileName) as Array;
         if (null == cachedLevelVersions) {
-            cachedLevelVersions = new Array();
+            cachedLevelVersions = [];
         }
 
         var versionUpdated:Boolean = false;
@@ -181,7 +181,7 @@ public class SLTRepositoryStorageManager {
             }
         }
         if (!versionUpdated) {
-            var objectToAdd:Object = new Object();
+            var objectToAdd:Object = {};
             objectToAdd["globalIndex"] = globalIndex;
             objectToAdd["version"] = int(version);
             cachedLevelVersions.push(objectToAdd);

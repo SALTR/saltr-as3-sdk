@@ -92,8 +92,9 @@ public class SLTMobileRepository implements ISLTRepository {
 
     private function saveInternal(file:File, objectToSave:Object):void {
         try {
+            var objectAsString : String = objectToSave is String ? objectToSave as String : JSON.stringify(objectToSave);
             _fileStream.open(file, FileMode.WRITE);
-            _fileStream.writeUTFBytes(JSON.stringify(objectToSave));
+            _fileStream.writeUTFBytes(objectAsString);
             _fileStream.close();
         }
         catch (error:Error) {

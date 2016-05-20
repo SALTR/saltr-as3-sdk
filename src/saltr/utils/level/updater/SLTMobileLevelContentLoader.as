@@ -59,7 +59,7 @@ public class SLTMobileLevelContentLoader {
         return  _repositoryStorageManager.getLevelVersionsFileFromCache(featureToken);
     }
 
-    saltr_internal function cacheLevelContent(featureToken:String, level:SLTLevel, content:Object):void {
+    saltr_internal function cacheLevelContent(featureToken:String, level:SLTLevel, content:String):void {
         _repositoryStorageManager.cacheLevelContent(featureToken, level.globalIndex, level.version, content);
         SLTLogger.getInstance().log("Level content cached. Feature token: " + featureToken + " Global index: " + level.globalIndex + " version: " + level.version);
     }
