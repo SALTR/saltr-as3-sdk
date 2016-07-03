@@ -12,7 +12,7 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTLevelContentApiCall extends SLTApiCall {
-    private var _deserializeLevelContent;
+    private var _deserializeLevelContent:Boolean;
 
     public function SLTLevelContentApiCall(isMobile:Boolean = true, deserializeLevelContent:Boolean = false) {
         super(isMobile);
@@ -39,7 +39,7 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     override saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.success = resource.data != null;
-        apiCallResult.data= _deserializeLevelContent ? resource.jsonData : resource.data;
+        apiCallResult.data = _deserializeLevelContent ? resource.jsonData : resource.data;
         handleResult(apiCallResult);
     }
 

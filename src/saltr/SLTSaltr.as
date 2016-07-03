@@ -289,7 +289,7 @@ public class SLTSaltr implements ISLTSaltr {
         };
 
         if (additionalApiCallParams != null) {
-            for (var i in additionalApiCallParams) {
+            for (var i:String in additionalApiCallParams) {
                 params[i] = additionalApiCallParams[i];
             }
         }

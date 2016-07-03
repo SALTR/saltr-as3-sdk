@@ -6,7 +6,6 @@ package saltr {
 import flash.utils.Dictionary;
 
 import saltr.game.SLTLevel;
-
 import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
@@ -104,8 +103,8 @@ public class SLTAppData {
         for (var i:String in _defaultFeatures) {
             _activeFeatures[i] = _defaultFeatures[i];
         }
-        for (var i:String in _defaultGameLevelsFeatures) {
-            _gameLevelsFeatures[i] = _defaultGameLevelsFeatures[i];
+        for (var j:String in _defaultGameLevelsFeatures) {
+            _gameLevelsFeatures[j] = _defaultGameLevelsFeatures[j];
         }
     }
 
