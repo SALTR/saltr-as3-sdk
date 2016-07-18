@@ -90,7 +90,7 @@ public class SLTApiCall {
             }
         }
         else {
-            var status:SLTStatus = new SLTStatus(SLTStatus.API_ERROR, "unknown API error: 'response' node is missing");
+            var status:SLTStatus = new SLTStatus(SLTStatus.API_ERROR, "unknown API error: wrong response");
             apiCallResult.status = status;
         }
 

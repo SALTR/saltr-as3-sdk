@@ -35,7 +35,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         }
         parseFixedAssets(layer, _boardConfig.cells, _boardConfig.assetMap);
         parseMatchingRuleDisabledChunks();
-        runGenerationTires(layer);
+        generateLayer(layer);
     }
 
     private function parseMatchingRuleDisabledChunks():void {
@@ -63,7 +63,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         return chunks;
     }
 
-    private function runGenerationTires(layer:SLTMatchingBoardLayer):void {
+    private function generateLayer(layer:SLTMatchingBoardLayer):void {
         _matchedAssetPositions.length = 0;
         generateAssetData(getMatchingRuleEnabledChunks(layer));
         fillLayerChunkAssetsWithMatchingRules();
