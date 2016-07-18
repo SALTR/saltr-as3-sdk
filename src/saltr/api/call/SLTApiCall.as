@@ -80,7 +80,7 @@ public class SLTApiCall {
         var success:Boolean = false;
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         var response:Object;
-        if (jsonData.hasOwnProperty("response")) {
+        if (jsonData && jsonData.hasOwnProperty("response")) {
             response = jsonData.response[0];
             success = response.success;
             if (success) {

@@ -9,11 +9,7 @@ use namespace saltr_internal;
 
 internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGeneratorBase {
     private static var INSTANCE:SLTMatchingBoardRulesEnabledGenerator;
-    // Board generation try count without breaking asset distribution rules
-    private static const TRY_COUNT_BREAKING_RULES_DISABLED:uint = 2;
-    // Board generation try count with breaking asset distribution rules except distribution by count
-    private static const TRY_COUNT_BREAKING_RULES_ENABLED:uint = 2;
-
+    
     private var _boardConfig:SLTMatchingBoardConfig;
     private var _layer:SLTMatchingBoardLayer;
     private var _matchedAssetPositions:Vector.<MatchedAssetPosition>;
@@ -68,46 +64,15 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function runGenerationTires(layer:SLTMatchingBoardLayer):void {
-        // Tire 1 - Try to generate board without breaking asset distribution rules.
-        for (var tier_1_i:int = 0; tier_1_i < TRY_COUNT_BREAKING_RULES_DISABLED; ++tier_1_i) {
-            _matchedAssetPositions.length = 0;
-            generateWithDisabledBreakingRules(layer);
-            if (_matchedAssetPositions.length <= 0) {
-                return; // Target reached. There is no need to go to next tire.
-            }
-        }
-        // Tire 2 - Try generate board with breaking rules.
-        for (var tier_2_i:int = 0; tier_2_i < TRY_COUNT_BREAKING_RULES_ENABLED; ++tier_2_i) {
-            _matchedAssetPositions.length = 0;
-            generateWithEnabledBreakingRules(layer);
-            if (_matchedAssetPositions.length <= 0) {
-                return; // Target reached. There is no need to go to next tire.
-            }
-        }
-        // Tire 3 - Breaking matching rules board generation.
         _matchedAssetPositions.length = 0;
-        generateWithForceEnabled(layer);
-    }
-
-    /*
-     Board generation without breaking asset distribution rules
-     */
-    private function generateWithDisabledBreakingRules(layer:SLTMatchingBoardLayer):void {
         generateAssetData(getMatchingRuleEnabledChunks(layer));
         fillLayerChunkAssetsWithMatchingRules();
-    }
-
-    /*
-     Board generation with breaking asset distribution rules except distribution by count
-     */
-    private function generateWithEnabledBreakingRules(layer:SLTMatchingBoardLayer):void {
-        generateWithDisabledBreakingRules(layer);
-        correctChunksMatchesWithChunkAssets();
-    }
-
-    private function generateWithForceEnabled(layer:SLTMatchingBoardLayer):void {
-        generateWithEnabledBreakingRules(layer);
-        fillLayerMissingChunkAssetsWithoutMatchingRules(layer);
+        if (_matchedAssetPositions.length > 0) {
+            correctChunksMatchesWithChunkAssets();
+        }
+        if (_matchedAssetPositions.length > 0) {
+            fillLayerMissingChunkAssetsWithoutMatchingRules(layer);
+        }
     }
 
     private function fillLayerMissingChunkAssetsWithoutMatchingRules(layer:SLTMatchingBoardLayer):void {
@@ -132,10 +97,8 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     private function correctChunksMatchesWithChunkAssets():void {
         var correctionAssets:Vector.<SLTChunkAssetDatum>;
         var appendingResult:Boolean = false;
-        var matchedAssetPositions:Vector.<MatchedAssetPosition> = _matchedAssetPositions.concat();
-
-        for (var i:uint = 0, positionsLength:int = matchedAssetPositions.length; i < positionsLength; ++i) {
-            var matchedCellPosition:MatchedAssetPosition = matchedAssetPositions[i];
+        for (var i:int = _matchedAssetPositions.length - 1; i >= 0; --i) {
+            var matchedCellPosition:MatchedAssetPosition = _matchedAssetPositions[i];
             var chunk:SLTChunk = _layer.getChunkWithCellPosition(matchedCellPosition.col, matchedCellPosition.row);
             correctionAssets = chunk.uniqueInAvailableAssetData;
             for (var j:uint = 0, assetsLength:int = correctionAssets.length; j < assetsLength; ++j) {
