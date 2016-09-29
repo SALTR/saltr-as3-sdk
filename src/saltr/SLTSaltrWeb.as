@@ -6,6 +6,7 @@ import saltr.api.call.SLTApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTWebApiCallFactory;
 import saltr.game.SLTLevel;
+import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
@@ -52,7 +53,7 @@ public class SLTSaltrWeb extends SLTSaltr {
         _callback(true);
     }
 
-    private function levelContentLoadFailCallback():void {
+    private function levelContentLoadFailCallback(status:SLTStatus):void {
         _callback(false);
     }
 }
