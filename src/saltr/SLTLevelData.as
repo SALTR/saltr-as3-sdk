@@ -36,6 +36,20 @@ public class SLTLevelData {
     }
 
     /**
+     * Provides level with given level token
+     * @param token The token of the level
+     */
+    public function getLevelByToken(token:String):SLTLevel {
+        for (var i:int = 0, len:int = _levels.length; i < len; ++i) {
+            var level:SLTLevel = _levels[i];
+            if (token == level.levelToken) {
+                return level;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Provides level with given global index
      * @param index The global index
      */
