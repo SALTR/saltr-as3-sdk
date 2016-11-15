@@ -34,7 +34,7 @@ public class SLTResourceURLTicket {
     private var _checkPolicy:Boolean;
     private var _useSameDomain:Boolean;
     private var _maxAttempts:int;
-    private var _dropTimeout:int;
+    private var _dropTimeout:Number;
 
 
     /**
@@ -49,7 +49,7 @@ public class SLTResourceURLTicket {
         _manageCookies = true;
         _useCache = true;
         //
-        _idleTimeout = 3000;
+        _idleTimeout = 3000.0;
         _userAgent = null;
         //
         _url = url;
@@ -59,7 +59,7 @@ public class SLTResourceURLTicket {
         _checkPolicy = false;
         _maxAttempts = 3;
         _useSameDomain = true;
-        _dropTimeout = 0;
+        _dropTimeout = 0.0;
     }
 
     /**
@@ -332,14 +332,14 @@ public class SLTResourceURLTicket {
     /**
      * Dropping timeout.
      */
-    saltr_internal function get dropTimeout():int {
+    saltr_internal function get dropTimeout():Number {
         return _dropTimeout;
     }
 
     /**
      * @private
      */
-    saltr_internal function set dropTimeout(value:int):void {
+    saltr_internal function set dropTimeout(value:Number):void {
         _dropTimeout = value;
     }
 }

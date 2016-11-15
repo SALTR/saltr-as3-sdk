@@ -32,7 +32,7 @@ public class SLTResource {
     private var _ticket:SLTResourceURLTicket;
     private var _fails:int;
     private var _maxAttempts:int;
-    private var _dropTimeout:int;
+    private var _dropTimeout:Number;
     private var _httpStatus:int;
     private var _timeoutTimer:Timer;
     private var _urlLoader:URLLoader;
@@ -79,7 +79,7 @@ public class SLTResource {
      * The loaded percent.
      */
     saltr_internal function get percentLoaded():int {
-        return Math.round((bytesLoaded / bytesTotal) * 100);
+        return Math.round((bytesLoaded / bytesTotal) * 100.0);
     }
 
     /**
@@ -146,7 +146,7 @@ public class SLTResource {
     /////////////////////////////////////////////
     //Handling Dropout Timer
     protected function startDropTimeoutTimer():void {
-        if (_dropTimeout != 0) {
+        if (_dropTimeout != 0.0) {
             _timeoutTimer = new Timer(_dropTimeout, 1);
             _timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, dropTimeOutTimerHandler);
             _timeoutTimer.start();

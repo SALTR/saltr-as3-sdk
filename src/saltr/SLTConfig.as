@@ -45,7 +45,7 @@ public class SLTConfig {
     saltr_internal static const DEVICE_PLATFORM_ANDROID:String = "android";
     saltr_internal static const DEVICE_PLATFORM_IOS:String = "ios";
 
-    saltr_internal static const HEARTBEAT_TIMER_DELAY:Number = 120000;
+    saltr_internal static const HEARTBEAT_TIMER_DELAY:Number = 120000.0;
 
     saltr_internal static const FEATURE_TYPE_GENERIC:String = "generic";
     saltr_internal static const FEATURE_TYPE_LEVEL_COLLECTION:String = "levelCollection";

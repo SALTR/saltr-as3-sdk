@@ -143,13 +143,13 @@ internal class SLTChunk {
     }
 
     private function resetChunkCells():void {
-        for (var i:int = 0, len:int = _chunkCells.length; i < len; ++i) {
+        for (var i:int = 0, i_len:int = _chunkCells.length; i < i_len; ++i) {
             _chunkCells[i].removeAssetInstance(_layerToken, _layerIndex);
         }
     }
 
     private function addToAvailableAssetData(assetData:Vector.<SLTChunkAssetDatum>):void {
-        for (var i:int = 0, length:int = assetData.length; i < length; ++i) {
+        for (var i:int = 0, i_len:int = assetData.length; i < i_len; ++i) {
             _availableAssetData.push(assetData[i]);
         }
     }
