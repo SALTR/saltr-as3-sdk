@@ -17,6 +17,7 @@ public class SLTConfig {
     saltr_internal static const ACTION_DEV_REGISTER_USER:String = "registerUser";
     saltr_internal static const ACTION_DEV_ADD_LEVELEND_EVENT:String = "addLevelEndEvent";
     saltr_internal static const ACTION_HEARTBEAT:String = "heartbeat";
+    saltr_internal static const ACTION_LEVEL_REPORT:String = "levelReport";
 
     saltr_internal static const SALTR_API_URL:String = "https://api.saltr.com/call";
     saltr_internal static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";

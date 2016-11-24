@@ -150,6 +150,18 @@ public class SLTSaltr implements ISLTSaltr {
     protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
     }
 
+    public function sendLevelReport(successCallback:Function, failCallback:Function, properties:Object):void {
+        var params : Object = {
+            clientKey: _clientKey,
+            deviceId: _deviceId,
+            socialId: _socialId,
+            levelReportEventProperties : properties
+        };
+
+        var levelReportApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_REPORT);
+        levelReportApiCall.call(params, successCallback, failCallback, _requestIdleTimeout);
+    }
+
     /**
      * Establishes the connection to Saltr server.
      */

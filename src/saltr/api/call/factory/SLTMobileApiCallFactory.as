@@ -3,6 +3,7 @@
  */
 package saltr.api.call.factory {
 import saltr.SLTAppData;
+import saltr.api.call.SLTLevelReportApiCall;
 import saltr.api.call.SLTAddPropertiesApiCall;
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTHeartbeatApiCall;
@@ -29,6 +30,9 @@ public class SLTMobileApiCallFactory extends SLTApiCallFactory {
                 break;
             case API_CALL_SEND_LEVEL_END :
                 apiCall = new SLTSendLevelEndEventApiCall();
+                break;
+            case API_CALL_LEVEL_REPORT :
+                apiCall = new SLTLevelReportApiCall();
                 break;
             default :
                 throw new Error("Unknown call API name.");

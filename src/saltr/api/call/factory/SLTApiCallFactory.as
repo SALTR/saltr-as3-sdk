@@ -13,7 +13,7 @@ public class SLTApiCallFactory {
     public static const API_CALL_HEARTBEAT:String = "Heartbeat";
     public static const API_CALL_LEVEL_CONTENT:String = "LevelContent";
     public static const API_CALL_SEND_LEVEL_END:String = "SendLevelEnd";
-
+    public static const API_CALL_LEVEL_REPORT:String = "LevelReport";
 
     private static var _factory : SLTApiCallFactory;
 
