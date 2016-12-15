@@ -56,7 +56,15 @@ internal class SLTMatchingBoardGeneratorBase {
             var cell:SLTCell = cells.retrieve(assetInstanceNode.col, assetInstanceNode.row);
             cell.removeAssetInstance(layer.token, layer.index);
             var positions:Array = getAssetInstancePositions(assetInstanceNode);
-            cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, positions));
+            var assetInstance : SLTAssetInstance;
+            if(asset is SLTMultiCellAsset) {
+                var multiCellAsset : SLTMultiCellAsset = asset as SLTMultiCellAsset;
+                assetInstance = new SLTMultiCellAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, multiCellAsset.cells, multiCellAsset.startPoint, positions);
+            }
+            else {
+                assetInstance = new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, positions);
+            }
+            cell.setAssetInstance(layer.token, layer.index, assetInstance);
         }
     }
 

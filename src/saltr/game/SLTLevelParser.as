@@ -7,6 +7,7 @@ import flash.utils.Dictionary;
 
 import saltr.game.canvas2d.SLT2DBoardParser;
 import saltr.game.matching.SLTMatchingBoardParser;
+import saltr.game.matching.SLTMultiCellAsset;
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -90,6 +91,7 @@ public class SLTLevelParser {
         var token:String;
         var statesMap:Dictionary;
         var properties:Object = null;
+        var asset : SLTAsset;
 
         if (assetNode.hasOwnProperty("token")) {
             token = assetNode.token;
@@ -103,7 +105,14 @@ public class SLTLevelParser {
             properties = assetNode.properties;
         }
 
-        return new SLTAsset(token, statesMap, properties);
+        if(assetNode.hasOwnProperty("startPoint")) {
+            asset = new SLTMultiCellAsset(token, assetNode.cells, assetNode.startPoint, statesMap, properties);
+        }
+        else {
+            asset = new SLTAsset(token, statesMap, properties);
+        }
+
+        return asset;
     }
 
     private function parseAssetStates(stateNodes:Object, boardType:String):Dictionary {

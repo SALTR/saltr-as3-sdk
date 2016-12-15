@@ -18,6 +18,7 @@ public class SLTAssetInstance {
      * @param token The unique identifier of the asset.
      * @param state The current instance state.
      * @param properties The current instance properties.
+     * @param positions The alt positions of the asset
      */
     public function SLTAssetInstance(token:String, state:SLTAssetState, properties:Object, positions:Array = null) {
         _token = token;
