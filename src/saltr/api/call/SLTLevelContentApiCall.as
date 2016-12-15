@@ -13,6 +13,7 @@ use namespace saltr_internal;
  */
 public class SLTLevelContentApiCall extends SLTApiCall {
     private var _deserializeLevelContent:Boolean;
+    private var _alternateUrl:String;
 
     public function SLTLevelContentApiCall(isMobile:Boolean = true, deserializeLevelContent:Boolean = false) {
         super(isMobile);
@@ -28,12 +29,34 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     }
 
     override saltr_internal function buildCall():URLVariables {
-        _url = _params.contentUrl + "?_time_=" + new Date().getTime();
+        _url = _params.contentUrl;
+        _alternateUrl = _params.alternateUrl;
         return null;
     }
 
     override saltr_internal function getURLTicket(urlVars:URLVariables, timeout:int):SLTResourceURLTicket {
-        return SLTApiCall.getTicket(_url, urlVars, timeout, URLRequestMethod.GET);
+        var resourceURLTicket:SLTResourceURLTicket = SLTApiCall.getTicket(_url, urlVars, timeout, URLRequestMethod.GET);
+        resourceURLTicket.maxAttempts = 1;
+        return resourceURLTicket;
+    }
+
+    override saltr_internal function callRequestFailHandler(resource:SLTResource):void {
+        if (_alternateUrl) {
+            var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(_alternateUrl);
+            var resource:SLTResource = new SLTResource("apiCallAlternate", ticket, alternateCallRequestCompletedHandler, alternateCallRequestFailHandler);
+            resource.load();
+        }
+        else {
+            alternateCallRequestFailHandler(resource);
+        }
+    }
+
+    private function alternateCallRequestCompletedHandler(resource:SLTResource):void {
+        callRequestCompletedHandler(resource);
+    }
+
+    private function alternateCallRequestFailHandler(resource:SLTResource):void {
+        super.saltr_internal::callRequestFailHandler(resource);
     }
 
     override saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {

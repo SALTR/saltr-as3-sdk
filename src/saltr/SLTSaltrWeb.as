@@ -2,6 +2,7 @@
  * Created by daal on 4/7/16.
  */
 package saltr {
+
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTWebApiCallFactory;
@@ -41,7 +42,8 @@ public class SLTSaltrWeb extends SLTSaltr {
         _callback = callback;
 
         var params:Object = {
-            contentUrl: sltLevel.contentUrl
+            contentUrl: sltLevel.contentUrl,
+            alternateUrl: sltLevel.alternateContentUrl
         };
 
         var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
