@@ -43,8 +43,7 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     override saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         if (_alternateUrl) {
             var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(_alternateUrl);
-            resource = new SLTResource("apiCallAlternate", ticket, alternateCallRequestCompletedHandler, alternateCallRequestFailHandler);
-            resource.load();
+            new SLTResource("apiCallAlternate", ticket, alternateCallRequestCompletedHandler, alternateCallRequestFailHandler).load();
         }
         else {
             alternateCallRequestFailHandler(resource);
