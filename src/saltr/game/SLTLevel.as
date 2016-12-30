@@ -212,8 +212,8 @@ public class SLTLevel {
             }
         }
         if (null != _canvas2DBoards) {
-            for (var canvasBoardtoken:String in _canvas2DBoards) {
-                regenerateBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, canvasBoardtoken);
+            for (var canvasBoardToken:String in _canvas2DBoards) {
+                regenerateBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, canvasBoardToken);
             }
         }
     }
