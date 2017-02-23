@@ -37,6 +37,8 @@ public dynamic class SLTBasicProperties extends Object {
     private var _location:String;       //The location (latitude/longitude) of the user. E.g. 37.775,-122.4183.
                                         //Set to (locate) to detect the location based on the IP address of the caller.
 
+    private var _paying:Boolean;        //The flag indicating is the user paying or not.
+
     /**
      * Class constructor.
      */
@@ -248,6 +250,14 @@ public dynamic class SLTBasicProperties extends Object {
      */
     public function set appVersion(value:String):void {
         _appVersion = value;
+    }
+
+    public function get paying():Boolean {
+        return _paying;
+    }
+
+    public function set paying(value:Boolean):void {
+        _paying = value;
     }
 }
 }
