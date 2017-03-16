@@ -32,9 +32,8 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     private var _isInProcess:Boolean;
     private var _isCancelled:Boolean;
 
-    public function SLTMobileLevelGroupUpdater(repositoryStorageManager:SLTRepositoryStorageManager,
-                                               requestIdleTimeout:int, dropTimeout:int, progressiveTimeout:int, featureToken:String, allLevels:Vector.<SLTLevel>) {
-        _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, requestIdleTimeout, dropTimeout, progressiveTimeout);
+    public function SLTMobileLevelGroupUpdater(featureToken:String, allLevels:Vector.<SLTLevel>, repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
+        _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, nativeTimeout, dropTimeout, timeoutIncrease);
         _isCancelled = false;
         resetUpdateProcess();
         _featureToken = featureToken;

@@ -17,23 +17,15 @@ use namespace saltr_internal;
  */
 public class SLTMobileLevelContentLoader {
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
-    private var _requestIdleTimeout:int;
+    private var _nativeTimeout:int;
     private var _dropTimeout:int;
-    private var _progressiveTimeout:int;
+    private var _timeoutIncrease:int;
 
-    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, requestIdleTimeout:int, dropTimeout:int, progressiveTimeout:int) {
+    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
         _repositoryStorageManager = repositoryStorageManager;
-        _requestIdleTimeout = requestIdleTimeout;
+        _nativeTimeout = nativeTimeout;
         _dropTimeout = dropTimeout;
-        _progressiveTimeout = progressiveTimeout;
-    }
-
-    saltr_internal function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
-        _repositoryStorageManager = value;
-    }
-
-    saltr_internal function set requestIdleTimeout(value:int):void {
-        _requestIdleTimeout = value;
+        _timeoutIncrease = timeoutIncrease;
     }
 
     saltr_internal function loadLevelContentFromSaltr(featureToken:String, sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
@@ -51,7 +43,7 @@ public class SLTMobileLevelContentLoader {
             contentUrl: sltLevel.contentUrl
         };
         var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
-        levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout, _dropTimeout, _progressiveTimeout);
+        levelContentApiCall.call(params, successHandler, failHandler, _nativeTimeout, _dropTimeout, _timeoutIncrease);
         SLTLogger.getInstance().log("Level content from Saltr requested. Feature token: " + featureToken + " Global index: " + sltLevel.globalIndex);
     }
 

@@ -39,7 +39,7 @@ public class SLTResource {
     private var _onSuccess:Function;
     private var _onFail:Function;
     private var _onProgress:Function;
-    private var _progressiveTimeout:int;
+    private var _timeoutIncrease:int;
 
     /**
      * Class constructor.
@@ -59,7 +59,7 @@ public class SLTResource {
         _fails = 0;
         _dropTimeout = _ticket.dropTimeout;
         _httpStatus = -1;
-        _progressiveTimeout = _ticket.progressiveTimeout;
+        _timeoutIncrease = _ticket.timeoutIncrease;
         initLoader();
     }
 
@@ -148,7 +148,7 @@ public class SLTResource {
     //Handling Dropout Timer
     protected function startDropTimeoutTimer():void {
         if (_dropTimeout != 0.0) {
-            _timeoutTimer = new Timer(_dropTimeout + _fails * _progressiveTimeout, 1);
+            _timeoutTimer = new Timer(_dropTimeout + _fails * _timeoutIncrease, 1);
             _timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, dropTimeOutTimerHandler);
             _timeoutTimer.start();
         }

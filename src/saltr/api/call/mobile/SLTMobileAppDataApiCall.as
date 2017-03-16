@@ -44,17 +44,16 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, 0);
     }
 
-    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0, dropTimeout:int = 0, progressiveTimeout:int = 0):void {
+    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, nativeTimeout:int = 0, dropTimeout:int = 0, timeoutIncrease:int = 0):void {
         _originalFailCallback = failCallback;
         _originalSuccessCallback = successCallback;
 
-
-        _levelUpdater.requestIdleTimeout = timeout;
+        _levelUpdater.nativeTimeout = nativeTimeout;
         _levelUpdater.dropTimeout = dropTimeout;
-        _levelUpdater.progressiveTimeout = progressiveTimeout;
+        _levelUpdater.timeoutIncrease = timeoutIncrease;
 
         if (params.context == CTX_MAIN) {
-            super.call(params, wrappedSuccessCallbackMainContext, wrappedFailCallbackMainContext, timeout, dropTimeout, progressiveTimeout);
+            super.call(params, wrappedSuccessCallbackMainContext, wrappedFailCallbackMainContext, nativeTimeout, dropTimeout, timeoutIncrease);
         }
         else {
             _dataToSendBackIfSecondaryContext = {
@@ -63,7 +62,7 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
                 callback: params.callback
             };
 
-            super.call(params, wrappedSuccessCallbackSecondaryContext, wrappedFailCallbackSecondaryContext, timeout, dropTimeout, progressiveTimeout);
+            super.call(params, wrappedSuccessCallbackSecondaryContext, wrappedFailCallbackSecondaryContext, nativeTimeout, dropTimeout, timeoutIncrease);
         }
     }
 

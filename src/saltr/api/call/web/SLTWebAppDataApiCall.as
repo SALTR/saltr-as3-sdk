@@ -28,11 +28,11 @@ public class SLTWebAppDataApiCall extends SLTAppDataApiCall {
         _validator = new SLTFeatureValidator();
     }
 
-    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0, dropTimeout:int = 0, progressiveTimeout:int = 0):void {
+    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, nativeTimeout:int = 0, dropTimeout:int = 0, timeoutIncrease:int = 0):void {
         _originalFailCallback = failCallback;
         _originalSuccessCallback = successCallback;
 
-        super.call(params, wrappedSuccessCallback, wrappedFailCallback, timeout, dropTimeout, progressiveTimeout);
+        super.call(params, wrappedSuccessCallback, wrappedFailCallback, nativeTimeout, dropTimeout, timeoutIncrease);
     }
 
     private function wrappedSuccessCallback(data:Object):void {

@@ -23,6 +23,9 @@ public class SLTApiCall {
     protected var _failCallback:Function;
     protected var _isMobile:Boolean;
     protected var _client:String;
+    protected var _nativeTimeout:int;
+    protected var _dropTimeout:int;
+    protected var _timeoutIncrease:int;
 
     internal static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
         if (v != null && v != "null" && v !== "") {
@@ -45,17 +48,21 @@ public class SLTApiCall {
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0, dropTimeout:int = 0, progressiveTimeout:int = 0):void {
+    saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, nativeTimeout:int = 0, dropTimeout:int = 0, timeoutIncrease:int = 0):void {
         _params = params;
         _successCallback = successCallback;
         _failCallback = failCallback;
+        _nativeTimeout = nativeTimeout;
+        _dropTimeout = dropTimeout;
+        _timeoutIncrease = timeoutIncrease;
         var validationResult:Object = validateParams();
         if (validationResult.isValid == false) {
             returnValidationFailedResult(validationResult.message);
             return;
         }
+
         var urlVars:URLVariables = buildCall();
-        doCall(urlVars, timeout, dropTimeout,progressiveTimeout);
+        doCall(urlVars);
     }
 
     private function returnValidationFailedResult(message:String):void {
@@ -65,10 +72,10 @@ public class SLTApiCall {
         handleResult(apiCallResult);
     }
 
-    private function doCall(urlVars:URLVariables, timeout:int, dropTimeout:int, _progressiveTimeout:int):void {
-        var ticket:SLTResourceURLTicket = getURLTicket(urlVars, timeout);
-        ticket.dropTimeout = dropTimeout;
-        ticket.progressiveTimeout = _progressiveTimeout;
+    private function doCall(urlVars:URLVariables):void {
+        var ticket:SLTResourceURLTicket = getURLTicket(urlVars, _nativeTimeout);
+        ticket.dropTimeout = _dropTimeout;
+        ticket.timeoutIncrease = _timeoutIncrease;
         var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler);
         resource.load();
     }

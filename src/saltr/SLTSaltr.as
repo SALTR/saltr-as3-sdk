@@ -26,9 +26,9 @@ public class SLTSaltr implements ISLTSaltr {
     protected var _customProperties:Object;
     protected var _logger:SLTLogger;
 
-    protected var _requestIdleTimeout:int;
-    protected var _requestDropTimeout:int;
-    protected var _progressiveTimeout:int;
+    protected var _nativeTimeout:int;
+    protected var _dropTimeout:int;
+    protected var _timeoutIncrease:int;
     protected var _devMode:Boolean;
     protected var _started:Boolean;
 
@@ -49,9 +49,9 @@ public class SLTSaltr implements ISLTSaltr {
         _heartBeatTimerStarted = false;
         _devMode = false;
         _started = false;
-        _requestIdleTimeout = 0;
-        _requestDropTimeout = 0;
-        _progressiveTimeout = 0;
+        _nativeTimeout = 0;
+        _dropTimeout = 0;
+        _timeoutIncrease = 0;
         _logger = SLTLogger.getInstance();
         _appData = new SLTAppData();
 
@@ -75,24 +75,24 @@ public class SLTSaltr implements ISLTSaltr {
     }
 
     /**
-     * The request idle timeout.
+     * The request idle timeout. Works on mobile platform only. For Web version dropTimeout should be used.
      */
-    public function set requestIdleTimeout(value:int):void {
-        _requestIdleTimeout = value;
+    public function set nativeTimeout(value:int):void {
+        _nativeTimeout = value;
     }
 
     /**
      * The request drop timeout.
      */
-    public function set requestDropTimeout(value:int):void {
-        _requestDropTimeout = value;
+    public function set dropTimeout(value:int):void {
+        _dropTimeout = value;
     }
 
     /**
      * The request progressive timeout.
      */
-    public function set progressiveTimeout(value:int):void {
-        _progressiveTimeout = value;
+    public function set timeoutIncrease(value:int):void {
+        _timeoutIncrease = value;
     }
 
     /**
@@ -176,7 +176,7 @@ public class SLTSaltr implements ISLTSaltr {
         };
 
         var levelReportApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_REPORT);
-        levelReportApiCall.call(params, successCallback, failCallback, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
+        levelReportApiCall.call(params, successCallback, failCallback, _nativeTimeout, _dropTimeout, _timeoutIncrease);
     }
 
     /**
@@ -223,7 +223,7 @@ public class SLTSaltr implements ISLTSaltr {
             customProperties: customProperties
         };
         var addPropertiesApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES);
-        addPropertiesApiCall.call(params, addPropertiesSuccessHandler, addPropertiesFailHandler, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
+        addPropertiesApiCall.call(params, addPropertiesSuccessHandler, addPropertiesFailHandler, _nativeTimeout, _dropTimeout, _timeoutIncrease);
     }
 
     private function addPropertiesSuccessHandler(data:Object):void {
@@ -324,7 +324,7 @@ public class SLTSaltr implements ISLTSaltr {
         }
 
         var appDataCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, _appData);
-        appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
+        appDataCall.call(params, successHandler, failHandler, _nativeTimeout, _dropTimeout, _timeoutIncrease);
         SLTLogger.getInstance().log("New app data requested.");
     }
 

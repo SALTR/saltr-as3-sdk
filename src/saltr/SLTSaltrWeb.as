@@ -47,7 +47,7 @@ public class SLTSaltrWeb extends SLTSaltr {
         };
 
         var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
-        levelContentApiCall.call(params, levelContentLoadSuccessCallback, levelContentLoadFailCallback, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
+        levelContentApiCall.call(params, levelContentLoadSuccessCallback, levelContentLoadFailCallback, _nativeTimeout, _dropTimeout, _timeoutIncrease);
     }
 
     private function levelContentLoadSuccessCallback(data:Object):void {

@@ -120,7 +120,7 @@ public class SLTSaltrMobileOld {
      */
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
-        _levelUpdater.requestIdleTimeout = _requestIdleTimeout;
+        _levelUpdater.nativeTimeout = _requestIdleTimeout;
     }
 
     /**
