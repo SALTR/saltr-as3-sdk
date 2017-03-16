@@ -43,6 +43,8 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     override saltr_internal function callRequestFailHandler(resource:SLTResource):void {
         if (_alternateUrl) {
             var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(_alternateUrl);
+            ticket.dropTimeout = 5000;
+            ticket.progressiveTimeout = 1000;
             new SLTResource("apiCallAlternate", ticket, alternateCallRequestCompletedHandler, alternateCallRequestFailHandler).load();
         }
         else {

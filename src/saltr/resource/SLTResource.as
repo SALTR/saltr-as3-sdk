@@ -39,6 +39,7 @@ public class SLTResource {
     private var _onSuccess:Function;
     private var _onFail:Function;
     private var _onProgress:Function;
+    private var _progressiveTimeout:int;
 
     /**
      * Class constructor.
@@ -58,6 +59,7 @@ public class SLTResource {
         _fails = 0;
         _dropTimeout = _ticket.dropTimeout;
         _httpStatus = -1;
+        _progressiveTimeout = _ticket.progressiveTimeout;
         initLoader();
     }
 
@@ -107,7 +109,6 @@ public class SLTResource {
      * Starts load.
      */
     saltr_internal function load():void {
-        ++_fails;
         initLoaderListeners(_urlLoader);
         _urlLoader.load(_ticket.getURLRequest());
         startDropTimeoutTimer();
@@ -147,7 +148,7 @@ public class SLTResource {
     //Handling Dropout Timer
     protected function startDropTimeoutTimer():void {
         if (_dropTimeout != 0.0) {
-            _timeoutTimer = new Timer(_dropTimeout, 1);
+            _timeoutTimer = new Timer(_dropTimeout + _fails * _progressiveTimeout, 1);
             _timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, dropTimeOutTimerHandler);
             _timeoutTimer.start();
         }
@@ -163,11 +164,9 @@ public class SLTResource {
     }
 
     protected function dropTimeOutTimerHandler(event:TimerEvent):void {
-        stopDropTimeoutTimer();
-        _urlLoader.close();
-        removeLoaderListeners(_urlLoader);
         trace("[Asset] Loading is too long, so it stopped by force.");
-        _onFail(this);
+        _urlLoader.close();
+        loadFailed(_urlLoader);
     }
 
     /////////////////////////////////////////////
@@ -211,8 +210,12 @@ public class SLTResource {
     }
 
     private function ioErrorHandler(event:IOErrorEvent):void {
+        loadFailed(event.target as EventDispatcher);
+    }
+
+    private function loadFailed(dispatcher:EventDispatcher):void {
+        _fails++;
         stopDropTimeoutTimer();
-        var dispatcher:EventDispatcher = event.target as EventDispatcher;
         removeLoaderListeners(dispatcher);
         if (_fails == _maxAttempts) {
             _onFail(this);

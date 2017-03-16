@@ -18,10 +18,14 @@ use namespace saltr_internal;
 public class SLTMobileLevelContentLoader {
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
     private var _requestIdleTimeout:int;
+    private var _dropTimeout:int;
+    private var _progressiveTimeout:int;
 
-    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, requestIdleTimeout:int) {
+    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, requestIdleTimeout:int, dropTimeout:int, progressiveTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
         _requestIdleTimeout = requestIdleTimeout;
+        _dropTimeout = dropTimeout;
+        _progressiveTimeout = progressiveTimeout;
     }
 
     saltr_internal function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
@@ -47,7 +51,7 @@ public class SLTMobileLevelContentLoader {
             contentUrl: sltLevel.contentUrl
         };
         var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
-        levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout);
+        levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout, _dropTimeout, _progressiveTimeout);
         SLTLogger.getInstance().log("Level content from Saltr requested. Feature token: " + featureToken + " Global index: " + sltLevel.globalIndex);
     }
 
@@ -56,7 +60,7 @@ public class SLTMobileLevelContentLoader {
     }
 
     saltr_internal function getLevelVersionsFileFromCache(featureToken:String):Object {
-        return  _repositoryStorageManager.getLevelVersionsFileFromCache(featureToken);
+        return _repositoryStorageManager.getLevelVersionsFileFromCache(featureToken);
     }
 
     saltr_internal function cacheLevelContent(featureToken:String, level:SLTLevel, content:String):void {

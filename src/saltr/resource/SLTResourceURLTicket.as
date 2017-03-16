@@ -35,7 +35,7 @@ public class SLTResourceURLTicket {
     private var _useSameDomain:Boolean;
     private var _maxAttempts:int;
     private var _dropTimeout:Number;
-
+    private var _progressiveTimeout:int;
 
     /**
      * Class constructor.
@@ -60,6 +60,7 @@ public class SLTResourceURLTicket {
         _maxAttempts = 3;
         _useSameDomain = true;
         _dropTimeout = 0.0;
+        _progressiveTimeout = 0;
     }
 
     /**
@@ -341,6 +342,20 @@ public class SLTResourceURLTicket {
      */
     saltr_internal function set dropTimeout(value:Number):void {
         _dropTimeout = value;
+    }
+
+    /**
+     * @private
+     */
+    saltr_internal function get progressiveTimeout():int {
+        return _progressiveTimeout;
+    }
+
+    /**
+     * @private
+     */
+    saltr_internal function set progressiveTimeout(value:int):void {
+        _progressiveTimeout = value;
     }
 }
 }

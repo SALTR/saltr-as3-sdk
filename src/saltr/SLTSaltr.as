@@ -27,6 +27,8 @@ public class SLTSaltr implements ISLTSaltr {
     protected var _logger:SLTLogger;
 
     protected var _requestIdleTimeout:int;
+    protected var _requestDropTimeout:int;
+    protected var _progressiveTimeout:int;
     protected var _devMode:Boolean;
     protected var _started:Boolean;
 
@@ -48,7 +50,8 @@ public class SLTSaltr implements ISLTSaltr {
         _devMode = false;
         _started = false;
         _requestIdleTimeout = 0;
-
+        _requestDropTimeout = 0;
+        _progressiveTimeout = 0;
         _logger = SLTLogger.getInstance();
         _appData = new SLTAppData();
 
@@ -76,6 +79,20 @@ public class SLTSaltr implements ISLTSaltr {
      */
     public function set requestIdleTimeout(value:int):void {
         _requestIdleTimeout = value;
+    }
+
+    /**
+     * The request drop timeout.
+     */
+    public function set requestDropTimeout(value:int):void {
+        _requestDropTimeout = value;
+    }
+
+    /**
+     * The request progressive timeout.
+     */
+    public function set progressiveTimeout(value:int):void {
+        _progressiveTimeout = value;
     }
 
     /**
@@ -135,7 +152,7 @@ public class SLTSaltr implements ISLTSaltr {
         }
         sltLevel.contentReady = false;
 
-        if(fromSaltr) {
+        if (fromSaltr) {
             initLevelContentFromSaltr(gameLevelsFeatureToken, sltLevel, callback);
         }
         else {
@@ -151,15 +168,15 @@ public class SLTSaltr implements ISLTSaltr {
     }
 
     public function sendLevelReport(successCallback:Function, failCallback:Function, properties:Object):void {
-        var params : Object = {
+        var params:Object = {
             clientKey: _clientKey,
             deviceId: _deviceId,
             socialId: _socialId,
-            levelReportEventProperties : properties
+            levelReportEventProperties: properties
         };
 
         var levelReportApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_REPORT);
-        levelReportApiCall.call(params, successCallback, failCallback, _requestIdleTimeout);
+        levelReportApiCall.call(params, successCallback, failCallback, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
     }
 
     /**
@@ -206,7 +223,7 @@ public class SLTSaltr implements ISLTSaltr {
             customProperties: customProperties
         };
         var addPropertiesApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_ADD_PROPERTIES);
-        addPropertiesApiCall.call(params, addPropertiesSuccessHandler, addPropertiesFailHandler, _requestIdleTimeout);
+        addPropertiesApiCall.call(params, addPropertiesSuccessHandler, addPropertiesFailHandler, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
     }
 
     private function addPropertiesSuccessHandler(data:Object):void {
@@ -307,7 +324,7 @@ public class SLTSaltr implements ISLTSaltr {
         }
 
         var appDataCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, _appData);
-        appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout);
+        appDataCall.call(params, successHandler, failHandler, _requestIdleTimeout, _requestDropTimeout, _progressiveTimeout);
         SLTLogger.getInstance().log("New app data requested.");
     }
 

@@ -33,7 +33,7 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
 
-    private var _dataToSendBackIfSecondaryContext : Object;
+    private var _dataToSendBackIfSecondaryContext:Object;
 
     public function SLTMobileAppDataApiCall(appData:SLTAppData) {
         super(appData);
@@ -44,24 +44,26 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, 0);
     }
 
-    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {
+    override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0, dropTimeout:int = 0, progressiveTimeout:int = 0):void {
         _originalFailCallback = failCallback;
         _originalSuccessCallback = successCallback;
 
 
         _levelUpdater.requestIdleTimeout = timeout;
+        _levelUpdater.dropTimeout = dropTimeout;
+        _levelUpdater.progressiveTimeout = progressiveTimeout;
 
-        if(params.context == CTX_MAIN) {
-            super.call(params, wrappedSuccessCallbackMainContext, wrappedFailCallbackMainContext, timeout);
+        if (params.context == CTX_MAIN) {
+            super.call(params, wrappedSuccessCallbackMainContext, wrappedFailCallbackMainContext, timeout, dropTimeout, progressiveTimeout);
         }
         else {
             _dataToSendBackIfSecondaryContext = {
-                gameLevelsFeatureToken : params.gameLevelsFeatureToken,
-                sltLevel : params.sltLevel,
-                callback : params.callback
+                gameLevelsFeatureToken: params.gameLevelsFeatureToken,
+                sltLevel: params.sltLevel,
+                callback: params.callback
             };
 
-            super.call(params, wrappedSuccessCallbackSecondaryContext, wrappedFailCallbackSecondaryContext, timeout);
+            super.call(params, wrappedSuccessCallbackSecondaryContext, wrappedFailCallbackSecondaryContext, timeout, dropTimeout, progressiveTimeout);
         }
     }
 

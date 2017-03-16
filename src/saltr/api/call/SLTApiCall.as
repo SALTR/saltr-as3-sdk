@@ -45,7 +45,7 @@ public class SLTApiCall {
         _client = _isMobile ? MOBILE_CLIENT : WEB_CLIENT;
     }
 
-    saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0):void {
+    saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, timeout:int = 0, dropTimeout:int = 0, progressiveTimeout:int = 0):void {
         _params = params;
         _successCallback = successCallback;
         _failCallback = failCallback;
@@ -55,7 +55,7 @@ public class SLTApiCall {
             return;
         }
         var urlVars:URLVariables = buildCall();
-        doCall(urlVars, timeout);
+        doCall(urlVars, timeout, dropTimeout,progressiveTimeout);
     }
 
     private function returnValidationFailedResult(message:String):void {
@@ -65,8 +65,10 @@ public class SLTApiCall {
         handleResult(apiCallResult);
     }
 
-    private function doCall(urlVars:URLVariables, timeout:int):void {
+    private function doCall(urlVars:URLVariables, timeout:int, dropTimeout:int, _progressiveTimeout:int):void {
         var ticket:SLTResourceURLTicket = getURLTicket(urlVars, timeout);
+        ticket.dropTimeout = dropTimeout;
+        ticket.progressiveTimeout = _progressiveTimeout;
         var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler);
         resource.load();
     }
