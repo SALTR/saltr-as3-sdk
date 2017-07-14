@@ -4,9 +4,13 @@
 
 package saltr {
 
+import de.polygonal.ds.HashMap;
+import de.polygonal.ds.Map;
+
 import flash.utils.Dictionary;
 
 import saltr.game.SLTLevel;
+import saltr.lang.SLTLocale;
 
 use namespace saltr_internal;
 
@@ -51,6 +55,17 @@ public class SLTDeserializer {
         return levels;
     }
 
+
+    saltr_internal static function decodeLocalization(rootNode:Object):Dictionary {
+        var locales:Dictionary = new Dictionary();
+        for (var key:String in rootNode) {
+            var localeNode:Object = rootNode[key];
+            var locale:SLTLocale = new SLTLocale(localeNode.url, localeNode.version);
+            locales[key] =  locale;
+        }
+        return locales;
+    }
+
     saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary = null):Dictionary {
         var features:Dictionary = new Dictionary();
         var featureNodes:Array = rootNode.features as Array;
@@ -72,6 +87,10 @@ public class SLTDeserializer {
                         levelData.sortLevel();
                     }
                     features[token] = new SLTFeature(token, featureType, version, levelData, required);
+                } else if (SLTConfig.FEATURE_TYPE_LOCALIZATION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LOCALIZATION == featureType) {
+                    var localizationData:SLTLocalization = new SLTLocalization();
+                    localizationData.initWithData(JSON.parse(featureNode.properties));
+                    features[token] = new SLTFeature(token, featureType, version, localizationData, required);
                 } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
                     var properties:Object = canUseExistingFeatureProperties ? existingFeatures[token].properties : JSON.parse(featureNode.properties);
                     features[token] = new SLTFeature(token, featureType, version, properties, required);
@@ -115,5 +134,6 @@ public class SLTDeserializer {
         }
         return version;
     }
+
 }
 }

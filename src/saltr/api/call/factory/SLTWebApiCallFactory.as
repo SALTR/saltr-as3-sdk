@@ -8,6 +8,7 @@ import saltr.api.call.SLTAddPropertiesApiCall;
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.SLTHeartbeatApiCall;
 import saltr.api.call.SLTLevelContentApiCall;
+import saltr.api.call.SLTLocaleContentApiCall;
 import saltr.api.call.SLTSendLevelEndEventApiCall;
 import saltr.api.call.web.SLTWebAppDataApiCall;
 
@@ -27,6 +28,9 @@ public class SLTWebApiCallFactory extends SLTApiCallFactory {
                 break;
             case API_CALL_LEVEL_CONTENT :
                 apiCall = new SLTLevelContentApiCall(false, true);
+                break;
+            case API_CALL_LOCALE_CONTENT :
+                apiCall = new SLTLocaleContentApiCall(false, true);
                 break;
             case API_CALL_SEND_LEVEL_END :
                 apiCall = new SLTSendLevelEndEventApiCall(false);

@@ -19,8 +19,10 @@ public class SLTConfig {
     saltr_internal static const ACTION_HEARTBEAT:String = "heartbeat";
     saltr_internal static const ACTION_LEVEL_REPORT:String = "levelReport";
 
-    saltr_internal static const SALTR_API_URL:String = "https://api.saltr.com/call";
-    saltr_internal static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";
+//    saltr_internal static const SALTR_API_URL:String = "https://api.saltr.com/call";
+    saltr_internal static const SALTR_API_URL:String = "http://localapi.saltr.com:8081/call";
+//    saltr_internal static const SALTR_DEVAPI_URL:String = "https://devapi.saltr.com/call";
+    saltr_internal static const SALTR_DEVAPI_URL:String = "http://localadmin.saltr.com:8085/call";
 
     //used to
     saltr_internal static const DEFAULT_CONTENT_ROOT:String = "saltr";
@@ -50,5 +52,6 @@ public class SLTConfig {
 
     saltr_internal static const FEATURE_TYPE_GENERIC:String = "generic";
     saltr_internal static const FEATURE_TYPE_LEVEL_COLLECTION:String = "levelCollection";
+    saltr_internal static const FEATURE_TYPE_LOCALIZATION:String = "localization";
 }
 }

@@ -8,6 +8,7 @@ import flash.utils.Timer;
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
+import saltr.lang.SLTLocale;
 import saltr.status.SLTStatus;
 import saltr.status.SLTStatusAppDataConcurrentLoadRefused;
 import saltr.status.SLTStatusAppDataLoadFail;
@@ -159,6 +160,26 @@ public class SLTSaltr implements ISLTSaltr {
             initLevelContentLocally(gameLevelsFeatureToken, sltLevel);
             callback(true);
         }
+    }
+
+    public function initLanguageContent(localizationFeatureToken:String, sltLocale:SLTLocale, callback:Function, fromSaltr:Boolean = false):void {
+        if (!_started) {
+            throw new Error("Method 'initLanguageContent' should be called after 'start()' only.");
+        }
+
+        if (fromSaltr) {
+            initLanguageContentFromSaltr(localizationFeatureToken, sltLocale, callback);
+        }
+        else {
+            initLanguageContentLocally(localizationFeatureToken, sltLocale);
+            callback(true);
+        }
+    }
+
+    protected function initLanguageContentFromSaltr(localizationFeatureToken:String, sltLocale:SLTLocale, callback:Function):void {
+    }
+
+    protected function initLanguageContentLocally(localizationFeatureToken:String, sltLocale:SLTLocale):void {
     }
 
     protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):void {
@@ -347,6 +368,22 @@ public class SLTSaltr implements ISLTSaltr {
         if (!_heartBeatTimerStarted) {
             startHeartbeat();
         }
+    }
+
+    /**
+     * Provides the localization properties.
+     * @return SLTLocalization The localization data object.
+     */
+    public function getLocalizationProperties(localizationFeatureToken:String):SLTLocalization {
+        return _appData.getLocalizationProperties(localizationFeatureToken);
+    }
+
+    /**
+     * Provides the localization properties.
+     * @return SLTLocalization The localization data object.
+     */
+    public function getActiveLanguageList(localizationFeatureToken:String):Array {
+        return _appData.getActiveLanguageList(localizationFeatureToken);
     }
 
     protected function appDataConnectFailHandler(status:SLTStatus):void {

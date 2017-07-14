@@ -19,6 +19,8 @@ public class SLTAppData {
     private var _defaultFeatures:Dictionary;
     private var _gameLevelsFeatures:Dictionary;
     private var _defaultGameLevelsFeatures:Dictionary;
+    private var _defaultLocalizationFeatures:Dictionary;
+    private var _localizationFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
     private var _snapshotId:String;
 
@@ -26,7 +28,9 @@ public class SLTAppData {
         _activeFeatures = new Dictionary();
         _defaultFeatures = new Dictionary();
         _gameLevelsFeatures = new Dictionary();
+        _localizationFeatures = new Dictionary();
         _defaultGameLevelsFeatures = new Dictionary();
+        _defaultLocalizationFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
@@ -40,6 +44,10 @@ public class SLTAppData {
 
     saltr_internal function get gameLevelsFeatures():Dictionary {
         return _gameLevelsFeatures;
+    }
+
+    saltr_internal function get localizationFeatures():Dictionary {
+        return _localizationFeatures;
     }
 
     saltr_internal function get experiments():Vector.<SLTExperiment> {
@@ -111,6 +119,7 @@ public class SLTAppData {
     saltr_internal function initDefaultFeatures(data:Object):void {
         try {
             _defaultGameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _defaultGameLevelsFeatures);
+            _defaultLocalizationFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LOCALIZATION, _defaultLocalizationFeatures);
             _defaultFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _defaultFeatures);
             _snapshotId = data.snapshotId;
         } catch (e:Error) {
@@ -121,6 +130,7 @@ public class SLTAppData {
     saltr_internal function initWithData(data:Object):void {
         try {
             _gameLevelsFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _gameLevelsFeatures);
+            _localizationFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LOCALIZATION, _localizationFeatures);
             _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _activeFeatures);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
@@ -130,6 +140,29 @@ public class SLTAppData {
 
     public function get snapshotId():String {
         return _snapshotId;
+    }
+
+    public function getActiveLanguageList(localizationFeatureToken:String):Array {
+        var langCodeList:Array = new Array();
+        var localization:SLTLocalization = _localizationFeatures[localizationFeatureToken].properties;
+        for ( var key in localization.languages)
+        {
+            langCodeList.push( key );
+        }
+        return langCodeList;
+    }
+
+    public function getLocalizationProperties(localizationFeatureToken:String):SLTLocalization {
+        var localizationFeature:SLTFeature = _localizationFeatures[localizationFeatureToken];
+        if (null != localizationFeature) {
+            return localizationFeature.properties as SLTLocalization;
+        } else {
+            var defaultLocalizationFeature:SLTFeature = _defaultLocalizationFeatures[localizationFeatureToken];
+            if (defaultLocalizationFeature != null) {
+                return defaultLocalizationFeature.properties as SLTLocalization;
+            }
+        }
+        return null;
     }
 }
 }

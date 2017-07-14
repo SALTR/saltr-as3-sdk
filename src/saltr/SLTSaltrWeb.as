@@ -7,6 +7,7 @@ import saltr.api.call.SLTApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTWebApiCallFactory;
 import saltr.game.SLTLevel;
+import saltr.lang.SLTLocale;
 import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
@@ -14,6 +15,7 @@ use namespace saltr_internal;
 public class SLTSaltrWeb extends SLTSaltr {
 
     private var _sltLevel:SLTLevel;
+    private var _sltLocale:SLTLocale;
     private var _callback:Function;
 
     public function SLTSaltrWeb(clientKey:String, deviceId:String = null, socialId:String = null) {
@@ -31,11 +33,26 @@ public class SLTSaltrWeb extends SLTSaltr {
         _started = true;
     }
 
-
     override public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
         super.initLevelContent(gameLevelsFeatureToken, sltLevel, callback, true);
     }
 
+    override public function initLanguageContent(localizationFeatureToken:String, sltLocale:SLTLocale, callback:Function, fromSaltr:Boolean = false):void {
+        super.initLanguageContent(localizationFeatureToken, sltLocale, callback, true);
+    }
+
+    override protected function initLanguageContentFromSaltr(localizationFeatureToken:String, sltLocale:SLTLocale, callback:Function):void {
+        _sltLocale = sltLocale;
+        _callback = callback;
+
+        var params:Object = {
+            contentUrl: _sltLocale.contentUrl,
+            alternateUrl: _sltLocale.alternateContentUrl
+        };
+
+        var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LOCALE_CONTENT);
+        levelContentApiCall.call(params, localizationContentLoadSuccessCallback, localizationContentLoadFailCallback, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+    }
 
     override protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
         _sltLevel = sltLevel;
@@ -56,6 +73,15 @@ public class SLTSaltrWeb extends SLTSaltr {
     }
 
     private function levelContentLoadFailCallback(status:SLTStatus):void {
+        _callback(false);
+    }
+
+    private function localizationContentLoadSuccessCallback(data:Object):void {
+        _sltLocale.updateContent(data);
+        _callback(true);
+    }
+
+    private function localizationContentLoadFailCallback(status:SLTStatus):void {
         _callback(false);
     }
 }
