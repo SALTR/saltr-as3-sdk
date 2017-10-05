@@ -55,7 +55,7 @@ public class SLTAsset {
      * Returns token plus properties string.
      */
     saltr_internal function toString():String {
-        return "[Asset] token: " + _token + ", " + " properties: " + _properties;
+        return "[Asset] Token: " + _token + ", " + " Properties: " + _properties;
     }
 }
 }

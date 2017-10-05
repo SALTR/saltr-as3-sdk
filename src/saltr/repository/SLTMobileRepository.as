@@ -35,7 +35,7 @@ public class SLTMobileRepository implements ISLTRepository {
 
     /**
      * Provides an object from storage.
-     * @param name The name of the object.
+     * @param fileName The name of the object.
      * @return The requested object.
      */
     public function getObjectFromStorage(fileName:String):Object {
@@ -45,7 +45,7 @@ public class SLTMobileRepository implements ISLTRepository {
 
     /**
      * Caches an object.
-     * @param name The name of the object.
+     * @param fileName The name of the object.
      * @param object The object to store.
      */
     public function cacheObject(fileName:String, object:Object):void {
@@ -55,12 +55,12 @@ public class SLTMobileRepository implements ISLTRepository {
 
     /**
      * Stores an object.
-     * @param name The name of the object.
+     * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function saveObject(fileName:String, objectToSave:Object):void {
+    public function saveObject(fileName:String, object:Object):void {
         var file:File = _storageDirectory.resolvePath(fileName);
-        saveInternal(file, objectToSave);
+        saveInternal(file, object);
     }
 
     public function getObjectFromCache(fileName:String):Object {
@@ -85,7 +85,7 @@ public class SLTMobileRepository implements ISLTRepository {
             return stringData ? JSON.parse(stringData) : null;
         }
         catch (error:Error) {
-            trace("[MobileStorageEngine] : error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
+            trace("[SALTR][MobileStorageEngine] Error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
         }
         return null;
     }
@@ -98,7 +98,7 @@ public class SLTMobileRepository implements ISLTRepository {
             _fileStream.close();
         }
         catch (error:Error) {
-            trace("[MobileStorageEngine] : error while saving object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
+            trace("[SALTR][MobileStorageEngine] Error while saving object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
         }
     }
 }

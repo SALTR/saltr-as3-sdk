@@ -39,6 +39,8 @@ public class SLTLevel {
      * @param localIndex The local index of the level in the pack.
      * @param packIndex The index of the pack the level is in.
      * @param contentUrl The content URL of the level.
+     * @param levelToken The token of the level feature.
+     * @param packToken The token of the pack.
      * @param version The current version of the level.
      */
     public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, levelToken:String, packToken:String, version:String) {
@@ -116,7 +118,7 @@ public class SLTLevel {
 
     /**
      * Updates contentReady value. For internal use only.
-     * @param contentReady
+     * @param value
      */
     public function set contentReady(value:Boolean):void {
         _contentReady = value;

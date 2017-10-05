@@ -37,7 +37,7 @@ public class SLT2DBoardParser extends SLTBoardParser {
 
     /**
      * Parses the board content.
-     * @param rootNodes The root node.
+     * @param rootNode The root node.
      * @param assetMap The asset map.
      * @return The parsed boards.
      */

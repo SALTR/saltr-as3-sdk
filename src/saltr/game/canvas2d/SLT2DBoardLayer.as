@@ -18,6 +18,7 @@ internal class SLT2DBoardLayer extends SLTBoardLayer {
      * Class constructor.
      * @param token The layer's identifier.
      * @param layerIndex The layer's ordering index.
+     * @param assetRules The array of asset rules.
      */
     public function SLT2DBoardLayer(token:String, layerIndex:int, assetRules:Array) {
         super(token, layerIndex);

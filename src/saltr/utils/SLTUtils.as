@@ -27,6 +27,7 @@ public class SLTUtils {
      * Formats a String in .Net-style, with curly braces ("{0}").
      * Does not support any number formatting options yet.
      * @param format The string to format.
+     * @param args
      * @return Formatted string.
      */
     saltr_internal static function formatString(format:String, ...args):String {
@@ -123,10 +124,8 @@ public class SLTUtils {
 
     saltr_internal static function validateFeatureToken(token:String):Boolean {
         var pattern:RegExp = /[^a-zA-Z0-9._-]/;
-        if (null == token || "" == token || -1 != token.search(pattern)) {
-            return false;
-        }
-        return true;
+        return !(null == token || "" == token || -1 != token.search(pattern));
+
     }
 }
 }

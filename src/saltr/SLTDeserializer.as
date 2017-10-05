@@ -23,17 +23,12 @@ public class SLTDeserializer {
         var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
         var experimentNodes:Array = rootNode.experiments as Array;
         if (experimentNodes != null) {
-            var experimentNode:Object;
-            var token:String;
-            var partition:String;
-            var experimentType:String;
-            var customEvents:Array;
             for (var i:int = 0, len:int = experimentNodes.length; i < len; ++i) {
-                experimentNode = experimentNodes[i];
-                token = experimentNode.token;
-                partition = experimentNode.partition;
-                experimentType = experimentNode.type;
-                customEvents = experimentNode.customEventList as Array;
+                var experimentNode:Object = experimentNodes[i];
+                var token:String = experimentNode.token;
+                var partition:String = experimentNode.partition;
+                var experimentType:String = experimentNode.type;
+                var customEvents:Array = experimentNode.customEventList as Array;
                 experiments.push(new SLTExperiment(token, partition, experimentType, customEvents));
             }
         }

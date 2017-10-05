@@ -227,19 +227,19 @@ public class SLTSaltr implements ISLTSaltr {
     }
 
     private function addPropertiesSuccessHandler(data:Object):void {
-        trace("[addPropertiesApiCallback] success");
+        trace("[SALTR] addPropertiesApiCallback() - succeeded.");
     }
 
     private function addPropertiesFailHandler(status:SLTStatus):void {
-        trace("[addPropertiesApiCallback] error");
+        trace("[SALTR] addPropertiesApiCallback() - failed.");
     }
 
     private function sendLevelEndSuccessHandler(data:Object):void {
-        trace("sendLevelEndSuccessHandler");
+        trace("[SALTR] sendLevelEndSuccessHandler() - succeeded.");
     }
 
     private function sendLevelEndFailHandler(status:SLTStatus):void {
-        trace("sendLevelEndFailHandler");
+        trace("[SALTR] sendLevelEndFailHandler() - failed.");
     }
 
     /**
