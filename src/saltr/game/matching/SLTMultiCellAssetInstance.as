@@ -18,7 +18,7 @@ public class SLTMultiCellAssetInstance extends SLTAssetInstance {
     /**
      * Class constructor.
      * @param token The identifier.
-     * @param stateId The state identifier.
+     * @param state The asset state object.
      * @param properties The properties.
      * @param cells The composed cells.
      * @param startPoint MultiCell asset start point.

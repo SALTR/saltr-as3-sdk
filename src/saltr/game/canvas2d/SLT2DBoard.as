@@ -19,6 +19,7 @@ public class SLT2DBoard extends SLTBoard {
 
     /**
      * Class constructor.
+     * @param token The token of canvas 2d board.
      * @param config The board configuration.
      * @param propertyObjects The board associated properties.
      * @param checkpoints The board checkpoints.

@@ -25,8 +25,8 @@ internal class SLT2DBoardGenerator {
             var assetInstanceNode:Object = assetNodes[i];
             var x:Number = assetInstanceNode.x;
             var y:Number = assetInstanceNode.y;
-            var scaleX:Number = assetInstanceNode.hasOwnProperty("scaleX") ? assetInstanceNode.scaleX : 1;
-            var scaleY:Number = assetInstanceNode.hasOwnProperty("scaleY") ? assetInstanceNode.scaleY : 1;
+            var scaleX:Number = assetInstanceNode.hasOwnProperty("scaleX") ? assetInstanceNode.scaleX : 1.0;
+            var scaleY:Number = assetInstanceNode.hasOwnProperty("scaleY") ? assetInstanceNode.scaleY : 1.0;
             var rotation:Number = assetInstanceNode.rotation;
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateId:String = assetInstanceNode.stateId;

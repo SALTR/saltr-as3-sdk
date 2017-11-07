@@ -2,10 +2,10 @@
  * Created by daal on 4/13/15.
  */
 package saltr.api.call.factory {
-import saltr.SLTAppData;
-import saltr.api.call.*;
+import plexonic.error.ErrorAbstractMethodInvokation;
 
-import starling.errors.AbstractClassError;
+import saltr.SLTAppData;
+import saltr.api.call.SLTApiCall;
 
 public class SLTApiCallFactory {
     public static const API_CALL_ADD_PROPERTIES:String = "AddProperties";
@@ -16,7 +16,7 @@ public class SLTApiCallFactory {
     public static const API_CALL_SEND_LEVEL_END:String = "SendLevelEnd";
     public static const API_CALL_LEVEL_REPORT:String = "LevelReport";
 
-    private static var _factory : SLTApiCallFactory;
+    private static var _factory:SLTApiCallFactory;
 
     public static function get factory():SLTApiCallFactory {
         return _factory;
@@ -28,7 +28,7 @@ public class SLTApiCallFactory {
 
 
     public function getCall(name:String, appData:SLTAppData = null):SLTApiCall {
-        throw new AbstractClassError();
+        throw new ErrorAbstractMethodInvokation();
     }
 }
 }

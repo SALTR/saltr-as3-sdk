@@ -73,9 +73,8 @@ public class SLTLevelData {
         try {
             var newLevels:Vector.<SLTLevel> = SLTDeserializer.decodeLevels(data);
         } catch (e:Error) {
-            throw new Error("Levels parse error");
+            throw new Error("[SALTR] Level parsing error.");
         }
-
 
         if (newLevels != null) {
             disposeLevels();

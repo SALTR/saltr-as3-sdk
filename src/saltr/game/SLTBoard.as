@@ -30,8 +30,10 @@ public class SLTBoard {
 
     /**
      * Class constructor.
+     * @param token The token of the board.
      * @param layers The layers of the board.
-     * @param properties The board associated properties.
+     * @param propertyObjects
+     * @param checkpoints
      */
     public function SLTBoard(token:String, layers:Dictionary, propertyObjects:Dictionary, checkpoints:Dictionary) {
         _propertyObjects = propertyObjects;

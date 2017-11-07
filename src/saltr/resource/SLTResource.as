@@ -93,7 +93,7 @@ public class SLTResource {
             json = JSON.parse(_urlLoader.data);
         }
         catch (e:Error) {
-            trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
+            trace("[SALTR][JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
         }
         return json;
     }
@@ -164,7 +164,7 @@ public class SLTResource {
     }
 
     protected function dropTimeOutTimerHandler(event:TimerEvent):void {
-        trace("[Asset] Loading is too long, so it stopped by force.");
+        trace("[SALTR][Error] Asset loading takes too long, so it is force-stopped.");
         _urlLoader.close();
         loadFailed(_urlLoader);
     }
@@ -205,7 +205,7 @@ public class SLTResource {
         }
         else {
             _onFail(this);
-            trace("[ERROR] Asset with path '" + _ticket.url + "' cannot be found.");
+            trace("[SALTR][Error] Asset with path '" + _ticket.url + "' cannot be found.");
         }
     }
 

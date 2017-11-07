@@ -166,7 +166,7 @@ public class SLTMobileDeviceInfo {
         var pattern:RegExp = /\r?\n/;
         var lines:Array = content.split(pattern);
 
-        var infoData:Object = new Object();
+        var infoData:Object = {};
         for (var i:int = 0, length:int = lines.length; i < length; ++i) {
             var line:String = String(lines[i]);
             if ("" != line) {

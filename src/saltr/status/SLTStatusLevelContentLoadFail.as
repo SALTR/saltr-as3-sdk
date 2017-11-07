@@ -13,7 +13,7 @@ public class SLTStatusLevelContentLoadFail extends SLTStatus {
      * Class constructor.
      */
     public function SLTStatusLevelContentLoadFail() {
-        super(CLIENT_LEVEL_CONTENT_LOAD_FAIL, "Level content load has failed.");
+        super(CLIENT_LEVEL_CONTENT_LOAD_FAIL, "[SALTR] Level content load has failed.");
     }
 }
 }
