@@ -5,6 +5,8 @@ package saltr.repository {
 import flash.desktop.NativeApplication;
 import flash.filesystem.File;
 
+import libwebp.internal.retargetSWF;
+
 import saltr.SLTConfig;
 import saltr.SLTDeserializer;
 import saltr.saltr_internal;
@@ -37,6 +39,10 @@ public class SLTRepositoryStorageManager {
 
     private static function getLevelDataFromApplicationUrl(contentRoot:String, token:String):String {
         return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, token);
+    }
+
+    private static function getCachedLocalizationVersionUrl(localizationFeatureToken:String):String {
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LOCALIZATION_VERSIONS_URL_TEMPLATE, getAppVersion(), localizationFeatureToken);
     }
 
     private static function getCachedLevelVersionsUrl(gameLevelsFeatureToken:String):String {
@@ -135,6 +141,12 @@ public class SLTRepositoryStorageManager {
         }
         return version;
     }
+
+
+    saltr_internal function getLocalizationVersionsFileFromCache(localizationFeatureToken:String):Object {
+        _repository.getObjectFromCache(getCachedLocalizationVersionUrl(localizationFeatureToken));
+    }
+
 
     /**
      * Provides the level versioning file from cache.

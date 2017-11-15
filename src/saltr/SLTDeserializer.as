@@ -83,7 +83,7 @@ public class SLTDeserializer {
                     }
                     features[token] = new SLTFeature(token, featureType, version, levelData, required);
                 } else if (SLTConfig.FEATURE_TYPE_LOCALIZATION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LOCALIZATION == featureType) {
-                    var localizationData:SLTLocalization = new SLTLocalization();
+                    var localizationData:SLTLocalizationData = new SLTLocalizationData();
                     localizationData.initWithData(JSON.parse(featureNode.properties));
                     features[token] = new SLTFeature(token, featureType, version, localizationData, required);
                 } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {

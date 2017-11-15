@@ -32,6 +32,9 @@ public class SLTConfig {
     saltr_internal static const CACHE_VERSIONED_LEVEL_VERSIONS_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}/level_versions.json";
     saltr_internal static const CACHE_VERSIONED_LEVEL_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}/level_{2}.json";
 
+    saltr_internal static const CACHE_VERSIONED_LOCALIZATION_VERSIONS_URL_TEMPLATE = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}/localization_versions.json";
+    saltr_internal static const CACHE_VERSIONED_LOCALIZATION_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}/locale_{2}.json";
+
     saltr_internal static const LOCAL_LEVEL_DATA_URL_TEMPLATE:String = "{0}/features/{1}/level_data.json";
     saltr_internal static const LOCAL_LEVEL_CONTENT_URL_TEMPLATE:String = "{0}/{1}";
     saltr_internal static const LOCAL_APP_DATA_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_data.json";

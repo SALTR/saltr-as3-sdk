@@ -3,6 +3,8 @@
  */
 
 package saltr {
+import flash.filesystem.File;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;

@@ -59,6 +59,10 @@ public class SLTSaltr implements ISLTSaltr {
         _validator = new SLTFeatureValidator();
     }
 
+    public function get appData():SLTAppData {
+        return _appData;
+    }
+
     /**
      * The dev mode state.
      */
@@ -372,15 +376,15 @@ public class SLTSaltr implements ISLTSaltr {
 
     /**
      * Provides the localization properties.
-     * @return SLTLocalization The localization data object.
+     * @return SLTLocalizationData The localization data object.
      */
-    public function getLocalizationProperties(localizationFeatureToken:String):SLTLocalization {
+    public function getLocalizationProperties(localizationFeatureToken:String):SLTLocalizationData {
         return _appData.getLocalizationProperties(localizationFeatureToken);
     }
 
     /**
      * Provides the localization properties.
-     * @return SLTLocalization The localization data object.
+     * @return SLTLocalizationData The localization data object.
      */
     public function getActiveLanguageList(localizationFeatureToken:String):Array {
         return _appData.getActiveLanguageList(localizationFeatureToken);

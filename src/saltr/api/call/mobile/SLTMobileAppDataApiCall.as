@@ -10,6 +10,9 @@ import saltr.SLTAppData;
 import saltr.SLTFeature;
 import saltr.SLTFeatureValidator;
 import saltr.api.call.SLTAppDataApiCall;
+import saltr.core.cachable.CacheUpdater;
+import saltr.core.cachable.CacheUpdater;
+import saltr.core.cachable.LocalizationCacheUpdater;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
@@ -95,6 +98,7 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
         SLTLogger.getInstance().log("New app data request from connect() succeed.");
         if (processNewAppData(data)) {
             _levelUpdater.update(_appData.gameLevelsFeatures);
+            new LocalizationCacheUpdater(_appData.localizationFeatures).update();
             _originalSuccessCallback(_appData);
         } else {
             _originalFailCallback(new SLTStatusAppDataParseError());

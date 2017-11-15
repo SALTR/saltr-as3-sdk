@@ -144,7 +144,7 @@ public class SLTAppData {
 
     public function getActiveLanguageList(localizationFeatureToken:String):Array {
         var langCodeList:Array = new Array();
-        var localization:SLTLocalization = _localizationFeatures[localizationFeatureToken].properties;
+        var localization:SLTLocalizationData = _localizationFeatures[localizationFeatureToken].properties;
         for ( var key in localization.languages)
         {
             langCodeList.push( key );
@@ -152,14 +152,14 @@ public class SLTAppData {
         return langCodeList;
     }
 
-    public function getLocalizationProperties(localizationFeatureToken:String):SLTLocalization {
+    public function getLocalizationProperties(localizationFeatureToken:String):SLTLocalizationData {
         var localizationFeature:SLTFeature = _localizationFeatures[localizationFeatureToken];
         if (null != localizationFeature) {
-            return localizationFeature.properties as SLTLocalization;
+            return localizationFeature.properties as SLTLocalizationData;
         } else {
             var defaultLocalizationFeature:SLTFeature = _defaultLocalizationFeatures[localizationFeatureToken];
             if (defaultLocalizationFeature != null) {
-                return defaultLocalizationFeature.properties as SLTLocalization;
+                return defaultLocalizationFeature.properties as SLTLocalizationData;
             }
         }
         return null;

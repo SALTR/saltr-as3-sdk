@@ -2,21 +2,28 @@
  * Created by tyom on 6/27/2017.
  */
 package saltr {
-import de.polygonal.ds.Map;
-
 import flash.utils.Dictionary;
 
 use namespace saltr_internal;
 
-public class SLTLocalization {
+public class SLTLocalizationData {
 
     private var _languages:Dictionary;
 
-    public function SLTLocalization() {
+    public function SLTLocalizationData() {
     }
 
     public function get languages():Dictionary {
         return _languages;
+    }
+
+    saltr_internal function get allLocales():Array {
+        var result : Array = [];
+        for (var key:String in _languages) {
+            result.push(_languages[key]);
+        }
+
+        return result;
     }
 
     public function initWithData(data:Object):void {

@@ -26,7 +26,6 @@ public class SLTApiCallFactory {
         _factory = value;
     }
 
-
     public function getCall(name:String, appData:SLTAppData = null):SLTApiCall {
         throw new ErrorAbstractMethodInvokation();
     }

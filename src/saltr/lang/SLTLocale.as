@@ -4,19 +4,13 @@
 package saltr.lang {
 import flash.utils.Dictionary;
 
-public class SLTLocale {
-    private var _contentUrl:String;
+import saltr.core.cachable.Cachable;
+
+public class SLTLocale extends Cachable{
+
     private var _alternateContentUrl:String;
-
-    private var _version:String;
     private var _langData:Dictionary;
-
-    /**
-     * The current version of the level.
-     */
-    public function get version():String {
-        return _version;
-    }
+    private var _locale:String;
 
     public function get alternateContentUrl():String {
         return _alternateContentUrl;
@@ -26,18 +20,8 @@ public class SLTLocale {
         _alternateContentUrl = value;
     }
 
-    /**
-     * The content URL of the level.
-     */
-    public function get contentUrl():String {
-        return _contentUrl;
-    }
-
-    public function set contentUrl(value:String):void {
-        _contentUrl = value;
-    }
-
-    public function SLTLocale(contentUrl:String, version:String) {
+    public function SLTLocale(locale : String, contentUrl:String, version:String) {
+        _locale = locale;
         _contentUrl=contentUrl;
         _version=version;
     }
@@ -48,6 +32,10 @@ public class SLTLocale {
             //var levelPropertyNode:Object = levelPropertyNodes[token];
             _langData[token] = data[token];
         }
+    }
+
+    override public function get cachableIdentifier():String{
+        return _locale;
     }
 }
 }
