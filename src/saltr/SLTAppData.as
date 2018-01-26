@@ -47,7 +47,7 @@ public class SLTAppData {
     }
 
     saltr_internal function getActiveFeatureTokens():Vector.<String> {
-        var tokens:Vector.<String> = new Vector.<String>();
+        var tokens:Vector.<String> = new <String>[];
         for each(var feature:SLTFeature in _activeFeatures) {
             tokens.push(feature.token);
         }

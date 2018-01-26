@@ -20,7 +20,7 @@ public class SLTDeserializer {
     }
 
     saltr_internal static function decodeExperiments(rootNode:Object):Vector.<SLTExperiment> {
-        var experiments:Vector.<SLTExperiment> = new Vector.<SLTExperiment>();
+        var experiments:Vector.<SLTExperiment> = new <SLTExperiment>[];
         var experimentNodes:Array = rootNode.experiments as Array;
         if (experimentNodes != null) {
             for (var i:int = 0, len:int = experimentNodes.length; i < len; ++i) {

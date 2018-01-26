@@ -47,9 +47,9 @@ internal class SLTChunk {
         _chunkAssetRules = chunkAssetRules;
         _matchingRuleEnabled = matchingRuleEnabled;
         _assetMap = assetMap;
-        _availableAssetData = new Vector.<SLTChunkAssetDatum>();
-        _uniqueInAvailableAssetData = new Vector.<SLTChunkAssetDatum>();
-        _uniqueInCountAssetData = new Vector.<SLTChunkAssetDatum>();
+        _availableAssetData = new <SLTChunkAssetDatum>[];
+        _uniqueInAvailableAssetData = new <SLTChunkAssetDatum>[];
+        _uniqueInCountAssetData = new <SLTChunkAssetDatum>[];
     }
 
     /**
@@ -224,7 +224,7 @@ internal class SLTChunk {
     }
 
     private function getAssetData(count:uint, assetId:String, stateId:String):Vector.<SLTChunkAssetDatum> {
-        var assetData:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
+        var assetData:Vector.<SLTChunkAssetDatum> = new <SLTChunkAssetDatum>[];
         for (var i:int = 0; i < count; ++i) {
             assetData.push(new SLTChunkAssetDatum(assetId, stateId, _assetMap));
             _availableCells.splice(0, 1);

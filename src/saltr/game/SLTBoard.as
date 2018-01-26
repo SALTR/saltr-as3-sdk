@@ -77,7 +77,7 @@ public class SLTBoard {
      * Provides the checkpoints.
      */
     public function getCheckpoints():Vector.<SLTCheckpoint> {
-        var checkpointVector:Vector.<SLTCheckpoint> = new Vector.<SLTCheckpoint>();
+        var checkpointVector:Vector.<SLTCheckpoint> = new <SLTCheckpoint>[];
         for each(var checkpoint:SLTCheckpoint in _checkpoints) {
             checkpointVector.push(checkpoint);
         }

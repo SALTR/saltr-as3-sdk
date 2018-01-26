@@ -97,7 +97,7 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
             matchingRules.matchSize = rootNode.matchingRules.matchSize;
 
             var excludedAssetNodes:Array = rootNode.matchingRules.excludedAssets as Array;
-            var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
+            var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new <SLTChunkAssetDatum>[];
             for each (var excludedAssetId:String in excludedAssetNodes) {
                 excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetId, "", assetMap));
             }

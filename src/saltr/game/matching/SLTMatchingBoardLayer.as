@@ -24,7 +24,7 @@ internal class SLTMatchingBoardLayer extends SLTBoardLayer {
      */
     public function SLTMatchingBoardLayer(token:String, layerIndex:int, assetRules:Array) {
         super(token, layerIndex);
-        _chunks = new Vector.<SLTChunk>();
+        _chunks = new <SLTChunk>[];
         _assetRules = assetRules;
     }
 

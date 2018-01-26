@@ -73,7 +73,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     }
 
     private function getOutdatedLevels():Vector.<SLTLevel> {
-        var levelsToUpdate:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+        var levelsToUpdate:Vector.<SLTLevel> = new <SLTLevel>[];
         var cachedLevelVersions:Object = _levelContentLoader.getLevelVersionsFileFromCache(_featureToken);
         for (var i:int = 0, length:int = _allLevels.length; i < length; ++i) {
             var currentLevel:SLTLevel = _allLevels[i];

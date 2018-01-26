@@ -19,7 +19,7 @@ internal class SLT2DBoardGenerator {
     }
 
     private function parseAssetInstances(layer:SLT2DBoardLayer, assetMap:Dictionary):Vector.<SLT2DAssetInstance> {
-        var assetInstances:Vector.<SLT2DAssetInstance> = new Vector.<SLT2DAssetInstance>();
+        var assetInstances:Vector.<SLT2DAssetInstance> = new <SLT2DAssetInstance>[];
         var assetNodes:Array = layer.assetRules;
         for (var i:int = 0, len:int = assetNodes.length; i < len; ++i) {
             var assetInstanceNode:Object = assetNodes[i];

@@ -30,7 +30,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     public function SLTMobileLevelsFeaturesUpdater(repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
         _nativeTimeout = nativeTimeout;
-        _gameLevelGroups = new Vector.<SLTMobileLevelGroupUpdater>();
+        _gameLevelGroups = new <SLTMobileLevelGroupUpdater>[];
         resetUpdateProcess();
     }
 
@@ -89,7 +89,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     }
 
     private function initWithLevel(featureToken:String, level:SLTLevel):void {
-        var levels:Vector.<SLTLevel> = new Vector.<SLTLevel>();
+        var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         levels.push(level);
         var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(featureToken, levels, _repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
         _gameLevelGroups.push(groupUpdater);

@@ -31,7 +31,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
         _boardConfig = boardConfig;
         _layer = layer;
         if (null == _matchedAssetPositions) {
-            _matchedAssetPositions = new Vector.<MatchedAssetPosition>();
+            _matchedAssetPositions = new <MatchedAssetPosition>[];
         }
         parseFixedAssets(layer, _boardConfig.cells, _boardConfig.assetMap);
         parseMatchingRuleDisabledChunks();
@@ -39,7 +39,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function parseMatchingRuleDisabledChunks():void {
-        var chunks:Vector.<SLTChunk> = new Vector.<SLTChunk>();
+        var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
         for (var i:int = 0, length:int = _layer.chunks.length; i < length; ++i) {
             var chunk:SLTChunk = _layer.chunks[i];
             if (false == chunk.matchingRuleEnabled) {
@@ -53,7 +53,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
     }
 
     private function getMatchingRuleEnabledChunks(layer:SLTMatchingBoardLayer):Vector.<SLTChunk> {
-        var chunks:Vector.<SLTChunk> = new Vector.<SLTChunk>();
+        var chunks:Vector.<SLTChunk> = new <SLTChunk>[];
         for (var i:int = 0, length:int = _layer.chunks.length; i < length; ++i) {
             var chunk:SLTChunk = _layer.chunks[i];
             if (chunk.matchingRuleEnabled) {
