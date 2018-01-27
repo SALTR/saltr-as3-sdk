@@ -6,6 +6,7 @@ package saltr.resource {
 import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -91,8 +92,9 @@ public class SLTResourceURLTicket {
         request.data = _variables;
         request.method = _method;
         request.contentType = _contentType;
-        for each(var header:URLRequestHeader in _requestHeaders) {
-            request.requestHeaders.push(header);
+
+        for (var i:int = 0, i_len:int = _requestHeaders.length; i < i_len; ++i) {
+            request.requestHeaders.push(_requestHeaders[i]);
         }
         return request;
     }
@@ -112,7 +114,8 @@ public class SLTResourceURLTicket {
      * @return The value of the header, <code>null</code> if there is no existing header with provided name.
      */
     saltr_internal function getHeaderValue(name:String):String {
-        for each(var header:URLRequestHeader in _requestHeaders) {
+        for (var i:int = 0, i_len:int = _requestHeaders.length; i < i_len; ++i) {
+            var header:URLRequestHeader = _requestHeaders[i];
             if (header.name == name) {
                 return header.value;
             }

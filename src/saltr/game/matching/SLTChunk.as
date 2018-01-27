@@ -80,14 +80,13 @@ internal class SLTChunk {
     }
 
     saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {
-        var cellFound:Boolean = false;
-        for each(var cell:SLTCell in _chunkCells) {
+        for (var i:int = 0, i_len:int = _chunkCells.length; i < i_len; ++i) {
+            var cell:SLTCell = _chunkCells[i];
             if (col == cell.col && row == cell.row) {
-                cellFound = true;
-                break;
+                return true;
             }
         }
-        return cellFound;
+        return false;
     }
 
     saltr_internal function addAssetInstanceWithPosition(assetDatum:SLTChunkAssetDatum, col:uint, row:uint):void {
@@ -236,14 +235,13 @@ internal class SLTChunk {
     }
 
     private function getCellWithPosition(col:uint, row:uint):SLTCell {
-        var cellToReturn:SLTCell = null;
-        for each(var cell:SLTCell in _chunkCells) {
+        for (var i:int = 0, i_len:int = _chunkCells.length; i < i_len; ++i) {
+            var cell:SLTCell = _chunkCells[i];
             if (col == cell.col && row == cell.row) {
-                cellToReturn = cell;
-                break;
+                return cell;
             }
         }
-        return cellToReturn;
+        return null;
     }
 
     private function getCellIndexWithPosition(col:uint, row:uint):int {

@@ -138,13 +138,17 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
             var chunkNode:Object = chunkNodes[i];
             var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
-            for each(var cellNode:Object in cellNodes) {
+
+            for (var j:int = 0, j_len:int = cellNodes.length; j < j_len; ++j) {
+                var cellNode:Object = cellNodes[j];
                 chunkCells.push(cells.retrieve(cellNode[0], cellNode[1]) as SLTCell);
             }
 
             var assetRuleNodes:Array = chunkNode.assetRules as Array;
             var chunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
-            for each (var ruleNode:Object in assetRuleNodes) {
+
+            for (var k:int = 0, k_len:int = assetRuleNodes.length; k < k_len; ++k) {
+                var ruleNode:Object = assetRuleNodes[k];
                 chunkAssetRules.push(new SLTChunkAssetRule(ruleNode.assetId, ruleNode.distributionType, ruleNode.distributionValue, ruleNode.stateId));
             }
 
