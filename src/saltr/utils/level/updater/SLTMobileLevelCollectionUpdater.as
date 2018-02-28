@@ -18,11 +18,11 @@ use namespace saltr_internal;
 /**
  * @private
  */
-public class SLTMobileLevelGroupUpdater extends EventDispatcher {
+public class SLTMobileLevelCollectionUpdater extends EventDispatcher {
     private static const LEVEL_UPDATE_TIMER_DELAY:Number = 3000;
     private static const DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT:uint = 3;
 
-    private var _featureToken:String;
+    private var _levelCollectionFeatureToken:String;
     private var _outdatedLevels:Vector.<SLTLevel>;
     private var _updatedLevelCount:uint;
     private var _levelIndexToUpdate:int;
@@ -32,17 +32,17 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     private var _isInProcess:Boolean;
     private var _isCancelled:Boolean;
 
-    public function SLTMobileLevelGroupUpdater(featureToken:String, allLevels:Vector.<SLTLevel>, repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
+    public function SLTMobileLevelCollectionUpdater(featureToken:String, allLevels:Vector.<SLTLevel>, repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
         _levelContentLoader = new SLTMobileLevelContentLoader(repositoryStorageManager, nativeTimeout, dropTimeout, timeoutIncrease);
         _isCancelled = false;
         resetUpdateProcess();
-        _featureToken = featureToken;
+        _levelCollectionFeatureToken = featureToken;
         _allLevels = allLevels;
         _outdatedLevels = getOutdatedLevels();
     }
 
     public function update():void {
-        SLTLogger.getInstance().log("Game levels group update called. featureToken: " + _featureToken + ", outdated Levels length: " + _outdatedLevels.length);
+        SLTLogger.getInstance().log("Game levels group update called. featureToken: " + _levelCollectionFeatureToken + ", outdated Levels length: " + _outdatedLevels.length);
         if (_isInProcess) {
             throw new Error("SLTMobileLevelGroupUpdater is in processing.");
             return;
@@ -74,7 +74,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
 
     private function getOutdatedLevels():Vector.<SLTLevel> {
         var levelsToUpdate:Vector.<SLTLevel> = new <SLTLevel>[];
-        var cachedLevelVersions:Object = _levelContentLoader.getLevelVersionsFileFromCache(_featureToken);
+        var cachedLevelVersions:Object = _levelContentLoader.getLevelVersionsFileFromCache(_levelCollectionFeatureToken);
         for (var i:int = 0, length:int = _allLevels.length; i < length; ++i) {
             var currentLevel:SLTLevel = _allLevels[i];
             if (null == cachedLevelVersions || currentLevel.version != getCachedLevelVersion(cachedLevelVersions, currentLevel)) {
@@ -85,7 +85,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     }
 
     private function getCachedLevelVersion(cachedLevelVersions:Object, level:SLTLevel):String {
-        return _levelContentLoader.getCachedLevelVersion(cachedLevelVersions, _featureToken, level);
+        return _levelContentLoader.getCachedLevelVersion(cachedLevelVersions, _levelCollectionFeatureToken, level);
     }
 
     private function startLevelUpdateTimer():void {
@@ -113,7 +113,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     private function startNextLevelsUpdate():void {
         for (var i:uint = 0; i < DEFAULT_SIMULTANEOUS_UPDATING_LEVELS_COUNT; ++i) {
             if (_levelIndexToUpdate < _outdatedLevels.length) {
-                _levelContentLoader.loadLevelContentFromSaltr(_featureToken, _outdatedLevels[_levelIndexToUpdate], loadLevelSuccessHandler, loadLevelFailHandler);
+                _levelContentLoader.loadLevelContentFromSaltr(_levelCollectionFeatureToken, _outdatedLevels[_levelIndexToUpdate], loadLevelSuccessHandler, loadLevelFailHandler);
                 ++_levelIndexToUpdate;
             } else {
                 return;
@@ -146,7 +146,7 @@ public class SLTMobileLevelGroupUpdater extends EventDispatcher {
     private function updateCompleted():void {
         var updatedLevelCount:uint = _updatedLevelCount;
         resetUpdateProcess();
-        SLTLogger.getInstance().log("Game levels group update completed. featureToken: " + _featureToken + ", updated level count: " + updatedLevelCount);
+        SLTLogger.getInstance().log("Game levels group update completed. featureToken: " + _levelCollectionFeatureToken + ", updated level count: " + updatedLevelCount);
         dispatchEvent(new Event(Event.COMPLETE));
     }
 }

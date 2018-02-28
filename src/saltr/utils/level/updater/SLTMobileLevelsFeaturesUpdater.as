@@ -7,7 +7,6 @@ import flash.events.EventDispatcher;
 import flash.utils.Dictionary;
 
 import saltr.SLTFeature;
-import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -23,14 +22,14 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     private var _nativeTimeout:int;
     private var _dropTimeout:int;
     private var _timeoutIncrease:int;
-    private var _gameLevelGroups:Vector.<SLTMobileLevelGroupUpdater>;
+    private var _levelCollectionUpdaters:Vector.<SLTMobileLevelCollectionUpdater>;
     private var _isInProcess:Boolean;
     private var _updatedGroupCount:uint;
 
     public function SLTMobileLevelsFeaturesUpdater(repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int) {
         _repositoryStorageManager = repositoryStorageManager;
         _nativeTimeout = nativeTimeout;
-        _gameLevelGroups = new <SLTMobileLevelGroupUpdater>[];
+        _levelCollectionUpdaters = new <SLTMobileLevelCollectionUpdater>[];
         resetUpdateProcess();
     }
 
@@ -50,12 +49,12 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
         _timeoutIncrease = value;
     }
 
-    public function update(gameLevelsFeatures:Dictionary):void {
+    public function update(levelCollections:Dictionary):void {
         SLTLogger.getInstance().log("Game level features update called.");
         if (_isInProcess) {
             cancel();
         }
-        initWithFeatures(gameLevelsFeatures);
+        initCollectionUpdaters(levelCollections);
         startUpdate();
     }
 
@@ -70,53 +69,53 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
 
     private function startUpdate():void {
         SLTLogger.getInstance().log("Game level features update started.");
-        if (_gameLevelGroups.length > 0) {
+        if (_levelCollectionUpdaters.length > 0) {
             _isInProcess = true;
-            for (var i:int = 0, length:int = _gameLevelGroups.length; i < length; ++i) {
-                _gameLevelGroups[i].addEventListener(Event.COMPLETE, groupUpdatedHandler);
-                _gameLevelGroups[i].update();
+            for (var i:int = 0, length:int = _levelCollectionUpdaters.length; i < length; ++i) {
+                _levelCollectionUpdaters[i].addEventListener(Event.COMPLETE, groupUpdatedHandler);
+                _levelCollectionUpdaters[i].update();
             }
         }
     }
 
-    private function initWithFeatures(gameLevelsFeatures:Dictionary):void {
-        for (var key:Object in gameLevelsFeatures) {
-            var feature:SLTFeature = gameLevelsFeatures[key];
-            var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(feature.token, feature.properties.allLevels, _repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
-            _gameLevelGroups.push(groupUpdater);
+    private function initCollectionUpdaters(levelCollections:Dictionary):void {
+        for (var key:Object in levelCollections) {
+            var collection:SLTFeature = levelCollections[key];
+            var collectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(collection.token, collection.properties.allLevels, _repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+            _levelCollectionUpdaters.push(collectionUpdater);
         }
-        SLTLogger.getInstance().log("Game level features initialized with game levels features. Level group count to update: " + _gameLevelGroups.length);
+        SLTLogger.getInstance().log("Game level features initialized with game levels features. Level group count to update: " + _levelCollectionUpdaters.length);
     }
 
     private function initWithLevel(featureToken:String, level:SLTLevel):void {
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         levels.push(level);
-        var groupUpdater:SLTMobileLevelGroupUpdater = new SLTMobileLevelGroupUpdater(featureToken, levels, _repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
-        _gameLevelGroups.push(groupUpdater);
+        var groupUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(featureToken, levels, _repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+        _levelCollectionUpdaters.push(groupUpdater);
         SLTLogger.getInstance().log("Game level features initialized with dedicated level.");
     }
 
     private function cancel():void {
-        for (var i:int = 0, length:int = _gameLevelGroups.length; i < length; ++i) {
-            _gameLevelGroups[i].cancel();
+        for (var i:int = 0, length:int = _levelCollectionUpdaters.length; i < length; ++i) {
+            _levelCollectionUpdaters[i].cancel();
         }
         resetUpdateProcess();
         SLTLogger.getInstance().log("Game level features previous update cancelled.");
     }
 
     private function resetUpdateProcess():void {
-        for (var i:int = 0, length:int = _gameLevelGroups.length; i < length; ++i) {
-            _gameLevelGroups[i].removeEventListener(Event.COMPLETE, groupUpdatedHandler)
+        for (var i:int = 0, length:int = _levelCollectionUpdaters.length; i < length; ++i) {
+            _levelCollectionUpdaters[i].removeEventListener(Event.COMPLETE, groupUpdatedHandler)
         }
-        _gameLevelGroups.length = 0;
+        _levelCollectionUpdaters.length = 0;
         _updatedGroupCount = 0;
         _isInProcess = false;
     }
 
     private function groupUpdatedHandler(event:Event):void {
         ++_updatedGroupCount;
-        SLTLogger.getInstance().log("Game level features one group update completed. TotalGroupCount: " + _gameLevelGroups.length + " UpdatedGroupCount: " + _updatedGroupCount);
-        if (_gameLevelGroups.length == _updatedGroupCount) {
+        SLTLogger.getInstance().log("Game level features one group update completed. TotalGroupCount: " + _levelCollectionUpdaters.length + " UpdatedGroupCount: " + _updatedGroupCount);
+        if (_levelCollectionUpdaters.length == _updatedGroupCount) {
             updateCompleted();
         }
     }

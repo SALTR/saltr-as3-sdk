@@ -128,21 +128,19 @@ public class SLTRepositoryStorageManager {
     saltr_internal function getLevelVersionFromCache(cachedLevelVersions:Object, gameLevelsFeatureToken:String, globalIndex:int):String {
         var version:String = null;
         var cachedLevelFile:Object = _repository.getObjectFromCache(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex));
-        if (null != cachedLevelFile) {
-            if (null != cachedLevelVersions) {
-                version = SLTDeserializer.getCachedLevelVersion(cachedLevelVersions, globalIndex);
-            }
+        if (cachedLevelFile != null && cachedLevelVersions != null) {
+            version = SLTDeserializer.getCachedLevelVersion(cachedLevelVersions, globalIndex);
         }
         return version;
     }
 
     /**
      * Provides the level versioning file from cache.
-     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param levelCollectionFeatureToken The GameLevels feature token
      * @return The level versioning file from cache, null if not exists.
      */
-    saltr_internal function getLevelVersionsFileFromCache(gameLevelsFeatureToken:String):Object {
-        return _repository.getObjectFromCache(getCachedLevelVersionsUrl(gameLevelsFeatureToken));
+    saltr_internal function getLevelVersionsFileFromCache(levelCollectionFeatureToken:String):Object {
+        return _repository.getObjectFromCache(getCachedLevelVersionsUrl(levelCollectionFeatureToken));
     }
 
     /**
