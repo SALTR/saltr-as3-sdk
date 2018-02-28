@@ -128,9 +128,9 @@ public class SLTSaltr implements ISLTSaltr {
     /**
      * Provides the game level feature properties by provided token.
      * @param token The unique identifier of the feature
-     * @return SLTLevelData The level data object.
+     * @return SLTLevelCollection The level data object.
      */
-    public function getGameLevelFeatureProperties(token:String):SLTLevelData {
+    public function getGameLevelFeatureProperties(token:String):SLTLevelCollection {
         return _appData.getGameLevelsProperties(token);
     }
 

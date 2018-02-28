@@ -59,14 +59,14 @@ public class SLTDeserializer {
                 var canUseExistingFeatureProperties:Boolean = existingFeatures && existingFeatures[token] && existingFeatures[token].version == version;
 
                 if (SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == featureType) {
-                    var levelData:SLTLevelData = new SLTLevelData();
+                    var levelCollection:SLTLevelCollection = new SLTLevelCollection();
                     if (canUseExistingFeatureProperties) {
-                        levelData = existingFeatures[token].properties;
+                        levelCollection = existingFeatures[token].properties;
                     } else {
-                        levelData.initWithData(JSON.parse(featureNode.properties));
-                        levelData.sortLevel();
+                        levelCollection.initWithData(JSON.parse(featureNode.properties));
+                        levelCollection.sortLevel();
                     }
-                    features[token] = new SLTFeature(token, featureType, version, levelData, required);
+                    features[token] = new SLTFeature(token, featureType, version, levelCollection, required);
                 } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
                     var properties:Object = canUseExistingFeatureProperties ? existingFeatures[token].properties : JSON.parse(featureNode.properties);
                     features[token] = new SLTFeature(token, featureType, version, properties, required);

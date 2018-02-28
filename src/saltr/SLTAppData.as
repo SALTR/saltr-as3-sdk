@@ -71,14 +71,14 @@ public class SLTAppData {
         return _defaultGameLevelsFeatures[token].properties.allLevels;
     }
 
-    saltr_internal function getGameLevelsProperties(token:String):SLTLevelData {
+    saltr_internal function getGameLevelsProperties(token:String):SLTLevelCollection {
         var gameLevelsFeature:SLTFeature = _gameLevelsFeatures[token];
         if (null != gameLevelsFeature) {
-            return gameLevelsFeature.properties as SLTLevelData;
+            return gameLevelsFeature.properties as SLTLevelCollection;
         } else {
             var defaultGameLevelFeature:SLTFeature = _defaultGameLevelsFeatures[token];
             if (defaultGameLevelFeature != null) {
-                return defaultGameLevelFeature.properties as SLTLevelData;
+                return defaultGameLevelFeature.properties as SLTLevelCollection;
             }
         }
         return null;

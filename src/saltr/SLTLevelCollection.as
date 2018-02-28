@@ -8,16 +8,16 @@ import saltr.game.SLTLevel;
 use namespace saltr_internal;
 
 /**
- * The SLTLevelData class provides the level data.
+ * The SLTLevelCollection class provides the level data.
  */
-public class SLTLevelData {
+public class SLTLevelCollection {
 
     private var _levels:Vector.<SLTLevel>;
 
     /**
      * Class constructor.
      */
-    public function SLTLevelData() {
+    public function SLTLevelCollection() {
         _levels = new <SLTLevel>[];
     }
 
