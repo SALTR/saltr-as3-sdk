@@ -156,12 +156,15 @@ public class SLTSaltr implements ISLTSaltr {
             initLevelContentFromSaltr(gameLevelsFeatureToken, sltLevel, callback);
         }
         else {
-            initLevelContentLocally(gameLevelsFeatureToken, sltLevel);
-            callback(true);
+            initLevelContentLocally(gameLevelsFeatureToken, sltLevel, callback);
         }
     }
 
-    protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):void {
+    public function clearLevelContent(sltLevel:SLTLevel):void {
+        sltLevel.clearContent();
+    }
+
+    protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
     }
 
     protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {

@@ -63,6 +63,30 @@ public class SLTMobileRepository implements ISLTRepository {
         saveInternal(file, object);
     }
 
+    /**
+     *  Indicates whether the referenced file
+     * @param fileName The name of the object.
+     * @return true if file exist,false otherwise.
+     */
+    public function cachedFileExist(fileName:String):Boolean {
+        return _cacheDirectory.resolvePath(fileName).exists;
+    }
+
+    /**
+     *  Provides an array of File objects from cache
+     * @param fileName The name of the object.
+     * @param pattern The pattern to match, which can be any type of object but is typically either a string or a regular expression.
+     * @return Returns an array of File objects. Array is filtered by pattern.
+     */
+    public function getCacheDirectoryListing(folder:String, pattern:* = null):Array {
+        var directoryListing:Array = _cacheDirectory.resolvePath(folder).getDirectoryListing();
+        if (pattern != null) {
+            return getFilteredDirectoryListing(directoryListing, pattern);
+        } else {
+            return directoryListing;
+        }
+    }
+
     public function getObjectFromCache(fileName:String):Object {
         var file:File = _cacheDirectory.resolvePath(fileName);
         return getInternal(file);
@@ -72,6 +96,16 @@ public class SLTMobileRepository implements ISLTRepository {
     public function getObjectFromApplication(fileName:String):Object {
         var file:File = _applicationDirectory.resolvePath(fileName);
         return getInternal(file);
+    }
+
+    private function getFilteredDirectoryListing(directoryListing:Array, pattern:*):Array {
+        var result:Array = [];
+        for (var i:int = 0, len:int = directoryListing.length; i < len; ++i) {
+            if (directoryListing[i].nativePath.search(pattern) >= 0) {
+                result.push(directoryListing[i]);
+            }
+        }
+        return result;
     }
 
     private function getInternal(file:File):Object {
@@ -92,7 +126,7 @@ public class SLTMobileRepository implements ISLTRepository {
 
     private function saveInternal(file:File, objectToSave:Object):void {
         try {
-            var objectAsString : String = objectToSave is String ? objectToSave as String : JSON.stringify(objectToSave);
+            var objectAsString:String = objectToSave is String ? objectToSave as String : JSON.stringify(objectToSave);
             _fileStream.open(file, FileMode.WRITE);
             _fileStream.writeUTFBytes(objectAsString);
             _fileStream.close();

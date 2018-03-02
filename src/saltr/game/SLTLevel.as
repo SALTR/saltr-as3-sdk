@@ -204,6 +204,19 @@ public class SLTLevel {
         _contentReady = true;
     }
 
+
+    /**
+     * Clear the content of the level.
+     */
+    saltr_internal function clearContent():void {
+        _properties = null;
+        _matrixAssetMap = null;
+        _canvas2DAssetMap = null;
+        _matrixBoards = null;
+        _canvas2DBoards = null;
+        _contentReady = false;
+    }
+
     /**
      * Regenerates contents of all boards.
      */

@@ -27,8 +27,9 @@ public class SLTConfig {
     saltr_internal static const DEFAULT_GAME_LEVELS_FEATURE_TOKEN:String = "GAME_LEVELS";
     saltr_internal static const CACHE_VERSIONED_CONTENT_ROOT_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}";
     saltr_internal static const CACHE_VERSIONED_APP_DATA_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}/app_data_cache.json";
-    saltr_internal static const CACHE_VERSIONED_LEVEL_VERSIONS_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}/level_versions.json";
-    saltr_internal static const CACHE_VERSIONED_LEVEL_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}/level_{2}.json";
+    saltr_internal static const CACHE_VERSIONED_LEVEL_URL_TEMPLATE:String =  CACHE_VERSIONED_LEVELS_FOLDER+"/level_{2}_{3}.json";
+    saltr_internal static const CACHE_VERSIONED_LEVELS_FOLDER:String = DEFAULT_CONTENT_ROOT + "/app_{0}/features/{1}";
+
 
     saltr_internal static const LOCAL_LEVEL_DATA_URL_TEMPLATE:String = "{0}/features/{1}/level_data.json";
     saltr_internal static const LOCAL_LEVEL_CONTENT_URL_TEMPLATE:String = "{0}/{1}";

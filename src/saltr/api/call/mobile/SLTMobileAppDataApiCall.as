@@ -94,8 +94,7 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     private function wrappedSuccessCallbackMainContext(data:Object):void {
         SLTLogger.getInstance().log("New app data request from connect() succeed.");
         if (processNewAppData(data)) {
-            _levelUpdater.update(_appData.gameLevelsFeatures);
-            _originalSuccessCallback(_appData);
+          _originalSuccessCallback(_appData);
         } else {
             _originalFailCallback(new SLTStatusAppDataParseError());
         }

@@ -74,18 +74,13 @@ public class SLTMobileLevelCollectionUpdater extends EventDispatcher {
 
     private function getOutdatedLevels():Vector.<SLTLevel> {
         var levelsToUpdate:Vector.<SLTLevel> = new <SLTLevel>[];
-        var cachedLevelVersions:Object = _levelContentLoader.getLevelVersionsFileFromCache(_levelCollectionFeatureToken);
         for (var i:int = 0, length:int = _allLevels.length; i < length; ++i) {
             var currentLevel:SLTLevel = _allLevels[i];
-            if (null == cachedLevelVersions || currentLevel.version != getCachedLevelVersion(cachedLevelVersions, currentLevel)) {
+            if (!_levelContentLoader.cachedLevelFileEsist(_levelCollectionFeatureToken,currentLevel)) {
                 levelsToUpdate.push(currentLevel);
             }
         }
         return levelsToUpdate;
-    }
-
-    private function getCachedLevelVersion(cachedLevelVersions:Object, level:SLTLevel):String {
-        return _levelContentLoader.getCachedLevelVersion(cachedLevelVersions, _levelCollectionFeatureToken, level);
     }
 
     private function startLevelUpdateTimer():void {

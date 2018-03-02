@@ -39,12 +39,8 @@ public class SLTRepositoryStorageManager {
         return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, token);
     }
 
-    private static function getCachedLevelVersionsUrl(gameLevelsFeatureToken:String):String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_VERSIONS_URL_TEMPLATE, getAppVersion(), gameLevelsFeatureToken);
-    }
-
-    private static function getCachedLevelUrl(gameLevelsFeatureToken:String, globalIndex:int):String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, getAppVersion(), gameLevelsFeatureToken, globalIndex);
+    private static function getCachedLevelUrl(gameLevelsFeatureToken:String, globalIndex:int, levelVersion:String):String {
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, getAppVersion(), gameLevelsFeatureToken, globalIndex, levelVersion);
     }
 
     private static function isCurrentAppVersionCacheDirExists(cacheDirectory:File):Boolean {
@@ -112,35 +108,30 @@ public class SLTRepositoryStorageManager {
      * Provides an level object from cache.
      * @param gameLevelsFeatureToken The GameLevels feature token
      * @param globalIndex The global identifier of the cached level.
+     * @param version The version of the level.
      * @return The requested level from cache.
      */
-    saltr_internal function getLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object {
-        return _repository.getObjectFromCache(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex));
+    saltr_internal function getLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int, version:String):Object {
+        return _repository.getObjectFromCache(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex, version));
     }
 
     /**
-     * Provides the cached level version.
-     * @param cachedLevelVersions The level versioning file from cache.
+     * Provides a last modified level object from cache.
      * @param gameLevelsFeatureToken The GameLevels feature token
      * @param globalIndex The global identifier of the cached level.
-     * @return The version of the cached level.
+     * @return The requested level from cache.
      */
-    saltr_internal function getLevelVersionFromCache(cachedLevelVersions:Object, gameLevelsFeatureToken:String, globalIndex:int):String {
-        var version:String = null;
-        var cachedLevelFile:Object = _repository.getObjectFromCache(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex));
-        if (cachedLevelFile != null && cachedLevelVersions != null) {
-            version = SLTDeserializer.getCachedLevelVersion(cachedLevelVersions, globalIndex);
+    saltr_internal function getLastModifiedLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object {
+        var versionedLevelsFolder:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVELS_FOLDER, getAppVersion(), gameLevelsFeatureToken);
+        var cacheDirectoryListing:Array = _repository.getCacheDirectoryListing(versionedLevelsFolder, "level_"+globalIndex);
+        var result:File = null;
+        for (var i:int = 0, len:int = cacheDirectoryListing.length; i < len; ++i) {
+            var file:File = cacheDirectoryListing[i];
+            if (result == null || file.modificationDate > result.modificationDate) {
+                result = file;
+            }
         }
-        return version;
-    }
-
-    /**
-     * Provides the level versioning file from cache.
-     * @param levelCollectionFeatureToken The GameLevels feature token
-     * @return The level versioning file from cache, null if not exists.
-     */
-    saltr_internal function getLevelVersionsFileFromCache(levelCollectionFeatureToken:String):Object {
-        return _repository.getObjectFromCache(getCachedLevelVersionsUrl(levelCollectionFeatureToken));
+        return result ? _repository.getObjectFromCache(result.url) : null;
     }
 
     /**
@@ -160,32 +151,8 @@ public class SLTRepositoryStorageManager {
      * @param content The level to store.
      */
     saltr_internal function cacheLevelContent(gameLevelsFeatureToken:String, globalIndex:int, version:String, content:String):void {
-        var cachedLevelFileName:String = getCachedLevelUrl(gameLevelsFeatureToken, globalIndex);
+        var cachedLevelFileName:String = getCachedLevelUrl(gameLevelsFeatureToken, globalIndex, version);
         _repository.cacheObject(cachedLevelFileName, content);
-        //versions save here
-        var cachedLevelVersionsFileName:String = getCachedLevelVersionsUrl(gameLevelsFeatureToken);
-        var cachedLevelVersions:Array = _repository.getObjectFromCache(cachedLevelVersionsFileName) as Array;
-        if (null == cachedLevelVersions) {
-            cachedLevelVersions = [];
-        }
-
-        var versionUpdated:Boolean = false;
-        for (var i:int = 0, length:int = cachedLevelVersions.length; i < length; ++i) {
-            var cachedVersion:Object = cachedLevelVersions[i];
-            if (globalIndex == cachedVersion.globalIndex) {
-                cachedVersion.version = version;
-                versionUpdated = true;
-                break;
-            }
-        }
-        if (!versionUpdated) {
-            var objectToAdd:Object = {};
-            objectToAdd["globalIndex"] = globalIndex;
-            objectToAdd["version"] = int(version);
-            cachedLevelVersions.push(objectToAdd);
-        }
-
-        _repository.cacheObject(cachedLevelVersionsFileName, cachedLevelVersions);
     }
 
     /**
@@ -216,6 +183,16 @@ public class SLTRepositoryStorageManager {
         return _repository.getObjectFromApplication(SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, path));
     }
 
+    /**
+     *  Indicates whether the referenced file
+     * @param fileName The name of the object.
+     * @param globalIndex The global index of the level.
+     * @param version The version of the level.
+     * @return true if file exist,false otherwise.
+     */
+    saltr_internal function cachedLevelFileExist(gameLevelsFeatureToken:String, globalIndex:int, version:String):Boolean {
+        return _repository.cachedFileExist(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex, version));
+    }
 
 }
 }

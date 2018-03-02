@@ -50,5 +50,24 @@ public class SLTDummyRepository implements ISLTRepository {
     public function getObjectFromApplication(fileName:String):Object {
         return null;
     }
+
+    /**
+     *  Indicates whether the referenced file
+     * @param fileName The name of the object.
+     * @return true if file exist,false otherwise.
+     */
+    public function cachedFileExist(fileName:String):Boolean {
+        return false;
+    }
+
+    /**
+     *  Provides an array of File objects from cache
+     * @param fileName The name of the object.
+     * @param pattern The pattern to match, which can be any type of object but is typically either a string or a regular expression.
+     * @return Returns an array of File objects. Array is filtered by pattern.
+     */
+    public function getCacheDirectoryListing(fileName:String, pattern:*=null):Array{
+        return null;
+    }
 }
 }

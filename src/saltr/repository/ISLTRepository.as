@@ -43,5 +43,20 @@ public interface ISLTRepository {
      * @return The requested object.
      */
     function getObjectFromApplication(fileName:String):Object;
+
+    /**
+     *  Indicates whether the referenced file
+     * @param fileName The name of the object.
+     * @return true if file exist,false otherwise.
+     */
+    function cachedFileExist(fileName:String):Boolean ;
+
+    /**
+     *  Provides an array of File objects from cache
+     * @param fileName The name of the object.
+     * @param pattern The pattern to match, which can be any type of object but is typically either a string or a regular expression.
+     * @return Returns an array of File objects. Array is filtered by pattern.
+     */
+    function getCacheDirectoryListing(fileName:String, pattern:* = null):Array;
 }
 }

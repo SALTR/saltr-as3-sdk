@@ -3,6 +3,8 @@
  */
 
 package saltr {
+import flash.events.Event;
+
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTMobileApiCallFactory;
 import saltr.game.SLTLevel;
@@ -10,6 +12,7 @@ import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.utils.SLTMobileDeviceInfo;
+import saltr.utils.level.updater.SLTMobileLevelCollectionUpdater;
 
 use namespace saltr_internal;
 
@@ -97,15 +100,25 @@ public class SLTSaltrMobile extends SLTSaltr {
      * @param sltLevel The level.
      * @return TRUE if success, FALSE otherwise.
      */
-    override protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel):void {
-        var content:Object = loadLevelContentInternally(gameLevelsFeatureToken, sltLevel);
-        if(content == null) {
-            throw new Error("[initLevelContentLocally] Level with globalIndex = " + sltLevel.globalIndex + " is missing in '" + gameLevelsFeatureToken+"' game feature");
+    override protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+        var defaultLevelVersion:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[sltLevel.globalIndex].version;
+        if(defaultLevelVersion == sltLevel.version) {
+            initLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel, callback);
+        } else if (cachedLevelUpToDate(gameLevelsFeatureToken, sltLevel)) {
+            initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
+        } else {
+            var repositoryStorageManager:SLTRepositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
+            var levelCollectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(gameLevelsFeatureToken, new <SLTLevel>[sltLevel], repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+            levelCollectionUpdater.addEventListener(Event.COMPLETE, updateCompletedHandler);
+            function updateCompletedHandler(event:Event):void {
+                if (_repositoryStorageManager.cachedLevelFileExist(gameLevelsFeatureToken, sltLevel.globalIndex, sltLevel.version)) {
+                    initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
+                } else {
+                    initLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel, callback);
+                }
+            }
+            levelCollectionUpdater.update();
         }
-        else {
-            sltLevel.updateContent(content);
-        }
-
     }
 
     /**
@@ -130,22 +143,58 @@ public class SLTSaltrMobile extends SLTSaltr {
     }
 
     private function loadLevelContentInternally(gameLevelsFeatureToken:String, level:SLTLevel):Object {
-        var content:Object = _repositoryStorageManager.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
-        if (content == null) {
-            var applicationLevelPath:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[level.globalIndex].contentUrl;
-            content = _repositoryStorageManager.getLevelFromApplication(applicationLevelPath);
+        var content:Object = null;
+        var globalIndex:int = level.globalIndex;
+        if (level.version == _appData.getDefaultGameLevels(gameLevelsFeatureToken)[globalIndex].version) {
+            loadLevelContentFromSnapshot(gameLevelsFeatureToken, level);
+        } else {
+            content = loadLevelContentFromCache(gameLevelsFeatureToken, level);
         }
         return content;
+    }
+
+    private function loadLevelContentFromCache(gameLevelsFeatureToken:String, level:SLTLevel):Object {
+        return _repositoryStorageManager.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex, level.version);
+        //  return _repositoryStorageManager.getLastModifiedLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
+    }
+
+    private function loadLevelContentFromSnapshot(gameLevelsFeatureToken:String, level:SLTLevel):Object {
+        var applicationLevelPath:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[level.globalIndex].contentUrl;
+        return _repositoryStorageManager.getLevelFromApplication(applicationLevelPath);
+    }
+
+    private function cachedLevelUpToDate(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
+        var repositoryStorageManager:SLTRepositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
+        return repositoryStorageManager.cachedLevelFileExist(gameLevelsFeatureToken, sltLevel.globalIndex, sltLevel.version);
+    }
+
+    private function updateSLTLevelContent(content:Object, sltLevel:SLTLevel, callback:Function):void {
+        if (content == null) {
+            throw new Error("[initLevelContentLocally] Level with globalIndex = " + sltLevel.globalIndex + " is missing in  game feature");
+        }
+        else {
+            sltLevel.updateContent(content);
+        }
+        callback(true);
     }
 
     private function appDataInitLevelSuccessHandler(data:Object):void {
         _isWaitingForAppData = false;
 
         var gameLevelsFeatureToken:String = data.gameLevelsFeatureToken;
-        var level:SLTLevel = data.sltLevel;
+        var sltLevel:SLTLevel = data.sltLevel;
         var callback:Function = data.callback;
-        initLevelContentLocally(gameLevelsFeatureToken, level);
-        callback(true);
+        initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
+    }
+
+    private function initLevelContentFromSnapshot(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+        var content:Object = loadLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel);
+        updateSLTLevelContent(content, sltLevel, callback);
+    }
+
+    private function initLevelContentFromCache(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+        var content:Object = loadLevelContentFromCache(gameLevelsFeatureToken, sltLevel);
+        updateSLTLevelContent(content, sltLevel, callback);
     }
 }
 }
