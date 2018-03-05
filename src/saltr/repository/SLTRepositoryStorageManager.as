@@ -48,19 +48,14 @@ public class SLTRepositoryStorageManager {
         return dir.exists;
     }
 
-    private static function cleanupCache(cacheDirectory:File):void {
-        var rootDir:File = cacheDirectory.resolvePath(SLTConfig.DEFAULT_CONTENT_ROOT);
-        if (rootDir.exists) {
-            var contents:Array = rootDir.getDirectoryListing();
-            var currentAppCacheName:String = "app_" + getAppVersion();
-            for (var i:uint = 0, length:uint = contents.length; i < length; i++) {
-                var contentName:String = contents[i].name;
-                if (currentAppCacheName != contentName && 0 == contentName.indexOf("app_")) {
-                    var dir:File = rootDir.resolvePath(contents[i].name);
-                    if (dir.isDirectory) {
-                        dir.deleteDirectory(true);
-                    }
-                }
+    public function cleanupOldAppCache():void {
+        var cacheDirectoryListing:Array = _repository.getCacheDirectoryListing(SLTConfig.DEFAULT_CONTENT_ROOT);
+        var currentAppCacheName:String = "app_" + getAppVersion();
+        for (var i:uint = 0, length:uint = cacheDirectoryListing.length; i < length; i++) {
+            var appCacheDir:File = cacheDirectoryListing[i];
+            var appCacheDirName:String = cacheDirectoryListing[i].name;
+            if (appCacheDir.isDirectory && currentAppCacheName != appCacheDirName && 0 == appCacheDirName.indexOf("app_")) {
+                cacheDirectoryListing[i].deleteDirectoryAsync(true);
             }
         }
     }
@@ -123,7 +118,7 @@ public class SLTRepositoryStorageManager {
      */
     saltr_internal function getLastModifiedLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object {
         var versionedLevelsFolder:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVELS_FOLDER, getAppVersion(), gameLevelsFeatureToken);
-        var cacheDirectoryListing:Array = _repository.getCacheDirectoryListing(versionedLevelsFolder, "level_"+globalIndex);
+        var cacheDirectoryListing:Array = _repository.getCacheDirectoryListing(versionedLevelsFolder, "level_" + globalIndex);
         var result:File = null;
         for (var i:int = 0, len:int = cacheDirectoryListing.length; i < len; ++i) {
             var file:File = cacheDirectoryListing[i];

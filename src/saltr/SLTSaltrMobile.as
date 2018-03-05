@@ -59,6 +59,7 @@ public class SLTSaltrMobile extends SLTSaltr {
         if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
         }
+        _repositoryStorageManager.cleanupOldAppCache();
         _appData.initDefaultFeatures(getAppDataFromApplication());
         var cachedData:Object = getCachedAppData();
         if (cachedData == null) {
@@ -102,7 +103,7 @@ public class SLTSaltrMobile extends SLTSaltr {
      */
     override protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
         var defaultLevelVersion:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[sltLevel.globalIndex].version;
-        if(defaultLevelVersion == sltLevel.version) {
+        if (defaultLevelVersion == sltLevel.version) {
             initLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel, callback);
         } else if (cachedLevelUpToDate(gameLevelsFeatureToken, sltLevel)) {
             initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
@@ -117,6 +118,7 @@ public class SLTSaltrMobile extends SLTSaltr {
                     initLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel, callback);
                 }
             }
+
             levelCollectionUpdater.update();
         }
     }
