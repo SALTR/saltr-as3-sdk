@@ -79,11 +79,16 @@ public class SLTMobileRepository implements ISLTRepository {
      * @return Returns an array of File objects. Array is filtered by pattern.
      */
     public function getCacheDirectoryListing(folder:String, pattern:* = null):Array {
-        var directoryListing:Array = _cacheDirectory.resolvePath(folder).getDirectoryListing();
-        if (pattern != null) {
-            return getFilteredDirectoryListing(directoryListing, pattern);
+        var dir:File = _cacheDirectory.resolvePath(folder);
+        if (dir.exists) {
+            var directoryListing:Array = dir.getDirectoryListing();
+            if (pattern != null) {
+                return getFilteredDirectoryListing(directoryListing, pattern);
+            } else {
+                return directoryListing;
+            }
         } else {
-            return directoryListing;
+            return null;
         }
     }
 
