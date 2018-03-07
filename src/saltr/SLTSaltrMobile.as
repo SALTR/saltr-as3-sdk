@@ -184,7 +184,11 @@ public class SLTSaltrMobile extends SLTSaltr {
         var levelCollectionToken:String = data.levelCollectionToken;
         var sltLevel:SLTLevel = data.sltLevel;
         var callback:Function = data.callback;
-        initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
+        if (_repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version)) {
+            initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
+        } else {
+            initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
+        }
     }
 
     private function initLevelContentFromSnapshot(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
