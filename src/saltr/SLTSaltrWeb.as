@@ -32,12 +32,12 @@ public class SLTSaltrWeb extends SLTSaltr {
     }
 
 
-    override public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
-        super.initLevelContent(gameLevelsFeatureToken, sltLevel, callback, true);
+    override public function initLevelContent(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
+        super.initLevelContent(levelCollectionToken, sltLevel, callback, true);
     }
 
 
-    override protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    override protected function initLevelContentFromSaltr(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
         _sltLevel = sltLevel;
         _callback = callback;
 

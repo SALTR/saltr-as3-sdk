@@ -52,8 +52,8 @@ public class SLTMobileLevelContentLoader {
         SLTLogger.getInstance().log("Level content cached. Feature token: " + featureToken + " Global index: " + level.globalIndex + " version: " + level.version);
     }
 
-    saltr_internal function cachedLevelFileEsist(featureToken:String, level:SLTLevel):Boolean {
-        return _repositoryStorageManager.cachedLevelFileExist(featureToken, level.globalIndex, level.version);
+    saltr_internal function cachedLevelFileExists(featureToken:String, level:SLTLevel):Boolean {
+        return _repositoryStorageManager.cachedLevelFileExists(featureToken, level.globalIndex, level.version);
 
     }
 }

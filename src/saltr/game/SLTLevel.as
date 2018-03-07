@@ -21,11 +21,7 @@ public class SLTLevel {
     private var _packToken:String;
     private var _properties:Dictionary;
     private var _version:String;
-
     private var _contentReady:Boolean;
-    private var _matrixAssetMap:Dictionary;
-    private var _canvas2DAssetMap:Dictionary;
-
     private var _parser:SLTLevelParser;
 
     /**
@@ -89,10 +85,6 @@ public class SLTLevel {
      */
     public function get contentUrl():String {
         return _contentUrl;
-    }
-
-    public function set contentUrl(value:String):void {
-        _contentUrl = value;
     }
 
     /**
@@ -184,17 +176,20 @@ public class SLTLevel {
     public function updateContent(rootNode:Object):void {
         _properties = _parser.parseLevelProperties(rootNode);
 
+        var matrixAssetMap:Dictionary;
+        var canvas2DAssetMap:Dictionary;
+
         try {
-            _matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
-            _canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
+            canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
         }
         catch (e:Error) {
             throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
         }
 
         try {
-            _matrixBoards = _parser.parseBoardContent(rootNode, _matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
-            _canvas2DBoards = _parser.parseBoardContent(rootNode, _canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            _matrixBoards = _parser.parseBoardContent(rootNode, matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
+            _canvas2DBoards = _parser.parseBoardContent(rootNode, canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
         }
         catch (e:Error) {
             throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
@@ -210,8 +205,6 @@ public class SLTLevel {
      */
     saltr_internal function clearContent():void {
         _properties = null;
-        _matrixAssetMap = null;
-        _canvas2DAssetMap = null;
         _matrixBoards = null;
         _canvas2DBoards = null;
         _contentReady = false;

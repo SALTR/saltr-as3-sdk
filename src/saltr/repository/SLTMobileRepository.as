@@ -14,7 +14,20 @@ use namespace saltr_internal;
 /**
  * The SLTMobileRepository class represents the mobile repository.
  */
-public class SLTMobileRepository implements ISLTRepository {
+public class SLTMobileRepository {
+
+    private static function getFilteredDirectoryListing(directoryListing:Array, pattern:*):Array {
+        var result:Array = [];
+        for (var i:int = 0, len:int = directoryListing.length; i < len; ++i) {
+            if (directoryListing[i].nativePath.search(pattern) >= 0) {
+                result.push(directoryListing[i]);
+            }
+        }
+        return result;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private var _storageDirectory:File;
     private var _applicationDirectory:File;
     private var _cacheDirectory:File;
@@ -32,15 +45,14 @@ public class SLTMobileRepository implements ISLTRepository {
 //        trace("cacheDir: " + _cacheDirectory.nativePath);
     }
 
-
     /**
      * Provides an object from storage.
      * @param fileName The name of the object.
      * @return The requested object.
      */
-    public function getObjectFromStorage(fileName:String):Object {
+    public function readObjectFromStorageDir(fileName:String):Object {
         var file:File = _storageDirectory.resolvePath(fileName);
-        return getInternal(file);
+        return readInternalString(file);
     }
 
     /**
@@ -48,9 +60,9 @@ public class SLTMobileRepository implements ISLTRepository {
      * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function cacheObject(fileName:String, object:Object):void {
+    public function writeObjectIntoCacheDir(fileName:String, object:Object):void {
         var file:File = _cacheDirectory.resolvePath(fileName);
-        saveInternal(file, object);
+        writeInternalString(file, object);
     }
 
     /**
@@ -58,9 +70,9 @@ public class SLTMobileRepository implements ISLTRepository {
      * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function saveObject(fileName:String, object:Object):void {
+    public function writeObjectIntoStorageDir(fileName:String, object:Object):void {
         var file:File = _storageDirectory.resolvePath(fileName);
-        saveInternal(file, object);
+        writeInternalString(file, object);
     }
 
     /**
@@ -68,17 +80,17 @@ public class SLTMobileRepository implements ISLTRepository {
      * @param fileName The name of the object.
      * @return true if file exist,false otherwise.
      */
-    public function cachedFileExist(fileName:String):Boolean {
+    public function cachedFileExists(fileName:String):Boolean {
         return _cacheDirectory.resolvePath(fileName).exists;
     }
 
     /**
      *  Provides an array of File objects from cache
-     * @param fileName The name of the object.
+     * @param folder
      * @param pattern The pattern to match, which can be any type of object but is typically either a string or a regular expression.
      * @return Returns an array of File objects. Array is filtered by pattern.
      */
-    public function getCacheDirectoryListing(folder:String, pattern:* = null):Array {
+    public function getCacheDirSubFolderListing(folder:String, pattern:* = null):Array {
         var dir:File = _cacheDirectory.resolvePath(folder);
         if (dir.exists) {
             var directoryListing:Array = dir.getDirectoryListing();
@@ -92,28 +104,18 @@ public class SLTMobileRepository implements ISLTRepository {
         }
     }
 
-    public function getObjectFromCache(fileName:String):Object {
+    public function readObjectFromCacheDir(fileName:String):Object {
         var file:File = _cacheDirectory.resolvePath(fileName);
-        return getInternal(file);
+        return readInternalString(file);
 
     }
 
-    public function getObjectFromApplication(fileName:String):Object {
+    public function readObjectFromApplicationDir(fileName:String):Object {
         var file:File = _applicationDirectory.resolvePath(fileName);
-        return getInternal(file);
+        return readInternalString(file);
     }
 
-    private function getFilteredDirectoryListing(directoryListing:Array, pattern:*):Array {
-        var result:Array = [];
-        for (var i:int = 0, len:int = directoryListing.length; i < len; ++i) {
-            if (directoryListing[i].nativePath.search(pattern) >= 0) {
-                result.push(directoryListing[i]);
-            }
-        }
-        return result;
-    }
-
-    private function getInternal(file:File):Object {
+    private function readInternalString(file:File):Object {
         try {
             if (!file.exists) {
                 return null;
@@ -129,7 +131,7 @@ public class SLTMobileRepository implements ISLTRepository {
         return null;
     }
 
-    private function saveInternal(file:File, objectToSave:Object):void {
+    private function writeInternalString(file:File, objectToSave:Object):void {
         try {
             var objectAsString:String = objectToSave is String ? objectToSave as String : JSON.stringify(objectToSave);
             _fileStream.open(file, FileMode.WRITE);

@@ -76,7 +76,7 @@ public class SLTMobileLevelCollectionUpdater extends EventDispatcher {
         var levelsToUpdate:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var i:int = 0, length:int = _allLevels.length; i < length; ++i) {
             var currentLevel:SLTLevel = _allLevels[i];
-            if (!_levelContentLoader.cachedLevelFileEsist(_levelCollectionFeatureToken,currentLevel)) {
+            if (!_levelContentLoader.cachedLevelFileExists(_levelCollectionFeatureToken,currentLevel)) {
                 levelsToUpdate.push(currentLevel);
             }
         }

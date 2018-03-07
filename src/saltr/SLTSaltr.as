@@ -128,10 +128,10 @@ public class SLTSaltr implements ISLTSaltr {
     /**
      * Provides the game level feature properties by provided token.
      * @param token The unique identifier of the feature
-     * @return SLTLevelCollection The level data object.
+     * @return SLTLevelCollectionProperties The level data object.
      */
-    public function getGameLevelFeatureProperties(token:String):SLTLevelCollection {
-        return _appData.getGameLevelsProperties(token);
+    public function getLevelCollectionFeatureProperties(token:String):SLTLevelCollectionProperties {
+        return _appData.getLevelCollectionProperties(token);
     }
 
     public function addValidator(featureToken:String, validator:Function):void {
@@ -146,17 +146,17 @@ public class SLTSaltr implements ISLTSaltr {
         //abstract...
     }
 
-    public function initLevelContent(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
+    public function initLevelContent(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
         if (!_started) {
             throw new Error("Method 'initLevelContent' should be called after 'start()' only.");
         }
         sltLevel.contentReady = false;
 
         if (fromSaltr) {
-            initLevelContentFromSaltr(gameLevelsFeatureToken, sltLevel, callback);
+            initLevelContentFromSaltr(levelCollectionToken, sltLevel, callback);
         }
         else {
-            initLevelContentLocally(gameLevelsFeatureToken, sltLevel, callback);
+            initLevelContentLocally(levelCollectionToken, sltLevel, callback);
         }
     }
 
@@ -164,10 +164,10 @@ public class SLTSaltr implements ISLTSaltr {
         sltLevel.clearContent();
     }
 
-    protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    protected function initLevelContentLocally(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
     }
 
-    protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    protected function initLevelContentFromSaltr(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
     }
 
     public function sendLevelReport(successCallback:Function, failCallback:Function, properties:Object):void {
@@ -317,7 +317,7 @@ public class SLTSaltr implements ISLTSaltr {
             basicProperties: basicProperties,
             customProperties: customProperties,
             snapshotId: _appData.snapshotId,
-            context: "main"
+            context: SLTContext.NORMAL
         };
 
         if (additionalApiCallParams != null) {

@@ -8,7 +8,6 @@ import flash.events.Event;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTMobileApiCallFactory;
 import saltr.game.SLTLevel;
-import saltr.repository.ISLTRepository;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.utils.SLTMobileDeviceInfo;
@@ -25,7 +24,6 @@ public class SLTSaltrMobile extends SLTSaltr {
 
     /**
      * Class constructor.
-     * @param flashStage The flash stage.
      * @param clientKey The client key.
      * @param deviceId The device unique identifier.
      */
@@ -40,7 +38,7 @@ public class SLTSaltrMobile extends SLTSaltr {
     /**
      * The repository.
      */
-    public function set repository(value:ISLTRepository):void {
+    public function set repository(value:SLTMobileRepository):void {
         _repositoryStorageManager = new SLTRepositoryStorageManager(value);
     }
 
@@ -97,25 +95,26 @@ public class SLTSaltrMobile extends SLTSaltr {
 
     /**
      * Initialize level content.
-     * @param gameLevelsFeatureToken The "GameLevels" feature token
+     * @param levelCollectionToken The Level Collection feature token
      * @param sltLevel The level.
-     * @return TRUE if success, FALSE otherwise.
+     * @param callback
      */
-    override protected function initLevelContentLocally(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var defaultLevelVersion:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[sltLevel.globalIndex].version;
+    override protected function initLevelContentLocally(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
+        var defaultLevelVersion:String = _appData.getDefaultGameLevels(levelCollectionToken)[sltLevel.globalIndex].version;
         if (defaultLevelVersion == sltLevel.version) {
-            initLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel, callback);
-        } else if (cachedLevelUpToDate(gameLevelsFeatureToken, sltLevel)) {
-            initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
+            initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
+        } else if (cachedLevelUpToDate(levelCollectionToken, sltLevel)) {
+            initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
         } else {
             var repositoryStorageManager:SLTRepositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-            var levelCollectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(gameLevelsFeatureToken, new <SLTLevel>[sltLevel], repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+            var levelCollectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(levelCollectionToken, new <SLTLevel>[sltLevel], repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
             levelCollectionUpdater.addEventListener(Event.COMPLETE, updateCompletedHandler);
+
             function updateCompletedHandler(event:Event):void {
-                if (_repositoryStorageManager.cachedLevelFileExist(gameLevelsFeatureToken, sltLevel.globalIndex, sltLevel.version)) {
-                    initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
+                if (_repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version)) {
+                    initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
                 } else {
-                    initLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel, callback);
+                    initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
                 }
             }
 
@@ -125,49 +124,48 @@ public class SLTSaltrMobile extends SLTSaltr {
 
     /**
      * Initialize level content with latest data from saltr.
-     * @param gameLevelsFeatureToken The "GameLevels" feature token
+     * @param levelCollectionToken The Level Collection feature token
      * @param sltLevel The level.
      * @param callback The callback function. Called when level initialization completed.
      */
-    override protected function initLevelContentFromSaltr(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
+    override protected function initLevelContentFromSaltr(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
         var additionalCallParams:Object = {
-            gameLevelsFeatureToken: gameLevelsFeatureToken,
+            levelCollectionToken: levelCollectionToken,
             sltLevel: sltLevel,
             callback: callback
         };
 
         if (canGetAppData()) {
-            additionalCallParams.context = "secondary";
+            additionalCallParams.context = SLTContext.FORCED;
             getAppData(appDataInitLevelSuccessHandler, null, false, null, null, additionalCallParams);
         } else {
             appDataInitLevelSuccessHandler(additionalCallParams);
         }
     }
 
-    private function loadLevelContentInternally(gameLevelsFeatureToken:String, level:SLTLevel):Object {
+    private function loadLevelContentInternally(levelCollectionToken:String, level:SLTLevel):Object {
         var content:Object = null;
         var globalIndex:int = level.globalIndex;
-        if (level.version == _appData.getDefaultGameLevels(gameLevelsFeatureToken)[globalIndex].version) {
-            loadLevelContentFromSnapshot(gameLevelsFeatureToken, level);
+        if (level.version == _appData.getDefaultGameLevels(levelCollectionToken)[globalIndex].version) {
+            loadLevelContentFromSnapshot(levelCollectionToken, level);
         } else {
-            content = loadLevelContentFromCache(gameLevelsFeatureToken, level);
+            content = loadLevelContentFromCache(levelCollectionToken, level);
         }
         return content;
     }
 
-    private function loadLevelContentFromCache(gameLevelsFeatureToken:String, level:SLTLevel):Object {
-        return _repositoryStorageManager.getLevelFromCache(gameLevelsFeatureToken, level.globalIndex, level.version);
-        //  return _repositoryStorageManager.getLastModifiedLevelFromCache(gameLevelsFeatureToken, level.globalIndex);
+    private function loadLevelContentFromCache(levelCollectionToken:String, level:SLTLevel):Object {
+        return _repositoryStorageManager.getLevelFromCache(levelCollectionToken, level.globalIndex, level.version);
+        //  return _repositoryStorageManager.getLastModifiedLevelFromCache(levelCollectionToken, level.globalIndex);
     }
 
-    private function loadLevelContentFromSnapshot(gameLevelsFeatureToken:String, level:SLTLevel):Object {
-        var applicationLevelPath:String = _appData.getDefaultGameLevels(gameLevelsFeatureToken)[level.globalIndex].contentUrl;
+    private function loadLevelContentFromSnapshot(levelCollectionToken:String, level:SLTLevel):Object {
+        var applicationLevelPath:String = _appData.getDefaultGameLevels(levelCollectionToken)[level.globalIndex].contentUrl;
         return _repositoryStorageManager.getLevelFromApplication(applicationLevelPath);
     }
 
-    private function cachedLevelUpToDate(gameLevelsFeatureToken:String, sltLevel:SLTLevel):Boolean {
-        var repositoryStorageManager:SLTRepositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-        return repositoryStorageManager.cachedLevelFileExist(gameLevelsFeatureToken, sltLevel.globalIndex, sltLevel.version);
+    private function cachedLevelUpToDate(levelCollectionToken:String, sltLevel:SLTLevel):Boolean {
+        return _repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version);
     }
 
     private function updateSLTLevelContent(content:Object, sltLevel:SLTLevel, callback:Function):void {
@@ -183,19 +181,19 @@ public class SLTSaltrMobile extends SLTSaltr {
     private function appDataInitLevelSuccessHandler(data:Object):void {
         _isWaitingForAppData = false;
 
-        var gameLevelsFeatureToken:String = data.gameLevelsFeatureToken;
+        var levelCollectionToken:String = data.levelCollectionToken;
         var sltLevel:SLTLevel = data.sltLevel;
         var callback:Function = data.callback;
-        initLevelContentFromCache(gameLevelsFeatureToken, sltLevel, callback);
+        initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
     }
 
-    private function initLevelContentFromSnapshot(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var content:Object = loadLevelContentFromSnapshot(gameLevelsFeatureToken, sltLevel);
+    private function initLevelContentFromSnapshot(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
+        var content:Object = loadLevelContentFromSnapshot(levelCollectionToken, sltLevel);
         updateSLTLevelContent(content, sltLevel, callback);
     }
 
-    private function initLevelContentFromCache(gameLevelsFeatureToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var content:Object = loadLevelContentFromCache(gameLevelsFeatureToken, sltLevel);
+    private function initLevelContentFromCache(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
+        var content:Object = loadLevelContentFromCache(levelCollectionToken, sltLevel);
         updateSLTLevelContent(content, sltLevel, callback);
     }
 }

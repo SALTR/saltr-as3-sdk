@@ -6,7 +6,6 @@ import flash.desktop.NativeApplication;
 import flash.filesystem.File;
 
 import saltr.SLTConfig;
-import saltr.SLTDeserializer;
 import saltr.saltr_internal;
 import saltr.utils.SLTLogger;
 import saltr.utils.SLTUtils;
@@ -17,9 +16,6 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTRepositoryStorageManager {
-
-    private var _repository:ISLTRepository;
-    private var _localContentRoot:String;
 
     private static function getAppVersion():String {
         var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
@@ -39,8 +35,8 @@ public class SLTRepositoryStorageManager {
         return SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_DATA_URL_TEMPLATE, contentRoot, token);
     }
 
-    private static function getCachedLevelUrl(gameLevelsFeatureToken:String, globalIndex:int, levelVersion:String):String {
-        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, getAppVersion(), gameLevelsFeatureToken, globalIndex, levelVersion);
+    private static function getCachedLevelUrl(levelCollectionToken:String, globalIndex:int, levelVersion:String):String {
+        return SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVEL_URL_TEMPLATE, getAppVersion(), levelCollectionToken, globalIndex, levelVersion);
     }
 
     private static function isCurrentAppVersionCacheDirExists(cacheDirectory:File):Boolean {
@@ -48,23 +44,28 @@ public class SLTRepositoryStorageManager {
         return dir.exists;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private var _repository:SLTMobileRepository;
+    private var _localContentRoot:String;
+
+    public function SLTRepositoryStorageManager(repository:SLTMobileRepository) {
+        _repository = repository;
+        _localContentRoot = SLTConfig.DEFAULT_CONTENT_ROOT;
+    }
+
     public function cleanupOldAppCache():void {
-        var cacheDirectoryListing:Array = _repository.getCacheDirectoryListing(SLTConfig.DEFAULT_CONTENT_ROOT);
+        var cacheDirectoryListing:Array = _repository.getCacheDirSubFolderListing(SLTConfig.DEFAULT_CONTENT_ROOT);
         if (cacheDirectoryListing != null) {
             var currentAppCacheName:String = "app_" + getAppVersion();
             for (var i:uint = 0, length:uint = cacheDirectoryListing.length; i < length; i++) {
                 var appCacheDir:File = cacheDirectoryListing[i];
                 var appCacheDirName:String = cacheDirectoryListing[i].name;
-                if (appCacheDir.isDirectory && currentAppCacheName != appCacheDirName && 0 == appCacheDirName.indexOf("app_")) {
+                if (appCacheDir.isDirectory && currentAppCacheName != appCacheDirName && appCacheDirName.indexOf("app_") == 0) {
                     cacheDirectoryListing[i].deleteDirectoryAsync(true);
                 }
             }
         }
-    }
-
-    public function SLTRepositoryStorageManager(repository:ISLTRepository) {
-        _repository = repository;
-        _localContentRoot = SLTConfig.DEFAULT_CONTENT_ROOT;
     }
 
     /**
@@ -77,11 +78,11 @@ public class SLTRepositoryStorageManager {
 
     /**
      * Provides an object from storage.
-     * @param name The name of the object.
+     * @param fileName The name of the file.
      * @return The requested object.
      */
-    saltr_internal function getObjectFromStorage(fileName:String):Object {
-        return _repository.getObjectFromStorage(fileName);
+    saltr_internal function readObjectFromStorageDir(fileName:String):Object {
+        return _repository.readObjectFromStorageDir(fileName);
     }
 
     /**
@@ -89,7 +90,7 @@ public class SLTRepositoryStorageManager {
      * @return The cached application data.
      */
     saltr_internal function getAppDataFromCache():Object {
-        return _repository.getObjectFromCache(getCachedAppDataUrl());
+        return _repository.readObjectFromCacheDir(getCachedAppDataUrl());
     }
 
 
@@ -98,29 +99,29 @@ public class SLTRepositoryStorageManager {
      * @return The wrapped in package application data.
      */
     saltr_internal function getAppDataFromApplication():Object {
-        return _repository.getObjectFromApplication(getAppDataFromApplicationUrl());
+        return _repository.readObjectFromApplicationDir(getAppDataFromApplicationUrl());
     }
 
     /**
      * Provides an level object from cache.
-     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param levelCollectionToken The Level Collection feature token
      * @param globalIndex The global identifier of the cached level.
      * @param version The version of the level.
      * @return The requested level from cache.
      */
-    saltr_internal function getLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int, version:String):Object {
-        return _repository.getObjectFromCache(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex, version));
+    saltr_internal function getLevelFromCache(levelCollectionToken:String, globalIndex:int, version:String):Object {
+        return _repository.readObjectFromCacheDir(getCachedLevelUrl(levelCollectionToken, globalIndex, version));
     }
 
     /**
      * Provides a last modified level object from cache.
-     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param levelCollectionToken The Level Collection feature token
      * @param globalIndex The global identifier of the cached level.
      * @return The requested level from cache.
      */
-    saltr_internal function getLastModifiedLevelFromCache(gameLevelsFeatureToken:String, globalIndex:int):Object {
-        var versionedLevelsFolder:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVELS_FOLDER, getAppVersion(), gameLevelsFeatureToken);
-        var cacheDirectoryListing:Array = _repository.getCacheDirectoryListing(versionedLevelsFolder, "level_" + globalIndex);
+    saltr_internal function getLastModifiedLevelFromCache(levelCollectionToken:String, globalIndex:int):Object {
+        var versionedLevelsFolder:String = SLTUtils.formatString(SLTConfig.CACHE_VERSIONED_LEVELS_FOLDER, getAppVersion(), levelCollectionToken);
+        var cacheDirectoryListing:Array = _repository.getCacheDirSubFolderListing(versionedLevelsFolder, "level_" + globalIndex);
         var result:File = null;
         if (cacheDirectoryListing != null) {
             for (var i:int = 0, len:int = cacheDirectoryListing.length; i < len; ++i) {
@@ -130,28 +131,28 @@ public class SLTRepositoryStorageManager {
                 }
             }
         }
-        return result ? _repository.getObjectFromCache(result.url) : null;
+        return result ? _repository.readObjectFromCacheDir(result.url) : null;
     }
 
     /**
      * Stores an object.
-     * @param name The name of the object.
-     * @param object The object to store.
+     * @param fileName The name of the file.
+     * @param objectToSave The object to store.
      */
     saltr_internal function saveObject(fileName:String, objectToSave:Object):void {
-        _repository.saveObject(fileName, objectToSave);
+        _repository.writeObjectIntoStorageDir(fileName, objectToSave);
     }
 
     /**
      * Caches an level content.
-     * @param gameLevelsFeatureToken The "GameLevels" feature token the level belong to.
+     * @param levelCollectionToken The Level Collection feature token the level belong to.
      * @param globalIndex The global index of the level.
      * @param version The version of the level.
      * @param content The level to store.
      */
-    saltr_internal function cacheLevelContent(gameLevelsFeatureToken:String, globalIndex:int, version:String, content:String):void {
-        var cachedLevelFileName:String = getCachedLevelUrl(gameLevelsFeatureToken, globalIndex, version);
-        _repository.cacheObject(cachedLevelFileName, content);
+    saltr_internal function cacheLevelContent(levelCollectionToken:String, globalIndex:int, version:String, content:String):void {
+        var cachedLevelFileName:String = getCachedLevelUrl(levelCollectionToken, globalIndex, version);
+        _repository.writeObjectIntoCacheDir(cachedLevelFileName, content);
     }
 
     /**
@@ -159,38 +160,37 @@ public class SLTRepositoryStorageManager {
      * @param object The object to store.
      */
     saltr_internal function cacheAppData(object:Object):void {
-        _repository.cacheObject(getCachedAppDataUrl(), object);
+        _repository.writeObjectIntoCacheDir(getCachedAppDataUrl(), object);
         SLTLogger.getInstance().log("App data cached");
     }
 
     /**
      * Provides the level_data.json from application.
-     * @param gameLevelsFeatureToken The GameLevels feature token
+     * @param levelCollectionToken The Level Collection feature token
      * @return The requested level_data.json from application.
      */
-    saltr_internal function getLevelDataFromApplication(gameLevelsFeatureToken:String):Object {
-        return _repository.getObjectFromApplication(getLevelDataFromApplicationUrl(_localContentRoot, gameLevelsFeatureToken));
+    saltr_internal function getLevelDataFromApplication(levelCollectionToken:String):Object {
+        return _repository.readObjectFromApplicationDir(getLevelDataFromApplicationUrl(_localContentRoot, levelCollectionToken));
     }
 
     /**
      * Provides an level object from application.
-     * @param gameLevelsFeatureToken The GameLevels feature token
-     * @param globalIndex The global identifier of the cached level.
      * @return The requested level from application.
+     * @param path
      */
     saltr_internal function getLevelFromApplication(path:String):Object {
-        return _repository.getObjectFromApplication(SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, path));
+        return _repository.readObjectFromApplicationDir(SLTUtils.formatString(SLTConfig.LOCAL_LEVEL_CONTENT_URL_TEMPLATE, _localContentRoot, path));
     }
 
     /**
      *  Indicates whether the referenced file
-     * @param fileName The name of the object.
+     * @param levelCollectionToken The Level Collection feature token.
      * @param globalIndex The global index of the level.
      * @param version The version of the level.
      * @return true if file exist,false otherwise.
      */
-    saltr_internal function cachedLevelFileExist(gameLevelsFeatureToken:String, globalIndex:int, version:String):Boolean {
-        return _repository.cachedFileExist(getCachedLevelUrl(gameLevelsFeatureToken, globalIndex, version));
+    saltr_internal function cachedLevelFileExists(levelCollectionToken:String, globalIndex:int, version:String):Boolean {
+        return _repository.cachedFileExists(getCachedLevelUrl(levelCollectionToken, globalIndex, version));
     }
 
 }

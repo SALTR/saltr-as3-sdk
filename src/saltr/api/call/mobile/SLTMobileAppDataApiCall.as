@@ -6,7 +6,7 @@ import flash.events.Event;
 import flash.utils.Dictionary;
 
 import saltr.SLTAppData;
-
+import saltr.SLTContext;
 import saltr.SLTFeature;
 import saltr.SLTFeatureValidator;
 import saltr.api.call.SLTAppDataApiCall;
@@ -24,16 +24,13 @@ use namespace saltr_internal;
 
 public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
-    public static const CTX_MAIN:String = "main";
-    public static const CTX_SEC:String = "secondary";
-
     private var _originalSuccessCallback:Function;
     private var _originalFailCallback:Function;
     private var _validator:SLTFeatureValidator;
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
 
-    private var _dataToSendBackIfSecondaryContext:Object;
+    private var _contextForcedData:Object;
 
     public function SLTMobileAppDataApiCall(appData:SLTAppData) {
         super(appData);
@@ -52,55 +49,59 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
         _levelUpdater.dropTimeout = dropTimeout;
         _levelUpdater.timeoutIncrease = timeoutIncrease;
 
-        if (params.context == CTX_MAIN) {
-            super.call(params, wrappedSuccessCallbackMainContext, wrappedFailCallbackMainContext, nativeTimeout, dropTimeout, timeoutIncrease);
+        if (params.context == SLTContext.NORMAL) {
+            super.call(params, wrappedSuccessCallbackContextNormal, wrappedFailCallbackContextNormal, nativeTimeout, dropTimeout, timeoutIncrease);
         }
-        else {
-            _dataToSendBackIfSecondaryContext = {
-                gameLevelsFeatureToken: params.gameLevelsFeatureToken,
+        else if (params.context == SLTContext.FORCED) {
+            _contextForcedData = {
+                levelCollectionToken: params.levelCollectionToken,
                 sltLevel: params.sltLevel,
                 callback: params.callback
             };
 
-            super.call(params, wrappedSuccessCallbackSecondaryContext, wrappedFailCallbackSecondaryContext, nativeTimeout, dropTimeout, timeoutIncrease);
+            super.call(params, wrappedSuccessCallbackContextForced, wrappedFailCallbackContextForced, nativeTimeout, dropTimeout, timeoutIncrease);
+        } else {
+            throw new Error("Wrong SALTR context is used.");
         }
     }
 
 
-////////////SECONDARY CONTEXT////////
+    //////////// CONTEXT FORCED ////////
 
-    private function wrappedFailCallbackSecondaryContext(status:SLTStatus):void {
-        _originalSuccessCallback(_dataToSendBackIfSecondaryContext);
+    private function wrappedFailCallbackContextForced(status:SLTStatus):void {
+        _originalSuccessCallback(_contextForcedData);
     }
 
-    private function wrappedSuccessCallbackSecondaryContext(data:Object):void {
+    private function wrappedSuccessCallbackContextForced(data:Object):void {
         if (processNewAppData(data)) {
-            var newLevel:SLTLevel = _appData.getGameLevelsProperties(_params.gameLevelsFeatureToken).getLevelByGlobalIndex(_params.sltLevel.globalIndex);
+            var newLevel:SLTLevel = _appData.getLevelCollectionProperties(_contextForcedData.levelCollectionToken).getLevelByGlobalIndex(_contextForcedData.sltLevel.globalIndex);
             _levelUpdater.addEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
-            _levelUpdater.updateLevel(_params.gameLevelsFeatureToken, newLevel);
+
+            //we need to force load level content here
+            _levelUpdater.updateLevel(_contextForcedData.levelCollectionToken, newLevel);
         } else {
-            _originalSuccessCallback(_dataToSendBackIfSecondaryContext);
+            _originalSuccessCallback(_contextForcedData);
         }
     }
 
     private function dedicatedLevelUpdateCompleteHandler(event:Event):void {
         _levelUpdater.removeEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
-        _originalSuccessCallback(_dataToSendBackIfSecondaryContext);
+        _originalSuccessCallback(_contextForcedData);
     }
 
 
-////////////MAIN CONTEXT////////
+    //////////// CONTEXT NORMAL ////////
 
-    private function wrappedSuccessCallbackMainContext(data:Object):void {
+    private function wrappedSuccessCallbackContextNormal(data:Object):void {
         SLTLogger.getInstance().log("New app data request from connect() succeed.");
         if (processNewAppData(data)) {
-          _originalSuccessCallback(_appData);
+            _originalSuccessCallback(_appData);
         } else {
             _originalFailCallback(new SLTStatusAppDataParseError());
         }
     }
 
-    private function wrappedFailCallbackMainContext(status:SLTStatus):void {
+    private function wrappedFailCallbackContextNormal(status:SLTStatus):void {
         SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: " + status.statusCode);
 
         if (status.statusCode == SLTStatus.API_ERROR) {

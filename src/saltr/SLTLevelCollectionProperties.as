@@ -10,14 +10,14 @@ use namespace saltr_internal;
 /**
  * The SLTLevelCollection class provides the level data.
  */
-public class SLTLevelCollection {
+public class SLTLevelCollectionProperties {
 
     private var _levels:Vector.<SLTLevel>;
 
     /**
      * Class constructor.
      */
-    public function SLTLevelCollection() {
+    public function SLTLevelCollectionProperties() {
         _levels = new <SLTLevel>[];
     }
 
@@ -70,8 +70,10 @@ public class SLTLevelCollection {
      * @private
      */
     saltr_internal function initWithData(data:Object):void {
+        var newLevels:Vector.<SLTLevel> = null;
+
         try {
-            var newLevels:Vector.<SLTLevel> = SLTDeserializer.decodeLevels(data);
+            newLevels = SLTDeserializer.decodeLevels(data);
         } catch (e:Error) {
             throw new Error("[SALTR] Level parsing error.");
         }

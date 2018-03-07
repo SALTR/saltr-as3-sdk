@@ -58,12 +58,12 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
         startUpdate();
     }
 
-    public function updateLevel(gameLevelsFeatureToken:String, level:SLTLevel):void {
+    public function updateLevel(levelCollectionToken:String, level:SLTLevel):void {
         SLTLogger.getInstance().log("Update dedicated game level called.");
         if (_isInProcess) {
             cancel();
         }
-        initWithLevel(gameLevelsFeatureToken, level);
+        initWithLevel(levelCollectionToken, level);
         startUpdate();
     }
 
