@@ -154,9 +154,8 @@ public class SLTSaltr implements ISLTSaltr {
 
         if (fromSaltr) {
             initLevelContentFromSaltr(levelCollectionToken, sltLevel, callback);
-        }
-        else {
-            initLevelContentLocally(levelCollectionToken, sltLevel, callback);
+        } else {
+            initLevelContentFromAvailableSource(levelCollectionToken, sltLevel, callback);
         }
     }
 
@@ -164,7 +163,8 @@ public class SLTSaltr implements ISLTSaltr {
         sltLevel.clearContent();
     }
 
-    protected function initLevelContentLocally(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
+    protected function initLevelContentFromAvailableSource(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
+        //override
     }
 
     protected function initLevelContentFromSaltr(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
@@ -305,10 +305,11 @@ public class SLTSaltr implements ISLTSaltr {
         stopHeartbeat();
     }
 
-    protected function getAppData(successHandler:Function, failHandler:Function, ping:Boolean = false, basicProperties:Object = null, customProperties:Object = null, additionalApiCallParams:Object = null):void {
+    protected function getAppData(successHandler:Function, failHandler:Function, ping:Boolean = false, basicProperties:Object = null, customProperties:Object = null, additionalParams:Object = null):void {
         _isWaitingForAppData = true;
 
         var params:Object = {
+            context: SLTContext.NORMAL,
             clientKey: _clientKey,
             deviceId: _deviceId,
             devMode: _devMode,
@@ -316,13 +317,12 @@ public class SLTSaltr implements ISLTSaltr {
             socialId: _socialId,
             basicProperties: basicProperties,
             customProperties: customProperties,
-            snapshotId: _appData.snapshotId,
-            context: SLTContext.NORMAL
+            snapshotId: _appData.snapshotId
         };
 
-        if (additionalApiCallParams != null) {
-            for (var i:String in additionalApiCallParams) {
-                params[i] = additionalApiCallParams[i];
+        if (additionalParams != null) {
+            for (var i:String in additionalParams) {
+                params[i] = additionalParams[i];
             }
         }
 

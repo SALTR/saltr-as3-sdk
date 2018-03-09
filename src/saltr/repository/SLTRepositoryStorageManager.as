@@ -17,6 +17,8 @@ use namespace saltr_internal;
  */
 public class SLTRepositoryStorageManager {
 
+    private static var INSTANCE:SLTRepositoryStorageManager;
+
     private static function getAppVersion():String {
         var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
         var ns:Namespace = applicationDescriptor.namespace();
@@ -44,13 +46,20 @@ public class SLTRepositoryStorageManager {
         return dir.exists;
     }
 
+    public static function getInstance():SLTRepositoryStorageManager {
+        if (!INSTANCE) {
+            INSTANCE = new SLTRepositoryStorageManager();
+        }
+        return INSTANCE;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private var _repository:SLTMobileRepository;
     private var _localContentRoot:String;
 
-    public function SLTRepositoryStorageManager(repository:SLTMobileRepository) {
-        _repository = repository;
+    public function SLTRepositoryStorageManager() {
+        _repository = new SLTMobileRepository();
         _localContentRoot = SLTConfig.DEFAULT_CONTENT_ROOT;
     }
 

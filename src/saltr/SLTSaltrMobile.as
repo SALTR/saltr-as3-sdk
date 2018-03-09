@@ -8,7 +8,6 @@ import flash.events.Event;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTMobileApiCallFactory;
 import saltr.game.SLTLevel;
-import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.utils.SLTMobileDeviceInfo;
 import saltr.utils.level.updater.SLTMobileLevelCollectionUpdater;
@@ -32,14 +31,7 @@ public class SLTSaltrMobile extends SLTSaltr {
         _isWaitingForAppData = false;
 
         SLTApiCallFactory.factory = new SLTMobileApiCallFactory();
-        _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-    }
-
-    /**
-     * The repository.
-     */
-    public function set repository(value:SLTMobileRepository):void {
-        _repositoryStorageManager = new SLTRepositoryStorageManager(value);
+        _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
     }
 
     /**
@@ -99,23 +91,18 @@ public class SLTSaltrMobile extends SLTSaltr {
      * @param sltLevel The level.
      * @param callback
      */
-    override protected function initLevelContentLocally(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
+    override protected function initLevelContentFromAvailableSource(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
         var defaultLevelVersion:String = _appData.getDefaultGameLevels(levelCollectionToken)[sltLevel.globalIndex].version;
         if (defaultLevelVersion == sltLevel.version) {
             initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
-        } else if (cachedLevelUpToDate(levelCollectionToken, sltLevel)) {
+        } else if (isLevelContentCacheAvailable(levelCollectionToken, sltLevel)) {
             initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
         } else {
-            var repositoryStorageManager:SLTRepositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-            var levelCollectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(levelCollectionToken, new <SLTLevel>[sltLevel], repositoryStorageManager, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+            var levelCollectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(levelCollectionToken, new <SLTLevel>[sltLevel], _nativeTimeout, _dropTimeout, _timeoutIncrease);
             levelCollectionUpdater.addEventListener(Event.COMPLETE, updateCompletedHandler);
 
             function updateCompletedHandler(event:Event):void {
-                if (_repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version)) {
-                    initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
-                } else {
-                    initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
-                }
+                initLevelFromCacheOrSnapshot(levelCollectionToken, sltLevel, callback);
             }
 
             levelCollectionUpdater.update();
@@ -164,7 +151,7 @@ public class SLTSaltrMobile extends SLTSaltr {
         return _repositoryStorageManager.getLevelFromApplication(applicationLevelPath);
     }
 
-    private function cachedLevelUpToDate(levelCollectionToken:String, sltLevel:SLTLevel):Boolean {
+    private function isLevelContentCacheAvailable(levelCollectionToken:String, sltLevel:SLTLevel):Boolean {
         return _repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version);
     }
 
@@ -181,9 +168,11 @@ public class SLTSaltrMobile extends SLTSaltr {
     private function appDataInitLevelSuccessHandler(data:Object):void {
         _isWaitingForAppData = false;
 
-        var levelCollectionToken:String = data.levelCollectionToken;
-        var sltLevel:SLTLevel = data.sltLevel;
-        var callback:Function = data.callback;
+        initLevelFromCacheOrSnapshot(data.levelCollectionToken, data.sltLevel, data.callback);
+    }
+
+
+    private function initLevelFromCacheOrSnapshot(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
         if (_repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version)) {
             initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
         } else {

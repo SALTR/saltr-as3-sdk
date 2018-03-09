@@ -21,8 +21,8 @@ public class SLTMobileLevelContentLoader {
     private var _dropTimeout:int;
     private var _timeoutIncrease:int;
 
-    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
-        _repositoryStorageManager = repositoryStorageManager;
+    public function SLTMobileLevelContentLoader(nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
+        _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
         _nativeTimeout = nativeTimeout;
         _dropTimeout = dropTimeout;
         _timeoutIncrease = timeoutIncrease;

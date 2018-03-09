@@ -36,9 +36,8 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
         super(appData);
 
         _validator = new SLTFeatureValidator();
-        _repositoryStorageManager = new SLTRepositoryStorageManager(new SLTMobileRepository());
-
-        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(_repositoryStorageManager, 0);
+        _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
+        _levelUpdater = new SLTMobileLevelsFeaturesUpdater(0);
     }
 
     override saltr_internal function call(params:Object, successCallback:Function = null, failCallback:Function = null, nativeTimeout:int = 0, dropTimeout:int = 0, timeoutIncrease:int = 0):void {
