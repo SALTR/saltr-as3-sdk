@@ -170,6 +170,14 @@ public class SLTLevel {
         }
     }
 
+    public function update(contentUrl:String, levelToken:String, packToken:String, version:String):void {
+        _contentUrl = contentUrl;
+        _levelToken = levelToken;
+        _packToken = packToken;
+        _version = version;
+        _contentReady = false;
+    }
+
     /**
      * Updates the content of the level.
      */

@@ -69,11 +69,11 @@ public class SLTLevelCollectionProperties {
     /**
      * @private
      */
-    saltr_internal function initWithData(data:Object):void {
+    saltr_internal function initWithData(data:Object, existingLevels:Vector.<SLTLevel> ):void {
         var newLevels:Vector.<SLTLevel> = null;
 
         try {
-            newLevels = SLTDeserializer.decodeLevels(data);
+            newLevels = SLTDeserializer.decodeLevels(data, existingLevels);
         } catch (e:Error) {
             throw new Error("[SALTR] Level parsing error.");
         }
