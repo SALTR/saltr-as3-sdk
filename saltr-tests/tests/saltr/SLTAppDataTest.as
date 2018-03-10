@@ -158,7 +158,7 @@ public class SLTAppDataTest {
             }
         }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.initWithData(JSON.parse(new AppDataJson()));
-        assertEquals(5, _appData.getFeatureProperties("SETTINGS").general.lifeRefillTime);
+        assertEquals(5, _appData.getFeatureBody("SETTINGS").general.lifeRefillTime);
     }
 
     /**
@@ -175,7 +175,7 @@ public class SLTAppDataTest {
             }
         }, SLTConfig.FEATURE_TYPE_GENERIC, true);
         _appData.initWithData(JSON.parse(new AppDataJson()));
-        assertEquals(30, _appData.getFeatureProperties("SETTINGS_DEVELOPER").general.lifeRefillTime);
+        assertEquals(30, _appData.getFeatureBody("SETTINGS_DEVELOPER").general.lifeRefillTime);
     }
 
     /**
@@ -192,7 +192,7 @@ public class SLTAppDataTest {
             }
         }, SLTConfig.FEATURE_TYPE_GENERIC, false);
         _appData.initWithData(JSON.parse(new AppDataJson()));
-        assertEquals(null, _appData.getFeatureProperties("SETTINGS_DEVELOPER"));
+        assertEquals(null, _appData.getFeatureBody("SETTINGS_DEVELOPER"));
     }
     
     private function validateFeatureToken(token:String):void {

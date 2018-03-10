@@ -54,43 +54,42 @@ public class SLTAppData {
         return tokens;
     }
 
-    saltr_internal function getFeatureProperties(token:String):Object {
+    saltr_internal function getFeatureBody(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
         if (activeFeature != null && activeFeature.isValid) {
-            return activeFeature.properties;
+            return activeFeature.body;
         } else {
             var devFeature:SLTFeature = _defaultFeatures[token];
             if (devFeature != null && devFeature.required) {
-                return devFeature.properties;
+                return devFeature.body;
             }
         }
         return null;
     }
 
     saltr_internal function getDefaultGameLevels(token:String):Vector.<SLTLevel> {
-        return _defaultLevelCollectionFeatures[token].properties.allLevels;
+        return SLTFeature(_defaultLevelCollectionFeatures[token]).body.allLevels;
     }
 
-    saltr_internal function getLevelCollectionProperties(token:String):SLTLevelCollectionProperties {
+    saltr_internal function getLevelCollectionBody(token:String):SLTLevelCollectionBody {
         var levelCollectionFeature:SLTFeature = _levelCollectionFeatures[token];
         if (null != levelCollectionFeature) {
-            return levelCollectionFeature.properties as SLTLevelCollectionProperties;
+            return levelCollectionFeature.body as SLTLevelCollectionBody;
         } else {
             var defaultLevelCollection:SLTFeature = _defaultLevelCollectionFeatures[token];
             if (defaultLevelCollection != null) {
-                return defaultLevelCollection.properties as SLTLevelCollectionProperties;
+                return defaultLevelCollection.body as SLTLevelCollectionBody;
             }
         }
         return null;
     }
 
-
-    saltr_internal function defineFeature(token:String, properties:*, type:String, required:Boolean):void {
+    saltr_internal function defineFeature(token:String, body:*, type:String, required:Boolean):void {
         if (!SLTUtils.validateFeatureToken(token)) {
             throw new Error("feature's token value is incorrect.");
         }
 
-        var feature:SLTFeature = new SLTFeature(token, type, properties, required);
+        var feature:SLTFeature = new SLTFeature(token, type, body, required);
         if (type == SLTConfig.FEATURE_TYPE_GENERIC) {
             _defaultFeatures[token] = feature;
         }

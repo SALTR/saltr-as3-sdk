@@ -21,7 +21,7 @@ public class SLTFeatureValidator {
     public function validate(feature:SLTFeature):Boolean {
         var validateFunction:Function = _validators[feature.token];
         if (validateFunction) {
-            return validateFunction(feature.properties);
+            return validateFunction(feature.body);
         } else {
             return true;
         }

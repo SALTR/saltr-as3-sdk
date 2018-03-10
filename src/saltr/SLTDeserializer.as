@@ -70,22 +70,24 @@ public class SLTDeserializer {
                 var featureType:String = featureNode.type;
                 var version:String = featureNode.version;
                 var required:Boolean = featureNode.required;
-                var existingFeature:Object = existingFeatures ? existingFeatures[token] : null;
-                var canUseExistingFeatureProperties:Boolean = existingFeature && existingFeature.version == version;
+                var existingFeature:SLTFeature = existingFeatures ? existingFeatures[token] : null;
+                var canUseExistingFeatureBody:Boolean = existingFeature && existingFeature.version == version;
 
                 if (SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == featureType) {
-                    var levelCollectionProperties:SLTLevelCollectionProperties;
-                    if (canUseExistingFeatureProperties) {
-                        levelCollectionProperties = existingFeature.properties;
+                    var levelCollectionBody:SLTLevelCollectionBody;
+                    if (canUseExistingFeatureBody) {
+                        levelCollectionBody = existingFeature.body as SLTLevelCollectionBody;
                     } else {
-                        levelCollectionProperties = new SLTLevelCollectionProperties();
-                        var existingLevels:Vector.<SLTLevel> = existingFeature ? existingFeature.properties.allLevels : null;
-                        levelCollectionProperties.initWithData(JSON.parse(featureNode.properties), existingLevels);
-                        levelCollectionProperties.sortLevel();
+                        levelCollectionBody = new SLTLevelCollectionBody();
+                        var existingLevels:Vector.<SLTLevel> = existingFeature ? existingFeature.body.allLevels : null;
+                        levelCollectionBody.initWithData(JSON.parse(featureNode.properties), existingLevels);
+                        levelCollectionBody.sortLevel();
                     }
-                    features[token] = new SLTFeature(token, featureType, version, levelCollectionProperties, required);
+
+                    features[token] = new SLTFeature(token, featureType, version, levelCollectionBody, required);
+
                 } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
-                    var properties:Object = canUseExistingFeatureProperties ? existingFeatures[token].properties : JSON.parse(featureNode.properties);
+                    var properties:Object = canUseExistingFeatureBody ? existingFeature.body : JSON.parse(featureNode.properties);
                     features[token] = new SLTFeature(token, featureType, version, properties, required);
                 }
             }

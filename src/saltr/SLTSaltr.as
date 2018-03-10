@@ -121,17 +121,17 @@ public class SLTSaltr implements ISLTSaltr {
      * @param token The unique identifier of the feature.
      * @return Object The feature's properties.
      */
-    public function getFeatureProperties(token:String):Object {
-        return _appData.getFeatureProperties(token);
+    public function getFeatureBody(token:String):Object {
+        return _appData.getFeatureBody(token);
     }
 
     /**
      * Provides the game level feature properties by provided token.
      * @param token The unique identifier of the feature
-     * @return SLTLevelCollectionProperties The level data object.
+     * @return SLTLevelCollectionBody The level data object.
      */
-    public function getLevelCollectionFeatureProperties(token:String):SLTLevelCollectionProperties {
-        return _appData.getLevelCollectionProperties(token);
+    public function getLevelCollectionFeatureBody(token:String):SLTLevelCollectionBody {
+        return _appData.getLevelCollectionBody(token);
     }
 
     public function addValidator(featureToken:String, validator:Function):void {

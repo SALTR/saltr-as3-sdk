@@ -74,7 +74,7 @@ public class SLTMobileLevelsFeaturesUpdater extends EventDispatcher {
     private function initCollectionUpdaters(levelCollections:Dictionary):void {
         for (var key:Object in levelCollections) {
             var collection:SLTFeature = levelCollections[key];
-            var collectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(collection.token, collection.properties.allLevels, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+            var collectionUpdater:SLTMobileLevelCollectionUpdater = new SLTMobileLevelCollectionUpdater(collection.token, collection.body.allLevels, _nativeTimeout, _dropTimeout, _timeoutIncrease);
             _levelCollectionUpdaters.push(collectionUpdater);
         }
         SLTLogger.getInstance().log("Game level features initialized with game levels features. Level group count to update: " + _levelCollectionUpdaters.length);

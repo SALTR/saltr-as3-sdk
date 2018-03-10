@@ -39,7 +39,7 @@ public class SLTLevelParser {
      */
     public function SLTLevelParser(singleton:Singleton) {
         if (singleton == null) {
-            throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
+            throw new Error("Class cannot be instantiated. Please use the getInstance().");
         }
         _matchingBoardParser = new SLTMatchingBoardParser();
         _canvas2dBoardParser = new SLT2DBoardParser();
@@ -50,7 +50,6 @@ public class SLTLevelParser {
             var properties:Dictionary = new Dictionary();
             var levelPropertyNodes:Object = rootNode[NODE_PROPERTY_OBJECTS];
             for (var token:String in levelPropertyNodes) {
-                //var levelPropertyNode:Object = levelPropertyNodes[token];
                 properties[token] = levelPropertyNodes[token];
             }
             return properties;

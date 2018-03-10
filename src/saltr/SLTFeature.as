@@ -3,8 +3,6 @@
  */
 
 package saltr {
-import saltr.saltr_internal;
-
 use namespace saltr_internal;
 
 /**
@@ -13,15 +11,15 @@ use namespace saltr_internal;
 public class SLTFeature {
     private var _token:String;
     private var _type:String;
-    private var _properties:Object;
+    private var _body:Object;
     private var _required:Boolean;
     private var _isValid:Boolean;
     private var _version:String;
 
-    public function SLTFeature(token:String, type:String, version:String, properties:Object = null, required:Boolean = false) {
+    public function SLTFeature(token:String, type:String, version:String, body:Object = null, required:Boolean = false) {
         _token = token;
         _type = type;
-        _properties = properties;
+        _body = body;
         _required = required;
         _isValid = true;
         _version = version;
@@ -35,8 +33,8 @@ public class SLTFeature {
         return _type;
     }
 
-    saltr_internal function get properties():Object {
-        return _properties;
+    saltr_internal function get body():Object {
+        return _body;
     }
 
     saltr_internal function get required():Boolean {
@@ -48,7 +46,7 @@ public class SLTFeature {
     }
 
     saltr_internal function toString():String {
-        return "[SALTR] Feature { token : " + _token + ", value : " + _properties + "}";
+        return "[SALTR] Feature { token : " + _token + ", value : " + _body + "}";
     }
 
     saltr_internal function get isValid():Boolean {

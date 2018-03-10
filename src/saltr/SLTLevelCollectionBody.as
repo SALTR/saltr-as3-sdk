@@ -10,14 +10,14 @@ use namespace saltr_internal;
 /**
  * The SLTLevelCollection class provides the level data.
  */
-public class SLTLevelCollectionProperties {
+public class SLTLevelCollectionBody {
 
     private var _levels:Vector.<SLTLevel>;
 
     /**
      * Class constructor.
      */
-    public function SLTLevelCollectionProperties() {
+    public function SLTLevelCollectionBody() {
         _levels = new <SLTLevel>[];
     }
 

@@ -73,7 +73,7 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
     private function wrappedSuccessCallbackContextForced(data:Object):void {
         if (processNewAppData(data)) {
-            var newLevel:SLTLevel = _appData.getLevelCollectionProperties(_contextForcedData.levelCollectionToken).getLevelByGlobalIndex(_contextForcedData.sltLevel.globalIndex);
+            var newLevel:SLTLevel = _appData.getLevelCollectionBody(_contextForcedData.levelCollectionToken).getLevelByGlobalIndex(_contextForcedData.sltLevel.globalIndex);
             _levelUpdater.addEventListener(Event.COMPLETE, dedicatedLevelUpdateCompleteHandler);
 
             //we need to force load level content here
