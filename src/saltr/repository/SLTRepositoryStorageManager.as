@@ -4,7 +4,7 @@
 package saltr.repository {
 import flash.filesystem.File;
 
-import saltr.SLTConfig;
+import saltr.SLTMobileConfig;
 import saltr.saltr_internal;
 import saltr.utils.SLTLogger;
 import saltr.utils.SLTUtils;
@@ -19,15 +19,15 @@ public class SLTRepositoryStorageManager {
     private static var INSTANCE:SLTRepositoryStorageManager;
 
     private static function getSnapshotLevelDataUrl(token:String):String {
-        return SLTUtils.formatString(SLTConfig.SNAPSHOT_LEVEL_DATA_URL_TEMPLATE, token);
+        return SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_DATA_URL_TEMPLATE, token);
     }
 
     private static function getCachedLevelContentUrl(levelCollectionToken:String, globalIndex:int, levelVersion:String):String {
-        return SLTUtils.formatString(SLTConfig.CACHED_LEVEL_URL_TEMPLATE, levelCollectionToken, globalIndex, levelVersion);
+        return SLTUtils.formatString(SLTMobileConfig.CACHED_LEVEL_URL_TEMPLATE, levelCollectionToken, globalIndex, levelVersion);
     }
 
     private static function isCurrentAppVersionCacheDirExists(cacheDirectory:File):Boolean {
-        var dir:File = cacheDirectory.resolvePath(SLTConfig.CACHED_CONTENT_ROOT_URL_TEMPLATE);
+        var dir:File = cacheDirectory.resolvePath(SLTMobileConfig.CACHED_CONTENT_ROOT_URL_TEMPLATE);
         return dir.exists;
     }
 
@@ -47,9 +47,9 @@ public class SLTRepositoryStorageManager {
     }
 
     public function cleanupOldAppCache():void {
-        var cacheDirectoryListing:Array = _repository.getCacheDirSubFolderListing(SLTConfig.DEFAULT_CONTENT_ROOT);
+        var cacheDirectoryListing:Array = _repository.getCacheDirSubFolderListing(SLTMobileConfig.DEFAULT_CONTENT_ROOT);
         if (cacheDirectoryListing != null) {
-            var currentAppCacheName:String = "app_" + SLTConfig.APP_VERSION;
+            var currentAppCacheName:String = "app_" + SLTMobileConfig.APP_VERSION;
             for (var i:uint = 0, length:uint = cacheDirectoryListing.length; i < length; i++) {
                 var appCacheDir:File = cacheDirectoryListing[i];
                 var appCacheDirName:String = cacheDirectoryListing[i].name;
@@ -74,7 +74,7 @@ public class SLTRepositoryStorageManager {
      * @return The cached application data.
      */
     saltr_internal function getAppDataFromCache():Object {
-        return _repository.readObjectFromCacheDir(SLTConfig.CACHED_APP_DATA_URL_TEMPLATE);
+        return _repository.readObjectFromCacheDir(SLTMobileConfig.CACHED_APP_DATA_URL_TEMPLATE);
     }
 
 
@@ -83,7 +83,7 @@ public class SLTRepositoryStorageManager {
      * @return The wrapped in package application data.
      */
     saltr_internal function getAppDataFromSnapshot():Object {
-        return _repository.readObjectFromApplicationDir(SLTConfig.SNAPSHOT_APP_DATA_URL_TEMPLATE);
+        return _repository.readObjectFromApplicationDir(SLTMobileConfig.SNAPSHOT_APP_DATA_URL_TEMPLATE);
     }
 
     /**
@@ -104,7 +104,7 @@ public class SLTRepositoryStorageManager {
      * @return The requested level from cache.
      */
     saltr_internal function getLastModifiedLevelFromCache(levelCollectionToken:String, globalIndex:int):Object {
-        var levelContentsFolderURL:String = SLTUtils.formatString(SLTConfig.CACHED_LEVEL_CONTENTS_FOLDER_URL_TEMPLATE, levelCollectionToken);
+        var levelContentsFolderURL:String = SLTUtils.formatString(SLTMobileConfig.CACHED_LEVEL_CONTENTS_FOLDER_URL_TEMPLATE, levelCollectionToken);
         var cacheDirectoryListing:Array = _repository.getCacheDirSubFolderListing(levelContentsFolderURL, "level_" + globalIndex);
         var result:File = null;
         if (cacheDirectoryListing != null) {
@@ -144,7 +144,7 @@ public class SLTRepositoryStorageManager {
      * @param object The object to store.
      */
     saltr_internal function cacheAppData(object:Object):void {
-        _repository.writeObjectIntoCacheDir(SLTConfig.CACHED_APP_DATA_URL_TEMPLATE, object);
+        _repository.writeObjectIntoCacheDir(SLTMobileConfig.CACHED_APP_DATA_URL_TEMPLATE, object);
         SLTLogger.getInstance().log("App data cached");
     }
 
@@ -163,7 +163,7 @@ public class SLTRepositoryStorageManager {
      * @param url
      */
     saltr_internal function getLevelContentFromSnapshot(url:String):Object {
-        return _repository.readObjectFromApplicationDir(SLTUtils.formatString(SLTConfig.SNAPSHOT_LEVEL_CONTENT_URL_TEMPLATE, url));
+        return _repository.readObjectFromApplicationDir(SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_CONTENT_URL_TEMPLATE, url));
     }
 
     /**
