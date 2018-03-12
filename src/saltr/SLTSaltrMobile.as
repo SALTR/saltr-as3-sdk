@@ -59,7 +59,7 @@ public class SLTSaltrMobile extends SLTSaltr {
         return _repositoryStorageManager.getAppDataFromCache();
     }
 
-    private function getAppDataFromSnapshot():Object {
+    override protected function getAppDataFromSnapshot():Object {
         return _repositoryStorageManager.getAppDataFromSnapshot();
     }
 

@@ -26,8 +26,7 @@ public class SLTSaltrWeb extends SLTSaltr {
         if (_socialId == null) {
             throw new Error("socialId field is required and can't be null.");
         }
-
-        _appData.initEmpty();
+        _appData.initFeatures(getAppDataFromSnapshot());
         _started = true;
     }
 

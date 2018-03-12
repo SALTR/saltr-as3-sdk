@@ -11,7 +11,6 @@ import saltr.SLTFeature;
 import saltr.SLTFeatureValidator;
 import saltr.api.call.SLTAppDataApiCall;
 import saltr.game.SLTLevel;
-import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;

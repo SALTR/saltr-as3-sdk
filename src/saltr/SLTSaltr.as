@@ -139,6 +139,11 @@ public class SLTSaltr implements ISLTSaltr {
         //abstract...
     }
 
+    protected function getAppDataFromSnapshot():Object {
+         //abstract...
+        return null;
+    }
+
     public function initLevelContent(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
         if (!_started) {
             throw new Error("Method 'initLevelContent' should be called after 'start()' only.");
