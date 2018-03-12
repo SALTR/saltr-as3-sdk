@@ -30,11 +30,9 @@ public class SLTSaltrWeb extends SLTSaltr {
         _started = true;
     }
 
-
     override public function initLevelContent(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function, fromSaltr:Boolean = false):void {
         super.initLevelContent(levelCollectionToken, sltLevel, callback, true);
     }
-
 
     override protected function initLevelContentFromSaltr(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
         _sltLevel = sltLevel;
