@@ -53,7 +53,7 @@ public class SLTMobileLevelContentLoader {
     }
 
     saltr_internal function cachedLevelFileExists(featureToken:String, level:SLTLevel):Boolean {
-        return _repositoryStorageManager.cachedLevelFileExists(featureToken, level.globalIndex, level.version);
+        return _repositoryStorageManager.isCachedLevelContentFileExists(featureToken, level.globalIndex, level.version);
 
     }
 }

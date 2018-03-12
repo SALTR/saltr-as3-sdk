@@ -16,17 +16,11 @@ use namespace saltr_internal;
 public class SLTAppData {
 
     private var _activeFeatures:Dictionary;
-    private var _defaultFeatures:Dictionary;
-    private var _levelCollectionFeatures:Dictionary;
-    private var _defaultLevelCollectionFeatures:Dictionary;
     private var _experiments:Vector.<SLTExperiment>;
     private var _snapshotId:String;
 
     public function SLTAppData() {
         _activeFeatures = new Dictionary();
-        _defaultFeatures = new Dictionary();
-        _levelCollectionFeatures = new Dictionary();
-        _defaultLevelCollectionFeatures = new Dictionary();
         _experiments = new <SLTExperiment>[];
     }
 
@@ -34,52 +28,26 @@ public class SLTAppData {
         return _activeFeatures;
     }
 
-    saltr_internal function get defaultFeatures():Dictionary {
-        return _defaultFeatures;
-    }
-
-    saltr_internal function get levelCollectionFeatures():Dictionary {
-        return _levelCollectionFeatures;
-    }
-
     saltr_internal function get experiments():Vector.<SLTExperiment> {
         return _experiments;
     }
 
-    saltr_internal function getActiveFeatureTokens():Vector.<String> {
-        var tokens:Vector.<String> = new <String>[];
-        for each(var feature:SLTFeature in _activeFeatures) {
-            tokens.push(feature.token);
-        }
-        return tokens;
-    }
-
     saltr_internal function getFeatureBody(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
-        if (activeFeature != null && activeFeature.isValid) {
+        if (activeFeature != null && activeFeature.isValid && !activeFeature.disabled) {
             return activeFeature.body;
-        } else {
-            var devFeature:SLTFeature = _defaultFeatures[token];
-            if (devFeature != null && devFeature.required) {
-                return devFeature.body;
-            }
         }
         return null;
     }
 
-    saltr_internal function getDefaultGameLevels(token:String):Vector.<SLTLevel> {
-        return SLTFeature(_defaultLevelCollectionFeatures[token]).body.allLevels;
+    saltr_internal function getLevelCollectionLevelsFromDefault(token:String):Vector.<SLTLevel> {
+        return SLTFeature(_defaultFeatures[token]).body.allLevels;
     }
 
     saltr_internal function getLevelCollectionBody(token:String):SLTLevelCollectionBody {
-        var levelCollectionFeature:SLTFeature = _levelCollectionFeatures[token];
-        if (null != levelCollectionFeature) {
+        var levelCollectionFeature:SLTFeature = _activeFeatures[token];
+        if (levelCollectionFeature != null) {
             return levelCollectionFeature.body as SLTLevelCollectionBody;
-        } else {
-            var defaultLevelCollection:SLTFeature = _defaultLevelCollectionFeatures[token];
-            if (defaultLevelCollection != null) {
-                return defaultLevelCollection.body as SLTLevelCollectionBody;
-            }
         }
         return null;
     }
@@ -89,29 +57,12 @@ public class SLTAppData {
             throw new Error("feature's token value is incorrect.");
         }
 
-        var feature:SLTFeature = new SLTFeature(token, type, body, required);
-        if (type == SLTConfig.FEATURE_TYPE_GENERIC) {
-            _defaultFeatures[token] = feature;
-        }
-        else if (type == SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION) {
-            _defaultLevelCollectionFeatures[token] = feature;
-        }
+        _activeFeatures[token] = new SLTFeature(token, type, body, required);
     }
 
-    saltr_internal function initEmpty():void {
-        for (var i:String in _defaultFeatures) {
-            _activeFeatures[i] = _defaultFeatures[i];
-        }
-
-        for (var j:String in _defaultLevelCollectionFeatures) {
-            _levelCollectionFeatures[j] = _defaultLevelCollectionFeatures[j];
-        }
-    }
-
-    saltr_internal function initDefaultFeatures(data:Object):void {
+    saltr_internal function initFeatures(data:Object):void {
         try {
-            _defaultLevelCollectionFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _defaultLevelCollectionFeatures);
-            _defaultFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _defaultFeatures);
+            SLTDeserializer.decodeAndInitFeatures(data, _activeFeatures);
             _snapshotId = data.snapshotId;
         } catch (e:Error) {
             throw new Error("AppData parse error");
@@ -120,8 +71,7 @@ public class SLTAppData {
 
     saltr_internal function initWithData(data:Object):void {
         try {
-            _levelCollectionFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION, _levelCollectionFeatures);
-            _activeFeatures = SLTDeserializer.decodeFeatures(data, SLTConfig.FEATURE_TYPE_GENERIC, _activeFeatures);
+            _activeFeatures = SLTDeserializer.decodeAndUpdateFeatures(data, _activeFeatures);
             _experiments = SLTDeserializer.decodeExperiments(data);
         } catch (e:Error) {
             throw new Error("AppData parse error");

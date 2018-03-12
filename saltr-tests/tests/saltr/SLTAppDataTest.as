@@ -7,6 +7,7 @@ import org.flexunit.asserts.assertFalse;
 
 import saltr.SLTAppData;
 import saltr.SLTConfig;
+import saltr.SLTFeatureType;
 import saltr.saltr_internal;
 import saltr.utils.SLTUtils;
 
@@ -46,7 +47,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
         _appData.initEmpty();
         var tokens:Vector.<String> = _appData.getActiveFeatureTokens();
 
@@ -80,7 +81,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
     }
 
     /**
@@ -95,7 +96,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
     }
 
     /**
@@ -110,7 +111,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
     }
 
     /**
@@ -125,7 +126,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
 
         var token2:String = "VALIDATION";
         validateFeatureToken(token2);
@@ -133,7 +134,7 @@ public class SLTAppDataTest {
             general: {
                 validationTimeout: 50
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
         _appData.initEmpty();
         var tokens:Vector.<String> = _appData.getActiveFeatureTokens();
 
@@ -156,7 +157,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(5, _appData.getFeatureBody("SETTINGS").general.lifeRefillTime);
     }
@@ -173,7 +174,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, true);
+        }, SLTFeatureType.GENERIC, true);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(30, _appData.getFeatureBody("SETTINGS_DEVELOPER").general.lifeRefillTime);
     }
@@ -190,7 +191,7 @@ public class SLTAppDataTest {
             general: {
                 lifeRefillTime: 30
             }
-        }, SLTConfig.FEATURE_TYPE_GENERIC, false);
+        }, SLTFeatureType.GENERIC, false);
         _appData.initWithData(JSON.parse(new AppDataJson()));
         assertEquals(null, _appData.getFeatureBody("SETTINGS_DEVELOPER"));
     }

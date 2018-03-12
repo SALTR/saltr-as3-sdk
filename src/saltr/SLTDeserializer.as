@@ -35,21 +35,17 @@ public class SLTDeserializer {
         return experiments;
     }
 
-    saltr_internal static function decodeLevels(rootNode:Object, existingLevels:Vector.<SLTLevel>):Vector.<SLTLevel> {
-        return existingLevels ? decodeAndUpdateExistingLevels(rootNode, existingLevels) : decodeAndCreateNewLevels(rootNode);
-    }
-
-    private static function decodeAndUpdateExistingLevels(rootNode:Object, existingLevels:Vector.<SLTLevel>):Vector.<SLTLevel> {
+    saltr_internal static function decodeAndUpdateExistingLevels(rootNode:Object, existingLevels:Vector.<SLTLevel>):Vector.<SLTLevel> {
         var levelsNode:Array = rootNode.levels as Array;
         for (var i:int = 0, length:int = levelsNode.length; i < length; ++i) {
             var levelNode:Object = levelsNode[i];
             var currentSLTLevel:SLTLevel = existingLevels[levelNode.globalIndex];
-            currentSLTLevel.update(levelNode.url, levelNode.levelToken, levelNode.packToken, levelNode.version);
+            currentSLTLevel.update(levelNode.version, levelNode.url);
         }
         return existingLevels;
     }
 
-    private static function decodeAndCreateNewLevels(rootNode:Object):Vector.<SLTLevel> {
+    saltr_internal static function decodeAndCreateNewLevels(rootNode:Object):Vector.<SLTLevel> {
         var levelsNode:Array = rootNode.levels as Array;
         var levels:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var i:int = 0, length:int = levelsNode.length; i < length; ++i) {
@@ -60,74 +56,79 @@ public class SLTDeserializer {
         return levels;
     }
 
-    saltr_internal static function decodeFeatures(rootNode:Object, decodeFeatureType:String, existingFeatures:Dictionary = null):Dictionary {
-        var features:Dictionary = new Dictionary();
-        var featureNodes:Array = rootNode.features as Array;
+    saltr_internal static function decodeAndInitFeatures(snapshotAppdataNode:Object, features:Dictionary):Dictionary {
+        var featureNodes:Array = snapshotAppdataNode.features as Array;
         if (featureNodes != null) {
             for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
                 var featureNode:Object = featureNodes[i];
                 var token:String = featureNode.token;
                 var featureType:String = featureNode.type;
                 var version:String = featureNode.version;
-                var required:Boolean = featureNode.required;
-                var existingFeature:SLTFeature = existingFeatures ? existingFeatures[token] : null;
-                var canUseExistingFeatureBody:Boolean = existingFeature && existingFeature.version == version;
+                var isRequired:Boolean = featureNode.required;
 
-                if (SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == decodeFeatureType && SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION == featureType) {
-                    var levelCollectionBody:SLTLevelCollectionBody;
-                    if (canUseExistingFeatureBody) {
-                        levelCollectionBody = existingFeature.body as SLTLevelCollectionBody;
-                    } else {
-                        levelCollectionBody = new SLTLevelCollectionBody();
-                        var existingLevels:Vector.<SLTLevel> = existingFeature ? existingFeature.body.allLevels : null;
-                        levelCollectionBody.initWithData(JSON.parse(featureNode.properties), existingLevels);
-                        levelCollectionBody.sortLevel();
-                    }
+                var parsedBody:Object = JSON.parse(featureNode.properties);
 
-                    features[token] = new SLTFeature(token, featureType, version, levelCollectionBody, required);
+                switch (featureType) {
+                    case SLTFeatureType.GENERIC :
+                        features[token] = new SLTFeature(token, featureType, version, parsedBody, isRequired);
+                        break;
 
-                } else if (SLTConfig.FEATURE_TYPE_GENERIC == decodeFeatureType && SLTConfig.FEATURE_TYPE_GENERIC == featureType) {
-                    var properties:Object = canUseExistingFeatureBody ? existingFeature.body : JSON.parse(featureNode.properties);
-                    features[token] = new SLTFeature(token, featureType, version, properties, required);
+                    case SLTFeatureType.LEVEL_COLLECTION :
+                        features[token] = new SLTFeature(token, featureType, version, new SLTLevelCollectionBody(parsedBody), isRequired);
+                        break;
+
+                    default:
+                        trace("SALTR parsing unknown feature type.");
                 }
             }
         }
         return features;
     }
 
-    saltr_internal static function getFeature(rootNode:Object, featureToken:String, featureType:String):Object {
-        var feature:Object = null;
-        var featureNodes:Array = rootNode.features as Array;
-        if (null != featureNodes) {
-            for (var i:int = 0, length:int = featureNodes.length; i < length; ++i) {
-                var featureNode:Object = featureNodes[i];
-                if (featureToken == featureNode.token && featureType == featureNode.type) {
-                    feature = featureNode;
-                    break;
-                }
-            }
-        }
-        return feature;
-    }
 
-    /*
-     Provides cached level version from level_versions.json
-     rootNode - level_versions.json
-     globalIndex - The level global identifier
-     */
-    saltr_internal static function getCachedLevelVersion(rootNode:Object, globalIndex:int):String {
-        var version:String = null;
-        var container:Array = rootNode as Array;
-        if (null != container) {
-            for (var i:int = 0, length:int = container.length; i < length; ++i) {
-                var cachedLevelNode:Object = container[i];
-                if (globalIndex == cachedLevelNode.globalIndex) {
-                    version = cachedLevelNode.version;
-                    break;
+    saltr_internal static function decodeAndUpdateFeatures(rootNode:Object, sltFeatureMap:Dictionary):Dictionary {
+        var featureNodes:Array = rootNode.features as Array;
+
+        if (featureNodes != null) {
+
+            var featureNodeMap:Dictionary = new Dictionary();
+            for (var i:int = 0, len:int = featureNodes.length; i < len; ++i) {
+                var node:Object = featureNodes[i];
+                featureNodeMap[node.token] = node;
+            }
+
+            for each (var sltFeature:SLTFeature in sltFeatureMap) {
+                var token:String = sltFeature.token;
+                var featureType:String = sltFeature.type;
+                var featureNode:Object = featureNodeMap[token];
+
+                if (featureNode != null) {
+                    var featureNodeVersion:String = featureNode.version;
+                    sltFeature.disabled = false;
+                    if (sltFeature.version != featureNodeVersion) {
+                        switch (featureType) {
+                            case SLTFeatureType.GENERIC :
+                                sltFeature.update(featureNodeVersion, JSON.parse(featureNode.properties));
+                                break;
+
+                            case SLTFeatureType.LEVEL_COLLECTION :
+                                SLTLevelCollectionBody(sltFeature.body).updateLevels(JSON.parse(featureNode.properties));
+                                sltFeature.update(featureNodeVersion);
+                                break;
+
+                            default:
+                                trace("SALTR parsing unknown feature type.");
+                        }
+                    }
+
+                } else if (sltFeature.isRequired == false) {
+                    sltFeature.disabled = true;
                 }
+
+
             }
         }
-        return version;
+        return sltFeatureMap;
     }
 }
 }

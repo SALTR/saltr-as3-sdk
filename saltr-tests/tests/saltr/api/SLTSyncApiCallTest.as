@@ -151,7 +151,7 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
 
     override protected function getCorrectMobileCallParams():Object {
         var features:Dictionary = new Dictionary();
-        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, "0", {"bottom-row-limit": 3}, true);
+        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTFeatureType.GENERIC, "0", {"bottom-row-limit": 3}, true);
         return {
             clientKey: "clientKey",
             deviceId: "deviceId",
@@ -162,7 +162,7 @@ public class SLTSyncApiCallTest extends SLTApiCallTest {
 
     override protected function getCorrectWebCallParams():Object {
         var features:Dictionary = new Dictionary();
-        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTConfig.FEATURE_TYPE_GENERIC, "0", {"bottom-row-limit": 3}, true);
+        features["COLLECT_SCROLLING"] = new SLTFeature("COLLECT_SCROLLING", SLTFeatureType.GENERIC, "0", {"bottom-row-limit": 3}, true);
         return {
             clientKey: "clientKey",
             socialId: "socialId",

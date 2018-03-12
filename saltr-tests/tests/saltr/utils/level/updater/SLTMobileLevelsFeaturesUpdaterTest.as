@@ -12,6 +12,7 @@ import org.flexunit.async.Async;
 
 import saltr.SLTConfig;
 import saltr.SLTDeserializer;
+import saltr.SLTFeatureType;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
@@ -69,7 +70,7 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
      */
     [Test(async, timeout=10000)]
     public function updateCompleteTest():void {
-        var gameLevelsFeatures:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+        var gameLevelsFeatures:Dictionary = SLTDeserializer.decodeAndUpdateFeatures(JSON.parse(new AppData5LevelsJson()), SLTFeatureType.LEVEL_COLLECTION);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 5000);
         _featuresUpdater.update(gameLevelsFeatures);
     }
@@ -82,8 +83,8 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
      */
     [Test(async, timeout=1000)]
     public function updateCancelUpdateTest():void {
-        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
-        var gameLevelsFeatures3Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData3LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeAndUpdateFeatures(JSON.parse(new AppData5LevelsJson()), SLTFeatureType.LEVEL_COLLECTION);
+        var gameLevelsFeatures3Levels:Dictionary = SLTDeserializer.decodeAndUpdateFeatures(JSON.parse(new AppData3LevelsJson()), SLTFeatureType.LEVEL_COLLECTION);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
         _featuresUpdater.update(gameLevelsFeatures5Levels);
         _featuresUpdater.update(gameLevelsFeatures3Levels);
@@ -97,7 +98,7 @@ public class SLTMobileLevelsFeaturesUpdaterTest {
      */
     [Test(async, timeout=1000)]
     public function updateCancelUpdateLevelTest():void {
-        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeFeatures(JSON.parse(new AppData5LevelsJson()), SLTConfig.FEATURE_TYPE_LEVEL_COLLECTION);
+        var gameLevelsFeatures5Levels:Dictionary = SLTDeserializer.decodeAndUpdateFeatures(JSON.parse(new AppData5LevelsJson()), SLTFeatureType.LEVEL_COLLECTION);
         Async.proceedOnEvent(this, _featuresUpdater, Event.COMPLETE, 500);
         _featuresUpdater.update(gameLevelsFeatures5Levels);
         var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "", "", "44");

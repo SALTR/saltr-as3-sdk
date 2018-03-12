@@ -17,8 +17,9 @@ public class SLTLevelCollectionBody {
     /**
      * Class constructor.
      */
-    public function SLTLevelCollectionBody() {
-        _levels = new <SLTLevel>[];
+    public function SLTLevelCollectionBody(data:Object) {
+        _levels = SLTDeserializer.decodeAndCreateNewLevels(data);
+        sortLevel();
     }
 
     /**
@@ -33,6 +34,13 @@ public class SLTLevelCollectionBody {
      */
     public function get allLevelsCount():uint {
         return _levels.length;
+    }
+
+    /**
+     *
+     */
+    public function updateLevels(data:Object):void {
+        SLTDeserializer.decodeAndUpdateExistingLevels(data, _levels);
     }
 
     /**
@@ -66,25 +74,7 @@ public class SLTLevelCollectionBody {
         return null;
     }
 
-    /**
-     * @private
-     */
-    saltr_internal function initWithData(data:Object, existingLevels:Vector.<SLTLevel> ):void {
-        var newLevels:Vector.<SLTLevel> = null;
-
-        try {
-            newLevels = SLTDeserializer.decodeLevels(data, existingLevels);
-        } catch (e:Error) {
-            throw new Error("[SALTR] Level parsing error.");
-        }
-
-        if (newLevels != null) {
-            disposeLevels();
-            _levels = newLevels;
-        }
-    }
-
-    saltr_internal function sortLevel():void {
+    private function sortLevel():void {
         _levels.sort(function (level1:SLTLevel, level2:SLTLevel):Number {
             return level1.globalIndex - level2.globalIndex;
         })
@@ -93,5 +83,6 @@ public class SLTLevelCollectionBody {
     private function disposeLevels():void {
         _levels.length = 0;
     }
+
 }
 }

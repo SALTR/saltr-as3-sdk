@@ -35,27 +35,21 @@ public class SLTSaltrMobile extends SLTSaltr {
     }
 
     /**
-     * Defines the local content root.
-     * @param contentRoot The content root url.
-     */
-    public function setLocalContentRoot(contentRoot:String):void {
-        _repositoryStorageManager.setLocalContentRoot(contentRoot);
-    }
-
-    /**
      * Starts the instance.
      */
     override public function start():void {
         if (_deviceId == null) {
             throw new Error("deviceId field is required and can't be null.");
         }
-        _repositoryStorageManager.cleanupOldAppCache();
-        _appData.initDefaultFeatures(getAppDataFromApplication());
-        var cachedData:Object = getCachedAppData();
-        if (cachedData == null) {
-            _appData.initEmpty();
-        } else {
-            _appData.initWithData(cachedData);
+
+        //TODO: this line should be called only on 1st game run, if not possible - delete
+        //_repositoryStorageManager.cleanupOldAppCache();
+
+        _appData.initFeatures(getAppDataFromSnapshot());
+        var cachedAppData:Object = getCachedAppData();
+
+        if (cachedAppData != null) {
+            _appData.initWithData(cachedAppData);
         }
 
         _started = true;
@@ -65,8 +59,8 @@ public class SLTSaltrMobile extends SLTSaltr {
         return _repositoryStorageManager.getAppDataFromCache();
     }
 
-    private function getAppDataFromApplication():Object {
-        return _repositoryStorageManager.getAppDataFromApplication();
+    private function getAppDataFromSnapshot():Object {
+        return _repositoryStorageManager.getAppDataFromSnapshot();
     }
 
     override protected function updateMissingProperties(basicProperties:SLTBasicProperties):void {
@@ -92,7 +86,7 @@ public class SLTSaltrMobile extends SLTSaltr {
      * @param callback
      */
     override protected function initLevelContentFromAvailableSource(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var defaultLevelVersion:String = _appData.getDefaultGameLevels(levelCollectionToken)[sltLevel.globalIndex].version;
+        var defaultLevelVersion:String = _appData.getLevelCollectionLevelsFromDefault(levelCollectionToken)[sltLevel.globalIndex].version;
         if (defaultLevelVersion == sltLevel.version) {
             initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
         } else if (isLevelContentCacheAvailable(levelCollectionToken, sltLevel)) {
@@ -133,7 +127,7 @@ public class SLTSaltrMobile extends SLTSaltr {
     private function loadLevelContentInternally(levelCollectionToken:String, level:SLTLevel):Object {
         var content:Object = null;
         var globalIndex:int = level.globalIndex;
-        if (level.version == _appData.getDefaultGameLevels(levelCollectionToken)[globalIndex].version) {
+        if (level.version == _appData.getLevelCollectionLevelsFromDefault(levelCollectionToken)[globalIndex].version) {
             loadLevelContentFromSnapshot(levelCollectionToken, level);
         } else {
             content = loadLevelContentFromCache(levelCollectionToken, level);
@@ -142,17 +136,17 @@ public class SLTSaltrMobile extends SLTSaltr {
     }
 
     private function loadLevelContentFromCache(levelCollectionToken:String, level:SLTLevel):Object {
-        return _repositoryStorageManager.getLevelFromCache(levelCollectionToken, level.globalIndex, level.version);
+        return _repositoryStorageManager.getLevelContentFromCache(levelCollectionToken, level.globalIndex, level.version);
         //  return _repositoryStorageManager.getLastModifiedLevelFromCache(levelCollectionToken, level.globalIndex);
     }
 
     private function loadLevelContentFromSnapshot(levelCollectionToken:String, level:SLTLevel):Object {
-        var applicationLevelPath:String = _appData.getDefaultGameLevels(levelCollectionToken)[level.globalIndex].contentUrl;
-        return _repositoryStorageManager.getLevelFromApplication(applicationLevelPath);
+        var levelURL:String = _appData.getLevelCollectionLevelsFromDefault(levelCollectionToken)[level.globalIndex].contentUrl;
+        return _repositoryStorageManager.getLevelContentFromSnapshot(levelURL);
     }
 
     private function isLevelContentCacheAvailable(levelCollectionToken:String, sltLevel:SLTLevel):Boolean {
-        return _repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version);
+        return _repositoryStorageManager.isCachedLevelContentFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version);
     }
 
     private function updateSLTLevelContent(content:Object, sltLevel:SLTLevel, callback:Function):void {
@@ -171,9 +165,8 @@ public class SLTSaltrMobile extends SLTSaltr {
         initLevelFromCacheOrSnapshot(data.levelCollectionToken, data.sltLevel, data.callback);
     }
 
-
     private function initLevelFromCacheOrSnapshot(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
-        if (_repositoryStorageManager.cachedLevelFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version)) {
+        if (_repositoryStorageManager.isCachedLevelContentFileExists(levelCollectionToken, sltLevel.globalIndex, sltLevel.version)) {
             initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
         } else {
             initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);

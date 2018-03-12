@@ -110,13 +110,6 @@ public class SLTSaltr implements ISLTSaltr {
     }
 
     /**
-     * Provides active feature tokens.
-     */
-    public function getActiveFeatureTokens():Vector.<String> {
-        return _appData.getActiveFeatureTokens();
-    }
-
-    /**
      * Provides the feature properties by provided token.
      * @param token The unique identifier of the feature.
      * @return Object The feature's properties.
@@ -134,8 +127,8 @@ public class SLTSaltr implements ISLTSaltr {
         return _appData.getLevelCollectionBody(token);
     }
 
-    public function addValidator(featureToken:String, validator:Function):void {
-        _validator.addValidator(featureToken, validator);
+    public function addValidator(featureToken:String, validatorFunction:Function):void {
+        _validator.addValidator(featureToken, validatorFunction);
     }
 
     protected function canGetAppData():Boolean {
