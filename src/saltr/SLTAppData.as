@@ -40,10 +40,6 @@ public class SLTAppData {
         return null;
     }
 
-    saltr_internal function getLevelCollectionLevelsFromDefault(token:String):Vector.<SLTLevel> {
-        return SLTFeature(_defaultFeatures[token]).body.allLevels;
-    }
-
     saltr_internal function getLevelCollectionBody(token:String):SLTLevelCollectionBody {
         var levelCollectionFeature:SLTFeature = _activeFeatures[token];
         if (levelCollectionFeature != null) {

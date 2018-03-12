@@ -86,8 +86,7 @@ public class SLTSaltrMobile extends SLTSaltr {
      * @param callback
      */
     override protected function initLevelContentFromAvailableSource(levelCollectionToken:String, sltLevel:SLTLevel, callback:Function):void {
-        var defaultLevelVersion:String = _appData.getLevelCollectionLevelsFromDefault(levelCollectionToken)[sltLevel.globalIndex].version;
-        if (defaultLevelVersion == sltLevel.version) {
+        if (sltLevel.defaultVersion == sltLevel.version) {
             initLevelContentFromSnapshot(levelCollectionToken, sltLevel, callback);
         } else if (isLevelContentCacheAvailable(levelCollectionToken, sltLevel)) {
             initLevelContentFromCache(levelCollectionToken, sltLevel, callback);
@@ -124,25 +123,13 @@ public class SLTSaltrMobile extends SLTSaltr {
         }
     }
 
-    private function loadLevelContentInternally(levelCollectionToken:String, level:SLTLevel):Object {
-        var content:Object = null;
-        var globalIndex:int = level.globalIndex;
-        if (level.version == _appData.getLevelCollectionLevelsFromDefault(levelCollectionToken)[globalIndex].version) {
-            loadLevelContentFromSnapshot(levelCollectionToken, level);
-        } else {
-            content = loadLevelContentFromCache(levelCollectionToken, level);
-        }
-        return content;
-    }
-
     private function loadLevelContentFromCache(levelCollectionToken:String, level:SLTLevel):Object {
         return _repositoryStorageManager.getLevelContentFromCache(levelCollectionToken, level.globalIndex, level.version);
         //  return _repositoryStorageManager.getLastModifiedLevelFromCache(levelCollectionToken, level.globalIndex);
     }
 
     private function loadLevelContentFromSnapshot(levelCollectionToken:String, level:SLTLevel):Object {
-        var levelURL:String = _appData.getLevelCollectionLevelsFromDefault(levelCollectionToken)[level.globalIndex].contentUrl;
-        return _repositoryStorageManager.getLevelContentFromSnapshot(levelURL);
+        return _repositoryStorageManager.getLevelContentFromSnapshot(level.defaultContentUrl);
     }
 
     private function isLevelContentCacheAvailable(levelCollectionToken:String, sltLevel:SLTLevel):Boolean {
