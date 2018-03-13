@@ -65,12 +65,8 @@ public class SLTAppData {
     }
 
     saltr_internal function initWithData(data:Object):void {
-        try {
-            _activeFeatures = SLTDeserializer.decodeAndUpdateFeatures(data, _activeFeatures);
-            _experiments = SLTDeserializer.decodeExperiments(data);
-        } catch (e:Error) {
-            throw new Error("AppData parse error");
-        }
+        _activeFeatures = SLTDeserializer.decodeAndUpdateFeatures(data, _activeFeatures);
+        _experiments = SLTDeserializer.decodeExperiments(data);
     }
 
     public function get snapshotId():String {
