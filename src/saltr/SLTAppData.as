@@ -5,7 +5,6 @@
 package saltr {
 import flash.utils.Dictionary;
 
-import saltr.game.SLTLevel;
 import saltr.utils.SLTUtils;
 
 use namespace saltr_internal;
