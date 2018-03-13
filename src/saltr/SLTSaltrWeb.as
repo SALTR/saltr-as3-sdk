@@ -40,11 +40,15 @@ public class SLTSaltrWeb extends SLTSaltr {
 
         var params:Object = {
             contentUrl: sltLevel.contentUrl,
-            alternateUrl: sltLevel.alternateContentUrl
+            alternateUrl: getAlternateUrl(sltLevel)
         };
 
         var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
         levelContentApiCall.call(params, levelContentLoadSuccessCallback, levelContentLoadFailCallback, _nativeTimeout, _dropTimeout, _timeoutIncrease);
+    }
+
+    protected function getAlternateUrl(sltLevel:SLTLevel):String {
+        return sltLevel.defaultContentUrl;
     }
 
     private function levelContentLoadSuccessCallback(data:Object):void {

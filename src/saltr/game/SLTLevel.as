@@ -17,7 +17,6 @@ public class SLTLevel {
     private var _packIndex:int;
     private var _contentUrl:String;
     private var _defaultContentUrl:String;
-    private var _alternateContentUrl:String;
     private var _levelToken:String;
     private var _packToken:String;
     private var _properties:Dictionary;
@@ -53,14 +52,6 @@ public class SLTLevel {
         _defaultVersion = version;
         _contentReady = false;
         _parser = SLTLevelParser.getInstance();
-    }
-
-    public function get alternateContentUrl():String {
-        return _alternateContentUrl;
-    }
-
-    public function set alternateContentUrl(value:String):void {
-        _alternateContentUrl = value;
     }
 
     /**
