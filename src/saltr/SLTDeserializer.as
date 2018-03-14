@@ -37,7 +37,7 @@ public class SLTDeserializer {
 
     saltr_internal static function decodeAndUpdateExistingLevels(rootNode:Object, existingLevels:Vector.<SLTLevel>):Vector.<SLTLevel> {
         var levelsNode:Array = rootNode.levels as Array;
-        for (var i:int = 0, length:int = existingLevels.length; i < length; ++i) {
+        for (var i:int = 0, length:int = Math.min(existingLevels.length, levelsNode.length); i < length; ++i) {
             var levelNode:Object = levelsNode[i];
             var currentSLTLevel:SLTLevel = existingLevels[levelNode.globalIndex];
             currentSLTLevel.update(levelNode.version, levelNode.url);
