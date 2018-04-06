@@ -76,6 +76,7 @@ public class SLTMobileDeviceInfo {
     public static const ANDROID_INFO_KEYS:Array = [ANDROID_KEY_OS_NAME, ANDROID_KEY_OS_VERSION, ANDROID_KEY_BRAND, ANDROID_KEY_MODEL];
 
     private static const UNKNOWN_VALUE:String = "Unknown";
+    private static const NEW_LINE_PATTERN:RegExp = /\r?\n/;
 
     /**
      * Class constructor.
@@ -163,8 +164,7 @@ public class SLTMobileDeviceInfo {
         content = content.replace(File.lineEnding, "\n");
         fs.close();
 
-        var pattern:RegExp = /\r?\n/;
-        var lines:Array = content.split(pattern);
+        var lines:Array = content.split(NEW_LINE_PATTERN);
 
         var infoData:Object = {};
         for (var i:int = 0, length:int = lines.length; i < length; ++i) {
