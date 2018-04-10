@@ -122,10 +122,5 @@ public class SLTUtils {
         }
     }
 
-    saltr_internal static function validateFeatureToken(token:String):Boolean {
-        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
-        return !(null == token || "" == token || -1 != token.search(pattern));
-
-    }
 }
 }

@@ -33,7 +33,6 @@ public class SLTSaltr implements ISLTSaltr {
     protected var _started:Boolean;
 
     protected var _appData:SLTAppData;
-    protected var _validator:SLTFeatureValidator;
 
     protected var _heartbeatTimer:Timer;
     protected var _heartBeatTimerStarted:Boolean;
@@ -54,8 +53,6 @@ public class SLTSaltr implements ISLTSaltr {
         _timeoutIncrease = 0;
         _logger = SLTLogger.getInstance();
         _appData = new SLTAppData();
-
-        _validator = new SLTFeatureValidator();
     }
 
     /**
@@ -125,10 +122,6 @@ public class SLTSaltr implements ISLTSaltr {
      */
     public function getLevelCollectionFeatureBody(token:String):SLTLevelCollectionBody {
         return _appData.getLevelCollectionBody(token);
-    }
-
-    public function addValidator(featureToken:String, validatorFunction:Function):void {
-        _validator.addValidator(featureToken, validatorFunction);
     }
 
     protected function canGetAppData():Boolean {

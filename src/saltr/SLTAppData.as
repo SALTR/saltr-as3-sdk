@@ -48,10 +48,6 @@ public class SLTAppData {
     }
 
     saltr_internal function defineFeature(token:String, body:*, type:String, required:Boolean):void {
-        if (!SLTUtils.validateFeatureToken(token)) {
-            throw new Error("feature's token value is incorrect.");
-        }
-
         _activeFeatures[token] = new SLTFeature(token, type, body, required);
     }
 

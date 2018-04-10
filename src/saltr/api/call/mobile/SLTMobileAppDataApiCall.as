@@ -3,12 +3,9 @@
  */
 package saltr.api.call.mobile {
 import flash.events.Event;
-import flash.utils.Dictionary;
 
 import saltr.SLTAppData;
 import saltr.SLTContext;
-import saltr.SLTFeature;
-import saltr.SLTFeatureValidator;
 import saltr.api.call.SLTAppDataApiCall;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
@@ -25,7 +22,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
     private var _originalSuccessCallback:Function;
     private var _originalFailCallback:Function;
-    private var _validator:SLTFeatureValidator;
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
     private var _levelUpdater:SLTMobileLevelsFeaturesUpdater;
 
@@ -34,7 +30,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     public function SLTMobileAppDataApiCall(appData:SLTAppData) {
         super(appData);
 
-        _validator = new SLTFeatureValidator();
         _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
         _levelUpdater = new SLTMobileLevelsFeaturesUpdater(0);
     }
@@ -112,7 +107,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
     private function processNewAppData(data:Object):Boolean {
         try {
             _appData.initWithData(data);
-            validateFeatures();
         } catch (e:Error) {
             SLTLogger.getInstance().log("New app data process failed.");
             return false;
@@ -122,15 +116,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
         SLTLogger.getInstance().log("New app data processed.");
         return true;
-    }
-
-    private function validateFeatures():void {
-        var activeFeatures:Dictionary = _appData.activeFeatures;
-        for each (var feature:SLTFeature  in activeFeatures) {
-            if (!_validator.validate(feature)) {
-                feature.isValid = false;
-            }
-        }
     }
 
 }
