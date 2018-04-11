@@ -5,8 +5,6 @@
 package saltr {
 import flash.utils.Dictionary;
 
-import saltr.utils.SLTUtils;
-
 use namespace saltr_internal;
 
 /**
@@ -33,7 +31,7 @@ public class SLTAppData {
 
     saltr_internal function getFeatureBody(token:String):Object {
         var activeFeature:SLTFeature = _activeFeatures[token];
-        if (activeFeature != null && activeFeature.isValid && !activeFeature.disabled) {
+        if (activeFeature != null && !activeFeature.disabled) {
             return activeFeature.body;
         }
         return null;
