@@ -28,7 +28,7 @@ public class SLTApiCall {
     protected var _timeoutIncrease:int;
 
     internal static function removeEmptyAndNullsJSONReplacer(k:*, v:*):* {
-        if (v != null && v != "null" && v !== "") {
+        if (v != null && v != "null" && v != "") {
             return v;
         }
         return undefined;
