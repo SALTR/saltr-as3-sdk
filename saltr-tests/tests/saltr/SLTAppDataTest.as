@@ -42,7 +42,6 @@ public class SLTAppDataTest {
     [Test]
     public function initEmptyTest():void {
         var token:String = "SETTINGS";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -76,7 +75,6 @@ public class SLTAppDataTest {
     [Test(expects="Error")]
     public function defineFeatureTestWithIncorrectToken():void {
         var token:String = "SETTINGS INCORRECT";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -91,7 +89,6 @@ public class SLTAppDataTest {
     [Test(expects="Error")]
     public function defineFeatureTestWithNullToken():void {
         var token:String = null;
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -106,7 +103,6 @@ public class SLTAppDataTest {
     [Test(expects="Error")]
     public function defineFeatureTestWithEmptyToken():void {
         var token:String = "";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -121,7 +117,6 @@ public class SLTAppDataTest {
     [Test]
     public function getActiveFeatureTokensTest():void {
         var token:String = "SETTINGS";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -129,7 +124,6 @@ public class SLTAppDataTest {
         }, SLTFeatureType.GENERIC, true);
 
         var token2:String = "VALIDATION";
-        validateFeatureToken(token2);
         _appData.defineFeature(token2, {
             general: {
                 validationTimeout: 50
@@ -152,7 +146,6 @@ public class SLTAppDataTest {
     [Test]
     public function getFeaturePropertiesWithActiveFeaturesTest():void {
         var token:String = "SETTINGS";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -169,7 +162,6 @@ public class SLTAppDataTest {
     [Test]
     public function getFeaturePropertiesWithDeveloperFeaturesTest():void {
         var token:String = "SETTINGS_DEVELOPER";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -186,7 +178,6 @@ public class SLTAppDataTest {
     [Test]
     public function getFeaturePropertiesWithNullResultTest():void {
         var token:String = "SETTINGS_DEVELOPER";
-        validateFeatureToken(token);
         _appData.defineFeature(token, {
             general: {
                 lifeRefillTime: 30
@@ -196,10 +187,5 @@ public class SLTAppDataTest {
         assertEquals(null, _appData.getFeatureBody("SETTINGS_DEVELOPER"));
     }
     
-    private function validateFeatureToken(token:String):void {
-        if (!SLTUtils.validateFeatureToken(token)) {
-            throw new Error("feature's token value is incorrect.");
-        }
-    }
 }
 }

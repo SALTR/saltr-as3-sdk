@@ -7,7 +7,6 @@ import flash.utils.Dictionary;
 import flash.utils.describeType;
 import flash.utils.getQualifiedClassName;
 
-import saltr.saltr_internal;
 
 import saltr.saltr_internal;
 
@@ -20,8 +19,6 @@ use namespace saltr_internal;
 public class SLTUtils {
 
     private static const EMAIL_PATTERN:RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
-    private static const FEATURE_TOKEN_PATTERN:RegExp = /[^a-zA-Z0-9._-]/;
-
     /**
      * Class constructor.
      */
@@ -126,8 +123,5 @@ public class SLTUtils {
         }
     }
 
-    saltr_internal static function validateFeatureToken(token:String):Boolean {
-        return !(null == token || "" == token || -1 != token.search(FEATURE_TOKEN_PATTERN));
-    }
 }
 }

@@ -13,7 +13,6 @@ public class SLTFeature {
     private var _type:String;
     private var _body:Object;
     private var _isRequired:Boolean;
-    private var _isValid:Boolean;
     private var _version:String;
     private var _disabled:Boolean;
 
@@ -22,7 +21,6 @@ public class SLTFeature {
         _type = type;
         _body = body;
         _isRequired = isRequired;
-        _isValid = true;
         _version = version;
         _disabled = false;
     }
@@ -51,20 +49,12 @@ public class SLTFeature {
         return "[SALTR] Feature { token : " + _token + ", value : " + _body + "}";
     }
 
-    saltr_internal function get isValid():Boolean {
-        return _isValid;
-    }
-
-    saltr_internal function set isValid(value:Boolean):void {
-        _isValid = value;
-    }
-
     public function get disabled():Boolean {
         return _disabled;
     }
 
     public function set disabled(value:Boolean):void {
-        _disabled = _isRequired ? false: value;
+        _disabled = _isRequired ? false : value;
     }
 
     public function update(version:String, newBody:Object = null):void {
