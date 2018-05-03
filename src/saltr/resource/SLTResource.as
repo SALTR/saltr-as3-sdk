@@ -40,6 +40,7 @@ public class SLTResource {
     private var _onFail:Function;
     private var _onProgress:Function;
     private var _timeoutIncrease:int;
+    private var _dataFormat:String;
 
     /**
      * Class constructor.
@@ -48,8 +49,9 @@ public class SLTResource {
      * @param onSuccess The callback function if loading succeed, function signature is function(asset:Asset).
      * @param onFail The callback function if loading fail, function signature is function(asset:Asset).
      * @param onProgress The callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int).
+     * @param dataFormat Controls whether the downloaded data is received as text (URLLoaderDataFormat.TEXT), raw binary data (URLLoaderDataFormat.BINARY), or URL-encoded variables (URLLoaderDataFormat.VARIABLES).
      */
-    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
+    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null, dataFormat:String = URLLoaderDataFormat.TEXT) {
         _id = id;
         _ticket = ticket;
         _onSuccess = onSuccess;
@@ -60,6 +62,7 @@ public class SLTResource {
         _dropTimeout = _ticket.dropTimeout;
         _httpStatus = -1;
         _timeoutIncrease = _ticket.timeoutIncrease;
+        _dataFormat = dataFormat;
         initLoader();
     }
 
@@ -101,7 +104,7 @@ public class SLTResource {
     /**
      * The String data.
      */
-    saltr_internal function get data():String {
+    saltr_internal function get data():Object {
         return _urlLoader.data
     }
 
@@ -136,7 +139,7 @@ public class SLTResource {
 
     protected function initLoader():void {
         _urlLoader = new URLLoader();
-        _urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+        _urlLoader.dataFormat = _dataFormat;
         initLoaderListeners(_urlLoader);
     }
 

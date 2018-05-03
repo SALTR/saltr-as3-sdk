@@ -26,12 +26,13 @@ public class SLTSaltrMobile extends SLTSaltr {
      * @param clientKey The client key.
      * @param deviceId The device unique identifier.
      */
-    public function SLTSaltrMobile(clientKey:String, deviceId:String) {
-        super(clientKey, deviceId);
+    public function SLTSaltrMobile(clientKey:String, deviceId:String, isBinary:Boolean = false) {
+        super(clientKey, deviceId, null, isBinary);
         _isWaitingForAppData = false;
 
         SLTApiCallFactory.factory = new SLTMobileApiCallFactory();
         _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
+        _repositoryStorageManager.isBinary = isBinary;
     }
 
     /**

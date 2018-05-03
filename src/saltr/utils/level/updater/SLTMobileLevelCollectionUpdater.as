@@ -116,7 +116,7 @@ public class SLTMobileLevelCollectionUpdater extends EventDispatcher {
         }
     }
 
-    private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:String):void {
+    private function loadLevelSuccessHandler(featureToken:String, sltLevel:SLTLevel, data:Object):void {
         if (_isCancelled) {
             return;
         }

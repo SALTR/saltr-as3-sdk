@@ -6,6 +6,7 @@ import flash.events.TimerEvent;
 import flash.utils.Timer;
 
 import saltr.api.call.SLTApiCall;
+import saltr.api.call.SLTAppDataApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.status.SLTStatus;
@@ -39,8 +40,9 @@ public class SLTSaltr implements ISLTSaltr {
 
     protected var _connectSuccessCallback:Function;
     protected var _connectFailCallback:Function;
+    protected var _isBinary:Boolean;
 
-    public function SLTSaltr(clientKey:String, deviceId:String = null, socialId:String = null) {
+    public function SLTSaltr(clientKey:String, deviceId:String = null, socialId:String = null, isBinary:Boolean = false) {
         _clientKey = clientKey;
         _deviceId = deviceId;
         _socialId = socialId;
@@ -53,6 +55,7 @@ public class SLTSaltr implements ISLTSaltr {
         _timeoutIncrease = 0;
         _logger = SLTLogger.getInstance();
         _appData = new SLTAppData();
+        _isBinary = isBinary;
     }
 
     /**
@@ -133,7 +136,7 @@ public class SLTSaltr implements ISLTSaltr {
     }
 
     protected function getAppDataFromSnapshot():Object {
-         //abstract...
+        //abstract...
         return null;
     }
 
@@ -310,13 +313,12 @@ public class SLTSaltr implements ISLTSaltr {
             customProperties: customProperties,
             snapshotId: _appData.snapshotId
         };
-
+        params[SLTAppDataApiCall.BINARY_APP_DATA] = _isBinary;
         if (additionalParams != null) {
             for (var i:String in additionalParams) {
                 params[i] = additionalParams[i];
             }
         }
-
         var appDataCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_APP_DATA, _appData);
         appDataCall.call(params, successHandler, failHandler, _nativeTimeout, _dropTimeout, _timeoutIncrease);
         SLTLogger.getInstance().log("New app data requested.");

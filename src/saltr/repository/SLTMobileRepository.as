@@ -6,8 +6,10 @@ package saltr.repository {
 import flash.filesystem.File;
 import flash.filesystem.FileMode;
 import flash.filesystem.FileStream;
+import flash.utils.ByteArray;
 
 import saltr.saltr_internal;
+import saltr.utils.gzip.SLTGzipFile;
 
 use namespace saltr_internal;
 
@@ -50,9 +52,9 @@ public class SLTMobileRepository {
      * @param fileName The name of the object.
      * @return The requested object.
      */
-    public function readObjectFromStorageDir(fileName:String):Object {
+    public function readObjectFromStorageDir(fileName:String, isBinary:Boolean):Object {
         var file:File = _storageDirectory.resolvePath(fileName);
-        return readInternalString(file);
+        return isBinary ? readInternalBinary(file) : readInternalString(file);
     }
 
     /**
@@ -60,9 +62,9 @@ public class SLTMobileRepository {
      * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function writeObjectIntoCacheDir(fileName:String, object:Object):void {
+    public function writeObjectIntoCacheDir(fileName:String, object:Object, isBinary:Boolean):void {
         var file:File = _cacheDirectory.resolvePath(fileName);
-        writeInternalString(file, object);
+        isBinary ? writeInternalBinary(file, object) : writeInternalString(file, object);
     }
 
     /**
@@ -70,9 +72,9 @@ public class SLTMobileRepository {
      * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function writeObjectIntoStorageDir(fileName:String, object:Object):void {
+    public function writeObjectIntoStorageDir(fileName:String, object:Object, isBinary:Boolean):void {
         var file:File = _storageDirectory.resolvePath(fileName);
-        writeInternalString(file, object);
+        isBinary ? writeInternalBinary(file, object) : writeInternalString(file, object);
     }
 
     /**
@@ -104,26 +106,38 @@ public class SLTMobileRepository {
         }
     }
 
-    public function readObjectFromCacheDir(fileName:String):Object {
+    public function readObjectFromCacheDir(fileName:String, isBinary:Boolean):Object {
         var file:File = _cacheDirectory.resolvePath(fileName);
-        return readInternalString(file);
+        return isBinary ? readInternalBinary(file) : readInternalString(file);
 
     }
 
-    public function readObjectFromApplicationDir(fileName:String):Object {
+    public function readObjectFromApplicationDir(fileName:String, isBinary:Boolean):Object {
         var file:File = _applicationDirectory.resolvePath(fileName);
-        return readInternalString(file);
+        return isBinary ? readInternalBinary(file) : readInternalString(file);
     }
 
     private function readInternalString(file:File):Object {
         try {
-            if (!file.exists) {
-                return null;
+            if (file.exists) {
+                _fileStream.open(file, FileMode.READ);
+                var stringData:String = _fileStream.readUTFBytes(_fileStream.bytesAvailable);
+                _fileStream.close();
+                return stringData ? JSON.parse(stringData) : null;
             }
-            _fileStream.open(file, FileMode.READ);
-            var stringData:String = _fileStream.readUTFBytes(_fileStream.bytesAvailable);
-            _fileStream.close();
-            return stringData ? JSON.parse(stringData) : null;
+
+        }
+        catch (error:Error) {
+            trace("[SALTR][MobileStorageEngine] Error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
+        }
+        return null;
+    }
+
+    private function readInternalBinary(file:File):Object {
+        try {
+            if (file.exists) {
+                return SLTGzipFile.getObjectFromFile(_fileStream, file);
+            }
         }
         catch (error:Error) {
             trace("[SALTR][MobileStorageEngine] Error while getting object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
@@ -137,6 +151,22 @@ public class SLTMobileRepository {
             _fileStream.open(file, FileMode.WRITE);
             _fileStream.writeUTFBytes(objectAsString);
             _fileStream.close();
+        }
+        catch (error:Error) {
+            trace("[SALTR][MobileStorageEngine] Error while saving object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");
+        }
+    }
+
+    private function writeInternalBinary(file:File, objectToSave:Object):void {
+        try {
+            var compressedByteArray:ByteArray = objectToSave as ByteArray;
+            if (compressedByteArray) {
+                _fileStream.open(file, FileMode.WRITE);
+                _fileStream.writeBytes(compressedByteArray);
+                _fileStream.close();
+            } else {
+                SLTGzipFile.compressObjectToFile(objectToSave, _fileStream, file);
+            }
         }
         catch (error:Error) {
             trace("[SALTR][MobileStorageEngine] Error while saving object.\nError : [ID : '" + error.errorID + "', message : '" + error.message + "'");

@@ -11,13 +11,15 @@ public class SLTMobileConfig {
 
 
     saltr_internal static const CACHED_CONTENT_ROOT_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION;
-    saltr_internal static const CACHED_APP_DATA_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION + "/app_data_cache.json";
+    saltr_internal static const CACHED_APP_DATA_JSON_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION + "/app_data_cache.json";
+    saltr_internal static const CACHED_APP_DATA_BINARY_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION + "/app_data_cache.bin";
     saltr_internal static const CACHED_LEVEL_CONTENTS_FOLDER_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION + "/features/{0}";
-    saltr_internal static const CACHED_LEVEL_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION + "/features/{0}/level_{1}_{2}.json";
+    saltr_internal static const CACHED_LEVEL_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_" + APP_VERSION + "/features/{0}/level_{1}_{2}.{3}";
 
-    saltr_internal static const SNAPSHOT_LEVEL_DATA_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/features/{0}/level_data.json";
+    saltr_internal static const SNAPSHOT_LEVEL_DATA_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/features/{0}/level_data.{1}";
     saltr_internal static const SNAPSHOT_LEVEL_CONTENT_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/{0}";
-    saltr_internal static const SNAPSHOT_APP_DATA_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_data.json";
+    saltr_internal static const SNAPSHOT_APP_DATA_JSON_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_data.json";
+    saltr_internal static const SNAPSHOT_APP_DATA_BINARY_URL_TEMPLATE:String = DEFAULT_CONTENT_ROOT + "/app_data.bin";
 
     saltr_internal static const DEFAULT_CONTENT_ROOT:String = "saltr";
 

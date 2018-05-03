@@ -3,11 +3,17 @@
  */
 package saltr {
 
+import com.probertson.utils.GZIPEncoder;
+
+import flash.utils.ByteArray;
+
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.api.call.factory.SLTWebApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.status.SLTStatus;
+import saltr.utils.gzip.SLTGzipByteArray;
+import saltr.utils.gzip.SLTGzipEncoder;
 
 use namespace saltr_internal;
 
@@ -16,8 +22,8 @@ public class SLTSaltrWeb extends SLTSaltr {
     private var _sltLevel:SLTLevel;
     private var _callback:Function;
 
-    public function SLTSaltrWeb(clientKey:String, deviceId:String = null, socialId:String = null) {
-        super(clientKey, deviceId, socialId);
+    public function SLTSaltrWeb(clientKey:String, deviceId:String = null, socialId:String = null, isBinary:Boolean = false) {
+        super(clientKey, deviceId, socialId, isBinary);
 
         SLTApiCallFactory.factory = new SLTWebApiCallFactory();
     }
@@ -48,6 +54,10 @@ public class SLTSaltrWeb extends SLTSaltr {
     }
 
     private function levelContentLoadSuccessCallback(data:Object):void {
+        var byteArray:ByteArray = data as ByteArray;
+        if (byteArray) {
+            data = SLTGzipEncoder.uncompressToObject(new SLTGzipByteArray(byteArray))
+        }
         _sltLevel.updateContent(data);
         _callback(true);
     }

@@ -18,12 +18,12 @@ public class SLTRepositoryStorageManager {
 
     private static var INSTANCE:SLTRepositoryStorageManager;
 
-    private static function getSnapshotLevelDataUrl(token:String):String {
-        return SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_DATA_URL_TEMPLATE, token);
+    private static function getSnapshotLevelDataUrl(token:String, isBinary:Boolean):String {
+        return SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_DATA_URL_TEMPLATE, token, isBinary ? "bin" : "json");
     }
 
-    private static function getCachedLevelContentUrl(levelCollectionToken:String, globalIndex:int, levelVersion:String):String {
-        return SLTUtils.formatString(SLTMobileConfig.CACHED_LEVEL_URL_TEMPLATE, levelCollectionToken, globalIndex, levelVersion);
+    private static function getCachedLevelContentUrl(levelCollectionToken:String, globalIndex:int, levelVersion:String, isBinary:Boolean):String {
+        return SLTUtils.formatString(SLTMobileConfig.CACHED_LEVEL_URL_TEMPLATE, levelCollectionToken, globalIndex, levelVersion, isBinary ? "bin" : "json");
     }
 
     private static function isCurrentAppVersionCacheDirExists(cacheDirectory:File):Boolean {
@@ -41,9 +41,14 @@ public class SLTRepositoryStorageManager {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private var _repository:SLTMobileRepository;
+    private var _isBinary:Boolean;
 
     public function SLTRepositoryStorageManager() {
         _repository = new SLTMobileRepository();
+    }
+
+    saltr_internal function set isBinary(value:Boolean):void {
+        _isBinary = value;
     }
 
     public function cleanupOldAppCache():void {
@@ -66,7 +71,7 @@ public class SLTRepositoryStorageManager {
      * @return The requested object.
      */
     saltr_internal function readObjectFromStorageDir(fileName:String):Object {
-        return _repository.readObjectFromStorageDir(fileName);
+        return _repository.readObjectFromStorageDir(fileName,_isBinary);
     }
 
     /**
@@ -74,7 +79,7 @@ public class SLTRepositoryStorageManager {
      * @return The cached application data.
      */
     saltr_internal function getAppDataFromCache():Object {
-        return _repository.readObjectFromCacheDir(SLTMobileConfig.CACHED_APP_DATA_URL_TEMPLATE);
+        return _repository.readObjectFromCacheDir(_isBinary ? SLTMobileConfig.CACHED_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.CACHED_APP_DATA_JSON_URL_TEMPLATE,_isBinary);
     }
 
 
@@ -83,7 +88,7 @@ public class SLTRepositoryStorageManager {
      * @return The wrapped in package application data.
      */
     saltr_internal function getAppDataFromSnapshot():Object {
-        return _repository.readObjectFromApplicationDir(SLTMobileConfig.SNAPSHOT_APP_DATA_URL_TEMPLATE);
+        return _repository.readObjectFromApplicationDir(_isBinary ? SLTMobileConfig.SNAPSHOT_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.SNAPSHOT_APP_DATA_JSON_URL_TEMPLATE, _isBinary);
     }
 
     /**
@@ -94,7 +99,7 @@ public class SLTRepositoryStorageManager {
      * @return The requested level from cache.
      */
     saltr_internal function getLevelContentFromCache(levelCollectionToken:String, globalIndex:int, version:String):Object {
-        return _repository.readObjectFromCacheDir(getCachedLevelContentUrl(levelCollectionToken, globalIndex, version));
+        return _repository.readObjectFromCacheDir(getCachedLevelContentUrl(levelCollectionToken, globalIndex, version, _isBinary),_isBinary);
     }
 
     /**
@@ -115,7 +120,7 @@ public class SLTRepositoryStorageManager {
                 }
             }
         }
-        return result ? _repository.readObjectFromCacheDir(result.url) : null;
+        return result ? _repository.readObjectFromCacheDir(result.url,_isBinary) : null;
     }
 
     /**
@@ -124,7 +129,7 @@ public class SLTRepositoryStorageManager {
      * @param objectToSave The object to store.
      */
     saltr_internal function saveObject(fileName:String, objectToSave:Object):void {
-        _repository.writeObjectIntoStorageDir(fileName, objectToSave);
+        _repository.writeObjectIntoStorageDir(fileName, objectToSave, _isBinary);
     }
 
     /**
@@ -134,9 +139,9 @@ public class SLTRepositoryStorageManager {
      * @param version The version of the level.
      * @param content The level to store.
      */
-    saltr_internal function cacheLevelContent(levelCollectionToken:String, globalIndex:int, version:String, content:String):void {
-        var cachedLevelFileName:String = getCachedLevelContentUrl(levelCollectionToken, globalIndex, version);
-        _repository.writeObjectIntoCacheDir(cachedLevelFileName, content);
+    saltr_internal function cacheLevelContent(levelCollectionToken:String, globalIndex:int, version:String, content:Object):void {
+        var cachedLevelFileName:String = getCachedLevelContentUrl(levelCollectionToken, globalIndex, version, _isBinary);
+        _repository.writeObjectIntoCacheDir(cachedLevelFileName, content, _isBinary);
     }
 
     /**
@@ -144,7 +149,7 @@ public class SLTRepositoryStorageManager {
      * @param object The object to store.
      */
     saltr_internal function cacheAppData(object:Object):void {
-        _repository.writeObjectIntoCacheDir(SLTMobileConfig.CACHED_APP_DATA_URL_TEMPLATE, object);
+        _repository.writeObjectIntoCacheDir(_isBinary ? SLTMobileConfig.CACHED_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.CACHED_APP_DATA_JSON_URL_TEMPLATE, object, _isBinary);
         SLTLogger.getInstance().log("App data cached");
     }
 
@@ -154,7 +159,7 @@ public class SLTRepositoryStorageManager {
      * @return The requested level_data.json from application.
      */
     saltr_internal function getLevelDataFromSnapshot(levelCollectionToken:String):Object {
-        return _repository.readObjectFromApplicationDir(getSnapshotLevelDataUrl(levelCollectionToken));
+        return _repository.readObjectFromApplicationDir(getSnapshotLevelDataUrl(levelCollectionToken, _isBinary), _isBinary);
     }
 
     /**
@@ -163,7 +168,7 @@ public class SLTRepositoryStorageManager {
      * @param url
      */
     saltr_internal function getLevelContentFromSnapshot(url:String):Object {
-        return _repository.readObjectFromApplicationDir(SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_CONTENT_URL_TEMPLATE, url));
+        return _repository.readObjectFromApplicationDir(SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_CONTENT_URL_TEMPLATE, url), _isBinary);
     }
 
     /**
@@ -174,7 +179,7 @@ public class SLTRepositoryStorageManager {
      * @return true if file exist,false otherwise.
      */
     saltr_internal function isCachedLevelContentFileExists(levelCollectionToken:String, globalIndex:int, version:String):Boolean {
-        return _repository.cachedFileExists(getCachedLevelContentUrl(levelCollectionToken, globalIndex, version));
+        return _repository.cachedFileExists(getCachedLevelContentUrl(levelCollectionToken, globalIndex, version, _isBinary));
     }
 
 }

@@ -1,4 +1,5 @@
 package saltr.api.call {
+import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
 
@@ -76,8 +77,12 @@ public class SLTApiCall {
         var ticket:SLTResourceURLTicket = getURLTicket(urlVars, _nativeTimeout);
         ticket.dropTimeout = _dropTimeout;
         ticket.timeoutIncrease = _timeoutIncrease;
-        var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler);
+        var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler, null, getDataFormat());
         resource.load();
+    }
+
+    saltr_internal function getDataFormat():String {
+        return URLLoaderDataFormat.TEXT;
     }
 
     saltr_internal function getURLTicket(urlVars:URLVariables, timeout:int):SLTResourceURLTicket {
