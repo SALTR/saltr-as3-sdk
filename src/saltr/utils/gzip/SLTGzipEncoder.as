@@ -27,7 +27,7 @@ public class SLTGzipEncoder {
     private static const GZIP_FORMAT:uint = 0x00088b1f;
     private static const COMPRESSOR_FASTEST_ALGORITHM:uint = 4;
 
-    public static function compress(source:ByteArray, outStream:ISLTGzip, timeStamp:Date = null, useCopyOfSource:Boolean = true):ISLTGzip {
+    public static function compress(source:ByteArray, outStream:ISLTGzip, useCopyOfSource:Boolean = true):ISLTGzip {
         if (source == null) {
             throw new ArgumentError("src can't be null.");
         }
@@ -39,8 +39,8 @@ public class SLTGzipEncoder {
             srcBytes = source;
         }
         outStream.writeUnsignedInt(GZIP_FORMAT);
-        var mtime:uint = (timeStamp == null) ? 0 : timeStamp.time;
-        outStream.writeUnsignedInt(mtime);
+        // 4 bytes MTIME
+        outStream.writeUnsignedInt(0);
         outStream.writeByte(COMPRESSOR_FASTEST_ALGORITHM);
         var os:uint;
         if (Capabilities.os.indexOf("Windows") >= 0) {

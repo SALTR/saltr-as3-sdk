@@ -23,7 +23,7 @@ public class SLTGzipFile implements ISLTGzip {
 
     public static function compressByteArrayToFile(source:ByteArray, fileStream:FileStream, file:File, useCopyOfSource:Boolean = true):void {
         fileStream.open(file, FileMode.WRITE);
-        SLTGzipEncoder.compress(source, new SLTGzipFile(fileStream), null, useCopyOfSource);
+        SLTGzipEncoder.compress(source, new SLTGzipFile(fileStream), useCopyOfSource);
         fileStream.close();
     }
 

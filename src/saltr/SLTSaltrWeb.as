@@ -3,8 +3,6 @@
  */
 package saltr {
 
-import com.probertson.utils.GZIPEncoder;
-
 import flash.utils.ByteArray;
 
 import saltr.api.call.SLTApiCall;

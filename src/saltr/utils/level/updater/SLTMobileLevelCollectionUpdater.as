@@ -8,7 +8,6 @@ import flash.events.TimerEvent;
 import flash.utils.Timer;
 
 import saltr.game.SLTLevel;
-import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 import saltr.utils.SLTLogger;
@@ -45,7 +44,6 @@ public class SLTMobileLevelCollectionUpdater extends EventDispatcher {
         SLTLogger.getInstance().log("Game levels group update called. featureToken: " + _levelCollectionFeatureToken + ", outdated Levels length: " + _outdatedLevels.length);
         if (_isInProcess) {
             throw new Error("SLTMobileLevelGroupUpdater is in processing.");
-            return;
         }
         if (_outdatedLevels.length > 0) {
             _levelIndexToUpdate = 0;
@@ -76,7 +74,7 @@ public class SLTMobileLevelCollectionUpdater extends EventDispatcher {
         var levelsToUpdate:Vector.<SLTLevel> = new <SLTLevel>[];
         for (var i:int = 0, length:int = _allLevels.length; i < length; ++i) {
             var currentLevel:SLTLevel = _allLevels[i];
-            if (!_levelContentLoader.cachedLevelFileExists(_levelCollectionFeatureToken,currentLevel)) {
+            if (!_levelContentLoader.cachedLevelFileExists(_levelCollectionFeatureToken, currentLevel)) {
                 levelsToUpdate.push(currentLevel);
             }
         }
