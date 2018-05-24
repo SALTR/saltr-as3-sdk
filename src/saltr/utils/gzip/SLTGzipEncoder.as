@@ -100,14 +100,12 @@ public class SLTGzipEncoder {
         }
 
         // If FNAME is set, an original file name is present, terminated by a zero byte.
-        var originalFileName:String = null;
         if (((flg >> 3) & 1) == 1) {
-            originalFileName = convertBytesToString(src);
+            var originalFileName:String = convertBytesToString(src);
         }
         // If FCOMMENT is set, a zero-terminated file comment is present.
-        var fcomment:String;
         if (((flg >> 4) & 1) == 1) {
-            fcomment = convertBytesToString(src)
+            var fcomment:String = convertBytesToString(src)
         }
         // 4 bytes MTIME (This gives the most recent modification time of the original file being compressed. The time is in Unix format, i.e., seconds since 00:00:00 GMT, Jan. 1, 1970. )
         // 1 byte XFL (flags used by specific compression methods)
