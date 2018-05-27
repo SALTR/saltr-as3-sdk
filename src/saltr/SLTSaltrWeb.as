@@ -52,9 +52,8 @@ public class SLTSaltrWeb extends SLTSaltr {
     }
 
     private function levelContentLoadSuccessCallback(data:Object):void {
-        var byteArray:ByteArray = data as ByteArray;
-        if (byteArray) {
-            data = SLTGzipEncoder.uncompressToObject(new SLTGzipByteArray(byteArray))
+        if (_isBinary && data != null && data is ByteArray) {
+            data = SLTGzipEncoder.uncompressToObject(new SLTGzipByteArray(data as ByteArray))
         }
         _sltLevel.updateContent(data);
         _callback(true);

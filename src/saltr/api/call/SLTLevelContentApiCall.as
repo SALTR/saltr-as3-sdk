@@ -22,10 +22,6 @@ public class SLTLevelContentApiCall extends SLTApiCall {
         _deserializeLevelContent = deserializeLevelContent;
     }
 
-    saltr_internal function get isBinary():Boolean {
-        return _dataFormat == URLLoaderDataFormat.BINARY;
-    }
-
     override saltr_internal function validateMobileParams():Object {
         return validateLevelContentUrl();
     }
@@ -74,7 +70,10 @@ public class SLTLevelContentApiCall extends SLTApiCall {
     override saltr_internal function callRequestCompletedHandler(resource:SLTResource):void {
         var apiCallResult:SLTApiCallResult = new SLTApiCallResult();
         apiCallResult.success = resource.data != null;
-        apiCallResult.data = _deserializeLevelContent && !isBinary ? resource.jsonData : resource.data;
+
+        apiCallResult.data = _deserializeLevelContent && (resource.dataFormat != URLLoaderDataFormat.BINARY) ? resource.jsonData : resource.data;
+        apiCallResult.dataFormat = resource.dataFormat;
+
         handleResult(apiCallResult);
     }
 

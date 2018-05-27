@@ -25,6 +25,7 @@ public class SLTSaltrMobile extends SLTSaltr {
      * Class constructor.
      * @param clientKey The client key.
      * @param deviceId The device unique identifier.
+     * @param isBinary Describes is AppData and Level Content calls shuld be done as binary.
      */
     public function SLTSaltrMobile(clientKey:String, deviceId:String, isBinary:Boolean = false) {
         super(clientKey, deviceId, null, isBinary);

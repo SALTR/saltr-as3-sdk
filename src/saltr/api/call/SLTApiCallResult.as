@@ -1,19 +1,22 @@
 package saltr.api.call {
+import flash.net.URLLoaderDataFormat;
+
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;
 
 use namespace saltr_internal;
 
 /**
- * @private
+ * Represent object created as a result of API call.
  */
 public class SLTApiCallResult {
     private var _success:Boolean;
-
     private var _status:SLTStatus;
     private var _data:Object;
+    private var _dataFormat:String;
 
     public function SLTApiCallResult() {
+        _dataFormat = URLLoaderDataFormat.TEXT;
     }
 
     saltr_internal function get success():Boolean {
@@ -38,6 +41,14 @@ public class SLTApiCallResult {
 
     saltr_internal function set status(value:SLTStatus):void {
         _status = value;
+    }
+
+    public function get dataFormat():String {
+        return _dataFormat;
+    }
+
+    public function set dataFormat(value:String):void {
+        _dataFormat = value;
     }
 }
 }

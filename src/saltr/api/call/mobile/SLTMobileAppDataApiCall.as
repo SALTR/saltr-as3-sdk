@@ -61,10 +61,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
     //////////// CONTEXT FORCED ////////
 
-    private function wrappedFailCallbackContextForced(status:SLTStatus):void {
-        _originalSuccessCallback(_contextForcedData);
-    }
-
     private function wrappedSuccessCallbackContextForced(data:Object):void {
         if (processNewAppData(data)) {
             var newLevel:SLTLevel = _appData.getLevelCollectionBody(_contextForcedData.levelCollectionToken).getLevelByGlobalIndex(_contextForcedData.sltLevel.globalIndex);
@@ -75,6 +71,10 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
         } else {
             _originalSuccessCallback(_contextForcedData);
         }
+    }
+
+    private function wrappedFailCallbackContextForced(status:SLTStatus):void {
+        _originalSuccessCallback(_contextForcedData);
     }
 
     private function dedicatedLevelUpdateCompleteHandler(event:Event):void {
@@ -96,7 +96,6 @@ public class SLTMobileAppDataApiCall extends SLTAppDataApiCall {
 
     private function wrappedFailCallbackContextNormal(status:SLTStatus):void {
         SLTLogger.getInstance().log("New app data request from connect() failed. StatusCode: " + status.statusCode);
-
         if (status.statusCode == SLTStatus.API_ERROR) {
             _originalFailCallback(new SLTStatusAppDataLoadFail());
         } else {

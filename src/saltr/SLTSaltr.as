@@ -314,6 +314,7 @@ public class SLTSaltr implements ISLTSaltr {
             snapshotId: _appData.snapshotId
         };
         params[SLTAppDataApiCall.BINARY_APP_DATA] = _isBinary;
+
         if (additionalParams != null) {
             for (var i:String in additionalParams) {
                 params[i] = additionalParams[i];

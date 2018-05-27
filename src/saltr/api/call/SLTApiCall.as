@@ -189,8 +189,11 @@ public class SLTApiCall {
         }
     }
 
+    //TODO: implement dispose
     protected function dispose():void {
-        //TODO: implement!
+        _params = null;
+        _successCallback = null;
+        _failCallback = null;
     }
 }
 }

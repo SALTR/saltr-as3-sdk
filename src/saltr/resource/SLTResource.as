@@ -67,6 +67,13 @@ public class SLTResource {
     }
 
     /**
+     * Data format.
+     */
+    public function get dataFormat():String {
+        return _dataFormat;
+    }
+
+    /**
      * The loaded bytes.
      */
     saltr_internal function get bytesLoaded():int {

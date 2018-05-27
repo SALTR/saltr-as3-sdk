@@ -71,7 +71,7 @@ public class SLTRepositoryStorageManager {
      * @return The requested object.
      */
     saltr_internal function readObjectFromStorageDir(fileName:String):Object {
-        return _repository.readObjectFromStorageDir(fileName,_isBinary);
+        return _repository.readObjectFromStorageDir(fileName, _isBinary);
     }
 
     /**
@@ -79,7 +79,7 @@ public class SLTRepositoryStorageManager {
      * @return The cached application data.
      */
     saltr_internal function getAppDataFromCache():Object {
-        return _repository.readObjectFromCacheDir(_isBinary ? SLTMobileConfig.CACHED_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.CACHED_APP_DATA_JSON_URL_TEMPLATE,_isBinary);
+        return _repository.readObjectFromCacheDir(_isBinary ? SLTMobileConfig.CACHED_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.CACHED_APP_DATA_JSON_URL_TEMPLATE, _isBinary);
     }
 
 
@@ -99,7 +99,7 @@ public class SLTRepositoryStorageManager {
      * @return The requested level from cache.
      */
     saltr_internal function getLevelContentFromCache(levelCollectionToken:String, globalIndex:int, version:String):Object {
-        return _repository.readObjectFromCacheDir(getCachedLevelContentUrl(levelCollectionToken, globalIndex, version, _isBinary),_isBinary);
+        return _repository.readObjectFromCacheDir(getCachedLevelContentUrl(levelCollectionToken, globalIndex, version, _isBinary), _isBinary);
     }
 
     /**
@@ -120,7 +120,7 @@ public class SLTRepositoryStorageManager {
                 }
             }
         }
-        return result ? _repository.readObjectFromCacheDir(result.url,_isBinary) : null;
+        return result ? _repository.readObjectFromCacheDir(result.url, _isBinary) : null;
     }
 
     /**
@@ -149,7 +149,8 @@ public class SLTRepositoryStorageManager {
      * @param object The object to store.
      */
     saltr_internal function cacheAppData(object:Object):void {
-        _repository.writeObjectIntoCacheDir(_isBinary ? SLTMobileConfig.CACHED_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.CACHED_APP_DATA_JSON_URL_TEMPLATE, object, _isBinary);
+        var url:String = _isBinary ? SLTMobileConfig.CACHED_APP_DATA_BINARY_URL_TEMPLATE : SLTMobileConfig.CACHED_APP_DATA_JSON_URL_TEMPLATE;
+        _repository.writeObjectIntoCacheDir(url, object, _isBinary);
         SLTLogger.getInstance().log("App data cached");
     }
 
