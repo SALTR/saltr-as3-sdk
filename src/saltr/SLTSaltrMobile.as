@@ -33,7 +33,7 @@ public class SLTSaltrMobile extends SLTSaltr {
 
         SLTApiCallFactory.factory = new SLTMobileApiCallFactory();
         _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
-        _repositoryStorageManager.isBinary = isBinary;
+        _repositoryStorageManager.init(isBinary);
     }
 
     /**

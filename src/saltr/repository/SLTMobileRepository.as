@@ -34,15 +34,18 @@ public class SLTMobileRepository {
     private var _applicationDirectory:File;
     private var _cacheDirectory:File;
     private var _fileStream:FileStream;
+    private var _isBinary:Boolean;
 
     /**
      * Class constructor.
      */
-    public function SLTMobileRepository() {
+    public function SLTMobileRepository(isBinary:Boolean = false) {
+        _isBinary = isBinary;
         _applicationDirectory = File.applicationDirectory;
         _storageDirectory = File.applicationStorageDirectory;
         _cacheDirectory = File.cacheDirectory;
         _fileStream = new FileStream();
+
 //        trace("storageDirectory: " + _storageDirectory.nativePath);
 //        trace("cacheDir: " + _cacheDirectory.nativePath);
     }
@@ -52,9 +55,9 @@ public class SLTMobileRepository {
      * @param fileName The name of the object.
      * @return The requested object.
      */
-    public function readObjectFromStorageDir(fileName:String, isBinary:Boolean):Object {
+    public function readObjectFromStorageDir(fileName:String):Object {
         var file:File = _storageDirectory.resolvePath(fileName);
-        return isBinary ? readInternalBinary(file) : readInternalString(file);
+        return _isBinary ? readInternalBinary(file) : readInternalString(file);
     }
 
     /**
@@ -62,9 +65,9 @@ public class SLTMobileRepository {
      * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function writeObjectIntoCacheDir(fileName:String, object:Object, isBinary:Boolean):void {
+    public function writeObjectIntoCacheDir(fileName:String, object:Object):void {
         var file:File = _cacheDirectory.resolvePath(fileName);
-        isBinary ? writeInternalBinary(file, object) : writeInternalString(file, object);
+        _isBinary ? writeInternalBinary(file, object) : writeInternalString(file, object);
     }
 
     /**
@@ -72,9 +75,9 @@ public class SLTMobileRepository {
      * @param fileName The name of the object.
      * @param object The object to store.
      */
-    public function writeObjectIntoStorageDir(fileName:String, object:Object, isBinary:Boolean):void {
+    public function writeObjectIntoStorageDir(fileName:String, object:Object):void {
         var file:File = _storageDirectory.resolvePath(fileName);
-        isBinary ? writeInternalBinary(file, object) : writeInternalString(file, object);
+        _isBinary ? writeInternalBinary(file, object) : writeInternalString(file, object);
     }
 
     /**
@@ -106,15 +109,15 @@ public class SLTMobileRepository {
         }
     }
 
-    public function readObjectFromCacheDir(fileName:String, isBinary:Boolean):Object {
+    public function readObjectFromCacheDir(fileName:String):Object {
         var file:File = _cacheDirectory.resolvePath(fileName);
-        return isBinary ? readInternalBinary(file) : readInternalString(file);
+        return _isBinary ? readInternalBinary(file) : readInternalString(file);
 
     }
 
-    public function readObjectFromApplicationDir(fileName:String, isBinary:Boolean):Object {
+    public function readObjectFromApplicationDir(fileName:String):Object {
         var file:File = _applicationDirectory.resolvePath(fileName);
-        return isBinary ? readInternalBinary(file) : readInternalString(file);
+        return _isBinary ? readInternalBinary(file) : readInternalString(file);
     }
 
     private function readInternalString(file:File):Object {
