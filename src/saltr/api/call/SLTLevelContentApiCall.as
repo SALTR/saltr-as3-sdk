@@ -72,7 +72,6 @@ public class SLTLevelContentApiCall extends SLTApiCall {
         apiCallResult.success = resource.data != null;
 
         apiCallResult.data = _deserializeLevelContent && (resource.dataFormat != URLLoaderDataFormat.BINARY) ? resource.jsonData : resource.data;
-        apiCallResult.dataFormat = resource.dataFormat;
 
         handleResult(apiCallResult);
     }

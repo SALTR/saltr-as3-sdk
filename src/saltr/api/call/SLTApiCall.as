@@ -179,11 +179,11 @@ public class SLTApiCall {
 
     internal function handleResult(result:SLTApiCallResult):void {
         if (result.success) {
-            if (null != _successCallback) {
+            if (_successCallback != null) {
                 _successCallback(result.data);
             }
         } else {
-            if (null != _failCallback) {
+            if (_failCallback != null) {
                 _failCallback(result.status);
             }
         }
