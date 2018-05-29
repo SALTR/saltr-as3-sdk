@@ -1,6 +1,10 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
+import plexonic.bugtracker.BugTrackerDataProvider;
+
+import plexonic.bugtracker.bugsnag.BugSnag;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -189,25 +193,38 @@ public class SLTLevel {
      * Updates the content of the level.
      */
     public function updateContent(rootNode:Object):void {
-        _properties = _parser.parseLevelProperties(rootNode);
+        try{
+            _properties = _parser.parseLevelProperties(rootNode);
+        }
+        catch (e:Error) {
+            BugTrackerDataProvider.globalError.UpdateLevelContent = rootNode;
+            throw new Error("[SALTR: ERROR] Level properties parsing failed. errorMessage = " + e.message + " error name = " + e.name + " errorId = " + e.errorID)
+        }
 
         var matrixAssetMap:Dictionary;
         var canvas2DAssetMap:Dictionary;
 
         try {
+            BugSnag.log("SLTLevel->UpdateContent()->line = 1 + parseLevelProperties(rootNode) finished");
             matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 2 + _parser.parseAssets(BOARD_TYPE_MATCHING) finished");
             canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 3 + _parser.parseAssets(BOARD_TYPE_CANVAS_2D) finished");
         }
         catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
+            BugTrackerDataProvider.globalError.UpdateLevelContent = rootNode;
+            throw new Error("[SALTR: ERROR] Level content asset parsing failed. errorMessage = " + e.message + " error name = " + e.name + " errorId = " + e.errorID)
         }
 
         try {
             _matrixBoards = _parser.parseBoardContent(rootNode, matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 4 +  _parser.parseBoardContent(BOARD_TYPE_MATCHING) finished");
             _canvas2DBoards = _parser.parseBoardContent(rootNode, canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 5 +  _parser.parseBoardContent(BOARD_TYPE_CANVAS_2D) finished");
         }
         catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
+            BugTrackerDataProvider.globalError.UpdateLevelContent = rootNode;
+            throw new Error("[SALTR: ERROR] Level content boards parsing failed.errorMessage = " + e.message + " error name = " + e.name + " errorId = " + e.errorID)
         }
 
         regenerateAllBoards();

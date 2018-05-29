@@ -2,6 +2,9 @@ package saltr.api.call {
 import flash.net.URLLoaderDataFormat;
 import flash.net.URLRequestMethod;
 import flash.net.URLVariables;
+import flash.utils.getQualifiedClassName;
+
+import plexonic.bugtracker.bugsnag.BugSnag;
 
 import saltr.resource.SLTResource;
 import saltr.resource.SLTResourceURLTicket;
@@ -52,7 +55,7 @@ public class SLTLevelContentApiCall extends SLTApiCall {
             var ticket:SLTResourceURLTicket = new SLTResourceURLTicket(_alternateUrl);
             ticket.dropTimeout = _dropTimeout;
             ticket.timeoutIncrease = _timeoutIncrease;
-            new SLTResource("apiCallAlternate", ticket, alternateCallRequestCompletedHandler, alternateCallRequestFailHandler).load();
+            new SLTResource("apiCallAlternate", ticket, alternateCallRequestCompletedHandler, alternateCallRequestFailHandler, getDataFormat()).load();
         }
         else {
             alternateCallRequestFailHandler(resource);
@@ -72,6 +75,17 @@ public class SLTLevelContentApiCall extends SLTApiCall {
         apiCallResult.success = resource.data != null;
 
         apiCallResult.data = _deserializeLevelContent && (resource.dataFormat != URLLoaderDataFormat.BINARY) ? resource.jsonData : resource.data;
+        if (apiCallResult.data == null) {
+            BugSnag.sendError("SLTLevelContentApiCall-> callRequestCompletedHandler", null, {
+                dataFormat: resource.dataFormat,
+                resourceData: resource.data,
+                dataType: getQualifiedClassName(apiCallResult.data),
+                resultData: apiCallResult.data,
+                isBinary: resource.dataFormat != URLLoaderDataFormat.BINARY,
+                deserializeLevelContent: _deserializeLevelContent
+
+            }, false);
+        }
 
         handleResult(apiCallResult);
     }

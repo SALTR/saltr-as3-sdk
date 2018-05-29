@@ -4,6 +4,9 @@
 package saltr {
 
 import flash.utils.ByteArray;
+import flash.utils.getQualifiedClassName;
+
+import plexonic.bugtracker.bugsnag.BugSnag;
 
 import saltr.api.call.SLTApiCall;
 import saltr.api.call.factory.SLTApiCallFactory;
@@ -52,10 +55,29 @@ public class SLTSaltrWeb extends SLTSaltr {
     }
 
     private function levelContentLoadSuccessCallback(data:Object):void {
+        var unCompressData:Object = null;
         if (_isBinary && data != null && data is ByteArray) {
-            data = SLTGzipEncoder.uncompressToObject(new SLTGzipByteArray(data as ByteArray))
+            var byteArrayData:ByteArray = data as ByteArray;
+            unCompressData = SLTGzipEncoder.uncompressToObject(new SLTGzipByteArray(byteArrayData));
+            if (unCompressData == null || byteArrayData == null) {
+                BugSnag.sendError("SLTSaltrWeb-> levelContentLoadSuccessCallback", "Gzip parsing fail", {
+                    uncompressData: unCompressData,
+                    byteArray: byteArrayData,
+                    dataType: getQualifiedClassName(data),
+                    isBinary: _isBinary
+                }, false)
+            }
+        } else {
+            unCompressData = data;
+            if (unCompressData == null) {
+                BugSnag.sendError("SLTSaltrWeb-> levelContentLoadSuccessCallback", "data is not byteArray", {
+                    uncompressData: unCompressData,
+                    dataType: getQualifiedClassName(data),
+                    isBinary: _isBinary
+                }, false);
+            }
         }
-        _sltLevel.updateContent(data);
+        _sltLevel.updateContent(unCompressData);
         _callback(true);
     }
 
