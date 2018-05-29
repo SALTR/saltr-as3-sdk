@@ -7,7 +7,6 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.HTTPStatusEvent;
 import flash.events.IOErrorEvent;
-import flash.events.ProgressEvent;
 import flash.events.SecurityErrorEvent;
 import flash.events.TimerEvent;
 import flash.net.URLLoader;
@@ -15,10 +14,10 @@ import flash.net.URLLoaderDataFormat;
 import flash.utils.Timer;
 
 import saltr.saltr_internal;
+import saltr.utils.SLTHTTPStatus;
 
 use namespace saltr_internal;
 
-import saltr.utils.SLTHTTPStatus;
 
 /**
  * The SLTResource class represents the resource.
@@ -38,7 +37,6 @@ public class SLTResource {
     private var _urlLoader:URLLoader;
     private var _onSuccess:Function;
     private var _onFail:Function;
-    private var _onProgress:Function;
     private var _timeoutIncrease:int;
     private var _dataFormat:String;
 
@@ -48,15 +46,13 @@ public class SLTResource {
      * @param ticket The ticket for loading the asset.
      * @param onSuccess The callback function if loading succeed, function signature is function(asset:Asset).
      * @param onFail The callback function if loading fail, function signature is function(asset:Asset).
-     * @param onProgress The callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int).
      * @param dataFormat Controls whether the downloaded data is received as text (URLLoaderDataFormat.TEXT), raw binary data (URLLoaderDataFormat.BINARY), or URL-encoded variables (URLLoaderDataFormat.VARIABLES).
      */
-    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null, dataFormat:String = URLLoaderDataFormat.TEXT) {
+    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, dataFormat:String = URLLoaderDataFormat.TEXT) {
         _id = id;
         _ticket = ticket;
         _onSuccess = onSuccess;
         _onFail = onFail;
-        _onProgress = onProgress;
         _maxAttempts = _ticket.maxAttempts;
         _fails = 0;
         _dropTimeout = _ticket.dropTimeout;
@@ -141,17 +137,12 @@ public class SLTResource {
         _urlLoader = null;
         _onSuccess = null;
         _onFail = null;
-        _onProgress = null;
     }
 
     protected function initLoader():void {
         _urlLoader = new URLLoader();
         _urlLoader.dataFormat = _dataFormat;
         initLoaderListeners(_urlLoader);
-    }
-
-    protected function progressHandler(event:Event):void {
-        _onProgress(bytesLoaded, bytesTotal, percentLoaded);
     }
 
     /////////////////////////////////////////////
@@ -183,9 +174,6 @@ public class SLTResource {
 
     protected function initLoaderListeners(dispatcher:EventDispatcher):void {
         dispatcher.addEventListener(Event.COMPLETE, completeHandler);
-        if (null != _onProgress) {
-            dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-        }
         dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
         dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
         if (HTTPStatusEvent.HTTP_RESPONSE_STATUS) {
@@ -196,7 +184,6 @@ public class SLTResource {
 
     protected function removeLoaderListeners(dispatcher:EventDispatcher):void {
         dispatcher.removeEventListener(Event.COMPLETE, completeHandler);
-        dispatcher.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
         dispatcher.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
         dispatcher.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
         if (HTTPStatusEvent.HTTP_RESPONSE_STATUS) {

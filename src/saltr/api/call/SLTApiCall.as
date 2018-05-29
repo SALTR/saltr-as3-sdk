@@ -77,7 +77,7 @@ public class SLTApiCall {
         var ticket:SLTResourceURLTicket = getURLTicket(urlVars, _nativeTimeout);
         ticket.dropTimeout = _dropTimeout;
         ticket.timeoutIncrease = _timeoutIncrease;
-        var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler, null, getDataFormat());
+        var resource:SLTResource = new SLTResource("apiCall", ticket, callRequestCompletedHandler, callRequestFailHandler, getDataFormat());
         resource.load();
     }
 
