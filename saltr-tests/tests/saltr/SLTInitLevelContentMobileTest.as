@@ -7,7 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 import saltr.game.SLTBoard;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTMobileRepository;
@@ -26,7 +26,7 @@ public class SLTInitLevelContentMobileTest {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     [Rule]
     public var mocks:MockolateRule = new MockolateRule();
@@ -38,7 +38,7 @@ public class SLTInitLevelContentMobileTest {
 
     [Before]
     public function tearUp():void {
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
 
         _saltr.defineGenericFeature("SETTINGS", {
@@ -66,7 +66,7 @@ public class SLTInitLevelContentMobileTest {
         stub(mobileRepository).method("getObjectFromCache").returns(JSON.parse(new LevelDataCachedJson()));
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
 
-        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json","","", "44");
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {
@@ -91,7 +91,7 @@ public class SLTInitLevelContentMobileTest {
         stub(mobileRepository).method("getObjectFromCache").returns(null);
         stub(mobileRepository).method("getObjectFromApplication").returns(JSON.parse(new LevelDataFromApplicationJson()));
 
-        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
+        var level:SLTLevel = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json","","", "44");
 
         var testPassed:Boolean = false;
         if (false == level.contentReady) {

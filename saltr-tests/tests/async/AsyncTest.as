@@ -4,13 +4,13 @@
 package tests.async {
 import flexunit.framework.Assert;
 
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 
 public class AsyncTest {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     [Before]
     public function tearUp():void {

@@ -44,18 +44,18 @@ public class SLTAsset {
     }
 
     /**
-     * Returns token plus properties string.
-     */
-    saltr_internal function toString():String {
-        return "[Asset] token: " + _token + ", " + " properties: " + _properties;
-    }
-
-    /**
      * Returns instance states by provided state identifiers.
      * @param stateId The state identifier.
      */
     saltr_internal function getInstanceState(stateId:String):SLTAssetState {
         return _stateMap[stateId] as SLTAssetState;
+    }
+
+    /**
+     * Returns token plus properties string.
+     */
+    saltr_internal function toString():String {
+        return "[Asset] Token: " + _token + ", " + " Properties: " + _properties;
     }
 }
 }

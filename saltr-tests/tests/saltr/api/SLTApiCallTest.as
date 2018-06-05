@@ -3,7 +3,7 @@
  */
 package tests.saltr.api {
 import saltr.api.call.SLTApiCall;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.resource.SLTResource;
 import saltr.saltr_internal;
 import saltr.status.SLTStatus;

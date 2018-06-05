@@ -7,17 +7,17 @@ import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.HTTPStatusEvent;
 import flash.events.IOErrorEvent;
-import flash.events.ProgressEvent;
 import flash.events.SecurityErrorEvent;
 import flash.events.TimerEvent;
 import flash.net.URLLoader;
 import flash.net.URLLoaderDataFormat;
 import flash.utils.Timer;
+
 import saltr.saltr_internal;
+import saltr.utils.SLTHTTPStatus;
 
 use namespace saltr_internal;
 
-import saltr.utils.SLTHTTPStatus;
 
 /**
  * The SLTResource class represents the resource.
@@ -31,33 +31,42 @@ public class SLTResource {
     private var _ticket:SLTResourceURLTicket;
     private var _fails:int;
     private var _maxAttempts:int;
-    private var _dropTimeout:int;
+    private var _dropTimeout:Number;
     private var _httpStatus:int;
     private var _timeoutTimer:Timer;
     private var _urlLoader:URLLoader;
     private var _onSuccess:Function;
     private var _onFail:Function;
-    private var _onProgress:Function;
+    private var _timeoutIncrease:int;
+    private var _dataFormat:String;
 
-     /**
+    /**
      * Class constructor.
      * @param id The id of asset.
      * @param ticket The ticket for loading the asset.
      * @param onSuccess The callback function if loading succeed, function signature is function(asset:Asset).
      * @param onFail The callback function if loading fail, function signature is function(asset:Asset).
-     * @param onProgress The callback function for asset loading progress, function signature is function(bytesLoaded:int, bytesTotal:int, percentLoaded:int).
+     * @param dataFormat Controls whether the downloaded data is received as text (URLLoaderDataFormat.TEXT), raw binary data (URLLoaderDataFormat.BINARY), or URL-encoded variables (URLLoaderDataFormat.VARIABLES).
      */
-    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, onProgress:Function = null) {
+    public function SLTResource(id:String, ticket:SLTResourceURLTicket, onSuccess:Function, onFail:Function, dataFormat:String = URLLoaderDataFormat.TEXT) {
         _id = id;
         _ticket = ticket;
         _onSuccess = onSuccess;
         _onFail = onFail;
-        _onProgress = onProgress;
         _maxAttempts = _ticket.maxAttempts;
         _fails = 0;
         _dropTimeout = _ticket.dropTimeout;
         _httpStatus = -1;
+        _timeoutIncrease = _ticket.timeoutIncrease;
+        _dataFormat = dataFormat;
         initLoader();
+    }
+
+    /**
+     * Data format.
+     */
+    public function get dataFormat():String {
+        return _dataFormat;
     }
 
     /**
@@ -78,7 +87,7 @@ public class SLTResource {
      * The loaded percent.
      */
     saltr_internal function get percentLoaded():int {
-        return Math.round((bytesLoaded / bytesTotal) * 100);
+        return Math.round((bytesLoaded / bytesTotal) * 100.0);
     }
 
     /**
@@ -87,19 +96,25 @@ public class SLTResource {
     saltr_internal function get jsonData():Object {
         var json:Object = null;
         try {
-            json = JSON.parse(String(_urlLoader.data));
+            json = JSON.parse(_urlLoader.data);
         }
         catch (e:Error) {
-            trace("[JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
+            trace("[SALTR][JSONAsset] JSON parsing Error. " + _ticket.variables + " \n  " + _urlLoader.data);
         }
         return json;
+    }
+
+    /**
+     * The String data.
+     */
+    saltr_internal function get data():Object {
+        return _urlLoader.data
     }
 
     /**
      * Starts load.
      */
     saltr_internal function load():void {
-        ++_fails;
         initLoaderListeners(_urlLoader);
         _urlLoader.load(_ticket.getURLRequest());
         startDropTimeoutTimer();
@@ -122,24 +137,19 @@ public class SLTResource {
         _urlLoader = null;
         _onSuccess = null;
         _onFail = null;
-        _onProgress = null;
     }
 
     protected function initLoader():void {
         _urlLoader = new URLLoader();
-        _urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+        _urlLoader.dataFormat = _dataFormat;
         initLoaderListeners(_urlLoader);
-    }
-
-    protected function progressHandler(event:Event):void {
-        _onProgress(bytesLoaded, bytesTotal, percentLoaded);
     }
 
     /////////////////////////////////////////////
     //Handling Dropout Timer
     protected function startDropTimeoutTimer():void {
-        if (_dropTimeout != 0) {
-            _timeoutTimer = new Timer(_dropTimeout, 1);
+        if (_dropTimeout != 0.0) {
+            _timeoutTimer = new Timer(_dropTimeout + _fails * _timeoutIncrease, 1);
             _timeoutTimer.addEventListener(TimerEvent.TIMER_COMPLETE, dropTimeOutTimerHandler);
             _timeoutTimer.start();
         }
@@ -155,20 +165,15 @@ public class SLTResource {
     }
 
     protected function dropTimeOutTimerHandler(event:TimerEvent):void {
-        stopDropTimeoutTimer();
+        trace("[SALTR][Error] Asset loading takes too long, so it is force-stopped.");
         _urlLoader.close();
-        removeLoaderListeners(_urlLoader);
-        trace("[Asset] Loading is too long, so it stopped by force.");
-        _onFail(this);
+        loadFailed(_urlLoader);
     }
 
     /////////////////////////////////////////////
 
     protected function initLoaderListeners(dispatcher:EventDispatcher):void {
         dispatcher.addEventListener(Event.COMPLETE, completeHandler);
-        if (null != _onProgress) {
-            dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
-        }
         dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
         dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
         if (HTTPStatusEvent.HTTP_RESPONSE_STATUS) {
@@ -179,7 +184,6 @@ public class SLTResource {
 
     protected function removeLoaderListeners(dispatcher:EventDispatcher):void {
         dispatcher.removeEventListener(Event.COMPLETE, completeHandler);
-        dispatcher.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
         dispatcher.removeEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
         dispatcher.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
         if (HTTPStatusEvent.HTTP_RESPONSE_STATUS) {
@@ -198,13 +202,17 @@ public class SLTResource {
         }
         else {
             _onFail(this);
-            trace("[ERROR] Asset with path '" + _ticket.url + "' cannot be found.");
+            trace("[SALTR][Error] Asset with path '" + _ticket.url + "' cannot be found.");
         }
     }
 
     private function ioErrorHandler(event:IOErrorEvent):void {
+        loadFailed(event.target as EventDispatcher);
+    }
+
+    private function loadFailed(dispatcher:EventDispatcher):void {
+        _fails++;
         stopDropTimeoutTimer();
-        var dispatcher:EventDispatcher = event.target as EventDispatcher;
         removeLoaderListeners(dispatcher);
         if (_fails == _maxAttempts) {
             _onFail(this);

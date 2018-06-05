@@ -37,7 +37,7 @@ public class SLT2DBoardParser extends SLTBoardParser {
 
     /**
      * Parses the board content.
-     * @param rootNodes The root node.
+     * @param rootNode The root node.
      * @param assetMap The asset map.
      * @return The parsed boards.
      */
@@ -45,9 +45,8 @@ public class SLT2DBoardParser extends SLTBoardParser {
         var boardNodes:Object = getBoardsNode(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
 
         var boards:Dictionary = new Dictionary();
-        for (var boardId:String in boardNodes) {
-            var boardNode:Object = boardNodes[boardId];
-            boards[boardId] = parseLevelBoard(boardNode, assetMap);
+        for each (var boardNode:Object in boardNodes) {
+            boards[boardNode.token] = parseLevelBoard(boardNode, assetMap);
         }
         return boards;
     }
@@ -64,7 +63,7 @@ public class SLT2DBoardParser extends SLTBoardParser {
         }
 
         var config:SLT2DBoardConfig = new SLT2DBoardConfig(layers, boardNode, assetMap);
-        return new SLT2DBoard(config, boardPropertyObjects, SLTCheckPointParser.parseCheckpoints(boardNode));
+        return new SLT2DBoard(boardNode.token, config, boardPropertyObjects, SLTCheckPointParser.parseCheckpoints(boardNode));
     }
 
     private function parseLayer(layerNode:Object, layerToken:String, assetMap:Dictionary):SLT2DBoardLayer {

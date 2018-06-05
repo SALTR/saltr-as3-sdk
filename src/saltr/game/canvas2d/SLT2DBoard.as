@@ -19,12 +19,13 @@ public class SLT2DBoard extends SLTBoard {
 
     /**
      * Class constructor.
+     * @param token The token of canvas 2d board.
      * @param config The board configuration.
      * @param propertyObjects The board associated properties.
      * @param checkpoints The board checkpoints.
      */
-    public function SLT2DBoard(config:SLT2DBoardConfig, propertyObjects:Dictionary, checkpoints:Dictionary) {
-        super(config.layers, propertyObjects, checkpoints);
+    public function SLT2DBoard(token:String, config:SLT2DBoardConfig, propertyObjects:Dictionary, checkpoints:Dictionary) {
+        super(token, config.layers, propertyObjects, checkpoints);
         _config = config;
     }
 

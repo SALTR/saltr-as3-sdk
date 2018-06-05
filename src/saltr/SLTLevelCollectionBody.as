@@ -8,17 +8,18 @@ import saltr.game.SLTLevel;
 use namespace saltr_internal;
 
 /**
- * The SLTLevelData class provides the level data.
+ * The SLTLevelCollection class provides the level data.
  */
-public class SLTLevelData {
+public class SLTLevelCollectionBody {
 
     private var _levels:Vector.<SLTLevel>;
 
     /**
      * Class constructor.
      */
-    public function SLTLevelData() {
-        _levels = new <SLTLevel>[];
+    public function SLTLevelCollectionBody(data:Object) {
+        _levels = SLTDeserializer.decodeAndCreateNewLevels(data);
+        sortLevel();
     }
 
     /**
@@ -33,6 +34,27 @@ public class SLTLevelData {
      */
     public function get allLevelsCount():uint {
         return _levels.length;
+    }
+
+    /**
+     *
+     */
+    public function updateLevels(data:Object):void {
+        SLTDeserializer.decodeAndUpdateExistingLevels(data, _levels);
+    }
+
+    /**
+     * Provides level with given level token
+     * @param token The token of the level
+     */
+    public function getLevelByToken(token:String):SLTLevel {
+        for (var i:int = 0, len:int = _levels.length; i < len; ++i) {
+            var level:SLTLevel = _levels[i];
+            if (token == level.levelToken) {
+                return level;
+            }
+        }
+        return null;
     }
 
     /**
@@ -52,25 +74,15 @@ public class SLTLevelData {
         return null;
     }
 
-    /**
-     * @private
-     */
-    saltr_internal function initWithData(data:Object):void {
-        try {
-            var newLevels:Vector.<SLTLevel> = SLTDeserializer.decodeLevels(data);
-        } catch (e:Error) {
-            throw new Error("Levels parse error");
-        }
-
-
-        if (newLevels != null) {
-            disposeLevels();
-            _levels = newLevels;
-        }
+    private function sortLevel():void {
+        _levels.sort(function (level1:SLTLevel, level2:SLTLevel):Number {
+            return level1.globalIndex - level2.globalIndex;
+        })
     }
 
     private function disposeLevels():void {
         _levels.length = 0;
     }
+
 }
 }

@@ -7,6 +7,8 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
+import saltr.SLTConfig;
+
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -34,7 +36,7 @@ public class SLTRepositoryStorageManagerTest {
     [Before]
     public function tearUp():void {
         _storageManager = new SLTRepositoryStorageManager(mobileRepository);
-        _appVersion = SLTUtils.getAppVersion();
+        _appVersion = SLTConfig.APP_VERSION;
     }
 
     [After]

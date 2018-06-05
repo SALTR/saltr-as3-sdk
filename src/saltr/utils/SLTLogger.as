@@ -27,7 +27,7 @@ public class SLTLogger {
 
     public function SLTLogger(singleton:Singleton) {
         if (null == singleton) {
-            throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
+            throw new Error("[SALTR] Class cannot be instantiated. Please use the method called getInstance.");
         }
         _isDebug = false;
         _verboseLogging = false;
@@ -43,7 +43,7 @@ public class SLTLogger {
 
     saltr_internal function log(message:String):void {
         if (_isDebug && _verboseLogging) {
-            trace("[SALTR]: " + message);
+            trace("[SALTR] " + message);
         }
     }
 }

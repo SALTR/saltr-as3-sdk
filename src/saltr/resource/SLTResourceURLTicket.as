@@ -6,6 +6,7 @@ package saltr.resource {
 import flash.net.URLRequest;
 import flash.net.URLRequestHeader;
 import flash.net.URLRequestMethod;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -34,8 +35,8 @@ public class SLTResourceURLTicket {
     private var _checkPolicy:Boolean;
     private var _useSameDomain:Boolean;
     private var _maxAttempts:int;
-    private var _dropTimeout:int;
-
+    private var _dropTimeout:Number;
+    private var _timeoutIncrease:int;
 
     /**
      * Class constructor.
@@ -49,7 +50,7 @@ public class SLTResourceURLTicket {
         _manageCookies = true;
         _useCache = true;
         //
-        _idleTimeout = 3000;
+        _idleTimeout = 3000.0;
         _userAgent = null;
         //
         _url = url;
@@ -59,7 +60,8 @@ public class SLTResourceURLTicket {
         _checkPolicy = false;
         _maxAttempts = 3;
         _useSameDomain = true;
-        _dropTimeout = 0;
+        _dropTimeout = 0.0;
+        _timeoutIncrease = 0;
     }
 
     /**
@@ -90,8 +92,9 @@ public class SLTResourceURLTicket {
         request.data = _variables;
         request.method = _method;
         request.contentType = _contentType;
-        for each(var header:URLRequestHeader in _requestHeaders) {
-            request.requestHeaders.push(header);
+
+        for (var i:int = 0, i_len:int = _requestHeaders.length; i < i_len; ++i) {
+            request.requestHeaders.push(_requestHeaders[i]);
         }
         return request;
     }
@@ -111,7 +114,8 @@ public class SLTResourceURLTicket {
      * @return The value of the header, <code>null</code> if there is no existing header with provided name.
      */
     saltr_internal function getHeaderValue(name:String):String {
-        for each(var header:URLRequestHeader in _requestHeaders) {
+        for (var i:int = 0, i_len:int = _requestHeaders.length; i < i_len; ++i) {
+            var header:URLRequestHeader = _requestHeaders[i];
             if (header.name == name) {
                 return header.value;
             }
@@ -332,15 +336,29 @@ public class SLTResourceURLTicket {
     /**
      * Dropping timeout.
      */
-    saltr_internal function get dropTimeout():int {
+    saltr_internal function get dropTimeout():Number {
         return _dropTimeout;
     }
 
     /**
      * @private
      */
-    saltr_internal function set dropTimeout(value:int):void {
+    saltr_internal function set dropTimeout(value:Number):void {
         _dropTimeout = value;
+    }
+
+    /**
+     * @private
+     */
+    saltr_internal function get timeoutIncrease():int {
+        return _timeoutIncrease;
+    }
+
+    /**
+     * @private
+     */
+    saltr_internal function set timeoutIncrease(value:int):void {
+        _timeoutIncrease = value;
     }
 }
 }

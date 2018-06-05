@@ -3,10 +3,10 @@
  */
 
 package saltr.utils {
-import flash.desktop.NativeApplication;
 import flash.utils.Dictionary;
 import flash.utils.describeType;
 import flash.utils.getQualifiedClassName;
+
 
 import saltr.saltr_internal;
 
@@ -18,6 +18,7 @@ use namespace saltr_internal;
  */
 public class SLTUtils {
 
+    private static const EMAIL_PATTERN:RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
     /**
      * Class constructor.
      */
@@ -28,6 +29,7 @@ public class SLTUtils {
      * Formats a String in .Net-style, with curly braces ("{0}").
      * Does not support any number formatting options yet.
      * @param format The string to format.
+     * @param args
      * @return Formatted string.
      */
     saltr_internal static function formatString(format:String, ...args):String {
@@ -57,8 +59,7 @@ public class SLTUtils {
      * @return <code>true</code> if valid.
      */
     saltr_internal static function checkEmailValidation(email:String):Boolean {
-        var emailExpression:RegExp = /([a-z0-9._-]+?)@([a-z0-9.-]+)\.([a-z]{2,4})/;
-        return emailExpression.test(email);
+        return EMAIL_PATTERN.test(email);
     }
 
     /**
@@ -122,18 +123,5 @@ public class SLTUtils {
         }
     }
 
-    saltr_internal static function getAppVersion():String {
-        var applicationDescriptor:XML = NativeApplication.nativeApplication.applicationDescriptor;
-        var ns:Namespace = applicationDescriptor.namespace();
-        return applicationDescriptor.ns::versionNumber[0].toString();
-    }
-
-    saltr_internal static function validateFeatureToken(token:String):Boolean {
-        var pattern:RegExp = /[^a-zA-Z0-9._-]/;
-        if (null == token || "" == token || -1 != token.search(pattern)) {
-            return false;
-        }
-        return true;
-    }
 }
 }

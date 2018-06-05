@@ -3,7 +3,6 @@
  */
 package saltr.game.canvas2d {
 
-import flash.geom.Point;
 import flash.utils.Dictionary;
 
 import saltr.game.SLTAsset;
@@ -20,31 +19,31 @@ internal class SLT2DBoardGenerator {
     }
 
     private function parseAssetInstances(layer:SLT2DBoardLayer, assetMap:Dictionary):Vector.<SLT2DAssetInstance> {
-        var assetInstances:Vector.<SLT2DAssetInstance> = new Vector.<SLT2DAssetInstance>();
+        var assetInstances:Vector.<SLT2DAssetInstance> = new <SLT2DAssetInstance>[];
         var assetNodes:Array = layer.assetRules;
         for (var i:int = 0, len:int = assetNodes.length; i < len; ++i) {
             var assetInstanceNode:Object = assetNodes[i];
             var x:Number = assetInstanceNode.x;
             var y:Number = assetInstanceNode.y;
-            var scaleX:Number = assetInstanceNode.hasOwnProperty("scaleX") ? assetInstanceNode.scaleX : 1;
-            var scaleY:Number = assetInstanceNode.hasOwnProperty("scaleY") ? assetInstanceNode.scaleY : 1;
+            var scaleX:Number = assetInstanceNode.hasOwnProperty("scaleX") ? assetInstanceNode.scaleX : 1.0;
+            var scaleY:Number = assetInstanceNode.hasOwnProperty("scaleY") ? assetInstanceNode.scaleY : 1.0;
             var rotation:Number = assetInstanceNode.rotation;
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateId:String = assetInstanceNode.stateId;
-            var positions:Dictionary = getAssetInstancePositions(assetInstanceNode);
+            var positions:Array = getAssetInstancePositions(assetInstanceNode);
             assetInstances.push(new SLT2DAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, x, y, scaleX, scaleY, rotation, positions));
         }
         return assetInstances;
     }
 
-    private function getAssetInstancePositions(assetInstanceNode:Object):Dictionary {
-        var positions:Dictionary = new Dictionary();
-        var positionsArray:Array = assetInstanceNode.hasOwnProperty("positions") ? assetInstanceNode.positions as Array : new Array();
+    private function getAssetInstancePositions(assetInstanceNode:Object):Array {
+        var positions:Array = [];
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("altPositions") ? assetInstanceNode.altPositions as Array : [];
         var positionsCount:int = positionsArray.length;
         for (var i:int = 0; i < positionsCount; ++i) {
             var positionObject:Object = positionsArray[i];
-            var positionId:String = positionObject.id;
-            positions[positionId] = new Point(positionObject.x, positionObject.y);
+            var placeHolder:SLTCanvasPlaceHolder = new SLTCanvasPlaceHolder(positionObject.x, positionObject.y, positionObject.tags);
+            positions.push(placeHolder);
         }
         return positions;
     }

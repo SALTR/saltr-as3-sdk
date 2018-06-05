@@ -5,11 +5,10 @@ import saltr.status.SLTStatus;
 use namespace saltr_internal;
 
 /**
- * @private
+ * Represent object created as a result of API call.
  */
 public class SLTApiCallResult {
     private var _success:Boolean;
-
     private var _status:SLTStatus;
     private var _data:Object;
 

@@ -78,13 +78,13 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
         var matchingRuleIncludedBoards:Array = parseMatchingRuleIncludedBoards(rootNode);
 
         var boards:Dictionary = new Dictionary();
-        for (var boardId:String in boardNodes) {
+        for each (var boardNode:Object in boardNodes) {
             var boardRelatedMatchingRules:SLTMatchingRules = new SLTMatchingRules();
-            if (matchingRules.matchingRuleEnabled && -1 != matchingRuleIncludedBoards.indexOf(boardId)) {
+            var boardToken:String = boardNode.token;
+            if (matchingRules.matchingRuleEnabled && -1 != matchingRuleIncludedBoards.indexOf(boardToken)) {
                 boardRelatedMatchingRules = matchingRules;
             }
-            var boardNode:Object = boardNodes[boardId];
-            boards[boardId] = parseLevelBoard(boardRelatedMatchingRules, boardNode, assetMap);
+            boards[boardToken] = parseLevelBoard(boardRelatedMatchingRules, boardNode, assetMap);
         }
         return boards;
     }
@@ -97,7 +97,7 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
             matchingRules.matchSize = rootNode.matchingRules.matchSize;
 
             var excludedAssetNodes:Array = rootNode.matchingRules.excludedAssets as Array;
-            var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
+            var excludedMatchAssets:Vector.<SLTChunkAssetDatum> = new <SLTChunkAssetDatum>[];
             for each (var excludedAssetId:String in excludedAssetNodes) {
                 excludedMatchAssets.push(new SLTChunkAssetDatum(excludedAssetId, "", assetMap));
             }
@@ -128,7 +128,7 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
             layers[layerToken] = layer;
         }
         var config:SLTMatchingBoardConfig = new SLTMatchingBoardConfig(cells, layers, boardNode, assetMap, matchingRuleProperties);
-        var board:SLTMatchingBoard = new SLTMatchingBoard(config, boardPropertyObjects, SLTCheckPointParser.parseCheckpoints(boardNode));
+        var board:SLTMatchingBoard = new SLTMatchingBoard(boardNode.token, config, boardPropertyObjects, SLTCheckPointParser.parseCheckpoints(boardNode));
 
         return board;
     }
@@ -138,13 +138,17 @@ public class SLTMatchingBoardParser extends SLTBoardParser {
             var chunkNode:Object = chunkNodes[i];
             var cellNodes:Array = chunkNode.cells as Array;
             var chunkCells:Vector.<SLTCell> = new <SLTCell>[];
-            for each(var cellNode:Object in cellNodes) {
+
+            for (var j:int = 0, j_len:int = cellNodes.length; j < j_len; ++j) {
+                var cellNode:Object = cellNodes[j];
                 chunkCells.push(cells.retrieve(cellNode[0], cellNode[1]) as SLTCell);
             }
 
             var assetRuleNodes:Array = chunkNode.assetRules as Array;
             var chunkAssetRules:Vector.<SLTChunkAssetRule> = new <SLTChunkAssetRule>[];
-            for each (var ruleNode:Object in assetRuleNodes) {
+
+            for (var k:int = 0, k_len:int = assetRuleNodes.length; k < k_len; ++k) {
+                var ruleNode:Object = assetRuleNodes[k];
                 chunkAssetRules.push(new SLTChunkAssetRule(ruleNode.assetId, ruleNode.distributionType, ruleNode.distributionValue, ruleNode.stateId));
             }
 

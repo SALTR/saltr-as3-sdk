@@ -7,7 +7,7 @@ import mockolate.stub;
 
 import org.flexunit.asserts.assertEquals;
 
-import saltr.SLTSaltrMobile;
+import saltr.SLTSaltrMobileOld;
 import saltr.repository.SLTMobileRepository;
 import saltr.repository.SLTRepositoryStorageManager;
 
@@ -25,7 +25,7 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
 
     private var clientKey:String = "";
     private var deviceId:String = "";
-    private var _saltr:SLTSaltrMobile;
+    private var _saltr:SLTSaltrMobileOld;
 
     public function SLTSaltrMobileTest() {
     }
@@ -33,7 +33,7 @@ public class SLTSaltrMobileTest extends SLTSaltrTest {
     [Before]
     public function tearUp():void {
         stub(mobileRepository).method("getObjectFromApplication").returns(getJson(new AppDataJson()));
-        _saltr = new SLTSaltrMobile(FlexUnitRunner.STAGE, clientKey, deviceId);
+        _saltr = new SLTSaltrMobileOld(FlexUnitRunner.STAGE, clientKey, deviceId);
         _saltr.repository = mobileRepository;
 
         //defineGameLevels("GAME_LEVELS") in this test it is just a dummy value because of MobileRepository's mocking

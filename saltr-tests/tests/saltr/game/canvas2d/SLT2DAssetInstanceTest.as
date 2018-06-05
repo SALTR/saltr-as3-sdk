@@ -34,7 +34,7 @@ public class SLT2DAssetInstanceTest {
 
     [Before]
     public function tearUp():void {
-        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json", "44");
+        _level = new SLTLevel(225045, 246970, 0, "pack_0/level_0.json","","", "44");
     }
 
     [After]

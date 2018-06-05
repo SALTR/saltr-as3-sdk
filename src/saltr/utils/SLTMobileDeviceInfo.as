@@ -76,6 +76,7 @@ public class SLTMobileDeviceInfo {
     public static const ANDROID_INFO_KEYS:Array = [ANDROID_KEY_OS_NAME, ANDROID_KEY_OS_VERSION, ANDROID_KEY_BRAND, ANDROID_KEY_MODEL];
 
     private static const UNKNOWN_VALUE:String = "Unknown";
+    private static const NEW_LINE_PATTERN:RegExp = /\r?\n/;
 
     /**
      * Class constructor.
@@ -93,19 +94,23 @@ public class SLTMobileDeviceInfo {
         var devArr:Array;
         var internalName:String;
         var iosDevice:String;
-        var iosVersion:String;
+        var osVersion:String;
+        var osName:String;
 
         // Windows, Windows mobile, Mac hook
         if (null != os.match("Windows") || null != os.match("Mac")) {
             deviceInfo.os = "";
             deviceInfo.device = "";
+            osName = "";
+            deviceInfo.deviceType = "Desktop";
         } else if (null != os.match("iPad") || null != os.match("iPhone") || null != os.match("iPod")) {
             devArr = os.split(" ");
             internalName = devArr.pop();
+            deviceInfo.deviceType = internalName;
             iosDevice = (internalName.indexOf(",") > -1) ? internalName.split(",").shift() : UNKNOWN_VALUE;
-            iosVersion = devArr.pop();
-            deviceInfo.os = "iOS " + iosVersion;
-
+            osVersion = devArr.pop();
+            osName = "iOS";
+            deviceInfo.os = osName + " " + osVersion;
             if (null != iosDevice.match(/iPhone/)) {
                 deviceInfo.device = "iPhone " + IPHONE_VERSIONS[internalName];
             } else if (null != iosDevice.match(/iPod/)) {
@@ -118,8 +123,8 @@ public class SLTMobileDeviceInfo {
         } else {
             var androidInfo:Object = getAndroidInfo();
 
-            var osName:String = androidInfo.hasOwnProperty(ANDROID_KEY_OS_NAME) ? androidInfo[ANDROID_KEY_OS_NAME] : null;
-            var osVersion:String = androidInfo.hasOwnProperty(ANDROID_KEY_OS_VERSION) ? androidInfo[ANDROID_KEY_OS_VERSION] : null;
+            osName = androidInfo.hasOwnProperty(ANDROID_KEY_OS_NAME) ? androidInfo[ANDROID_KEY_OS_NAME] : null;
+            osVersion = androidInfo.hasOwnProperty(ANDROID_KEY_OS_VERSION) ? androidInfo[ANDROID_KEY_OS_VERSION] : null;
 
             if (null != osName && null != osVersion) {
                 deviceInfo.os = osName + " " + osVersion;
@@ -129,7 +134,7 @@ public class SLTMobileDeviceInfo {
 
             var deviceBrand:String = androidInfo.hasOwnProperty(ANDROID_KEY_BRAND) ? androidInfo[ANDROID_KEY_BRAND] : null;
             var deviceModel:String = androidInfo.hasOwnProperty(ANDROID_KEY_MODEL) ? androidInfo[ANDROID_KEY_MODEL] : null;
-
+            deviceInfo.deviceType = deviceModel;
             if (null == deviceBrand && null == deviceModel) {
                 deviceInfo.device = UNKNOWN_VALUE;
             } else {
@@ -143,7 +148,8 @@ public class SLTMobileDeviceInfo {
                 deviceInfo.device = deviceValue;
             }
         }
-
+        deviceInfo.version = osVersion;
+        deviceInfo.osName = osName;
         return deviceInfo;
     }
 
@@ -158,10 +164,9 @@ public class SLTMobileDeviceInfo {
         content = content.replace(File.lineEnding, "\n");
         fs.close();
 
-        var pattern:RegExp = /\r?\n/;
-        var lines:Array = content.split(pattern);
+        var lines:Array = content.split(NEW_LINE_PATTERN);
 
-        var infoData:Object = new Object();
+        var infoData:Object = {};
         for (var i:int = 0, length:int = lines.length; i < length; ++i) {
             var line:String = String(lines[i]);
             if ("" != line) {

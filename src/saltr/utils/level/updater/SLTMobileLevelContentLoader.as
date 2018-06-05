@@ -3,7 +3,7 @@
  */
 package saltr.utils.level.updater {
 import saltr.api.call.SLTApiCall;
-import saltr.api.call.SLTApiCallFactory;
+import saltr.api.call.factory.SLTApiCallFactory;
 import saltr.game.SLTLevel;
 import saltr.repository.SLTRepositoryStorageManager;
 import saltr.saltr_internal;
@@ -17,25 +17,15 @@ use namespace saltr_internal;
  */
 public class SLTMobileLevelContentLoader {
     private var _repositoryStorageManager:SLTRepositoryStorageManager;
-    private var _apiFactory:SLTApiCallFactory;
-    private var _requestIdleTimeout:int;
+    private var _nativeTimeout:int;
+    private var _dropTimeout:int;
+    private var _timeoutIncrease:int;
 
-    public function SLTMobileLevelContentLoader(repositoryStorageManager:SLTRepositoryStorageManager, apiFactory:SLTApiCallFactory, requestIdleTimeout:int) {
-        _repositoryStorageManager = repositoryStorageManager;
-        _apiFactory = apiFactory;
-        _requestIdleTimeout = requestIdleTimeout;
-    }
-
-    saltr_internal function set apiFactory(value:SLTApiCallFactory):void {
-        _apiFactory = value;
-    }
-
-    saltr_internal function set repositoryStorageManager(value:SLTRepositoryStorageManager):void {
-        _repositoryStorageManager = value;
-    }
-
-    saltr_internal function set requestIdleTimeout(value:int):void {
-        _requestIdleTimeout = value;
+    public function SLTMobileLevelContentLoader(nativeTimeout:int, dropTimeout:int, timeoutIncrease:int) {
+        _repositoryStorageManager = SLTRepositoryStorageManager.getInstance();
+        _nativeTimeout = nativeTimeout;
+        _dropTimeout = dropTimeout;
+        _timeoutIncrease = timeoutIncrease;
     }
 
     saltr_internal function loadLevelContentFromSaltr(featureToken:String, sltLevel:SLTLevel, successCallback:Function, failCallback:Function):void {
@@ -52,22 +42,19 @@ public class SLTMobileLevelContentLoader {
         var params:Object = {
             contentUrl: sltLevel.contentUrl
         };
-        var levelContentApiCall:SLTApiCall = _apiFactory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT, true);
-        levelContentApiCall.call(params, successHandler, failHandler, _requestIdleTimeout);
+        var levelContentApiCall:SLTApiCall = SLTApiCallFactory.factory.getCall(SLTApiCallFactory.API_CALL_LEVEL_CONTENT);
+        levelContentApiCall.call(params, successHandler, failHandler, _nativeTimeout, _dropTimeout, _timeoutIncrease);
         SLTLogger.getInstance().log("Level content from Saltr requested. Feature token: " + featureToken + " Global index: " + sltLevel.globalIndex);
-    }
-
-    saltr_internal function getCachedLevelVersion(cachedLevelVersions:Object, featureToken:String, level:SLTLevel):String {
-        return _repositoryStorageManager.getLevelVersionFromCache(cachedLevelVersions, featureToken, level.globalIndex);
-    }
-
-    saltr_internal function getLevelVersionsFileFromCache(featureToken:String):Object {
-        return  _repositoryStorageManager.getLevelVersionsFileFromCache(featureToken);
     }
 
     saltr_internal function cacheLevelContent(featureToken:String, level:SLTLevel, content:Object):void {
         _repositoryStorageManager.cacheLevelContent(featureToken, level.globalIndex, level.version, content);
         SLTLogger.getInstance().log("Level content cached. Feature token: " + featureToken + " Global index: " + level.globalIndex + " version: " + level.version);
+    }
+
+    saltr_internal function cachedLevelFileExists(featureToken:String, level:SLTLevel):Boolean {
+        return _repositoryStorageManager.isCachedLevelContentFileExists(featureToken, level.globalIndex, level.version);
+
     }
 }
 }

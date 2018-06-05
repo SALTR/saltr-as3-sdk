@@ -1,6 +1,10 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
+import plexonic.bugtracker.BugTrackerDataProvider;
+
+import plexonic.bugtracker.bugsnag.BugSnag;
+
 import saltr.saltr_internal;
 
 use namespace saltr_internal;
@@ -16,13 +20,13 @@ public class SLTLevel {
     private var _localIndex:int;
     private var _packIndex:int;
     private var _contentUrl:String;
+    private var _defaultContentUrl:String;
+    private var _levelToken:String;
+    private var _packToken:String;
     private var _properties:Dictionary;
     private var _version:String;
-
+    private var _defaultVersion:String;
     private var _contentReady:Boolean;
-    private var _matrixAssetMap:Dictionary;
-    private var _canvas2DAssetMap:Dictionary;
-
     private var _parser:SLTLevelParser;
 
     /**
@@ -36,14 +40,20 @@ public class SLTLevel {
      * @param localIndex The local index of the level in the pack.
      * @param packIndex The index of the pack the level is in.
      * @param contentUrl The content URL of the level.
+     * @param levelToken The token of the level feature.
+     * @param packToken The token of the pack.
      * @param version The current version of the level.
      */
-    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, version:String) {
+    public function SLTLevel(globalIndex:int, localIndex:int, packIndex:int, contentUrl:String, levelToken:String, packToken:String, version:String) {
         _globalIndex = globalIndex;
         _localIndex = localIndex;
         _packIndex = packIndex;
         _contentUrl = contentUrl;
+        _defaultContentUrl = contentUrl;
+        _levelToken = levelToken;
+        _packToken = packToken;
         _version = version;
+        _defaultVersion = version;
         _contentReady = false;
         _parser = SLTLevelParser.getInstance();
     }
@@ -77,6 +87,27 @@ public class SLTLevel {
     }
 
     /**
+     * The default content URL of the level.
+     */
+    public function get defaultContentUrl():String {
+        return _defaultContentUrl;
+    }
+
+    /**
+     * The level token.
+     */
+    public function get levelToken():String {
+        return _levelToken;
+    }
+
+    /**
+     * The pack token.
+     */
+    public function get packToken():String {
+        return _packToken;
+    }
+
+    /**
      * The content ready state.
      */
     public function get contentReady():Boolean {
@@ -84,10 +115,25 @@ public class SLTLevel {
     }
 
     /**
+     * Updates contentReady value. For internal use only.
+     * @param value
+     */
+    public function set contentReady(value:Boolean):void {
+        _contentReady = value;
+    }
+
+    /**
      * The current version of the level.
      */
     public function get version():String {
         return _version;
+    }
+
+    /**
+     * The default version of the level.
+     */
+    public function get defaultVersion():String {
+        return _defaultVersion;
     }
 
     /**
@@ -137,30 +183,63 @@ public class SLTLevel {
         }
     }
 
+    public function update(version:String, contentUrl:String):void {
+        _contentUrl = contentUrl;
+        _version = version;
+        _contentReady = false;
+    }
+
     /**
      * Updates the content of the level.
      */
     public function updateContent(rootNode:Object):void {
-        _properties = _parser.parseLevelProperties(rootNode);
-
-        try {
-            _matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
-            _canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
+        try{
+            _properties = _parser.parseLevelProperties(rootNode);
         }
         catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content asset parsing failed.")
+            BugTrackerDataProvider.globalError.UpdateLevelContent = rootNode;
+            throw new Error("[SALTR: ERROR] Level properties parsing failed. errorMessage = " + e.message + " error name = " + e.name + " errorId = " + e.errorID)
+        }
+
+        var matrixAssetMap:Dictionary;
+        var canvas2DAssetMap:Dictionary;
+
+        try {
+            BugSnag.log("SLTLevel->UpdateContent()->line = 1 + parseLevelProperties(rootNode) finished");
+            matrixAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_MATCHING);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 2 + _parser.parseAssets(BOARD_TYPE_MATCHING) finished");
+            canvas2DAssetMap = _parser.parseAssets(rootNode, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 3 + _parser.parseAssets(BOARD_TYPE_CANVAS_2D) finished");
+        }
+        catch (e:Error) {
+            BugTrackerDataProvider.globalError.UpdateLevelContent = rootNode;
+            throw new Error("[SALTR: ERROR] Level content asset parsing failed. errorMessage = " + e.message + " error name = " + e.name + " errorId = " + e.errorID)
         }
 
         try {
-            _matrixBoards = _parser.parseBoardContent(rootNode, _matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
-            _canvas2DBoards = _parser.parseBoardContent(rootNode, _canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            _matrixBoards = _parser.parseBoardContent(rootNode, matrixAssetMap, SLTBoard.BOARD_TYPE_MATCHING);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 4 +  _parser.parseBoardContent(BOARD_TYPE_MATCHING) finished");
+            _canvas2DBoards = _parser.parseBoardContent(rootNode, canvas2DAssetMap, SLTBoard.BOARD_TYPE_CANVAS_2D);
+            BugSnag.log("SLTLevel->UpdateContent()->line = 5 +  _parser.parseBoardContent(BOARD_TYPE_CANVAS_2D) finished");
         }
         catch (e:Error) {
-            throw new Error("[SALTR: ERROR] Level content boards parsing failed.")
+            BugTrackerDataProvider.globalError.UpdateLevelContent = rootNode;
+            throw new Error("[SALTR: ERROR] Level content boards parsing failed.errorMessage = " + e.message + " error name = " + e.name + " errorId = " + e.errorID)
         }
 
         regenerateAllBoards();
         _contentReady = true;
+    }
+
+
+    /**
+     * Clear the content of the level.
+     */
+    saltr_internal function clearContent():void {
+        _properties = null;
+        _matrixBoards = null;
+        _canvas2DBoards = null;
+        _contentReady = false;
     }
 
     /**
@@ -173,8 +252,8 @@ public class SLTLevel {
             }
         }
         if (null != _canvas2DBoards) {
-            for (var canvasBoardtoken:String in _canvas2DBoards) {
-                regenerateBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, canvasBoardtoken);
+            for (var canvasBoardToken:String in _canvas2DBoards) {
+                regenerateBoard(SLTBoard.BOARD_TYPE_CANVAS_2D, canvasBoardToken);
             }
         }
     }
@@ -200,6 +279,5 @@ public class SLTLevel {
         }
         return null;
     }
-
 }
 }

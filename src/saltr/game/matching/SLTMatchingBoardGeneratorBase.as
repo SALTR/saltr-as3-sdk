@@ -52,14 +52,19 @@ internal class SLTMatchingBoardGeneratorBase {
             var assetInstanceNode:Object = assetNodes[i];
             var asset:SLTAsset = assetMap[assetInstanceNode.assetId] as SLTAsset;
             var stateId:String = assetInstanceNode.stateId;
-            var cellPositions:Array = assetInstanceNode.cells;
 
-            for (var j:int = 0, jLen:int = cellPositions.length; j < jLen; ++j) {
-                var position:Array = cellPositions[j];
-                var cell:SLTCell = cells.retrieve(position[0], position[1]);
-                cell.removeAssetInstance(layer.token, layer.index);
-                cell.setAssetInstance(layer.token, layer.index, new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties));
+            var cell:SLTCell = cells.retrieve(assetInstanceNode.col, assetInstanceNode.row);
+            cell.removeAssetInstance(layer.token, layer.index);
+            var positions:Array = getAssetInstancePositions(assetInstanceNode);
+            var assetInstance : SLTAssetInstance;
+            if(asset is SLTMultiCellAsset) {
+                var multiCellAsset : SLTMultiCellAsset = asset as SLTMultiCellAsset;
+                assetInstance = new SLTMultiCellAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, multiCellAsset.cells, multiCellAsset.startPoint, positions);
             }
+            else {
+                assetInstance = new SLTAssetInstance(asset.token, asset.getInstanceState(stateId), asset.properties, positions);
+            }
+            cell.setAssetInstance(layer.token, layer.index, assetInstance);
         }
     }
 
@@ -75,6 +80,18 @@ internal class SLTMatchingBoardGeneratorBase {
                 chunk.addAssetInstanceWithCellIndex(assetDatum, j);
             }
         }
+    }
+
+    private function getAssetInstancePositions(assetInstanceNode:Object):Array {
+        var positions:Array = [];
+        var positionsArray:Array = assetInstanceNode.hasOwnProperty("altPositions") ? assetInstanceNode.altPositions as Array : [];
+        var positionsCount:int = positionsArray.length;
+        for (var i:int = 0; i < positionsCount; ++i) {
+            var positionObject:Object = positionsArray[i];
+            var placeHolder:SLTMatchingAssetPlaceHolder = new SLTMatchingAssetPlaceHolder(positionObject.col, positionObject.row, positionObject.tags);
+            positions.push(placeHolder);
+        }
+        return positions;
     }
 }
 }

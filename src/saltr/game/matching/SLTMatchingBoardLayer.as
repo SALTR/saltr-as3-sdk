@@ -24,7 +24,7 @@ internal class SLTMatchingBoardLayer extends SLTBoardLayer {
      */
     public function SLTMatchingBoardLayer(token:String, layerIndex:int, assetRules:Array) {
         super(token, layerIndex);
-        _chunks = new Vector.<SLTChunk>();
+        _chunks = new <SLTChunk>[];
         _assetRules = assetRules;
     }
 
@@ -37,14 +37,13 @@ internal class SLTMatchingBoardLayer extends SLTBoardLayer {
     }
 
     saltr_internal function getChunkWithCellPosition(col:uint, row:uint):SLTChunk {
-        var chunkFound:SLTChunk = null;
-        for each(var chunk:SLTChunk in _chunks) {
+        for (var i:int = 0, i_len:int = _chunks.length; i < i_len; ++i) {
+            var chunk:SLTChunk = _chunks[i];
             if (chunk.hasCellWithPosition(col, row)) {
-                chunkFound = chunk;
-                break;
+                return chunk;
             }
         }
-        return chunkFound;
+        return null;
     }
 
     /**

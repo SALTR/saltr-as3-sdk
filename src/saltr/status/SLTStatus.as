@@ -93,7 +93,7 @@ public class SLTStatus {
     public function SLTStatus(code:int, message:String) {
         _statusCode = code;
         _statusMessage = message;
-        trace(message);
+        trace("[SALTR] " + message);
     }
 
     /**

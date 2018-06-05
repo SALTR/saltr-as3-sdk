@@ -47,9 +47,9 @@ internal class SLTChunk {
         _chunkAssetRules = chunkAssetRules;
         _matchingRuleEnabled = matchingRuleEnabled;
         _assetMap = assetMap;
-        _availableAssetData = new Vector.<SLTChunkAssetDatum>();
-        _uniqueInAvailableAssetData = new Vector.<SLTChunkAssetDatum>();
-        _uniqueInCountAssetData = new Vector.<SLTChunkAssetDatum>();
+        _availableAssetData = new <SLTChunkAssetDatum>[];
+        _uniqueInAvailableAssetData = new <SLTChunkAssetDatum>[];
+        _uniqueInCountAssetData = new <SLTChunkAssetDatum>[];
     }
 
     /**
@@ -80,14 +80,13 @@ internal class SLTChunk {
     }
 
     saltr_internal function hasCellWithPosition(col:uint, row:uint):Boolean {
-        var cellFound:Boolean = false;
-        for each(var cell:SLTCell in _chunkCells) {
+        for (var i:int = 0, i_len:int = _chunkCells.length; i < i_len; ++i) {
+            var cell:SLTCell = _chunkCells[i];
             if (col == cell.col && row == cell.row) {
-                cellFound = true;
-                break;
+                return true;
             }
         }
-        return cellFound;
+        return false;
     }
 
     saltr_internal function addAssetInstanceWithPosition(assetDatum:SLTChunkAssetDatum, col:uint, row:uint):void {
@@ -143,13 +142,13 @@ internal class SLTChunk {
     }
 
     private function resetChunkCells():void {
-        for (var i:int = 0, len:int = _chunkCells.length; i < len; ++i) {
+        for (var i:int = 0, i_len:int = _chunkCells.length; i < i_len; ++i) {
             _chunkCells[i].removeAssetInstance(_layerToken, _layerIndex);
         }
     }
 
     private function addToAvailableAssetData(assetData:Vector.<SLTChunkAssetDatum>):void {
-        for (var i:int = 0, length:int = assetData.length; i < length; ++i) {
+        for (var i:int = 0, i_len:int = assetData.length; i < i_len; ++i) {
             _availableAssetData.push(assetData[i]);
         }
     }
@@ -224,7 +223,7 @@ internal class SLTChunk {
     }
 
     private function getAssetData(count:uint, assetId:String, stateId:String):Vector.<SLTChunkAssetDatum> {
-        var assetData:Vector.<SLTChunkAssetDatum> = new Vector.<SLTChunkAssetDatum>();
+        var assetData:Vector.<SLTChunkAssetDatum> = new <SLTChunkAssetDatum>[];
         for (var i:int = 0; i < count; ++i) {
             assetData.push(new SLTChunkAssetDatum(assetId, stateId, _assetMap));
             _availableCells.splice(0, 1);
@@ -236,14 +235,13 @@ internal class SLTChunk {
     }
 
     private function getCellWithPosition(col:uint, row:uint):SLTCell {
-        var cellToReturn:SLTCell = null;
-        for each(var cell:SLTCell in _chunkCells) {
+        for (var i:int = 0, i_len:int = _chunkCells.length; i < i_len; ++i) {
+            var cell:SLTCell = _chunkCells[i];
             if (col == cell.col && row == cell.row) {
-                cellToReturn = cell;
-                break;
+                return cell;
             }
         }
-        return cellToReturn;
+        return null;
     }
 
     private function getCellIndexWithPosition(col:uint, row:uint):int {
