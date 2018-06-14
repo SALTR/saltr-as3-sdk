@@ -4,6 +4,8 @@
 package saltr.repository {
 import flash.filesystem.File;
 
+import plexonic.error.ErrorSingletonClassInstantiation;
+
 import saltr.SLTMobileConfig;
 import saltr.saltr_internal;
 import saltr.utils.SLTLogger;
@@ -44,7 +46,9 @@ public class SLTRepositoryStorageManager {
     private var _isBinary:Boolean;
 
     public function SLTRepositoryStorageManager() {
-
+        if (sInstance) {
+            throw new ErrorSingletonClassInstantiation();
+        }
     }
 
     saltr_internal function init(isBinary:Boolean):void {

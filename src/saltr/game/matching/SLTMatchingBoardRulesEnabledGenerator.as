@@ -2,6 +2,8 @@
  * Created by TIGR on 3/25/2015.
  */
 package saltr.game.matching {
+import plexonic.error.ErrorSingletonClassInstantiation;
+
 import saltr.game.SLTAssetInstance;
 import saltr.saltr_internal;
 
@@ -25,7 +27,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     public function SLTMatchingBoardRulesEnabledGenerator() {
         if (sInstance) {
-            throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
+            throw new ErrorSingletonClassInstantiation();
         }
     }
 

@@ -5,6 +5,8 @@
 package saltr.game {
 import flash.utils.Dictionary;
 
+import plexonic.error.ErrorSingletonClassInstantiation;
+
 import saltr.game.canvas2d.SLT2DBoardParser;
 import saltr.game.matching.SLTMatchingBoardParser;
 import saltr.game.matching.SLTMultiCellAsset;
@@ -41,7 +43,7 @@ public class SLTLevelParser {
      */
     public function SLTLevelParser() {
         if (sInstance) {
-            throw new Error("Class cannot be instantiated. Please use the getInstance().");
+            throw new ErrorSingletonClassInstantiation();
         }
 
         _matchingBoardParser = new SLTMatchingBoardParser();
