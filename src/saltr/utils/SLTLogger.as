@@ -10,20 +10,22 @@ use namespace saltr_internal;
  * @private
  */
 public class SLTLogger {
-    private static var INSTANCE:SLTLogger;
-
-    private var _isDebug:Boolean;
-    private var _verboseLogging:Boolean;
+    private static var sInstance:SLTLogger;
 
     /**
      * Returns an instance of SLTLogger class.
      */
     saltr_internal static function getInstance():SLTLogger {
-        if (!INSTANCE) {
-            INSTANCE = new SLTLogger(new Singleton());
+        if (!sInstance) {
+            sInstance = new SLTLogger(new Singleton());
         }
-        return INSTANCE;
+        return sInstance;
     }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private var _isDebug:Boolean;
+    private var _verboseLogging:Boolean;
 
     public function SLTLogger(singleton:Singleton) {
         if (null == singleton) {

@@ -16,7 +16,7 @@ use namespace saltr_internal;
  */
 public class SLTRepositoryStorageManager {
 
-    private static var INSTANCE:SLTRepositoryStorageManager;
+    private static var sInstance:SLTRepositoryStorageManager;
 
     private static function getSnapshotLevelDataUrl(token:String, isBinary:Boolean):String {
         return SLTUtils.formatString(SLTMobileConfig.SNAPSHOT_LEVEL_DATA_URL_TEMPLATE, token, isBinary ? "bin" : "json");
@@ -32,10 +32,10 @@ public class SLTRepositoryStorageManager {
     }
 
     public static function getInstance():SLTRepositoryStorageManager {
-        if (!INSTANCE) {
-            INSTANCE = new SLTRepositoryStorageManager();
+        if (!sInstance) {
+            sInstance = new SLTRepositoryStorageManager();
         }
-        return INSTANCE;
+        return sInstance;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

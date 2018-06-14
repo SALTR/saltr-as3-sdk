@@ -7,17 +7,19 @@ import saltr.saltr_internal;
 use namespace saltr_internal;
 
 internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
-    private static var INSTANCE:SLTMatchingBoardGenerator;
+    private static var sInstance:SLTMatchingBoardGenerator;
+
+    saltr_internal static function getInstance():SLTMatchingBoardGenerator {
+        if (!sInstance) {
+            sInstance = new SLTMatchingBoardGenerator(new Singleton());
+        }
+        return sInstance;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private var _boardConfig:SLTMatchingBoardConfig;
     private var _layer:SLTMatchingBoardLayer;
-
-    saltr_internal static function getInstance():SLTMatchingBoardGenerator {
-        if (!INSTANCE) {
-            INSTANCE = new SLTMatchingBoardGenerator(new Singleton());
-        }
-        return INSTANCE;
-    }
 
     public function SLTMatchingBoardGenerator(singleton:Singleton) {
         if (singleton == null) {

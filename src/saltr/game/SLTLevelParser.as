@@ -19,20 +19,22 @@ use namespace saltr_internal;
 public class SLTLevelParser {
     saltr_internal static const NODE_PROPERTY_OBJECTS:String = "propertyObjects";
 
-    private static var INSTANCE:SLTLevelParser;
-
-    private var _matchingBoardParser:SLTMatchingBoardParser;
-    private var _canvas2dBoardParser:SLT2DBoardParser;
+    private static var sInstance:SLTLevelParser;
 
     /**
      * Returns an instance of SLTLevelParser class.
      */
     saltr_internal static function getInstance():SLTLevelParser {
-        if (!INSTANCE) {
-            INSTANCE = new SLTLevelParser(new Singleton());
+        if (!sInstance) {
+            sInstance = new SLTLevelParser(new Singleton());
         }
-        return INSTANCE;
+        return sInstance;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    private var _matchingBoardParser:SLTMatchingBoardParser;
+    private var _canvas2dBoardParser:SLT2DBoardParser;
 
     /**
      * Class constructor.

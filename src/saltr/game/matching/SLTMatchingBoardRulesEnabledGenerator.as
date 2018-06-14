@@ -8,18 +8,20 @@ import saltr.saltr_internal;
 use namespace saltr_internal;
 
 internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGeneratorBase {
-    private static var INSTANCE:SLTMatchingBoardRulesEnabledGenerator;
+    private static var sInstance:SLTMatchingBoardRulesEnabledGenerator;
+
+    saltr_internal static function getInstance():SLTMatchingBoardRulesEnabledGenerator {
+        if (!sInstance) {
+            sInstance = new SLTMatchingBoardRulesEnabledGenerator(new Singleton());
+        }
+        return sInstance;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     private var _boardConfig:SLTMatchingBoardConfig;
     private var _layer:SLTMatchingBoardLayer;
     private var _matchedAssetPositions:Vector.<MatchedAssetPosition>;
-
-    saltr_internal static function getInstance():SLTMatchingBoardRulesEnabledGenerator {
-        if (!INSTANCE) {
-            INSTANCE = new SLTMatchingBoardRulesEnabledGenerator(new Singleton());
-        }
-        return INSTANCE;
-    }
 
     public function SLTMatchingBoardRulesEnabledGenerator(singleton:Singleton) {
         if (singleton == null) {
