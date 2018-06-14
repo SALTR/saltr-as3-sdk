@@ -17,18 +17,18 @@ public class SLTLogger {
      */
     saltr_internal static function getInstance():SLTLogger {
         if (!sInstance) {
-            sInstance = new SLTLogger(new Singleton());
+            sInstance = new SLTLogger();
         }
         return sInstance;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     private var _isDebug:Boolean;
     private var _verboseLogging:Boolean;
 
-    public function SLTLogger(singleton:Singleton) {
-        if (null == singleton) {
+    public function SLTLogger() {
+        if (sInstance) {
             throw new Error("[SALTR] Class cannot be instantiated. Please use the method called getInstance.");
         }
         _isDebug = false;
@@ -49,7 +49,4 @@ public class SLTLogger {
         }
     }
 }
-}
-
-class Singleton {
 }

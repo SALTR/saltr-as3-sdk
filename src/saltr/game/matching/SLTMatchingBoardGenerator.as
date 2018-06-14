@@ -11,7 +11,7 @@ internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
 
     saltr_internal static function getInstance():SLTMatchingBoardGenerator {
         if (!sInstance) {
-            sInstance = new SLTMatchingBoardGenerator(new Singleton());
+            sInstance = new SLTMatchingBoardGenerator();
         }
         return sInstance;
     }
@@ -21,8 +21,8 @@ internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
     private var _boardConfig:SLTMatchingBoardConfig;
     private var _layer:SLTMatchingBoardLayer;
 
-    public function SLTMatchingBoardGenerator(singleton:Singleton) {
-        if (singleton == null) {
+    public function SLTMatchingBoardGenerator() {
+        if (sInstance) {
             throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
         }
     }
@@ -35,7 +35,4 @@ internal class SLTMatchingBoardGenerator extends SLTMatchingBoardGeneratorBase {
         fillLayerChunkAssets(_layer.chunks);
     }
 }
-}
-
-class Singleton {
 }

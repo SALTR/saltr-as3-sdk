@@ -2,7 +2,7 @@
  * Created by daal on 4/13/15.
  */
 package saltr.api.call.factory {
-import plexonic.error.ErrorAbstractMethodInvokation;
+import plexonic.error.ErrorAbstractMethodInvocation;
 
 import saltr.SLTAppData;
 import saltr.api.call.SLTApiCall;
@@ -27,7 +27,7 @@ public class SLTApiCallFactory {
 
 
     public function getCall(name:String, appData:SLTAppData = null):SLTApiCall {
-        throw new ErrorAbstractMethodInvokation();
+        throw new ErrorAbstractMethodInvocation();
     }
 }
 }

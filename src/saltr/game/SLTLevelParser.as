@@ -26,23 +26,24 @@ public class SLTLevelParser {
      */
     saltr_internal static function getInstance():SLTLevelParser {
         if (!sInstance) {
-            sInstance = new SLTLevelParser(new Singleton());
+            sInstance = new SLTLevelParser();
         }
         return sInstance;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     private var _matchingBoardParser:SLTMatchingBoardParser;
     private var _canvas2dBoardParser:SLT2DBoardParser;
 
     /**
      * Class constructor.
      */
-    public function SLTLevelParser(singleton:Singleton) {
-        if (singleton == null) {
+    public function SLTLevelParser() {
+        if (sInstance) {
             throw new Error("Class cannot be instantiated. Please use the getInstance().");
         }
+
         _matchingBoardParser = new SLTMatchingBoardParser();
         _canvas2dBoardParser = new SLT2DBoardParser();
     }
@@ -92,7 +93,7 @@ public class SLTLevelParser {
         var token:String;
         var statesMap:Dictionary;
         var properties:Object = null;
-        var asset : SLTAsset;
+        var asset:SLTAsset;
 
         if (assetNode.hasOwnProperty("token")) {
             token = assetNode.token;
@@ -106,7 +107,7 @@ public class SLTLevelParser {
             properties = assetNode.properties;
         }
 
-        if(assetNode.hasOwnProperty("startPoint")) {
+        if (assetNode.hasOwnProperty("startPoint")) {
             asset = new SLTMultiCellAsset(token, assetNode.cells, assetNode.startPoint, statesMap, properties);
         }
         else {
@@ -139,7 +140,4 @@ public class SLTLevelParser {
         }
     }
 }
-}
-
-class Singleton {
 }

@@ -12,19 +12,19 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 
     saltr_internal static function getInstance():SLTMatchingBoardRulesEnabledGenerator {
         if (!sInstance) {
-            sInstance = new SLTMatchingBoardRulesEnabledGenerator(new Singleton());
+            sInstance = new SLTMatchingBoardRulesEnabledGenerator();
         }
         return sInstance;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     private var _boardConfig:SLTMatchingBoardConfig;
     private var _layer:SLTMatchingBoardLayer;
     private var _matchedAssetPositions:Vector.<MatchedAssetPosition>;
 
-    public function SLTMatchingBoardRulesEnabledGenerator(singleton:Singleton) {
-        if (singleton == null) {
+    public function SLTMatchingBoardRulesEnabledGenerator() {
+        if (sInstance) {
             throw new Error("Class cannot be instantiated. Please use the method called getInstance.");
         }
     }
@@ -358,10 +358,7 @@ internal class SLTMatchingBoardRulesEnabledGenerator extends SLTMatchingBoardGen
 }
 }
 
-class Singleton {
-}
-
-class MatchedAssetPosition {
+internal class MatchedAssetPosition {
     private var _col:uint;
     private var _row:uint;
 
